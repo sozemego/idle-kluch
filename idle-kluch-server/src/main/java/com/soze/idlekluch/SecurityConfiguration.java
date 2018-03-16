@@ -40,6 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .and()
         .csrf().disable()
       .authorizeRequests()
+        .anyRequest().permitAll()
       .and()
         .addFilter(new JWTAuthenticationFilter(authenticationManager(), authService))
         .addFilter(new JWTAuthorizationFilter(authenticationManager(), authService))

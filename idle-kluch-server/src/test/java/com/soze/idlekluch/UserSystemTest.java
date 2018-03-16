@@ -7,11 +7,14 @@ import com.soze.idlekluch.user.dto.SimpleUserDto;
 import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.utils.http.ErrorResponse;
 import com.soze.idlekluch.utils.http.HttpClient;
+import com.soze.idlekluch.utils.sql.DatabaseReset;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.ResponseEntity;
 
 import java.util.stream.IntStream;
 
+import static com.soze.idlekluch.utils.http.ResponseAssertUtils.*;
 import static org.junit.Assert.*;
 
 public class UserSystemTest {
@@ -35,7 +38,7 @@ public class UserSystemTest {
     String username = "sozemego";
     RegisterUserForm form = new RegisterUserForm(username, "password".toCharArray());
 
-    Response response = client.post(form, createUserPath);
+    ResponseEntity response = client.post(form, createUserPath);
     assertResponseIsOk(response);
 
     SimpleUserDto userDto = getSimpleUserDto(client.get(singleUserPath + username));
@@ -47,7 +50,7 @@ public class UserSystemTest {
   public void testCreateUserAlreadyExists() throws Exception {
     String username = "sozemego1";
     assertResponseIsOk(client.post(new RegisterUserForm(username, "password".toCharArray()), createUserPath));
-    Response response = client.post(new RegisterUserForm(username, "password".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm(username, "password".toCharArray()), createUserPath);
     assertResponseIsBadRequest(response);
 
     ErrorResponse errorResponse = getErrorResponse(response);
@@ -62,7 +65,7 @@ public class UserSystemTest {
 
   @Test
   public void testCreateUserWithWhiteSpaceInside() throws Exception {
-    Response response = client.post(new RegisterUserForm("some whitespace", "".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm("some whitespace", "".toCharArray()), createUserPath);
 
     ErrorResponse errorResponse = getErrorResponse(response);
     assertEquals(errorResponse.getStatusCode(), 400);
@@ -71,7 +74,7 @@ public class UserSystemTest {
 
   @Test
   public void testCreateUserWithWhiteSpaceAtTheEnd() throws Exception {
-    Response response = client.post(new RegisterUserForm("some_whitespace_after_this   ", "g".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm("some_whitespace_after_this   ", "g".toCharArray()), createUserPath);
 
     ErrorResponse errorResponse = getErrorResponse(response);
     assertEquals(errorResponse.getStatusCode(), 400);
@@ -80,7 +83,7 @@ public class UserSystemTest {
 
   @Test
   public void testCreateUserWithWhiteSpaceAtTheBeginning() throws Exception {
-    Response response = client.post(new RegisterUserForm("    legit_username", "".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm("    legit_username", "".toCharArray()), createUserPath);
 
     ErrorResponse errorResponse = getErrorResponse(response);
     assertEquals(errorResponse.getStatusCode(), 400);
@@ -89,7 +92,7 @@ public class UserSystemTest {
 
   @Test
   public void testCreateUserWithWhiteSpaceOnly() throws Exception {
-    Response response = client.post(new RegisterUserForm("      ", "".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm("      ", "".toCharArray()), createUserPath);
 
     ErrorResponse errorResponse = getErrorResponse(response);
     assertEquals(errorResponse.getStatusCode(), 400);
@@ -98,7 +101,7 @@ public class UserSystemTest {
 
   @Test
   public void testCreateUserWithIllegalCharacters() throws Exception {
-    Response response = client.post(new RegisterUserForm("[]@#$", "".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm("[]@#$", "".toCharArray()), createUserPath);
 
     ErrorResponse errorResponse = getErrorResponse(response);
     assertEquals(errorResponse.getStatusCode(), 400);
@@ -108,13 +111,13 @@ public class UserSystemTest {
   @Test
   public void testCreateUserWithAllAllowableCharacters() throws Exception {
     String username = "qwertyuiopasdfghjklzxcvbnm1234567890-_";
-    Response response = client.post(new RegisterUserForm(username, "password".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm(username, "password".toCharArray()), createUserPath);
     assertResponseIsOk(response);
   }
 
   @Test
   public void testCreateUserNameCaseDoesNotMatter() throws Exception {
-    Response response = client.post(new RegisterUserForm("case", "pass".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm("case", "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
     SimpleUserDto userDto = getSimpleUserDto(client.get(singleUserPath + "CASE"));
@@ -123,7 +126,7 @@ public class UserSystemTest {
 
   @Test
   public void testCreateUserNameRegisterAgainCaseDoesNotMatter() throws Exception {
-    Response response = client.post(new RegisterUserForm("some_case", "pass".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm("some_case", "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
     response = client.post(new RegisterUserForm("SOME_CASE", "pass".toCharArray()), createUserPath);
     ErrorResponse errorResponse = getErrorResponse(response);
@@ -134,7 +137,7 @@ public class UserSystemTest {
   @Test
   public void testCreateUsernameTooLong() throws Exception {
     String longUsername = IntStream.range(0, 26).mapToObj(a -> "" + a).reduce("", (a, b) -> a + b);
-    Response response = client.post(new RegisterUserForm(longUsername, "pass".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm(longUsername, "pass".toCharArray()), createUserPath);
     ErrorResponse errorResponse = getErrorResponse(response);
     assertEquals(400, errorResponse.getStatusCode());
     assertEquals(errorResponse.getData().get("field"), "username");
@@ -142,7 +145,7 @@ public class UserSystemTest {
 
   @Test
   public void testDeleteUserUnauthorized() throws Exception {
-    Response response = client.post(new RegisterUserForm("some_username", "pass".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm("some_username", "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
     assertResponseIsUnauthorized(client.delete(deleteUserPath));
@@ -150,7 +153,7 @@ public class UserSystemTest {
 
   @Test
   public void testDeleteUserAuthorized() throws Exception {
-    Response response = client.post(new RegisterUserForm("another_username", "pass".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm("another_username", "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
     response = client.post(new LoginForm("another_username", "pass".toCharArray()), login);
@@ -166,7 +169,7 @@ public class UserSystemTest {
 
   @Test
   public void testDeleteUserAuthorizedPreviouslyExisted() throws Exception {
-    Response response = client.post(new RegisterUserForm("another_username2", "pass".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm("another_username2", "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
     response = client.post(new LoginForm("another_username2", "pass".toCharArray()), login);
@@ -189,7 +192,7 @@ public class UserSystemTest {
   @Test
   public void testDeleteUserDoesNotExist() throws Exception {
     String username = "another_username3";
-    Response response = client.post(new RegisterUserForm(username, "pass".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm(username, "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
     response = client.post(new LoginForm(username, "pass".toCharArray()), login);
@@ -206,37 +209,37 @@ public class UserSystemTest {
 
   @Test
   public void testUsernameAvailable() throws Exception {
-    Response response = client.get(usernameAvailable + "NOPE");
-    boolean available = Boolean.valueOf(response.readEntity(String.class));
+    ResponseEntity response = client.get(usernameAvailable + "NOPE");
+    boolean available = Boolean.valueOf((String) response.getBody());
     assertEquals(true, available);
   }
 
   @Test
   public void testUsernameAvailableAlreadyTaken() throws Exception {
     String username = "USERUSER";
-    Response response = client.post(new RegisterUserForm(username, "pass".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm(username, "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
     response = client.get(usernameAvailable + username);
-    boolean available = Boolean.valueOf(response.readEntity(String.class));
+    boolean available = Boolean.valueOf((String) response.getBody());
     assertEquals(false, available);
   }
 
   @Test
   public void testUsernameAvailableInvalidUsername() throws Exception {
     String username = "USER_USER2";
-    Response response = client.post(new RegisterUserForm(username, "pass".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm(username, "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
     response = client.get(usernameAvailable + username);
-    boolean available = Boolean.valueOf(response.readEntity(String.class));
+    boolean available = Boolean.valueOf((String) response.getBody());
     assertEquals(false, available);
   }
 
   @Test
   public void testUsernameAvailableDeletedUsername() throws Exception {
     String username = "tobedeleted";
-    Response response = client.post(new RegisterUserForm(username, "pass".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm(username, "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
     response = client.post(new LoginForm(username, "pass".toCharArray()), login);
@@ -249,14 +252,14 @@ public class UserSystemTest {
     assertResponseIsOk(response);
 
     response = client.get(usernameAvailable + username);
-    boolean available = Boolean.valueOf(response.readEntity(String.class));
+    boolean available = Boolean.valueOf((String) response.getBody());
     assertEquals(false, available);
   }
 
   @Test
   public void testCreateUserEmptyPassword() throws Exception {
     String username = "thisdoesnotmatter";
-    Response response = client.post(new RegisterUserForm(username, "".toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm(username, "".toCharArray()), createUserPath);
 
     ErrorResponse errorResponse = getErrorResponse(response);
     assertEquals(400, errorResponse.getStatusCode());
@@ -269,22 +272,22 @@ public class UserSystemTest {
 
     String longPassword = IntStream.range(0, 250).mapToObj(i -> "" + i).reduce("", (a, b) -> a + b);
 
-    Response response = client.post(new RegisterUserForm(username, longPassword.toCharArray()), createUserPath);
+    ResponseEntity response = client.post(new RegisterUserForm(username, longPassword.toCharArray()), createUserPath);
     ErrorResponse errorResponse = getErrorResponse(response);
     assertEquals(400, errorResponse.getStatusCode());
     assertEquals(errorResponse.getData().get("field"), "password");
   }
 
-  private Jwt getJwt(Response response) {
-    return JsonUtils.jsonToObject(response.readEntity(String.class), Jwt.class);
+  private Jwt getJwt(ResponseEntity response) {
+    return JsonUtils.jsonToObject((String) response.getBody(), Jwt.class);
   }
 
-  private SimpleUserDto getSimpleUserDto(Response response) {
-    return JsonUtils.jsonToObject(response.readEntity(String.class), SimpleUserDto.class);
+  private SimpleUserDto getSimpleUserDto(ResponseEntity response) {
+    return JsonUtils.jsonToObject((String) response.getBody(), SimpleUserDto.class);
   }
 
-  private ErrorResponse getErrorResponse(Response response) {
-    return JsonUtils.jsonToObject(response.readEntity(String.class), ErrorResponse.class);
+  private ErrorResponse getErrorResponse(ResponseEntity response) {
+    return JsonUtils.jsonToObject((String) response.getBody(), ErrorResponse.class);
   }
 
 

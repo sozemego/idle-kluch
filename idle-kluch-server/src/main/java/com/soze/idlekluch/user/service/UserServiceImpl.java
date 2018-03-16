@@ -1,12 +1,12 @@
 package com.soze.idlekluch.user.service;
 
-import com.soze.kleddit.user.dto.RegisterUserForm;
-import com.soze.kleddit.user.entity.User;
-import com.soze.kleddit.user.exception.AuthUserDoesNotExistException;
-import com.soze.kleddit.user.exception.UserRegistrationException;
-import com.soze.kleddit.user.password.PasswordHash;
-import com.soze.kleddit.user.repository.UserRepository;
-import com.soze.kleddit.utils.jpa.EntityUUID;
+import com.soze.idlekluch.user.dto.RegisterUserForm;
+import com.soze.idlekluch.user.entity.User;
+import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
+import com.soze.idlekluch.user.exception.UserRegistrationException;
+import com.soze.idlekluch.user.password.PasswordHash;
+import com.soze.idlekluch.user.repository.UserRepository;
+import com.soze.idlekluch.utils.jpa.EntityUUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

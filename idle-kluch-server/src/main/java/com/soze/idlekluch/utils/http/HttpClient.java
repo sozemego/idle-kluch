@@ -2,11 +2,11 @@ package com.soze.idlekluch.utils.http;
 
 
 import com.soze.idlekluch.utils.JsonUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -31,99 +31,89 @@ public class HttpClient {
    * Performs a GET request to the base url given to this object.
    */
   public ResponseEntity get() {
+    return get(null);
+  }
 
-    String finalPath = url;
+  /**
+   * Performs a GET request to the base url with given path appended.
+   * By default, it requests a application/json from the endpoint.
+   */
+  public ResponseEntity get(final String path) {
+    final String finalPath = url + path != null ? path : "";
     System.out.println("Making a get request to " + finalPath);
 
-    return warnNotFound(createClient()
-      .target(url)
-      .request()
-      .header("Authorization", "Bearer " + token)
-      .get());
+    final RestTemplate restTemplate = createClient();
+    final HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.add("Authorization", "Bearer " + token);
+    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    final HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+
+    final ResponseEntity responseEntity = restTemplate.exchange(finalPath, HttpMethod.GET, entity, String.class);
+    return warnNotFound(responseEntity);
   }
 
   /**
    * Performs a GET request to the base url with given path appended.
    * By default, it requests a application/json from the endpoint.
    */
-  public ResponseEntity get(String path) {
+  public ResponseEntity getPlainText(final String path) {
     Objects.requireNonNull(path);
 
-    String finalPath = url + path;
-    System.out.println("Making a GET request to " + finalPath);
+    final String finalPath = url + path;
+    System.out.println("Making a get request to " + finalPath);
 
-    return warnNotFound(createClient()
-      .target(url + path)
-      .request()
-      .header("Authorization", "Bearer " + token)
-      .accept(MediaType.APPLICATION_JSON)
-      .get());
-  }
+    final RestTemplate restTemplate = createClient();
+    final HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.add("Authorization", "Bearer " + token);
+    httpHeaders.setAccept(Collections.singletonList(MediaType.TEXT_PLAIN));
+    final HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
 
-  /**
-   * Performs a GET request to the base url with given path appended.
-   * By default, it requests a application/json from the endpoint.
-   */
-  public ResponseEntity getPlainText(String path) {
-    Objects.requireNonNull(path);
-
-    String finalPath = url + path;
-    System.out.println("Making a GET request to " + finalPath);
-
-    return warnNotFound(createClient()
-      .target(url + path)
-      .request()
-      .header("Authorization", "Bearer " + token)
-      .accept(MediaType.TEXT_PLAIN)
-      .get());
+    final ResponseEntity responseEntity = restTemplate.exchange(finalPath, HttpMethod.GET, entity, String.class);
+    return warnNotFound(responseEntity);
   }
 
   /**
    * Stringifies a given body and performs a POST request to the base url.
    */
-  public ResponseEntity post(Object body) {
-    Objects.requireNonNull(body);
-
-    String finalPath = url;
-    String json = JsonUtils.objectToJson(body);
-    System.out.println("Making a POST request to " + finalPath + " with body " + json);
-
-    return warnNotFound(createClient()
-      .target(url)
-      .request()
-      .header("Authorization", "Bearer " + token)
-      .post(Entity.json(json)));
+  public ResponseEntity post(final Object body) {
+    return post(body, null);
   }
 
   /**
    * Stringifies a given body and performs a POST
    * request to the base url with path parameter appended.
    */
-  public ResponseEntity post(Object body, String path) {
+  public ResponseEntity post(final Object body, final String path) {
     Objects.requireNonNull(body);
-    Objects.requireNonNull(path);
 
-    String finalPath = url + path;
-    System.out.println("Making a POST request to " + finalPath);
+    final String finalPath = url + (path != null ? path : "");
+    final String json = JsonUtils.objectToJson(body);
+    System.out.println("Making a POST request to " + finalPath + " with body " + json);
 
-    return warnNotFound(createClient()
-      .target(finalPath)
-      .request()
-      .header("Authorization", "Bearer " + token)
-      .post(Entity.json(JsonUtils.objectToJson(body))));
+    final RestTemplate restTemplate = createClient();
+    final HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.add("Authorization", "Bearer " + token);
+    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+    final HttpEntity<String> entity = new HttpEntity<>(json, httpHeaders);
+    final ResponseEntity responseEntity = restTemplate.exchange(finalPath, HttpMethod.POST, entity, String.class);
+
+    return warnNotFound(responseEntity);
   }
 
-  public Response deleteWithAuthorizationHeader(String path, String headerValue) {
+  public ResponseEntity deleteWithAuthorizationHeader(final String path, final String bearerToken) {
+    Objects.requireNonNull(path);
+    Objects.requireNonNull(bearerToken);
 
-    String finalPath = url + path;
-    System.out.println("Deleting with authorization header. Path: " + finalPath + ", header value: " + headerValue);
+    final String finalPath = url + path != null ? path : "";
+    System.out.println("Making a DELETE request to " + finalPath + " with bearer " + bearerToken);
 
+    final RestTemplate restTemplate = createClient();
+    final HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.add("Authorization", "Bearer " + bearerToken);
+    final HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+    final ResponseEntity responseEntity = restTemplate.exchange(finalPath, HttpMethod.DELETE, entity, String.class);
 
-    return warnNotFound(createClient()
-      .target(finalPath)
-      .request()
-      .header("Authorization", "Bearer " + headerValue)
-      .delete());
+    return warnNotFound(responseEntity);
   }
 
   /**
@@ -131,43 +121,47 @@ public class HttpClient {
    */
   public ResponseEntity delete() {
 
-    System.out.println("Sending a DELETE request to " + url);
+    final String finalPath = url;
+    System.out.println("Making a DELETE request to " + finalPath);
 
-    return warnNotFound(createClient()
-      .target(url)
-      .request()
-      .header("Authorization", "Bearer " + token)
-      .delete());
+    final RestTemplate restTemplate = createClient();
+    final HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.add("Authorization", "Bearer " + token);
+    final HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+    final ResponseEntity responseEntity = restTemplate.exchange(finalPath, HttpMethod.DELETE, entity, String.class);
+
+    return warnNotFound(responseEntity);
   }
 
   /**
    * Sends a DELETE request to the base path, with given path appended.
+   *
    * @param path
    * @return
    */
-  public ResponseEntity delete(String path) {
-    Objects.requireNonNull(path);
+  public ResponseEntity delete(final String path) {
+    final String finalPath = url + path != null ? path : "";
+    System.out.println("Making a DELETE request to " + finalPath);
 
-    String finalPath = url + path;
-    System.out.println("Sending a DELETE request to " + finalPath);
+    final RestTemplate restTemplate = createClient();
+    final HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.add("Authorization", "Bearer " + token);
+    final HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+    final ResponseEntity responseEntity = restTemplate.exchange(finalPath, HttpMethod.DELETE, entity, String.class);
 
-    return warnNotFound(createClient()
-      .target(finalPath)
-      .request()
-      .header("Authorization", "Bearer " + token)
-      .delete());
+    return warnNotFound(responseEntity);
   }
 
   public void setToken(String token) {
     this.token = token;
   }
 
-  private Client createClient() {
-    return ClientBuilder.newClient();
+  private RestTemplate createClient() {
+    return new RestTemplate();
   }
 
   private ResponseEntity warnNotFound(ResponseEntity response) {
-    if(response.getStatusCode() == HttpStatus.NOT_FOUND) {
+    if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
       System.out.println("Warning, response had status code 404");
     }
     return response;
