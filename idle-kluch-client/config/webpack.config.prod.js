@@ -182,7 +182,9 @@ module.exports = {
                       options: {
                         importLoaders: 1,
                         minimize: true,
+						modules: true,
                         sourceMap: shouldUseSourceMap,
+						localIdentName: "[name]__[local]___[hash:base64:5]"
                       },
                     },
                     {
