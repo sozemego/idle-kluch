@@ -46,7 +46,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(AuthUserDoesNotExistException.class)
   public ResponseEntity<Object> handleAuthUserDoesNotExistException(AuthUserDoesNotExistException exception) {
     Map<String, Object> data = new HashMap<>();
-    ErrorResponse errorResponse = new ErrorResponse(429, exception.getMessage(), data);
+    ErrorResponse errorResponse = new ErrorResponse(401, exception.getMessage(), data);
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 

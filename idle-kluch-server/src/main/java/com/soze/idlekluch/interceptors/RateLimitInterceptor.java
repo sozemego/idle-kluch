@@ -18,7 +18,9 @@ import java.util.Objects;
 public class RateLimitInterceptor extends HandlerInterceptorAdapter {
 
   @Value("${IDLE_KLUCH_RATE_LIMIT_ENABLED}")
-  private String rateLimitEnabled;
+  private String rateLimitEnabledString;
+
+  private boolean rateLimitEnabled;
 
   private final RateLimitService rateLimitService;
 
@@ -29,12 +31,13 @@ public class RateLimitInterceptor extends HandlerInterceptorAdapter {
 
   @PostConstruct
   public void postConstruct() {
+    rateLimitEnabled = Boolean.valueOf(rateLimitEnabledString);
     System.out.println("Rate limiting is enabled: " + rateLimitEnabled);
   }
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    if (!Boolean.valueOf(rateLimitEnabled)) {
+    if (!rateLimitEnabled) {
       return true;
     }
 

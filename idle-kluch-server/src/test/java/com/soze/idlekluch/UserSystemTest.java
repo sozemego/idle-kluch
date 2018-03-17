@@ -63,7 +63,7 @@ public class UserSystemTest {
 
   @Test
   public void testGetUserByUsernameDoesNotExist() throws Exception {
-    assertResponseIsNotFound(client.get(singleUserPath + "crazy_user"));
+    assertResponseIsNotFound(() -> client.get(singleUserPath + "crazy_user"));
   }
 
   @Test
@@ -117,11 +117,13 @@ public class UserSystemTest {
 
   @Test
   public void testCreateUserWithIllegalCharacters() throws Exception {
-    ResponseEntity response = client.post(new RegisterUserForm("[]@#$", "".toCharArray()), createUserPath);
-
-    ErrorResponse errorResponse = getErrorResponse(response);
-    assertEquals(errorResponse.getStatusCode(), 400);
-    assertEquals(errorResponse.getData().get("field"), "username");
+    try {
+      client.post(new RegisterUserForm("[]@#$", "".toCharArray()), createUserPath);
+    } catch (HttpClientErrorException e) {
+      ErrorResponse errorResponse = getErrorResponse(e);
+      assertEquals(errorResponse.getStatusCode(), 400);
+      assertEquals(errorResponse.getData().get("field"), "username");
+    }
   }
 
   @Test
@@ -144,17 +146,21 @@ public class UserSystemTest {
   public void testCreateUserNameRegisterAgainCaseDoesNotMatter() throws Exception {
     ResponseEntity response = client.post(new RegisterUserForm("some_case", "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
-    response = client.post(new RegisterUserForm("SOME_CASE", "pass".toCharArray()), createUserPath);
-    ErrorResponse errorResponse = getErrorResponse(response);
-    assertEquals(400, errorResponse.getStatusCode());
-    assertEquals(errorResponse.getData().get("field"), "username");
+
+    try {
+      client.post(new RegisterUserForm("SOME_CASE", "pass".toCharArray()), createUserPath);
+    } catch (HttpClientErrorException e) {
+      ErrorResponse errorResponse = getErrorResponse(e);
+      assertEquals(400, errorResponse.getStatusCode());
+      assertEquals(errorResponse.getData().get("field"), "username");
+    }
   }
 
   @Test
   public void testCreateUsernameTooLong() throws Exception {
     String longUsername = IntStream.range(0, 26).mapToObj(a -> "" + a).reduce("", (a, b) -> a + b);
     try {
-      ResponseEntity response = client.post(new RegisterUserForm(longUsername, "pass".toCharArray()), createUserPath);
+      client.post(new RegisterUserForm(longUsername, "pass".toCharArray()), createUserPath);
     } catch (HttpClientErrorException e) {
       ErrorResponse errorResponse = getErrorResponse(e);
       assertEquals(400, errorResponse.getStatusCode());
@@ -167,8 +173,13 @@ public class UserSystemTest {
     ResponseEntity response = client.post(new RegisterUserForm("some_username", "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
+    response = client.post(new LoginForm("some_username", "pass".toCharArray()), login);
+    Jwt jwt = getJwt(response);
+    assertFalse(jwt == null);
+    assertFalse(jwt.getJwt().isEmpty());
+
     try {
-      client.delete(deleteUserPath);
+      client.deleteWithAuthorizationHeader(deleteUserPath, jwt.getJwt());
     } catch (HttpClientErrorException e) {
       assertResponseIsUnauthorized(e);
     }
