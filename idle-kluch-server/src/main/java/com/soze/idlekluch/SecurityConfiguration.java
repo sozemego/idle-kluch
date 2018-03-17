@@ -40,6 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .and()
         .csrf().disable()
       .authorizeRequests()
+        .antMatchers("/api/0.1/user/single/delete/").authenticated()
         .anyRequest().permitAll()
       .and()
         .addFilter(new JWTAuthenticationFilter(authenticationManager(), authService))

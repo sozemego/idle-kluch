@@ -11,6 +11,7 @@ import com.soze.idlekluch.utils.sql.DatabaseReset;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.stream.IntStream;
 
@@ -50,12 +51,14 @@ public class UserSystemTest {
   public void testCreateUserAlreadyExists() throws Exception {
     String username = "sozemego1";
     assertResponseIsOk(client.post(new RegisterUserForm(username, "password".toCharArray()), createUserPath));
-    ResponseEntity response = client.post(new RegisterUserForm(username, "password".toCharArray()), createUserPath);
-    assertResponseIsBadRequest(response);
-
-    ErrorResponse errorResponse = getErrorResponse(response);
-    assertEquals(errorResponse.getStatusCode(), 400);
-    assertEquals(errorResponse.getData().get("field"), "username");
+    try {
+      client.post(new RegisterUserForm(username, "password".toCharArray()), createUserPath);
+    } catch (HttpClientErrorException e) {
+      assertResponseIsBadRequest(e);
+      ErrorResponse errorResponse = getErrorResponse(e);
+      assertEquals(errorResponse.getStatusCode(), 400);
+      assertEquals(errorResponse.getData().get("field"), "username");
+    }
   }
 
   @Test
@@ -65,38 +68,51 @@ public class UserSystemTest {
 
   @Test
   public void testCreateUserWithWhiteSpaceInside() throws Exception {
-    ResponseEntity response = client.post(new RegisterUserForm("some whitespace", "".toCharArray()), createUserPath);
+    try {
+      client.post(new RegisterUserForm("some whitespace", "".toCharArray()), createUserPath);
+    } catch (HttpClientErrorException e) {
+      ErrorResponse errorResponse = getErrorResponse(e);
+      assertEquals(errorResponse.getStatusCode(), 400);
+      assertEquals(errorResponse.getData().get("field"), "username");
+    }
 
-    ErrorResponse errorResponse = getErrorResponse(response);
-    assertEquals(errorResponse.getStatusCode(), 400);
-    assertEquals(errorResponse.getData().get("field"), "username");
   }
 
   @Test
   public void testCreateUserWithWhiteSpaceAtTheEnd() throws Exception {
-    ResponseEntity response = client.post(new RegisterUserForm("some_whitespace_after_this   ", "g".toCharArray()), createUserPath);
-
-    ErrorResponse errorResponse = getErrorResponse(response);
-    assertEquals(errorResponse.getStatusCode(), 400);
-    assertEquals(errorResponse.getData().get("field"), "username");
+    try {
+      client.post(new RegisterUserForm("some_whitespace_after_this   ", "g".toCharArray()), createUserPath);
+    } catch (HttpClientErrorException e) {
+      ErrorResponse errorResponse = getErrorResponse(e);
+      assertEquals(errorResponse.getStatusCode(), 400);
+      assertEquals(errorResponse.getData().get("field"), "username");
+    }
   }
 
   @Test
   public void testCreateUserWithWhiteSpaceAtTheBeginning() throws Exception {
-    ResponseEntity response = client.post(new RegisterUserForm("    legit_username", "".toCharArray()), createUserPath);
+    try {
+      client.post(new RegisterUserForm("    legit_username", "".toCharArray()), createUserPath);
+    } catch (HttpClientErrorException e) {
+      ErrorResponse errorResponse = getErrorResponse(e);
+      assertEquals(errorResponse.getStatusCode(), 400);
+      assertEquals(errorResponse.getData().get("field"), "username");
+    }
 
-    ErrorResponse errorResponse = getErrorResponse(response);
-    assertEquals(errorResponse.getStatusCode(), 400);
-    assertEquals(errorResponse.getData().get("field"), "username");
   }
 
   @Test
   public void testCreateUserWithWhiteSpaceOnly() throws Exception {
-    ResponseEntity response = client.post(new RegisterUserForm("      ", "".toCharArray()), createUserPath);
 
-    ErrorResponse errorResponse = getErrorResponse(response);
-    assertEquals(errorResponse.getStatusCode(), 400);
-    assertEquals(errorResponse.getData().get("field"), "username");
+    try {
+      client.post(new RegisterUserForm("      ", "".toCharArray()), createUserPath);
+    } catch (HttpClientErrorException e) {
+      assertResponseIsBadRequest(e);
+      ErrorResponse errorResponse = getErrorResponse(e);
+      assertEquals(errorResponse.getStatusCode(), 400);
+      assertEquals(errorResponse.getData().get("field"), "username");
+    }
+
   }
 
   @Test
@@ -137,10 +153,13 @@ public class UserSystemTest {
   @Test
   public void testCreateUsernameTooLong() throws Exception {
     String longUsername = IntStream.range(0, 26).mapToObj(a -> "" + a).reduce("", (a, b) -> a + b);
-    ResponseEntity response = client.post(new RegisterUserForm(longUsername, "pass".toCharArray()), createUserPath);
-    ErrorResponse errorResponse = getErrorResponse(response);
-    assertEquals(400, errorResponse.getStatusCode());
-    assertEquals(errorResponse.getData().get("field"), "username");
+    try {
+      ResponseEntity response = client.post(new RegisterUserForm(longUsername, "pass".toCharArray()), createUserPath);
+    } catch (HttpClientErrorException e) {
+      ErrorResponse errorResponse = getErrorResponse(e);
+      assertEquals(400, errorResponse.getStatusCode());
+      assertEquals(errorResponse.getData().get("field"), "username");
+    }
   }
 
   @Test
@@ -148,7 +167,11 @@ public class UserSystemTest {
     ResponseEntity response = client.post(new RegisterUserForm("some_username", "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
-    assertResponseIsUnauthorized(client.delete(deleteUserPath));
+    try {
+      client.delete(deleteUserPath);
+    } catch (HttpClientErrorException e) {
+      assertResponseIsUnauthorized(e);
+    }
   }
 
   @Test
@@ -164,7 +187,7 @@ public class UserSystemTest {
     response = client.deleteWithAuthorizationHeader(deleteUserPath, jwt.getJwt());
     assertResponseIsOk(response);
 
-    assertResponseIsNotFound(client.get(singleUserPath + "another_username"));
+    assertResponseIsNotFound(() -> client.get(singleUserPath + "another_username"));
   }
 
   @Test
@@ -181,12 +204,15 @@ public class UserSystemTest {
     response = client.deleteWithAuthorizationHeader(deleteUserPath, jwt.getJwt());
     assertResponseIsOk(response);
 
-    assertResponseIsNotFound(client.get(singleUserPath + "another_username2"));
+    assertResponseIsNotFound(() -> client.get(singleUserPath + "another_username2"));
 
-    response = client.post(new RegisterUserForm("another_username2", "pass".toCharArray()), createUserPath);
-    ErrorResponse errorResponse = getErrorResponse(response);
-    assertEquals(400, errorResponse.getStatusCode());
-    assertEquals(errorResponse.getData().get("field"), "username");
+    try {
+      client.post(new RegisterUserForm("another_username2", "pass".toCharArray()), createUserPath);
+    } catch (HttpClientErrorException e) {
+      ErrorResponse errorResponse = getErrorResponse(e);
+      assertEquals(400, errorResponse.getStatusCode());
+      assertEquals(errorResponse.getData().get("field"), "username");
+    }
   }
 
   @Test
@@ -204,7 +230,7 @@ public class UserSystemTest {
     response = client.deleteWithAuthorizationHeader(deleteUserPath, jwt.getJwt());
     assertResponseIsOk(response);
 
-    assertResponseIsUnauthorized(client.deleteWithAuthorizationHeader(deleteUserPath, jwt.getJwt()));
+    assertResponseIsUnauthorized(() -> client.deleteWithAuthorizationHeader(deleteUserPath, jwt.getJwt()));
   }
 
   @Test
@@ -259,23 +285,27 @@ public class UserSystemTest {
   @Test
   public void testCreateUserEmptyPassword() throws Exception {
     String username = "thisdoesnotmatter";
-    ResponseEntity response = client.post(new RegisterUserForm(username, "".toCharArray()), createUserPath);
-
-    ErrorResponse errorResponse = getErrorResponse(response);
-    assertEquals(400, errorResponse.getStatusCode());
-    assertEquals(errorResponse.getData().get("field"), "password");
+    try {
+      client.post(new RegisterUserForm(username, "".toCharArray()), createUserPath);
+    } catch (HttpClientErrorException e) {
+      ErrorResponse errorResponse = getErrorResponse(e);
+      assertEquals(400, errorResponse.getStatusCode());
+      assertEquals(errorResponse.getData().get("field"), "password");
+    }
   }
 
   @Test
   public void testCreateUserPasswordTooLong() throws Exception {
     String username = "some_user_name_again";
-
     String longPassword = IntStream.range(0, 250).mapToObj(i -> "" + i).reduce("", (a, b) -> a + b);
 
-    ResponseEntity response = client.post(new RegisterUserForm(username, longPassword.toCharArray()), createUserPath);
-    ErrorResponse errorResponse = getErrorResponse(response);
-    assertEquals(400, errorResponse.getStatusCode());
-    assertEquals(errorResponse.getData().get("field"), "password");
+    try {
+      client.post(new RegisterUserForm(username, longPassword.toCharArray()), createUserPath);
+    } catch (HttpClientErrorException e) {
+      ErrorResponse errorResponse = getErrorResponse(e);
+      assertEquals(400, errorResponse.getStatusCode());
+      assertEquals(errorResponse.getData().get("field"), "password");
+    }
   }
 
   private Jwt getJwt(ResponseEntity response) {
@@ -288,6 +318,10 @@ public class UserSystemTest {
 
   private ErrorResponse getErrorResponse(ResponseEntity response) {
     return JsonUtils.jsonToObject((String) response.getBody(), ErrorResponse.class);
+  }
+
+  private ErrorResponse getErrorResponse(final HttpClientErrorException errorException) {
+    return JsonUtils.jsonToObject(errorException.getResponseBodyAsString(), ErrorResponse.class);
   }
 
 

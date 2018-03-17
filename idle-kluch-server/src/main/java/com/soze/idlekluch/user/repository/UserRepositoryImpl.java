@@ -44,7 +44,7 @@ public class UserRepositoryImpl implements UserRepository {
   public Optional<User> getUserByUsername(String username) {
     Objects.requireNonNull(username);
 
-    Query query = em.createQuery("SELECT u FROM User u WHERE UPPER(u.username) = :username AND u.nuked = false");
+    Query query = em.createQuery("SELECT u FROM User u WHERE UPPER(u.username) = :username AND u.deleted = false");
     query.setParameter("username", username.toUpperCase());
 
     try {
@@ -83,7 +83,7 @@ public class UserRepositoryImpl implements UserRepository {
       return new AuthUserDoesNotExistException("Trying to delete non-existent user.");
     });
 
-    user.setNuked(true);
+    user.setDeleted(true);
     updateUser(user);
   }
 

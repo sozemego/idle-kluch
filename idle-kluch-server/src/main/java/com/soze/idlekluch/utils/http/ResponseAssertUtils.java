@@ -2,6 +2,7 @@ package com.soze.idlekluch.utils.http;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -16,16 +17,44 @@ public class ResponseAssertUtils {
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }
 
+  public static void assertResponseIsBadRequest(final HttpClientErrorException response) {
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
+
   public static void assertResponseIsNotFound(final ResponseEntity response) {
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+  }
+
+  public static void assertResponseIsNotFound(final HttpClientErrorException response) {
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+  }
+
+  public static void assertResponseIsNotFound(final Runnable command) {
+    assertCommandIs(command, HttpStatus.NOT_FOUND);
   }
 
   public static void assertResponseIsUnauthorized(final ResponseEntity response) {
     assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
   }
 
+  public static void assertResponseIsUnauthorized(final HttpClientErrorException response) {
+    assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+  }
+
+  public static void assertResponseIsUnauthorized(final Runnable command) {
+    assertCommandIs(command, HttpStatus.UNAUTHORIZED);
+  }
+
   public static void assertResponseIsCreated(final ResponseEntity response) {
     assertEquals(HttpStatus.CREATED, response.getStatusCode());
+  }
+
+  public static void assertCommandIs(final Runnable command, final HttpStatus status) {
+    try {
+      command.run();
+    } catch (HttpClientErrorException e) {
+      assertEquals(status, e.getStatusCode());
+    }
   }
 
 }

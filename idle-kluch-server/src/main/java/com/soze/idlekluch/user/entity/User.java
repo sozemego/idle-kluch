@@ -31,8 +31,8 @@ public class User {
   @Column(name = "created_at")
   private OffsetDateTime createdAt;
 
-  @Column(name = "nuked")
-  private boolean nuked;
+  @Column(name = "deleted")
+  private boolean deleted;
 
   public User() {
 
@@ -70,12 +70,12 @@ public class User {
     this.createdAt = createdAt;
   }
 
-  public boolean getNuked() {
-    return nuked;
+  public boolean getDeleted() {
+    return deleted;
   }
 
-  public void setNuked(boolean nuked) {
-    this.nuked = nuked;
+  public void setDeleted(boolean deleted) {
+    this.deleted = deleted;
   }
 
   @Override
