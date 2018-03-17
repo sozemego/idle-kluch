@@ -11,11 +11,10 @@ public class ErrorResponse {
 
   private int statusCode;
   private String error;
-  private Map<String, Object> data = new HashMap<>();
+  private Map<String, Object> data;
 
   public ErrorResponse(int statusCode, String error) {
-    this.statusCode = statusCode;
-    this.error = Objects.requireNonNull(error);
+    this(statusCode, error, new HashMap<>());
   }
 
   @JsonCreator
@@ -45,10 +44,6 @@ public class ErrorResponse {
 
   public Map<String, Object> getData() {
     return data;
-  }
-
-  public void setData(Map<String, Object> data) {
-    this.data = data;
   }
 
   public void addData(String key, Object value) {

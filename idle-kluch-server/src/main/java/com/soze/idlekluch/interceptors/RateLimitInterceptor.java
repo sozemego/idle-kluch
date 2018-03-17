@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.security.Principal;
+import java.util.Objects;
 
 @Service
 public class RateLimitInterceptor extends HandlerInterceptorAdapter {
@@ -18,8 +20,17 @@ public class RateLimitInterceptor extends HandlerInterceptorAdapter {
   @Value("${IDLE_KLUCH_RATE_LIMIT_ENABLED}")
   private String rateLimitEnabled;
 
+  private final RateLimitService rateLimitService;
+
   @Autowired
-  private RateLimitService rateLimitService;
+  public RateLimitInterceptor(final RateLimitService rateLimitService) {
+    this.rateLimitService = Objects.requireNonNull(rateLimitService);
+  }
+
+  @PostConstruct
+  public void postConstruct() {
+    System.out.println("Rate limiting is enabled: " + rateLimitEnabled);
+  }
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -27,7 +38,7 @@ public class RateLimitInterceptor extends HandlerInterceptorAdapter {
       return true;
     }
 
-    if(!(handler instanceof HandlerMethod)) {
+    if (!(handler instanceof HandlerMethod)) {
       return true;
     }
 
@@ -49,9 +60,9 @@ public class RateLimitInterceptor extends HandlerInterceptorAdapter {
 
     //2. create a value object for the resource
     LimitedResource limitedResource = new LimitedResource(
-        method,
-        request.getMethod(),
-        request.getServletPath()
+      method,
+      request.getMethod(),
+      request.getServletPath()
     );
 
     //3. find the user name or IP if anonymous
@@ -59,22 +70,17 @@ public class RateLimitInterceptor extends HandlerInterceptorAdapter {
     String user = principal != null ? principal.getName() : request.getRemoteAddr();
 
     //3. apply rate limiting filter for this method and user
-    try {
-      rateLimitService.applyFilter(getRateLimit(annotation), user, limitedResource);
-    } catch (RateLimitException e) {
-      return false;
-    }
+    rateLimitService.applyFilter(getRateLimit(annotation), user, limitedResource);
 
     return true;
   }
 
   private RateLimit getRateLimit(RateLimited rateLimited) {
     return new RateLimit(
-        rateLimited.limit(),
-        rateLimited.timeUnit(),
-        rateLimited.timeUnits()
+      rateLimited.limit(),
+      rateLimited.timeUnit(),
+      rateLimited.timeUnits()
     );
   }
-
 
 }
