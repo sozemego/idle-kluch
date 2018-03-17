@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    height: 5rem;
+    align-items: center;
+}
+
+.element {
+    flex: 1 1 33%;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    font-weight: 700;
+}
