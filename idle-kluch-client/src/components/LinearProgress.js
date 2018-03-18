@@ -5,16 +5,12 @@ import PropTypes from 'prop-types';
 export class LinearProgress extends Component {
 
   render() {
-    const {
-      isFetching,
+	const {
+	  isFetching,
 	} = this.props;
 
-    if(!isFetching) {
-      return null;
-	}
-
 	return (
-	  <VendorLinearProgress mode={'indeterminate'} color={'red'}/>
+	  <VendorLinearProgress mode={'indeterminate'} color={'red'} style={isFetching ? {} : { visibility: 'hidden' }}/>
 	)
   }
 

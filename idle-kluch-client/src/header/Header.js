@@ -6,6 +6,7 @@ import styles from './header.css';
 import HeaderLinearProgress from "./HeaderLinearProgress";
 import HeaderAuthButtons from './HeaderAuthButtons';
 import * as appActions from '../app/actions';
+import { Divider } from "material-ui";
 
 class Header extends Component {
 
@@ -15,7 +16,7 @@ class Header extends Component {
 
   render() {
 	return (
-	  <div>
+	  <div className={styles.header}>
 		<div className={styles.container}>
 		  <div className={styles.element}>
 			<HeaderAuthButtons/>
@@ -27,6 +28,7 @@ class Header extends Component {
 
 		  </div>
 		</div>
+		<Divider/>
 		<HeaderLinearProgress/>
 	  </div>
 	)
