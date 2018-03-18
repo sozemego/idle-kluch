@@ -4,10 +4,6 @@ import PropTypes from 'prop-types';
 
 export class LinearProgress extends Component {
 
-  constructor(props) {
-	super(props);
-  }
-
   render() {
     const {
       isFetching,

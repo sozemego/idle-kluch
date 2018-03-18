@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import styles from './header.css';
 import HeaderLinearProgress from "./HeaderLinearProgress";
+import HeaderAuthButtons from './HeaderAuthButtons';
 import * as appActions from '../app/actions';
 
 class Header extends Component {
@@ -17,7 +18,7 @@ class Header extends Component {
 	  <div>
 		<div className={styles.container}>
 		  <div className={styles.element}>
-			buttons
+			<HeaderAuthButtons/>
 		  </div>
 		  <div className={[styles.element, styles.logo].join(' ')}>
 			Idle Kluch
