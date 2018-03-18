@@ -65,7 +65,6 @@ class HeaderAuthButtons extends Component {
 
   getLogoutComponent = () => {
 	const {
-	  user,
 	  isLoggedIn,
 	  logout,
 	} = this.props;
@@ -84,7 +83,6 @@ class HeaderAuthButtons extends Component {
 
   getAuthFormComponent = () => {
 	const {
-	  user,
 	  isLoggedIn,
 	} = this.props;
 
