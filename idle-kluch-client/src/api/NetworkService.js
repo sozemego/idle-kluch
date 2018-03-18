@@ -20,14 +20,14 @@ const errorInterceptor = (error) => {
 };
 
 const rateLimitErrorInterceptor = (error) => {
-  if (_.get(error, `status`, 400) === 429) {
+  if (_.get(error, `statusCode`, 400) === 429) {
 	store.dispatch(setErrorMessage('Too many requests!'));
   }
   return error;
 };
 
 const unauthorizedErrorInterceptor = (error) => {
-  if (_.get(error, 'status', 400) === 401) {
+  if (_.get(error, 'statusCode', 400) === 401) {
 	store.dispatch(setUsername(null));
 	store.dispatch(setToken(null));
   }
@@ -35,13 +35,7 @@ const unauthorizedErrorInterceptor = (error) => {
 };
 
 const errorUnpacker = (error) => {
-  const err = {
-	status: _.get(error, `response.status`, 400),
-	error: _.get(error, `response.statusText`, 'error'),
-	data: JSON.parse(_.get(error, `response.data.entity`, '{}')),
-  };
-
-  return Promise.resolve(err);
+  return Promise.resolve(error.response.data);
 };
 
 const fetchedError = (error) => {

@@ -28,16 +28,7 @@ export const register = (username, password) => {
 
 	return dispatch(logout())
 	  .then(() => userService.registerUser(username, password))
-	  .then(() => {
-		return dispatch(login(username, password));
-	  })
-	  .then((token) => {
-		dispatch(setUsername(username));
-		dispatch(setToken(token));
-		dispatch(clearForms());
-		networkService.setAuthorizationToken(token);
-		// navigationService.mainPage();
-	  })
+	  .then(() => dispatch(login(username, password)))
 	  .catch(error => {
 		if (error.field === 'username') {
 		  return dispatch(setUsernameError(error.message));
@@ -53,7 +44,14 @@ export const register = (username, password) => {
 
 export const login = (username, password) => {
   return (dispatch, getState) => {
-	return userService.login(username, password);
+	return userService.login(username, password)
+	  .then((token) => {
+		dispatch(setUsername(username));
+		dispatch(setToken(token));
+		dispatch(clearForms());
+		networkService.setAuthorizationToken(token);
+		// navigationService.mainPage();
+	  });
   };
 };
 

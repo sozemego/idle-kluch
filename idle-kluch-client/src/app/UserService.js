@@ -20,30 +20,30 @@ UserService.registerUser = function (username, password) {
   if (passwordError) return Promise.reject({ field: 'password', message: passwordError });
 
   return networkService.post(`${registerPath}`, { username, password })
-    .catch(error => {
-      if (error.response) {
-        const response = error.response.data;
-        return Promise.reject({
-          message: response.error,
-          field: response.data.field,
-        });
-      }
-      //todo handle network errors
-      console.warn(error);
-    });
+	.catch(error => {
+	  if (error.statusCode) {
+		return Promise.reject({
+		  message: error.error,
+		  field: error.data.field,
+		});
+	  }
+	  //todo handle network errors
+	  console.warn(error);
+	  throw error;
+	});
 };
 
 UserService.checkUsernameAvailability = function (username) {
   return networkService
-    .get(`${isAvailablePath}/${username}`);
+	.get(`${isAvailablePath}/${username}`);
 };
 
 UserService.login = function (username, password) {
   return networkService.post(`${loginPath}`, { username, password })
-    .then((data) => {
-      return data.jwt;
-    })
-    .catch(error => Promise.reject('Invalid username or password!'));
+	.then((data) => {
+	  return data.jwt;
+	})
+	.catch(error => Promise.reject('Invalid username or password!'));
 };
 
 UserService.delete = function () {
@@ -52,23 +52,23 @@ UserService.delete = function () {
 
 UserService.validateUsername = function (username) {
   if (!username) {
-    return 'Username cannot be empty!';
+	return 'Username cannot be empty!';
   }
 
   if (!passwordValidatorRegExp.test(username)) {
-    return 'Username can only contain letters, numbers, - and _!';
+	return 'Username can only contain letters, numbers, - and _!';
   }
 
   if (username.length > maxUsernameLength) {
-    return `Username cannot be longer than ${maxUsernameLength} characters!`;
+	return `Username cannot be longer than ${maxUsernameLength} characters!`;
   }
 };
 
 UserService.validatePassword = function (password) {
   if (!password) {
-    return 'Password cannot be empty!';
+	return 'Password cannot be empty!';
   }
   if (password.length > maxPasswordLength) {
-    return `Password cannot be longer than ${maxPasswordLength} characters!`;
+	return `Password cannot be longer than ${maxPasswordLength} characters!`;
   }
 };

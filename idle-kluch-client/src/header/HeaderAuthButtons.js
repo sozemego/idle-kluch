@@ -1,48 +1,84 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as appActions from '../app/actions';
 import { getUser, isLoggedIn } from "../app/selectors";
-import { FlatButton } from "material-ui";
+import { Menu, MenuItem, Popover } from "material-ui";
 
 import styles from './header-auth-buttons.css';
+import avatar from './avatar_temp.png';
 import HeaderAuthForm from "./HeaderAuthForm";
 
 class HeaderAuthButtons extends Component {
 
   constructor(props) {
-    super(props);
+	super(props);
+	this.state = {
+	  userMenuAnchor: null,
+	  userMenuOpen: false,
+	};
   }
 
   getNameComponent = () => {
+	const {
+	  userMenuOpen,
+	  userMenuAnchor,
+	} = this.state;
+
 	const {
 	  user,
 	  isLoggedIn,
 	} = this.props;
 
-	if(!isLoggedIn) {
+	if (!isLoggedIn) {
 	  return null;
 	}
 
-	return (
-	  <div>
-		{user.name}
-	  </div>
-	);
+	const {
+	  getLogoutComponent,
+	} = this;
+
+	return [
+	  <div className={styles.name__container}
+		   key={1}
+		   onClick={(event) => {
+			 event.preventDefault();
+			 this.setState({ userMenuOpen: true, userMenuAnchor: event.currentTarget })
+		   }}>
+		<img src={avatar} className={styles.avatar}/>
+		<div className={styles.name}>
+		  {user.name}
+		</div>
+		<i className={'material-icons'}>arrow_drop_down</i>
+	  </div>,
+	  <Popover anchorOrigin={{ horizontal: 'middle', vertical: 'bottom' }}
+			   open={userMenuOpen}
+			   onRequestClose={() => this.setState({userMenuOpen: false})}
+			   anchorEl={userMenuAnchor}
+	  >
+		<Menu>
+		  {getLogoutComponent()}
+		</Menu>
+	  </Popover>
+	];
   };
 
   getLogoutComponent = () => {
 	const {
 	  user,
 	  isLoggedIn,
+	  logout,
 	} = this.props;
 
-	if(!isLoggedIn) {
+	if (!isLoggedIn) {
 	  return null;
 	}
 
 	return (
-	  <FlatButton label={"Logout"}/>
+	  <MenuItem value="Logout" primaryText={"Logout"} onClick={() => {
+		this.setState({userMenuOpen: false})
+		logout();
+	  }}/>
 	);
   };
 
@@ -52,31 +88,24 @@ class HeaderAuthButtons extends Component {
 	  isLoggedIn,
 	} = this.props;
 
-	if(isLoggedIn) {
+	if (isLoggedIn) {
 	  return null;
 	}
 
 	return (
-	  <HeaderAuthForm />
+	  <HeaderAuthForm/>
 	);
   };
 
   render() {
-    const {
-      user,
-	  isLoggedIn,
-	} = this.props;
-
-    const {
+	const {
 	  getNameComponent,
-	  getLogoutComponent,
 	  getAuthFormComponent,
 	} = this;
 
-    return(
-      <div className={styles.container}>
+	return (
+	  <div className={styles.container}>
 		{getNameComponent()}
-		{getLogoutComponent()}
 		{getAuthFormComponent()}
 	  </div>
 	);
@@ -86,7 +115,7 @@ class HeaderAuthButtons extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: getUser(state),
+	user: getUser(state),
 	isLoggedIn: isLoggedIn(state),
   };
 };

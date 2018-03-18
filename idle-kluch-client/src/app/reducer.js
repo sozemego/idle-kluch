@@ -44,12 +44,12 @@ const setErrorMessage = (state, action) => {
 
 const setUsername = (state, action) => {
   action.payload ? localStorage.setItem('username', action.payload) : localStorage.removeItem('username');
-  return { ...state, currentUser: { ...state.currentUser, name: action.username } };
+  return { ...state, user: { ...state.user, name: action.payload } };
 };
 
 const setToken = (state, action) => {
   action.payload ? localStorage.setItem('jwt', action.payload) : localStorage.removeItem('jwt');
-  return { ...state, currentUser: { ...state.currentUser, token: action.token } };
+  return { ...state, user: { ...state.user, token: action.payload } };
 };
 
 const setUsernameError = (state, action) => {
