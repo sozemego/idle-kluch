@@ -13,8 +13,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.SharedCacheMode;
+import javax.persistence.ValidationMode;
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
@@ -36,20 +40,20 @@ public class JPAConfiguration {
     return driver;
   }
 
-  @Bean
-  public EntityManagerFactory entityManagerFactory() throws SQLException {
-    final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-    vendorAdapter.setGenerateDdl(false);
-    vendorAdapter.setShowSql(true);
-
-    final LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-    factory.setJpaVendorAdapter(vendorAdapter);
-    factory.setPackagesToScan("com.soze.idlekluch");
-    factory.setDataSource(dataSource());
-    factory.afterPropertiesSet();
-
-    return factory.getObject();
-  }
+//  @Bean
+//  public EntityManagerFactory entityManagerFactory() throws SQLException {
+//    final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//    vendorAdapter.setGenerateDdl(false);
+//    vendorAdapter.setShowSql(true);
+//
+//    final LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+//    factory.setJpaVendorAdapter(vendorAdapter);
+//    factory.setPackagesToScan("com.soze.idlekluch");
+//    factory.setDataSource(dataSource());
+//    factory.afterPropertiesSet();
+//
+//    return factory.getObject();
+//  }
 
   @Bean
   public EntityManager getEntityManager(final EntityManagerFactory entityManagerFactory) {
@@ -59,13 +63,34 @@ public class JPAConfiguration {
   @Bean
   public PlatformTransactionManager transactionManager() throws SQLException {
     JpaTransactionManager transactionManager = new JpaTransactionManager();
-    transactionManager.setEntityManagerFactory(entityManagerFactory());
+    transactionManager.setEntityManagerFactory(entityManagerFactoryBean().getObject());
     return transactionManager;
   }
 
   @Bean
   public HibernateExceptionTranslator hibernateExceptionTranslator() {
     return new HibernateExceptionTranslator();
+  }
+
+  @Bean
+  public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() throws SQLException {
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("javax.persistence.schema-generation.database.action", "none");
+    properties.put("hibernate.order_inserts", true);
+    properties.put("hibernate.order_updates", true);
+    HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
+    adapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect"); //you can change this if you have a different DB
+    adapter.setGenerateDdl(false);
+    adapter.setShowSql(true);
+
+    LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+    factory.setJpaVendorAdapter(adapter);
+    factory.setDataSource(dataSource());
+    factory.setPackagesToScan("com.soze.idlekluch");
+    factory.setSharedCacheMode(SharedCacheMode.ENABLE_SELECTIVE);
+    factory.setValidationMode(ValidationMode.NONE);
+    factory.setJpaPropertyMap(properties);
+    return factory;
   }
 
 }
