@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class World {
@@ -20,18 +20,18 @@ public class World {
   private static final Logger LOG = LoggerFactory.getLogger(World.class);
 
   //TODO externalize
-  private final int worldWidth = 100;
-  private final int worldHeight = 100;
+  private final int worldWidth = 25;
+  private final int worldHeight = 25;
 
   private final WorldRepository worldRepository;
   private final Engine engine;
-  private final List<Tile> allTiles;
+  private final Map<Point, Tile> allTiles;
 
   @Autowired
   public World(final WorldRepository worldRepository) {
     this.worldRepository = Objects.requireNonNull(worldRepository);
     this.engine = new Engine();
-    this.allTiles = new ArrayList<>();
+    this.allTiles = new HashMap<>();
   }
 
   @PostConstruct
@@ -49,8 +49,14 @@ public class World {
       LOG.info("Added [{}] tiles", newTiles.size());
     }
 
-    this.allTiles.addAll(allTiles);
+    for(final Tile tile: allTiles) {
+      this.allTiles.put(new Point(tile.getX(), tile.getY()), tile);
+    }
 
+  }
+
+  public Map<Point, Tile> getAllTiles() {
+    return allTiles;
   }
 
   private List<Tile> createInitialTiles() {

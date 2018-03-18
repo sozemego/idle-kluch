@@ -3,6 +3,7 @@ package com.soze.idlekluch.world.entity;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tiles")
@@ -19,7 +20,18 @@ public class Tile {
     return tileId;
   }
 
+  @Transient
+  public int getX() {
+    return tileId.getX();
+  }
+
+  @Transient
+  public int getY() {
+    return tileId.getY();
+  }
+
   public void setTileId(final TileId tileId) {
     this.tileId = tileId;
   }
+
 }
