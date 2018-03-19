@@ -14,7 +14,7 @@ public interface Routes {
   String USER_DELETE_SINGLE = "/single/delete"; //TODO remove delete from path
   String USER_CHECK_AVAILABLE_USERNAME = "/single/available/{username}";
 
-  String AUTH_BASE = BASE + "/auth";
+  String AUTH_BASE = USER_BASE + "/auth";
   String AUTH_LOGIN = "/login";
   String AUTH_PASSWORD_CHANGE = "/password/change";
   String AUTH_LOGOUT = "/logout";
