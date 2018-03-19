@@ -43,7 +43,12 @@ public class ErrorResponse {
   }
 
   public Map<String, Object> getData() {
-    return data;
+    return new HashMap<>(data);
+  }
+
+  public void put(final String key, final Object value) {
+    Objects.requireNonNull(key);
+    data.put(key, value);
   }
 
   public void addData(String key, Object value) {

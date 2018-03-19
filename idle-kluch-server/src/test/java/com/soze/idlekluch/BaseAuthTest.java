@@ -19,10 +19,7 @@ import java.util.Map;
  */
 public class BaseAuthTest {
 
-  private final String singleUserPath = Routes.USER_GET_SINGLE;
   private final String registerUserPath = Routes.USER_BASE + Routes.USER_REGISTER;
-  private final String deleteUserPath = Routes.USER_DELETE_SINGLE;
-  private final String usernameAvailable = Routes.USER_CHECK_AVAILABLE_USERNAME;
   private final String login = Routes.AUTH_BASE + Routes.AUTH_LOGIN;
 
   private final Map<String, String> userTokenMap = new HashMap<>();
@@ -32,7 +29,7 @@ public class BaseAuthTest {
 
   @Before
   public void setup() {
-    client = new HttpClient("http://localhost:8180/");
+    client = new HttpClient("http://localhost:8180");
   }
 
   protected void login(final String username) {

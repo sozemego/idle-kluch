@@ -41,6 +41,10 @@ public class ResponseAssertUtils {
     assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
   }
 
+  public static void assertResponseIsForbidden(final HttpClientErrorException response) {
+    assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+  }
+
   public static void assertResponseIsUnauthorized(final Runnable command) {
     assertCommandIs(command, HttpStatus.UNAUTHORIZED);
   }

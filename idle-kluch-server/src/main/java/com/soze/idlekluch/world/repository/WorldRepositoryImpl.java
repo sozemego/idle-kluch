@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.FlushModeType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
@@ -20,7 +19,6 @@ public class WorldRepositoryImpl implements WorldRepository {
   @Override
   public List<Tile> getAllTiles() {
     final Query query = em.createQuery("SELECT t FROM Tile t");
-
     return query.getResultList();
   }
 

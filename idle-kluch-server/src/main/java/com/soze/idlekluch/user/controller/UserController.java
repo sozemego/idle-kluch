@@ -53,7 +53,7 @@ public class UserController {
   }
 
   @RateLimited
-  @GetMapping(path = Routes.USER_GET_SINGLE, produces = "application/json")
+  @GetMapping(path = Routes.USER_GET_SINGLE + "/{username}", produces = "application/json")
   public ResponseEntity getUserByUsername(@PathVariable("username") final String username) {
     Objects.requireNonNull(username);
 
@@ -76,7 +76,7 @@ public class UserController {
   }
 
   @RateLimited
-  @GetMapping(path = Routes.USER_CHECK_AVAILABLE_USERNAME)
+  @GetMapping(path = Routes.USER_CHECK_AVAILABLE_USERNAME + "/{username}")
   public ResponseEntity isUsernameAvailable(@PathVariable("username") final String username) {
     boolean isAvailable = userService.isAvailableForRegistration(username);
     return ResponseEntity.ok(isAvailable);

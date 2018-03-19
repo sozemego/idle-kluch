@@ -41,9 +41,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .and()
         .csrf().disable()
       .authorizeRequests()
-        .antMatchers(Routes.USER_BASE + Routes.USER_DELETE_SINGLE).authenticated()
-        .antMatchers(Routes.AUTH_BASE + Routes.AUTH_PASSWORD_CHANGE).authenticated()
-        .antMatchers(Routes.AUTH_BASE + Routes.AUTH_LOGOUT).authenticated()
+        .antMatchers(
+          Routes.USER_BASE + Routes.USER_DELETE_SINGLE,
+          Routes.AUTH_BASE + Routes.AUTH_PASSWORD_CHANGE,
+          Routes.USER_BASE + Routes.USER_DELETE_SINGLE,
+          Routes.AUTH_BASE + Routes.AUTH_PASSWORD_CHANGE,
+          Routes.AUTH_BASE + Routes.AUTH_LOGOUT,
+          Routes.KINGDOM_BASE + Routes.KINGDOM_CREATE,
+          Routes.KINGDOM_BASE + Routes.KINGDOM_DELETE
+        )
+        .authenticated()
         .anyRequest().permitAll()
       .and()
         .addFilter(new JWTAuthenticationFilter(authenticationManager(), authService))
