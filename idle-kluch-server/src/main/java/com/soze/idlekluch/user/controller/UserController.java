@@ -1,6 +1,7 @@
 package com.soze.idlekluch.user.controller;
 
 import com.soze.idlekluch.interceptors.RateLimited;
+import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.dto.SimpleUserDto;
 import com.soze.idlekluch.user.entity.User;
@@ -20,7 +21,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping(path = "/api/0.1/user/")
+@RequestMapping(path = Routes.USER_BASE)
 public class UserController {
 
   private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
@@ -32,7 +33,7 @@ public class UserController {
     this.userService = Objects.requireNonNull(userService);
   }
 
-  @GetMapping(path = "/all", produces = "application/json")
+  @GetMapping(path = Routes.USER_GET_ALL, produces = "application/json")
   public ResponseEntity getAllUsers() {
     List<User> users = userService.getAllUsers();
 
@@ -45,14 +46,14 @@ public class UserController {
   }
 
   @RateLimited(limit = 5, timeUnits = 1)
-  @PostMapping(path = "/register", produces = "application/json")
+  @PostMapping(path = Routes.USER_REGISTER, produces = "application/json")
   public ResponseEntity registerUser(@RequestBody final RegisterUserForm registerUserForm) {
     userService.addUser(registerUserForm);
     return ResponseEntity.ok(new SimpleUserDto(registerUserForm.getUsername()));
   }
 
   @RateLimited
-  @GetMapping(path = "/single/{username}", produces = "application/json")
+  @GetMapping(path = Routes.USER_GET_SINGLE, produces = "application/json")
   public ResponseEntity getUserByUsername(@PathVariable("username") final String username) {
     Objects.requireNonNull(username);
 
@@ -68,14 +69,14 @@ public class UserController {
   }
 
   @RateLimited
-  @DeleteMapping(path = "/single/delete")
+  @DeleteMapping(path = Routes.USER_DELETE_SINGLE)
   public ResponseEntity deleteUser(final Principal principal) {
     userService.deleteUser(principal.getName());
     return ResponseEntity.ok().build();
   }
 
   @RateLimited
-  @GetMapping(path = "/single/available/{username}")
+  @GetMapping(path = Routes.USER_CHECK_AVAILABLE_USERNAME)
   public ResponseEntity isUsernameAvailable(@PathVariable("username") final String username) {
     boolean isAvailable = userService.isAvailableForRegistration(username);
     return ResponseEntity.ok(isAvailable);
