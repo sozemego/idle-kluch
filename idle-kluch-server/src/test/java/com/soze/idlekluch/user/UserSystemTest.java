@@ -25,7 +25,7 @@ public class UserSystemTest {
   private final String createUserPath = Routes.USER_REGISTER;
   private final String deleteUserPath = Routes.USER_DELETE_SINGLE;
   private final String usernameAvailable = Routes.USER_CHECK_AVAILABLE_USERNAME;
-  private final String login = Routes.AUTH_BASE + Routes.AUTH_LOGIN;
+  private final String login = Routes.AUTH + Routes.AUTH_LOGIN;
 
   private HttpClient client;
 
@@ -43,7 +43,7 @@ public class UserSystemTest {
     ResponseEntity response = client.post(form, createUserPath);
     assertResponseIsOk(response);
 
-    SimpleUserDto userDto = getSimpleUserDto(client.get(singleUserPath + username));
+    SimpleUserDto userDto = getSimpleUserDto(client.get(singleUserPath + "/" + username));
     assertTrue(userDto != null);
     assertEquals(userDto.getUsername(), username);
   }
@@ -139,7 +139,7 @@ public class UserSystemTest {
     ResponseEntity response = client.post(new RegisterUserForm("case", "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
-    SimpleUserDto userDto = getSimpleUserDto(client.get(singleUserPath + "CASE"));
+    SimpleUserDto userDto = getSimpleUserDto(client.get(singleUserPath + "/" + "CASE"));
     assertEquals("case", userDto.getUsername());
   }
 
@@ -247,7 +247,7 @@ public class UserSystemTest {
 
   @Test
   public void testUsernameAvailable() throws Exception {
-    ResponseEntity response = client.get(usernameAvailable + "NOPE");
+    ResponseEntity response = client.get(usernameAvailable + "/" + "NOPE");
     boolean available = Boolean.valueOf((String) response.getBody());
     assertEquals(true, available);
   }
@@ -258,7 +258,7 @@ public class UserSystemTest {
     ResponseEntity response = client.post(new RegisterUserForm(username, "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
-    response = client.get(usernameAvailable + username);
+    response = client.get(usernameAvailable + "/" + username);
     boolean available = Boolean.valueOf((String) response.getBody());
     assertEquals(false, available);
   }
@@ -269,7 +269,7 @@ public class UserSystemTest {
     ResponseEntity response = client.post(new RegisterUserForm(username, "pass".toCharArray()), createUserPath);
     assertResponseIsOk(response);
 
-    response = client.get(usernameAvailable + username);
+    response = client.get(usernameAvailable + "/" + username);
     boolean available = Boolean.valueOf((String) response.getBody());
     assertEquals(false, available);
   }
@@ -289,7 +289,7 @@ public class UserSystemTest {
     response = client.deleteWithAuthorizationHeader(deleteUserPath, jwt.getJwt());
     assertResponseIsOk(response);
 
-    response = client.get(usernameAvailable + username);
+    response = client.get(usernameAvailable + "/" + username);
     boolean available = Boolean.valueOf((String) response.getBody());
     assertEquals(false, available);
   }
