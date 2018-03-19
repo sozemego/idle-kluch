@@ -1,6 +1,7 @@
 package com.soze.idlekluch;
 
 import com.google.common.collect.ImmutableList;
+import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.security.JWTAuthenticationFilter;
 import com.soze.idlekluch.security.JWTAuthorizationFilter;
 import com.soze.idlekluch.user.service.AuthService;
@@ -40,7 +41,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .and()
         .csrf().disable()
       .authorizeRequests()
-        .antMatchers("/api/0.1/user/single/delete/").authenticated()
+        .antMatchers(Routes.USER_BASE + Routes.USER_DELETE_SINGLE).authenticated()
+        .antMatchers(Routes.AUTH_BASE + Routes.AUTH_PASSWORD_CHANGE).authenticated()
+        .antMatchers(Routes.AUTH_BASE + Routes.AUTH_LOGOUT).authenticated()
         .anyRequest().permitAll()
       .and()
         .addFilter(new JWTAuthenticationFilter(authenticationManager(), authService))

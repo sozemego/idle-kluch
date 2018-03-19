@@ -21,5 +21,8 @@ public interface Routes {
 
   String KINGDOM_BASE = BASE + "/kingdom";
 
+  String KINGDOM_CREATE = KINGDOM_BASE + "/create";
+  String KINGDOM_DELETE = KINGDOM_BASE + "/delete";
+  String KINGDOM_CHECK_NAME_AVAILABLE = KINGDOM_BASE + "/available/{username}";
 
 }
