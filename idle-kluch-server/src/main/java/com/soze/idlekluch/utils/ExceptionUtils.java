@@ -11,7 +11,8 @@ public class ExceptionUtils {
    * @return JAX-RS response
    */
   public static ResponseEntity convertErrorResponse(ErrorResponse errorResponse) {
-    return ResponseEntity.status(errorResponse.getStatusCode())
+    return ResponseEntity
+      .status(errorResponse.getStatusCode())
       .body(JsonUtils.objectToJson(errorResponse));
   }
 
