@@ -1,5 +1,6 @@
-package com.soze.idlekluch;
+package com.soze.idlekluch.user;
 
+import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.user.dto.Jwt;
 import com.soze.idlekluch.user.dto.LoginForm;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
@@ -20,18 +21,18 @@ import static org.junit.Assert.*;
 
 public class UserSystemTest {
 
-  private final String singleUserPath = "single/";
-  private final String createUserPath = "register/";
-  private final String deleteUserPath = "single/delete/";
-  private final String usernameAvailable = "single/available/";
-  private final String login = "auth/login/";
+  private final String singleUserPath = Routes.USER_GET_SINGLE;
+  private final String createUserPath = Routes.USER_REGISTER;
+  private final String deleteUserPath = Routes.USER_DELETE_SINGLE;
+  private final String usernameAvailable = Routes.USER_CHECK_AVAILABLE_USERNAME;
+  private final String login = Routes.AUTH_BASE + Routes.AUTH_LOGIN;
 
   private HttpClient client;
 
   @Before
   public void setup() {
     DatabaseReset.resetDatabase();
-    client = new HttpClient("http://localhost:8180/api/0.1/user/");
+    client = new HttpClient("http://localhost:8180" + Routes.USER_BASE);
   }
 
   @Test
