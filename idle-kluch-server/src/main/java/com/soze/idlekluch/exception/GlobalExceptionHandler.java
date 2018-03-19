@@ -1,0 +1,47 @@
+package com.soze.idlekluch.exception;
+
+
+import com.soze.idlekluch.interceptors.RateLimitException;
+import com.soze.idlekluch.utils.ExceptionUtils;
+import com.soze.idlekluch.utils.http.ErrorResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@ControllerAdvice
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+  @ExceptionHandler(RateLimitException.class)
+  public ResponseEntity<Object> handleRateLimitException(final RateLimitException exception) {
+    Map<String, Object> data = new HashMap<>();
+    data.put("resource", exception.getLimitedResource());
+    data.put("limit", exception.getRateLimit());
+    data.put("next", exception.getNextRequest());
+    ErrorResponse errorResponse = new ErrorResponse(429, "Rate limit exceeded", data);
+
+    return ExceptionUtils.convertErrorResponse(errorResponse);
+  }
+
+  @ExceptionHandler(EntityAlreadyExistsException.class)
+  public ResponseEntity<Object> handleEntityAlreadyExistsException(final EntityAlreadyExistsException exception) {
+    Map<String, Object> data = new HashMap<>();
+    data.put("entity", exception.getClazz().getSimpleName());
+
+    ErrorResponse errorResponse = new ErrorResponse(400, "Entity already exists", data);
+    return ExceptionUtils.convertErrorResponse(errorResponse);
+  }
+
+  @ExceptionHandler(EntityDoesNotExistException.class)
+  public ResponseEntity<Object> handleEntityDoesNotExistException(final EntityDoesNotExistException exception) {
+    Map<String, Object> data = new HashMap<>();
+    data.put("entity", exception.getClazz().getSimpleName());
+
+    ErrorResponse errorResponse = new ErrorResponse(400, "Entity does not exist", data);
+    return ExceptionUtils.convertErrorResponse(errorResponse);
+  }
+
+}
