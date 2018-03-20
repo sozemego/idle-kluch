@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "kingdom")
+@Table(name = "kingdoms")
 public class Kingdom {
 
   @EmbeddedId
@@ -49,5 +49,13 @@ public class Kingdom {
 
   public void setOwner(final User owner) {
     this.owner = owner;
+  }
+
+  public OffsetDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
   }
 }

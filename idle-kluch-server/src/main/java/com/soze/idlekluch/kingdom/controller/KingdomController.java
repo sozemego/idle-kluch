@@ -1,24 +1,32 @@
 package com.soze.idlekluch.kingdom.controller;
 
+import com.soze.idlekluch.kingdom.dto.KingdomDto;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
+import com.soze.idlekluch.kingdom.entity.Kingdom;
+import com.soze.idlekluch.kingdom.exception.InvalidRegisterKingdomException;
 import com.soze.idlekluch.kingdom.service.KingdomService;
 import com.soze.idlekluch.routes.Routes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 public class KingdomController {
 
+  private static final Logger LOG = LoggerFactory.getLogger(KingdomController.class);
+
   private final KingdomService kingdomService;
-  private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
   @Autowired
   public KingdomController(final KingdomService kingdomService) {
@@ -27,16 +35,32 @@ public class KingdomController {
 
   @PostMapping(path = Routes.KINGDOM_CREATE)
   public ResponseEntity createKingdom(final Principal principal,
-                                      @RequestBody final RegisterKingdomForm form) {
+                                      @Valid @RequestBody final RegisterKingdomForm form,
+                                      final BindingResult bindingResult) {
+
+    for (final FieldError error: bindingResult.getFieldErrors()) {
+      LOG.info("Kingdom creation by user [{}] rejected because [{}]", error.getDefaultMessage());
+      throw new InvalidRegisterKingdomException(error.getField(), error.getDefaultMessage());
+    }
+
     final String username = principal.getName();
     this.kingdomService.addKingdom(username, form);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
-  @GetMapping(path = Routes.KINGDOM_CHECK_NAME_AVAILABLE + "/{name}")
-  public ResponseEntity checkNameAvailable(@PathVariable("name") final String name) {
-    final boolean available = kingdomService.isNameAvailable(name);
-    return ResponseEntity.ok(available);
+  @GetMapping(path = Routes.KINGDOM_GET + "/{name}")
+  public ResponseEntity getKingdom(@PathVariable("name") final String name) {
+    final Optional<Kingdom> kingdomOptional = kingdomService.getKingdom(name);
+
+    if(kingdomOptional.isPresent()) {
+      LOG.info("Found kingdom with name [{}], returning", name);
+      final Kingdom kingdom = kingdomOptional.get();
+      final KingdomDto dto = new KingdomDto(kingdom.getName(), kingdom.getOwner().getUsername(), kingdom.getCreatedAt().toString());
+      return ResponseEntity.ok(dto);
+    }
+
+    LOG.info("Did not find kingdom with name [{}]", name);
+    return ResponseEntity.status(404).build();
   }
 
   @DeleteMapping(path = Routes.KINGDOM_DELETE)

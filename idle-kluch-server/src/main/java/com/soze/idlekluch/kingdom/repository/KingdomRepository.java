@@ -4,6 +4,8 @@ import com.soze.idlekluch.exception.EntityAlreadyExistsException;
 import com.soze.idlekluch.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 
+import java.util.Optional;
+
 public interface KingdomRepository {
 
   /**
@@ -12,6 +14,10 @@ public interface KingdomRepository {
    * @throws EntityAlreadyExistsException if a kingdom with given name already exists.
    */
   public void addKingdom(final Kingdom kingdom);
+
+  public Optional<Kingdom> getKingdom(final String name);
+
+  public Optional<Kingdom> getUsersKingdom(final String username);
 
   /**
    * Checks if a kingdom name is available.

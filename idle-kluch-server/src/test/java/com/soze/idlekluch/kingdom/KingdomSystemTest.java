@@ -19,7 +19,6 @@ import static org.junit.Assert.assertTrue;
 
 public class KingdomSystemTest extends BaseAuthTest {
 
-  private static final String CHECK_NAME_AVAILABLE = Routes.KINGDOM_CHECK_NAME_AVAILABLE;
   private static final String REGISTER_KINGDOM = Routes.KINGDOM_CREATE;
   private static final String GET_KINGDOM = Routes.KINGDOM_GET;
   private static final String DELETE_KINGDOM = Routes.KINGDOM_DELETE;
@@ -31,53 +30,6 @@ public class KingdomSystemTest extends BaseAuthTest {
   }
 
   @Test
-  public void testIsNameAvailable() throws Exception {
-    final ResponseEntity response = client.get(CHECK_NAME_AVAILABLE + "/superbingdom");
-    boolean available = Boolean.valueOf((String) response.getBody());
-    assertEquals(true, available);
-  }
-
-  @Test
-  public void testIsNameAvailableNotAvailable() {
-    login("Username");
-    final String kingdomName = "cool_kingdom";
-    final RegisterKingdomForm form = new RegisterKingdomForm(kingdomName);
-    client.post(form, REGISTER_KINGDOM);
-
-    final ResponseEntity response = client.get(CHECK_NAME_AVAILABLE + "/" + kingdomName);
-    boolean available = Boolean.valueOf((String) response.getBody());
-    assertEquals(false, available);
-  }
-
-  @Test
-  public void testIsNameAvailableTooLong() {
-    final String kingdomName = CommonUtils.generateRandomString(500);
-    final ResponseEntity response = client.get(CHECK_NAME_AVAILABLE + "/" + kingdomName);
-    boolean available = Boolean.valueOf((String) response.getBody());
-    assertEquals(false, available);
-  }
-
-  @Test
-  public void testIsNameAvailableCaseDoesNotMatter() {
-    final String kingdomName = "kingdom";
-    final ResponseEntity response = client.get(CHECK_NAME_AVAILABLE + "/" + kingdomName);
-    boolean available = Boolean.valueOf((String) response.getBody());
-    assertEquals(true, available);
-
-    final String username = "Username";
-    login(username);
-    final RegisterKingdomForm form = new RegisterKingdomForm(kingdomName.toUpperCase());
-    final ResponseEntity kingdomResponse = client.post(form, REGISTER_KINGDOM);
-    assertResponseIsCreated(kingdomResponse);
-
-    final ResponseEntity checkAgainResponse = client.get(CHECK_NAME_AVAILABLE + "/" + kingdomName);
-    assertEquals(false, Boolean.valueOf((String) checkAgainResponse.getBody()));
-
-    final ResponseEntity checkAgainUpperCaseResponse = client.get(CHECK_NAME_AVAILABLE + "/" + kingdomName.toUpperCase());
-    assertEquals(false, Boolean.valueOf((String) checkAgainUpperCaseResponse.getBody()));
-  }
-
-  @Test
   public void testRegisterKingdom() {
     final String username = "Username";
     login(username);
@@ -86,11 +38,11 @@ public class KingdomSystemTest extends BaseAuthTest {
     final ResponseEntity response = client.post(form, REGISTER_KINGDOM);
     assertResponseIsCreated(response);
 
-    final ResponseEntity kingdomResponse = client.get(GET_KINGDOM);
+    final ResponseEntity kingdomResponse = client.get(GET_KINGDOM + "/" + kingdomName);
     final KingdomDto dto = JsonUtils.jsonToObject((String) kingdomResponse.getBody(), KingdomDto.class);
 
-    assertTrue(dto.getName() == kingdomName);
-    assertTrue(dto.getOwner() == username);
+    assertTrue(dto.getName().equals(kingdomName));
+    assertTrue(dto.getOwner().equals(username));
     assertTrue(dto.getCreatedAt() != null);
   }
 
@@ -173,7 +125,7 @@ public class KingdomSystemTest extends BaseAuthTest {
 
     final RegisterKingdomForm differentForm = new RegisterKingdomForm("different_name");
     try {
-      client.post(form, REGISTER_KINGDOM);
+      client.post(differentForm, REGISTER_KINGDOM);
     } catch (HttpClientErrorException e) {
       assertResponseIsBadRequest(e);
       throw e;
@@ -199,11 +151,11 @@ public class KingdomSystemTest extends BaseAuthTest {
     final ResponseEntity response = client.post(form, REGISTER_KINGDOM);
     assertResponseIsCreated(response);
 
-    final ResponseEntity kingdomResponse = client.get(GET_KINGDOM);
+    final ResponseEntity kingdomResponse = client.get(GET_KINGDOM + "/" + kingdomName);
     final KingdomDto dto = JsonUtils.jsonToObject((String) kingdomResponse.getBody(), KingdomDto.class);
 
-    assertTrue(dto.getName() == kingdomName);
-    assertTrue(dto.getOwner() == username);
+    assertTrue(dto.getName().equals(kingdomName));
+    assertTrue(dto.getOwner().equals(username));
     assertTrue(dto.getCreatedAt() != null);
 
     client.delete(DELETE_KINGDOM);
