@@ -10,6 +10,7 @@ import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.utils.http.HttpClient;
 import org.junit.Before;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +20,8 @@ import java.util.Map;
  */
 public class BaseAuthTest {
 
-  private final String registerUserPath = Routes.USER_BASE + Routes.USER_REGISTER;
-  private final String login = Routes.AUTH_BASE + Routes.AUTH_LOGIN;
+  private final String registerUserPath = Routes.USER_REGISTER;
+  private final String login = Routes.AUTH_LOGIN;
 
   private final Map<String, String> userTokenMap = new HashMap<>();
   private final Map<String, String> userPasswordMap = new HashMap<>();
@@ -50,7 +51,12 @@ public class BaseAuthTest {
       String randomPassword = CommonUtils.generateRandomString(15);
       RegisterUserForm form = new RegisterUserForm(username, randomPassword.toCharArray());
 
-      client.post(form, registerUserPath);
+      try {
+        client.post(form, registerUserPath);
+      } catch (HttpClientErrorException e) {
+        //this exception will be thrown if this user is registered already,
+        //so we don't care about that
+      }
       return randomPassword;
     });
   }

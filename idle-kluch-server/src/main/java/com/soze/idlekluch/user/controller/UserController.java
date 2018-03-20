@@ -21,7 +21,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping(path = Routes.USER_BASE)
 public class UserController {
 
   private static final Logger LOG = LoggerFactory.getLogger(UserController.class);

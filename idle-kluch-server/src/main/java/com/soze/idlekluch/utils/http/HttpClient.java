@@ -42,7 +42,7 @@ public class HttpClient {
    */
   public ResponseEntity get(final String path) throws HttpClientErrorException {
     final String finalPath = url + (path != null ? path : "");
-    System.out.println("Making a get request to " + finalPath);
+    System.out.println("Making a GET request to " + finalPath);
 
     final RestTemplate restTemplate = createClient();
     final HttpHeaders httpHeaders = new HttpHeaders();

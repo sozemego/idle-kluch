@@ -9,17 +9,17 @@ public interface Routes {
 
   String USER = "/user";
   String USER_BASE = BASE + USER;
-  String USER_GET_ALL = "/all";
-  String USER_REGISTER = "/register";
-  String USER_GET_SINGLE = "/single";
-  String USER_DELETE_SINGLE = "/single/delete"; //TODO remove delete from path
-  String USER_CHECK_AVAILABLE_USERNAME = "/single/available";
+  String USER_GET_ALL = USER_BASE + "/all";
+  String USER_REGISTER = USER_BASE + "/register";
+  String USER_GET_SINGLE = USER_BASE + "/single";
+  String USER_DELETE_SINGLE = USER_BASE + "/single/delete";
+  String USER_CHECK_AVAILABLE_USERNAME = USER_BASE + "/single/available";
 
   String AUTH = "/auth";
   String AUTH_BASE = USER_BASE + AUTH;
-  String AUTH_LOGIN = "/login";
-  String AUTH_PASSWORD_CHANGE = "/password/change";
-  String AUTH_LOGOUT = "/logout";
+  String AUTH_LOGIN = AUTH_BASE + "/login";
+  String AUTH_PASSWORD_CHANGE = AUTH_BASE + "/password/change";
+  String AUTH_LOGOUT = AUTH_BASE + "/logout";
 
   String KINGDOM = "/kingdom";
   String KINGDOM_BASE = BASE + KINGDOM;

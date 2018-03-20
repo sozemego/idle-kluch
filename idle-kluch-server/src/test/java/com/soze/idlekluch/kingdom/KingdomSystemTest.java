@@ -7,6 +7,8 @@ import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.CommonUtils;
 import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.utils.http.ErrorResponse;
+import com.soze.idlekluch.utils.sql.DatabaseReset;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
@@ -17,10 +19,16 @@ import static org.junit.Assert.assertTrue;
 
 public class KingdomSystemTest extends BaseAuthTest {
 
-  private static final String CHECK_NAME_AVAILABLE = Routes.KINGDOM_BASE + Routes.KINGDOM_CHECK_NAME_AVAILABLE;
-  private static final String REGISTER_KINGDOM = Routes.KINGDOM_BASE + Routes.KINGDOM_CREATE;
-  private static final String GET_KINGDOM = Routes.KINGDOM_BASE + Routes.KINGDOM_GET;
-  private static final String DELETE_KINGDOM = Routes.KINGDOM_BASE + Routes.KINGDOM_DELETE;
+  private static final String CHECK_NAME_AVAILABLE = Routes.KINGDOM_CHECK_NAME_AVAILABLE;
+  private static final String REGISTER_KINGDOM = Routes.KINGDOM_CREATE;
+  private static final String GET_KINGDOM = Routes.KINGDOM_GET;
+  private static final String DELETE_KINGDOM = Routes.KINGDOM_DELETE;
+
+  @Before
+  public void setup() {
+    super.setup();
+    DatabaseReset.resetDatabase();
+  }
 
   @Test
   public void testIsNameAvailable() throws Exception {
@@ -66,7 +74,7 @@ public class KingdomSystemTest extends BaseAuthTest {
     assertTrue(dto.getCreatedAt() != null);
   }
 
-  @Test
+  @Test(expected = HttpClientErrorException.class)
   public void testRegisterKingdomNotAuthorized() {
     final String kingdomName = "cool kingdom";
     final RegisterKingdomForm form = new RegisterKingdomForm(kingdomName);
@@ -75,10 +83,11 @@ public class KingdomSystemTest extends BaseAuthTest {
       client.post(form, REGISTER_KINGDOM);
     } catch (HttpClientErrorException e) {
       assertResponseIsForbidden(e);
+      throw e;
     }
   }
 
-  @Test
+  @Test(expected = HttpClientErrorException.class)
   public void testRegisterKingdomIllegalName() {
     final String username = "Username";
     login(username);
@@ -91,11 +100,12 @@ public class KingdomSystemTest extends BaseAuthTest {
       assertResponseIsBadRequest(e);
       final ErrorResponse errorResponse = getErrorResponse(e);
       assertEquals("name", errorResponse.getData().get("field"));
+      throw e;
     }
 
   }
 
-  @Test
+  @Test(expected = HttpClientErrorException.class)
   public void testRegisterKingdomNameTooLong() {
     final String username = "Username";
     login(username);
@@ -108,19 +118,21 @@ public class KingdomSystemTest extends BaseAuthTest {
       assertResponseIsBadRequest(e);
       final ErrorResponse errorResponse = getErrorResponse(e);
       assertEquals("name", errorResponse.getData().get("field"));
+      throw e;
     }
   }
 
-  @Test
+  @Test(expected = HttpClientErrorException.class)
   public void testDeleteKingdomUnauthorized() {
     try {
       client.delete(DELETE_KINGDOM);
     } catch (HttpClientErrorException e) {
       assertResponseIsForbidden(e);
+      throw e;
     }
   }
 
-  @Test
+  @Test(expected = HttpClientErrorException.class)
   public void testDeleteKingdomAuthorized() {
     final String username = "cool_username";
     login(username);
@@ -142,8 +154,8 @@ public class KingdomSystemTest extends BaseAuthTest {
       client.get(GET_KINGDOM);
     } catch (HttpClientErrorException e) {
       assertResponseIsNotFound(e);
+      throw e;
     }
-
   }
 
   private ErrorResponse getErrorResponse(final HttpClientErrorException errorException) {

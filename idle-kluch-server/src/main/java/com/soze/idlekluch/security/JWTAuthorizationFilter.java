@@ -31,24 +31,19 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                                   HttpServletResponse res,
                                   FilterChain chain) throws IOException, ServletException {
     String header = req.getHeader(AUTHORIZATION);
-    System.out.println("AUTHORIZING HEADER " + header);
 
     if(header != null) {
       final String[] tokens = header.split(" ");
       if(tokens.length == 2 && "null".equalsIgnoreCase(tokens[1])) {
-        System.out.println("Bearer is null");
         chain.doFilter(req, res);
         return;
       }
     }
 
     if (header == null || !header.startsWith(AUTHENTICATION_SCHEME)) {
-      System.out.println("SKIPPING AUTH HEADER");
       chain.doFilter(req, res);
       return;
     }
-
-    System.out.println("NOT SKIPPING AUTH HEADER");
 
     UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
 

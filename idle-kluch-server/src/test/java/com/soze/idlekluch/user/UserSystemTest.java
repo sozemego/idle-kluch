@@ -25,14 +25,14 @@ public class UserSystemTest {
   private final String createUserPath = Routes.USER_REGISTER;
   private final String deleteUserPath = Routes.USER_DELETE_SINGLE;
   private final String usernameAvailable = Routes.USER_CHECK_AVAILABLE_USERNAME;
-  private final String login = Routes.AUTH + Routes.AUTH_LOGIN;
+  private final String login = Routes.AUTH_LOGIN;
 
   private HttpClient client;
 
   @Before
   public void setup() {
     DatabaseReset.resetDatabase();
-    client = new HttpClient("http://localhost:8180" + Routes.USER_BASE);
+    client = new HttpClient("http://localhost:8180");
   }
 
   @Test

@@ -3,11 +3,17 @@ package com.soze.idlekluch.kingdom.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class RegisterKingdomForm implements Serializable {
 
+  @NotNull
+  @Size(min = 1, max = 32, message = "Kingdom name has to be between 1 and 32 characters")
+  @Pattern(regexp = "[a-zA-Z0-9_-]+", message = "Kingdom name can only contain characters a-Z, 0-9 and underscores")
   private final String name;
 
   @JsonCreator
