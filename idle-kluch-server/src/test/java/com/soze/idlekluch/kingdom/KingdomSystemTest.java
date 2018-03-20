@@ -40,7 +40,7 @@ public class KingdomSystemTest extends BaseAuthTest {
   @Test
   public void testIsNameAvailableNotAvailable() {
     login("Username");
-    final String kingdomName = "cool kingdom";
+    final String kingdomName = "cool_kingdom";
     final RegisterKingdomForm form = new RegisterKingdomForm(kingdomName);
     client.post(form, REGISTER_KINGDOM);
 
@@ -58,10 +58,30 @@ public class KingdomSystemTest extends BaseAuthTest {
   }
 
   @Test
+  public void testIsNameAvailableCaseDoesNotMatter() {
+    final String kingdomName = "kingdom";
+    final ResponseEntity response = client.get(CHECK_NAME_AVAILABLE + "/" + kingdomName);
+    boolean available = Boolean.valueOf((String) response.getBody());
+    assertEquals(true, available);
+
+    final String username = "Username";
+    login(username);
+    final RegisterKingdomForm form = new RegisterKingdomForm(kingdomName.toUpperCase());
+    final ResponseEntity kingdomResponse = client.post(form, REGISTER_KINGDOM);
+    assertResponseIsCreated(kingdomResponse);
+
+    final ResponseEntity checkAgainResponse = client.get(CHECK_NAME_AVAILABLE + "/" + kingdomName);
+    assertEquals(false, Boolean.valueOf((String) checkAgainResponse.getBody()));
+
+    final ResponseEntity checkAgainUpperCaseResponse = client.get(CHECK_NAME_AVAILABLE + "/" + kingdomName.toUpperCase());
+    assertEquals(false, Boolean.valueOf((String) checkAgainUpperCaseResponse.getBody()));
+  }
+
+  @Test
   public void testRegisterKingdom() {
     final String username = "Username";
     login(username);
-    final String kingdomName = "cool kingdom";
+    final String kingdomName = "cool_kingdom";
     final RegisterKingdomForm form = new RegisterKingdomForm(kingdomName);
     final ResponseEntity response = client.post(form, REGISTER_KINGDOM);
     assertResponseIsCreated(response);
@@ -76,7 +96,7 @@ public class KingdomSystemTest extends BaseAuthTest {
 
   @Test(expected = HttpClientErrorException.class)
   public void testRegisterKingdomNotAuthorized() {
-    final String kingdomName = "cool kingdom";
+    final String kingdomName = "cool_kingdom";
     final RegisterKingdomForm form = new RegisterKingdomForm(kingdomName);
 
     try {
@@ -91,7 +111,7 @@ public class KingdomSystemTest extends BaseAuthTest {
   public void testRegisterKingdomIllegalName() {
     final String username = "Username";
     login(username);
-    final String kingdomName = "cool %%^$^ another one";
+    final String kingdomName = "cool_%%^$^_another_one";
     final RegisterKingdomForm form = new RegisterKingdomForm(kingdomName);
 
     try {
@@ -123,6 +143,44 @@ public class KingdomSystemTest extends BaseAuthTest {
   }
 
   @Test(expected = HttpClientErrorException.class)
+  public void testRegisterKingdomAlreadyExists() {
+    final String username = "Username";
+    login(username);
+    final String kingdomName = "normal";
+    final RegisterKingdomForm form = new RegisterKingdomForm(kingdomName);
+
+    client.post(form, REGISTER_KINGDOM);
+
+    final String anotherUsername = "another_user";
+    login(anotherUsername);
+
+    try {
+      client.post(form, REGISTER_KINGDOM);
+    } catch (HttpClientErrorException e) {
+      assertResponseIsBadRequest(e);
+      throw e;
+    }
+
+  }
+
+  @Test(expected = HttpClientErrorException.class)
+  public void testUserAlreadyHasKingdom() {
+    final String username = "Username";
+    login(username);
+    final String kingdomName = "normal";
+    final RegisterKingdomForm form = new RegisterKingdomForm(kingdomName);
+    client.post(form, REGISTER_KINGDOM);
+
+    final RegisterKingdomForm differentForm = new RegisterKingdomForm("different_name");
+    try {
+      client.post(form, REGISTER_KINGDOM);
+    } catch (HttpClientErrorException e) {
+      assertResponseIsBadRequest(e);
+      throw e;
+    }
+  }
+
+  @Test(expected = HttpClientErrorException.class)
   public void testDeleteKingdomUnauthorized() {
     try {
       client.delete(DELETE_KINGDOM);
@@ -136,7 +194,7 @@ public class KingdomSystemTest extends BaseAuthTest {
   public void testDeleteKingdomAuthorized() {
     final String username = "cool_username";
     login(username);
-    final String kingdomName = "cool fine kingdom";
+    final String kingdomName = "cool_fine_kingdom";
     final RegisterKingdomForm form = new RegisterKingdomForm(kingdomName);
     final ResponseEntity response = client.post(form, REGISTER_KINGDOM);
     assertResponseIsCreated(response);
