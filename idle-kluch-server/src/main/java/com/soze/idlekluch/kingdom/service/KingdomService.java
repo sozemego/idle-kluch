@@ -28,4 +28,6 @@ public interface KingdomService {
 
   public Optional<Kingdom> getKingdom(final String name);
 
+  public Optional<Kingdom> getUsersKingdom(final String username);
+
 }

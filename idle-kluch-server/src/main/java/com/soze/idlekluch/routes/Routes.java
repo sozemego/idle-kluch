@@ -27,5 +27,6 @@ public interface Routes {
   String KINGDOM_CREATE = KINGDOM_BASE + "/create";
   String KINGDOM_DELETE = KINGDOM_BASE + "/delete";
   String KINGDOM_GET = KINGDOM_BASE + "/single";
+  String KINGDOM_OWN = KINGDOM_BASE + "/own";
 
 }

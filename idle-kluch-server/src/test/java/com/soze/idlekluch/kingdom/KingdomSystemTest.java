@@ -22,6 +22,7 @@ public class KingdomSystemTest extends BaseAuthTest {
   private static final String REGISTER_KINGDOM = Routes.KINGDOM_CREATE;
   private static final String GET_KINGDOM = Routes.KINGDOM_GET;
   private static final String DELETE_KINGDOM = Routes.KINGDOM_DELETE;
+  private static final String KINGDOM_OWN = Routes.KINGDOM_OWN;
 
   @Before
   public void setup() {
@@ -44,6 +45,12 @@ public class KingdomSystemTest extends BaseAuthTest {
     assertTrue(dto.getName().equals(kingdomName));
     assertTrue(dto.getOwner().equals(username));
     assertTrue(dto.getCreatedAt() != null);
+
+    final ResponseEntity ownKingdomResponse = client.get(KINGDOM_OWN);
+    final KingdomDto ownKingdomDto = JsonUtils.jsonToObject((String) ownKingdomResponse.getBody(), KingdomDto.class);
+    assertTrue(ownKingdomDto.getName().equals(kingdomName));
+    assertTrue(ownKingdomDto.getOwner().equals(username));
+    assertTrue(ownKingdomDto.getCreatedAt() != null);
   }
 
   @Test(expected = HttpClientErrorException.class)
@@ -164,6 +171,16 @@ public class KingdomSystemTest extends BaseAuthTest {
       client.get(GET_KINGDOM);
     } catch (HttpClientErrorException e) {
       assertResponseIsNotFound(e);
+      throw e;
+    }
+  }
+
+  @Test(expected = HttpClientErrorException.class)
+  public void testGetOwnKingdomUnauthorized() {
+    try {
+      client.get(KINGDOM_OWN);
+    } catch (HttpClientErrorException e) {
+      assertResponseIsForbidden(e);
       throw e;
     }
   }

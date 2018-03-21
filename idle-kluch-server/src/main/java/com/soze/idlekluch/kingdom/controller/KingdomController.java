@@ -48,6 +48,18 @@ public class KingdomController {
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
+  @GetMapping(path = Routes.KINGDOM_OWN)
+  public ResponseEntity getOwnKingdom(final Principal principal) {
+    final Optional<Kingdom> kingdomOptional = kingdomService.getUsersKingdom(principal.getName());
+
+    if(!kingdomOptional.isPresent()) {
+      return ResponseEntity.status(404).build();
+    }
+
+    final KingdomDto dto = convertKingdomDto(kingdomOptional.get());
+    return ResponseEntity.ok(dto);
+  }
+
   @GetMapping(path = Routes.KINGDOM_GET + "/{name}")
   public ResponseEntity getKingdom(@PathVariable("name") final String name) {
     final Optional<Kingdom> kingdomOptional = kingdomService.getKingdom(name);
@@ -55,7 +67,7 @@ public class KingdomController {
     if(kingdomOptional.isPresent()) {
       LOG.info("Found kingdom with name [{}], returning", name);
       final Kingdom kingdom = kingdomOptional.get();
-      final KingdomDto dto = new KingdomDto(kingdom.getName(), kingdom.getOwner().getUsername(), kingdom.getCreatedAt().toString());
+      final KingdomDto dto = convertKingdomDto(kingdom);
       return ResponseEntity.ok(dto);
     }
 
@@ -67,6 +79,10 @@ public class KingdomController {
   public ResponseEntity deleteKingdom(final Principal principal) {
     this.kingdomService.removeKingdom(principal.getName());
     return ResponseEntity.ok().build();
+  }
+
+  private KingdomDto convertKingdomDto(final Kingdom kingdom) {
+    return new KingdomDto(kingdom.getName(), kingdom.getOwner().getUsername(), kingdom.getCreatedAt().toString());
   }
 
 }

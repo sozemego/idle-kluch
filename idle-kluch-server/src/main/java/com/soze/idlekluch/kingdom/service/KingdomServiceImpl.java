@@ -85,4 +85,10 @@ public class KingdomServiceImpl implements KingdomService {
     return kingdomRepository.getKingdom(name);
   }
 
+  @Override
+  public Optional<Kingdom> getUsersKingdom(final String username) {
+    Objects.requireNonNull(username);
+    return kingdomRepository.getUsersKingdom(username);
+  }
+
 }
