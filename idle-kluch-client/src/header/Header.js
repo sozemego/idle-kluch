@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 
 import styles from './header.css';
 import HeaderLinearProgress from "./HeaderLinearProgress";
-import HeaderAuthButtons from './HeaderUserSection';
+import HeaderAuthButtons from './HeaderUserSection/HeaderUserSection';
 import * as appActions from '../app/actions';
 import { Divider } from "material-ui";
-import HeaderKingdomSection from "./HeaderKingdomSection";
+import HeaderKingdomSection from "./HeaderKingdomSection/HeaderKingdomSection";
 
 class Header extends Component {
 

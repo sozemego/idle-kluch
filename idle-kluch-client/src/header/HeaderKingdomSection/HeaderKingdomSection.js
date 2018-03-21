@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as appActions from '../app/actions';
-import * as kingdomActions from '../kingdom/actions';
-import { getUser, isLoggedIn } from "../app/selectors";
+import * as appActions from '../../app/actions';
+import * as kingdomActions from '../../kingdom/actions';
+import { getUser, isLoggedIn } from "../../app/selectors";
 
-import avatar from './avatar_temp.png';
+import avatar from '../avatar_temp.png';
 import styles from './header-kingdom-section.css';
-import { getKingdom, hasKingdom } from "../kingdom/selectors";
+import { getKingdom, hasKingdom } from "../../kingdom/selectors";
 import { Menu, MenuItem, Popover } from "material-ui";
 
 class HeaderKingdomSection extends Component {

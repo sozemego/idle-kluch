@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import * as appActions from '../app/actions';
-import { getPasswordError, getUsernameError } from "../app/selectors";
+import * as appActions from '../../app/actions';
+import { getPasswordError, getUsernameError } from "../../app/selectors";
 
 import styles from './header-auth-form.css';
 import { TextField } from "material-ui";
