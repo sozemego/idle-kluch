@@ -1,6 +1,7 @@
 import { makeActionCreator } from "../store/utils";
 import { UserService as userService } from './UserService';
 import { NetworkService as networkService } from '../api/NetworkService';
+import { loadKingdom } from "../kingdom/actions";
 
 export const FETCHING = 'FETCHING';
 export const fetching = makeActionCreator(FETCHING);
@@ -37,6 +38,7 @@ export const register = (username, password) => {
 		  return dispatch(setPasswordError(error.message));
 		}
 		console.log(error);
+		throw error;
 	  });
 
   };
@@ -51,7 +53,9 @@ export const login = (username, password) => {
 		dispatch(clearForms());
 		networkService.setAuthorizationToken(token);
 		// navigationService.mainPage();
-	  });
+	  })
+	  .then()
+	  .catch(error => dispatch(setUsernameError(error)));
   };
 };
 

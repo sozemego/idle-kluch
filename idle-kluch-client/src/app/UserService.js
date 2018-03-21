@@ -56,7 +56,7 @@ UserService.validateUsername = function (username) {
   }
 
   if (!passwordValidatorRegExp.test(username)) {
-	return 'Username can only contain letters, numbers, - and _!';
+	return 'Username can only contain letters, numbers, - and _';
   }
 
   if (username.length > maxUsernameLength) {
