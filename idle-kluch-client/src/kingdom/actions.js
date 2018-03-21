@@ -16,11 +16,11 @@ export const loadKingdom = () => {
 
 	return kingdomService.getOwn()
 	  .then(kingdom => {
-	    dispatch(setKingdom(kingdom));
+		dispatch(setKingdom(kingdom));
 	  })
 	  .catch(error => {
-	    if(error.error !== 'Kingdom not found') {
-	      throw error;
+		if (error.error !== 'Kingdom not found') {
+		  throw error;
 		}
 	  });
 
@@ -30,14 +30,22 @@ export const loadKingdom = () => {
 export const registerKingdom = (kingdomName) => {
   return (dispatch, getState) => {
 
-    return kingdomService.registerKingdom(kingdomName)
+	return kingdomService.registerKingdom(kingdomName)
 	  .catch((error) => {
-	    if(error.field === 'name') {
-	      return dispatch(setKingdomNameRegistrationError(error.message));
+		if (error.field === 'name') {
+		  return dispatch(setKingdomNameRegistrationError(error.message));
 		}
 		throw error;
 	  })
 	  .then(() => dispatch(loadKingdom()));
 
+  };
+};
+
+export const deleteKingdom = () => {
+  return (dispatch, getState) => {
+
+	return kingdomService.deleteKingdom()
+	  .then(() => dispatch(setKingdom(null)));
   };
 };

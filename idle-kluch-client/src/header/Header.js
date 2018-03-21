@@ -7,6 +7,7 @@ import HeaderLinearProgress from "./HeaderLinearProgress";
 import HeaderAuthButtons from './HeaderUserSection';
 import * as appActions from '../app/actions';
 import { Divider } from "material-ui";
+import HeaderKingdomSection from "./HeaderKingdomSection";
 
 class Header extends Component {
 
@@ -20,6 +21,7 @@ class Header extends Component {
 		<div className={styles.container}>
 		  <div className={styles.element}>
 			{/*<HeaderAuthButtons/>*/}
+			<HeaderKingdomSection/>
 		  </div>
 		  <div className={[styles.element, styles.logo].join(' ')}>
 			Idle Kluch

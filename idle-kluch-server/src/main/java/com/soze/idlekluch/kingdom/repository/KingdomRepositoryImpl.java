@@ -42,13 +42,9 @@ public class KingdomRepositoryImpl implements KingdomRepository {
   }
 
   @Override
-  public boolean isNameAvailable(final String name) {
-    return false;
-  }
-
-  @Override
+  @Transactional
   public void removeKingdom(final Kingdom kingdom) {
-
+    em.remove(kingdom);
   }
 
   @Override

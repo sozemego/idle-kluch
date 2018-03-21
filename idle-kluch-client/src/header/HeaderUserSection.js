@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as appActions from '../app/actions';
 import { getUser, isLoggedIn } from "../app/selectors";
 
-import styles from './header-auth-buttons.css';
+import styles from './header-user.css';
 import HeaderAuthForm from "./HeaderAuthForm";
 import HeaderUserComponent from "./HeaderUserComponent";
 

@@ -13,7 +13,7 @@ const maxKingdomNameLength = 32;
 export const KingdomService = {};
 
 KingdomService.getOwn = () => {
-  return networkService.get(`${getOwn}`);
+  return networkService.get(getOwn);
 };
 
 KingdomService.registerKingdom = (name) => {
@@ -22,7 +22,11 @@ KingdomService.registerKingdom = (name) => {
 	return Promise.reject({ field: 'name', message: kingdomNameError });
   }
 
-  return networkService.post(`${create}`, {name});
+  return networkService.post(create, {name});
+};
+
+KingdomService.deleteKingdom = () => {
+  return networkService.delete(deleteKingdom);
 };
 
 const validateKingdomName = (kingdomName) => {

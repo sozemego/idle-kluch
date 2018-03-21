@@ -20,13 +20,6 @@ public interface KingdomRepository {
   public Optional<Kingdom> getUsersKingdom(final String username);
 
   /**
-   * Checks if a kingdom name is available.
-   * @param name
-   * @return
-   */
-  public boolean isNameAvailable(final String name);
-
-  /**
    * Deletes the kingdom.
    * @param kingdom
    * @throws EntityDoesNotExistException if kingdom does not exist
