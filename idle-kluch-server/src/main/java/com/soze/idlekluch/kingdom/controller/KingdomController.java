@@ -6,6 +6,8 @@ import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.InvalidRegisterKingdomException;
 import com.soze.idlekluch.kingdom.service.KingdomService;
 import com.soze.idlekluch.routes.Routes;
+import com.soze.idlekluch.utils.ExceptionUtils;
+import com.soze.idlekluch.utils.http.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +55,8 @@ public class KingdomController {
     final Optional<Kingdom> kingdomOptional = kingdomService.getUsersKingdom(principal.getName());
 
     if(!kingdomOptional.isPresent()) {
-      return ResponseEntity.status(404).build();
+      final ErrorResponse errorResponse = new ErrorResponse(404, "Kingdom not found");
+      return ExceptionUtils.convertErrorResponse(errorResponse);
     }
 
     final KingdomDto dto = convertKingdomDto(kingdomOptional.get());
@@ -72,7 +75,8 @@ public class KingdomController {
     }
 
     LOG.info("Did not find kingdom with name [{}]", name);
-    return ResponseEntity.status(404).build();
+    final ErrorResponse errorResponse = new ErrorResponse(404, "Kingdom not found");
+    return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
   @DeleteMapping(path = Routes.KINGDOM_DELETE)
