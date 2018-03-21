@@ -11,6 +11,7 @@ import store from "../store/store";
 import Header from '../header/Header.js';
 
 import styles from './App.css';
+import ContentContainer from "./ContentContainer";
 
 const theme = getMuiTheme(lightBaseTheme);
 const history = createBrowserHistory();
@@ -25,8 +26,8 @@ class App extends Component {
 			<div>
 			  <Header/>
 			  <div className={styles.content}>
-				<div>here be one of menus</div>
-				<div>here be game</div>
+				{/*<div>here be one of menus</div>*/}
+				<ContentContainer />
 			  </div>
 			</div>
 		  </Router>
