@@ -2,6 +2,7 @@ import { makeActionCreator } from "../store/utils";
 import { UserService as userService } from './UserService';
 import { NetworkService as networkService } from '../api/NetworkService';
 import { loadKingdom } from "../kingdom/actions";
+import { isLoggedIn } from "./selectors";
 
 export const FETCHING = 'FETCHING';
 export const fetching = makeActionCreator(FETCHING);
@@ -23,6 +24,22 @@ const setUsernameError = makeActionCreator(SET_USERNAME_ERROR, 'payload');
 
 export const SET_PASSWORD_ERROR = 'SET_PASSWORD_ERROR';
 const setPasswordError = makeActionCreator(SET_PASSWORD_ERROR, 'payload');
+
+/**
+ * Function used to initialize the application.
+ * @returns {function(*, *)}
+ */
+export const init = () => {
+  return (dispatch, getState) => {
+
+    const loggedIn = isLoggedIn(getState);
+
+	if(loggedIn) {
+      dispatch(loadKingdom());
+	}
+
+  };
+};
 
 export const register = (username, password) => {
   return (dispatch, getState) => {

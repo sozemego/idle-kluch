@@ -13,26 +13,32 @@ import Header from '../header/Header.js';
 import styles from './App.css';
 import ContentContainer from "./ContentContainer";
 
+import * as appActions from './actions';
+
 const theme = getMuiTheme(lightBaseTheme);
 const history = createBrowserHistory();
 
 class App extends Component {
 
+  componentDidMount = () => {
+	store.dispatch(appActions.init());
+  };
+
   render() {
 	return (
-	  <MuiThemeProvider muiTheme={theme}>
-		<Provider store={store}>
+	  <Provider store={store}>
+		<MuiThemeProvider muiTheme={theme}>
 		  <Router history={history}>
 			<div>
 			  <Header/>
 			  <div className={styles.content}>
 				{/*<div>here be one of menus</div>*/}
-				<ContentContainer />
+				<ContentContainer/>
 			  </div>
 			</div>
 		  </Router>
-		</Provider>
-	  </MuiThemeProvider>
+		</MuiThemeProvider>
+	  </Provider>
 	);
   }
 }

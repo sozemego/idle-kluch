@@ -14,10 +14,6 @@ class ContentContainer extends Component {
 	super(props);
   }
 
-  componentDidMount = () => {
-    this.props.loadKingdom();
-  };
-
   getComponent = () => {
 	const {
 	  hasKingdom,
