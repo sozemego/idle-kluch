@@ -30,12 +30,15 @@ public class JPAConfiguration {
   @Value("${IDLE_KLUCH_DATABASE_NAME}")
   private String dbName;
 
+  @Value("${IDLE_KLUCH_USERNAME}")
+  private String dbUsername;
+
   @Bean
   public DataSource dataSource() throws SQLException {
     final DriverManagerDataSource driver = new DriverManagerDataSource();
     driver.setDriverClassName("org.postgresql.Driver");
     driver.setUrl("jdbc:postgresql://localhost:5432/" + dbName + "?stringtype=unspecified");
-    driver.setUsername("postgres");
+    driver.setUsername(dbUsername);
     driver.setPassword(dbPassword);
     return driver;
   }

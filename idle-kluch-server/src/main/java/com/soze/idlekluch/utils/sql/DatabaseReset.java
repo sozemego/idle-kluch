@@ -1,7 +1,9 @@
 package com.soze.idlekluch.utils.sql;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,7 +29,7 @@ public class DatabaseReset {
   public static void resetDatabase() {
 
     try {
-      List<String> file = Files.lines(Paths.get("/idle-kluch/sql/create.sql"))
+      List<String> file = Files.lines(Paths.get("sql/create.sql"))
         .collect(Collectors.toList());
       String fileContent = file.stream().reduce("", (prev, cur) -> prev += cur + '\n');
       executeSql(fileContent);
