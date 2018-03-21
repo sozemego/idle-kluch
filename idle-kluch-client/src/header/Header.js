@@ -19,13 +19,13 @@ class Header extends Component {
 	  <div className={styles.header}>
 		<div className={styles.container}>
 		  <div className={styles.element}>
-			<HeaderAuthButtons/>
+			{/*<HeaderAuthButtons/>*/}
 		  </div>
 		  <div className={[styles.element, styles.logo].join(' ')}>
 			Idle Kluch
 		  </div>
 		  <div className={styles.element}>
-
+			<HeaderAuthButtons/>
 		  </div>
 		</div>
 		<Divider/>

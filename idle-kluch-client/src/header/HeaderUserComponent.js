@@ -11,12 +11,17 @@ import styles from './header-auth-buttons.css';
 class HeaderUserComponent extends Component {
 
   constructor(props) {
-    super(props);
+	super(props);
 	this.state = {
 	  userMenuAnchor: null,
 	  userMenuOpen: false,
 	};
   }
+
+  onContainerClicked = (event) => {
+	event.preventDefault();
+	this.setState({ userMenuOpen: true, userMenuAnchor: event.currentTarget });
+  };
 
   render() {
 	const {
@@ -37,10 +42,7 @@ class HeaderUserComponent extends Component {
 	return [
 	  <div className={styles.name__container}
 		   key={0}
-		   onClick={(event) => {
-			 event.preventDefault();
-			 this.setState({ userMenuOpen: true, userMenuAnchor: event.currentTarget })
-		   }}>
+		   onClick={this.onContainerClicked}>
 		<img src={avatar} className={styles.avatar}/>
 		<div className={styles.name}>
 		  {user.name}
@@ -50,14 +52,14 @@ class HeaderUserComponent extends Component {
 	  <Popover anchorOrigin={{ horizontal: 'middle', vertical: 'bottom' }}
 			   open={userMenuOpen}
 			   key={1}
-			   onRequestClose={() => this.setState({userMenuOpen: false})}
+			   onRequestClose={() => this.setState({ userMenuOpen: false })}
 			   anchorEl={userMenuAnchor}
 	  >
 		<Menu>
 		  <MenuItem value="Logout"
 					primaryText={"Logout"}
 					onClick={() => {
-					  this.setState({userMenuOpen: false})
+					  this.setState({ userMenuOpen: false })
 					  logout();
 					}}
 		  />

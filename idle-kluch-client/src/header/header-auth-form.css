@@ -34,4 +34,5 @@
     max-width: 125px;
     max-height: 2em;
     padding: 2px 4px 2px 4px;
+    justify-self: flex-start;
 }
