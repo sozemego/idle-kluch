@@ -24,7 +24,7 @@ class HeaderAuthForm extends Component {
 	} = this.props;
 
 	return register(this.state.username, this.state.password);
-  }
+  };
 
   login = () => {
     const {
@@ -32,7 +32,7 @@ class HeaderAuthForm extends Component {
 	} = this.props;
 
     return login(this.state.username, this.state.password);
-  }
+  };
 
   render() {
 	const {
@@ -58,6 +58,7 @@ class HeaderAuthForm extends Component {
 				 placeholder={'Username'}
 				 onChange={e => this.setState({username: e.target.value})}
 				 autoComplete={'username'}
+				 tabIndex={1}
 		  />
 		  <button className={styles.button} onClick={register}>Register</button>
 		  <div className={styles.error}>{usernameError}</div>
@@ -68,6 +69,7 @@ class HeaderAuthForm extends Component {
 				 placeholder={'Password'}
 				 autoComplete={'current-password'}
 				 onChange={e => this.setState({password: e.target.value})}
+				 tabIndex={2}
 		  />
 		  <button className={styles.button} onClick={login}>Login</button>
 		  <div className={styles.error}>{passwordError}</div>

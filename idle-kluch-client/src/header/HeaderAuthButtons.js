@@ -40,7 +40,7 @@ class HeaderAuthButtons extends Component {
 
 	return [
 	  <div className={styles.name__container}
-		   key={1}
+		   key={0}
 		   onClick={(event) => {
 			 event.preventDefault();
 			 this.setState({ userMenuOpen: true, userMenuAnchor: event.currentTarget })
@@ -53,6 +53,7 @@ class HeaderAuthButtons extends Component {
 	  </div>,
 	  <Popover anchorOrigin={{ horizontal: 'middle', vertical: 'bottom' }}
 			   open={userMenuOpen}
+			   key={1}
 			   onRequestClose={() => this.setState({userMenuOpen: false})}
 			   anchorEl={userMenuAnchor}
 	  >
@@ -74,10 +75,12 @@ class HeaderAuthButtons extends Component {
 	}
 
 	return (
-	  <MenuItem value="Logout" primaryText={"Logout"} onClick={() => {
-		this.setState({userMenuOpen: false})
-		logout();
-	  }}/>
+	  <MenuItem value="Logout"
+				primaryText={"Logout"}
+				onClick={() => {
+					this.setState({userMenuOpen: false})
+					logout();
+				}}/>
 	);
   };
 
