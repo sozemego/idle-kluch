@@ -30,7 +30,7 @@ public class JPAConfiguration {
   @Value("${IDLE_KLUCH_DATABASE_NAME}")
   private String dbName;
 
-  @Value("${IDLE_KLUCH_USERNAME}")
+  @Value("${IDLE_KLUCH_DATABASE_USERNAME}")
   private String dbUsername;
 
   @Bean

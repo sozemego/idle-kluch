@@ -1,9 +1,7 @@
 package com.soze.idlekluch.utils.sql;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class DatabaseReset {
 
-  private static final String DB_USER = System.getenv("IDLE_KLUCH_DB_USER");
+  private static final String DB_USER = System.getenv("IDLE_KLUCH_DATABASE_USERNAME");
   private static final String DB_PASS = System.getenv("IDLE_KLUCH_DATABASE_PASSWORD");
   private static final String CONNECTION_STRING = "jdbc:postgresql://127.0.0.1:5432/idle_kluch_test";
 
@@ -55,6 +53,7 @@ public class DatabaseReset {
         DB_USER,
         DB_PASS
       );
+
 
       PreparedStatement statement = connection.prepareStatement(sql);
       statement.execute();
