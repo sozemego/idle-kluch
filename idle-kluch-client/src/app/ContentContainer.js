@@ -7,6 +7,7 @@ import { isLoggedIn } from "./selectors";
 import * as kingdomActions from '../kingdom/actions';
 
 import styles from './content-container.css';
+import GameContainer from "../game/GameContainer";
 
 class ContentContainer extends Component {
 
@@ -22,6 +23,7 @@ class ContentContainer extends Component {
 
 	switch (true) {
 	  case !hasKingdom && isLoggedIn: return <CreateKingdomForm/>;
+	  case hasKingdom && isLoggedIn: return <GameContainer/>;
 	  default: return null;
 	}
   };

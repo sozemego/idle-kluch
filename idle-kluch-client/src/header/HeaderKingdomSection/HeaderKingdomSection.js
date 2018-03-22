@@ -73,8 +73,12 @@ class HeaderKingdomSection extends Component {
 }
 
 HeaderKingdomSection.propTypes = {
-  user: PropTypes.object.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
+  hasKingdom: PropTypes.bool.isRequired,
+  kingdom: PropTypes.object,
+};
+
+HeaderKingdomSection.defaultProps = {
+  kingdom: null,
 };
 
 const mapStateToProps = (state) => {

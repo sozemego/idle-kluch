@@ -29,4 +29,10 @@ public interface Routes {
   String KINGDOM_GET = KINGDOM_BASE + "/single";
   String KINGDOM_OWN = KINGDOM_BASE + "/own";
 
+  String WEB_SOCKET = "/ws";
+  String GAME = "/game";
+
+  String GAME_BASE = BASE + WEB_SOCKET + GAME;
+
+
 }
