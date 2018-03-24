@@ -7,7 +7,7 @@ const TILE_SIZE = 128;
 const createGame = () => {
 
   let game = null;
-  let background = null;
+  // let background = null;
 
   const gameUpdate = () => {
 
@@ -16,8 +16,8 @@ const createGame = () => {
   const config = {
 	type: Phaser.CANVAS,
 	parent: 'game',
-	width: window.innerWidth,
-	height: window.innerHeight,
+	width: TILE_SIZE * 10,
+	height: TILE_SIZE * 6,
 	scene: {
 	  preload: function() {
 		console.log('preloading!')
@@ -31,8 +31,7 @@ const createGame = () => {
 		for(let i = 0; i < tiles.length; i++) {
 		  const tile = tiles[i];
 		  const { x, y } = tile;
-		  const sprite = this.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'grass_1');
-		  sprite.setSize(TILE_SIZE, TILE_SIZE, true);
+		  const sprite = this.add.sprite((x * TILE_SIZE) + (TILE_SIZE / 2), (y * TILE_SIZE) + (TILE_SIZE / 2), 'grass_1');
 		}
 
 	  },
