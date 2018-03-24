@@ -1,5 +1,7 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 import { networkConfig } from '../api/config';
+import { addTiles } from "./actions";
+import store from '../store/store';
 
 const game = `ws/game`;
 
@@ -7,48 +9,43 @@ let socket = null;
 
 export const GameService = {};
 
-GameService.connect = function() {
-  if (socket && socket.readyState !== WebSocket.CLOSED) {
-	console.warn('Already connected or connecting or closing. Either way, cannot connect right now.');
-	return;
-  }
+GameService.connect = function () {
+  return new Promise((resolve, reject) => {
+	if (socket && socket.readyState !== WebSocket.CLOSED) {
+	  reject('Already connected or connecting or closing. Either way, cannot connect right now.');
+	  return;
+	}
 
-  const { wsProtocol, base, port, version } = networkConfig;
-  socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
+	const { wsProtocol, base, port, version } = networkConfig;
+	socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
 
-  socket.onopen = () => {
+	socket.onopen = () => {
+	  resolve();
+	};
 
-  };
+	socket.onclose = () => {
 
-  socket.onclose = () => {
+	};
 
-  };
-
-  socket.onmessage = (message) => {
-    const parsed = JSON.parse(message);
-	// const parsed = JSON.parse(message.data);
-	// if (parsed['START_TYPING']) {
-	//   onStartTyping(parsed['START_TYPING']);
-	// }
-	// if (parsed['STOP_TYPING']) {
-	//   onStopTyping(parsed['STOP_TYPING']);
-	// }
-	// if (parsed['REPLY']) {
-	//   onReply(parsed['REPLY']);
-	// }
-  };
+	socket.onmessage = (message) => {
+	  const parsed = JSON.parse(message.data);
+	  if(parsed['type'] === 'WORLD_CHUNK') {
+		store.dispatch(addTiles(parsed.tiles));
+	  }
+	};
+  });
 };
 
 GameService.disconnect = function () {
-  if(socket) {
+  if (socket) {
 	socket.close();
   }
 };
 
-const isOpen = () => {
-  return (socket && socket.readyState === WebSocket.OPEN);
-};
-
-const isConnecting = () => {
-  return (socket && socket.readyState === WebSocket.CONNECTING);
-};
+// const isOpen = () => {
+//   return (socket && socket.readyState === WebSocket.OPEN);
+// };
+//
+// const isConnecting = () => {
+//   return (socket && socket.readyState === WebSocket.CONNECTING);
+// };

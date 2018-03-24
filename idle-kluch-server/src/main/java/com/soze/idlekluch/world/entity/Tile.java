@@ -1,5 +1,7 @@
 package com.soze.idlekluch.world.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -16,6 +18,7 @@ public class Tile {
 
   }
 
+  @JsonIgnore
   public TileId getTileId() {
     return tileId;
   }

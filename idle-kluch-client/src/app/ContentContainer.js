@@ -6,14 +6,10 @@ import CreateKingdomForm from "../kingdom/CreateKingdomForm";
 import { isLoggedIn } from "./selectors";
 import * as kingdomActions from '../kingdom/actions';
 
-import styles from './content-container.css';
+// import styles from './content-container.css';
 import GameContainer from "../game/GameContainer";
 
 class ContentContainer extends Component {
-
-  constructor(props) {
-	super(props);
-  }
 
   getComponent = () => {
 	const {

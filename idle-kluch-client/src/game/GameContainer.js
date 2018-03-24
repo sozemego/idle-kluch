@@ -15,10 +15,8 @@ class GameContainer extends Component {
 
   render() {
     return(
-      <div>
-		THIS A GAME
-	  </div>
-	)
+      <div id='game'/>
+	);
   }
 
 }
