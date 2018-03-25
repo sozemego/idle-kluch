@@ -71,7 +71,7 @@ export const login = (username, password) => {
 		networkService.setAuthorizationToken(token);
 		// navigationService.mainPage();
 	  })
-	  .then()
+	  .then(() => dispatch(init()))
 	  .catch(error => dispatch(setUsernameError(error)));
   };
 };

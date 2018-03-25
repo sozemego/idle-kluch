@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { hasKingdom } from "../kingdom/selectors";
+import { hasKingdom, showCreateKingdomForm } from "../kingdom/selectors";
 import CreateKingdomForm from "../kingdom/CreateKingdomForm";
 import { isLoggedIn } from "./selectors";
 import * as kingdomActions from '../kingdom/actions';
@@ -15,10 +15,11 @@ class ContentContainer extends Component {
 	const {
 	  hasKingdom,
 	  isLoggedIn,
+	  showCreateKingdomForm,
 	} = this.props;
 
 	switch (true) {
-	  case !hasKingdom && isLoggedIn: return <CreateKingdomForm/>;
+	  case showCreateKingdomForm && isLoggedIn: return <CreateKingdomForm/>;
 	  case hasKingdom && isLoggedIn: return <GameContainer/>;
 	  default: return null;
 	}
@@ -46,6 +47,7 @@ const mapStateToProps = (state) => {
   return {
     isLoggedIn: isLoggedIn(state),
 	hasKingdom: hasKingdom(state),
+	showCreateKingdomForm: showCreateKingdomForm(state),
   };
 };
 
