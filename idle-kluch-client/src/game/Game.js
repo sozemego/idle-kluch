@@ -12,12 +12,15 @@ const createGame = () => {
   let camera = null;
 
   let cursors = null;
+
+  const tileSprites = {
+
+  };
   // let background = null;
 
   const preload = function () {
 	console.log('preloading!')
 	this.load.image('grass_1', 'grass_1.png');
-	// this.camera.bounds = undefined;
   };
 
   const create = function () {
@@ -29,22 +32,20 @@ const createGame = () => {
 	  const tile = tiles[i];
 	  const { x, y } = tile;
 	  const sprite = this.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'grass_1');
+	  sprite.inputEnabled = true;
+
+	  tileSprites[`${x}:${y}`] = sprite;
 	}
 
 	cursors = game.input.keyboard.createCursorKeys();
 
 	game.world.resize(5000, 5000);
-	// game.world.setBounds(-2000, -2000, 2000, 2000);
 	game.camera.x = 0;
 	game.camera.y = 0;
   };
 
   const update = () => {
-	// console.log(game.camera.bounds);
-	// console.log(game.world.bounds);
-	// game.world.setBounds
-	// console.log('rendering')
-	// game(game.camera, 32, 32);
+
 	const {x, y} = game.camera;
 	if (cursors.up.isDown) {
 	  game.camera.y = y - 5;
@@ -58,12 +59,19 @@ const createGame = () => {
 	if (cursors.right.isDown) {
 	  game.camera.x = x + 5;
 	}
+
+	Object.values(tileSprites).forEach(tileSprite => {
+	  tileSprite.tint = 0xffffff;
+	  if(tileSprite.input.pointerOver()) {
+	    tileSprite.tint = 200 << 16 | 200 << 8 | 200;
+	  }
+	});
+
   };
 
   const render = () => {
 
   };
-
 
   const config = {
 	type: Phaser.CANVAS,
