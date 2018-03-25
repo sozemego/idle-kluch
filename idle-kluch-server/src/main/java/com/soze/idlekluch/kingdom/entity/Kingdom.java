@@ -25,6 +25,7 @@ public class Kingdom {
   private User owner;
 
   public Kingdom() {
+
   }
 
   public EntityUUID getKingdomId() {
@@ -58,4 +59,5 @@ public class Kingdom {
   public void setCreatedAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
   }
+
 }

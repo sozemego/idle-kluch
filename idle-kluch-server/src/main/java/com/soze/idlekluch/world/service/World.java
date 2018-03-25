@@ -1,5 +1,7 @@
 package com.soze.idlekluch.world.service;
 
+import com.soze.idlekluch.kingdom.entity.Resource;
+import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.repository.WorldRepository;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityExistsException;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -38,6 +41,8 @@ public class World {
   public void initWorld() {
     LOG.info("Initializing world");
 
+    initResources();
+
     final List<Tile> allTiles = worldRepository.getAllTiles();
     LOG.info("Retrieved [{}] tiles.", allTiles.size());
 
@@ -51,6 +56,31 @@ public class World {
 
     for(final Tile tile: allTiles) {
       this.allTiles.put(new Point(tile.getX(), tile.getY()), tile);
+    }
+
+  }
+
+  /**
+   * This method inputs hardcoded resources into the database
+   * only if they do not exist. Later this will be replaced with
+   * resources from a config file or just SQL script.
+   */
+  private void initResources() {
+    LOG.info("Initializing world resources");
+
+    final List<Resource> toAdd = new ArrayList<>();
+    toAdd.add(new Resource(EntityUUID.randomId(), "Wood"));
+    toAdd.add(new Resource(EntityUUID.randomId(), "Stone"));
+    toAdd.add(new Resource(EntityUUID.randomId(), "Plank"));
+    toAdd.add(new Resource(EntityUUID.randomId(), "Brick"));
+
+    for(final Resource resourceToAdd: toAdd) {
+      try {
+        worldRepository.addResource(resourceToAdd);
+        LOG.info("Resource [{}] added", resourceToAdd);
+      } catch (EntityExistsException e) {
+
+      }
     }
 
   }

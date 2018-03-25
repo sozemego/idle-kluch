@@ -1,5 +1,6 @@
 package com.soze.idlekluch.world.repository;
 
+import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.world.entity.Tile;
 
 import java.util.List;
@@ -19,5 +20,9 @@ public interface WorldRepository {
   public void addTile(final Tile tile);
 
   public void addTiles(final List<Tile> tiles);
+
+  List<Resource> getAllAvailableResources();
+
+  void addResource(final Resource resource);
 
 }

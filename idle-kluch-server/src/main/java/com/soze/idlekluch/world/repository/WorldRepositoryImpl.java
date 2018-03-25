@@ -1,5 +1,6 @@
 package com.soze.idlekluch.world.repository;
 
+import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.world.entity.Tile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,18 @@ public class WorldRepositoryImpl implements WorldRepository {
   public void addTiles(final List<Tile> tiles) {
     Objects.requireNonNull(tiles);
     tiles.forEach(em::persist);
+  }
+
+  @Override
+  public List<Resource> getAllAvailableResources() {
+    return em.createQuery("SELECT r FROM Resource r").getResultList();
+  }
+
+  @Override
+  @Transactional
+  public void addResource(final Resource resource) {
+    Objects.requireNonNull(resource);
+    em.persist(resource);
   }
 
 }
