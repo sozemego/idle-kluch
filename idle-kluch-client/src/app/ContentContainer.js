@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { hasKingdom, showCreateKingdomForm } from "../kingdom/selectors";
+import { hasKingdom, shouldShowCreateKingdomForm } from "../kingdom/selectors";
 import CreateKingdomForm from "../kingdom/CreateKingdomForm";
 import { isLoggedIn } from "./selectors";
 import * as kingdomActions from '../kingdom/actions';
@@ -47,7 +47,7 @@ const mapStateToProps = (state) => {
   return {
     isLoggedIn: isLoggedIn(state),
 	hasKingdom: hasKingdom(state),
-	showCreateKingdomForm: showCreateKingdomForm(state),
+	showCreateKingdomForm: shouldShowCreateKingdomForm(state),
   };
 };
 
