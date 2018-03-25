@@ -60,6 +60,7 @@ const createGame = () => {
 	  game.camera.x = x + 5;
 	}
 
+	//show which tile is hovered with mouse
 	Object.values(tileSprites).forEach(tileSprite => {
 	  tileSprite.tint = 0xffffff;
 	  if(tileSprite.input.pointerOver()) {
