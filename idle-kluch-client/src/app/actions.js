@@ -27,7 +27,6 @@ const setPasswordError = makeActionCreator(SET_PASSWORD_ERROR, 'payload');
 
 /**
  * Function used to initialize the application.
- * @returns {function(*, *)}
  */
 export const init = () => {
   return (dispatch, getState) => {
