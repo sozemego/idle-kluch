@@ -2,19 +2,17 @@ package com.soze.idlekluch.kingdom.entity;
 
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Embeddable
-@Table(name = "storage_units")
 public class StorageUnit {
 
-  @EmbeddedId
+  @Embedded
+  @AttributeOverride(name = "id", column = @Column(name = "building_id"))
   private EntityUUID buildingId;
 
-  @EmbeddedId
+  @Embedded
+  @AttributeOverride(name = "id", column = @Column(name = "resource_id"))
   private EntityUUID resourceId;
 
   @Column(name = "amount")

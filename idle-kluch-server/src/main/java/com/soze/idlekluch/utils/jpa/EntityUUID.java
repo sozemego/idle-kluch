@@ -25,6 +25,14 @@ public class EntityUUID implements Serializable {
     this(UUID.fromString(id));
   }
 
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(final UUID id) {
+    this.id = id;
+  }
+
   public static EntityUUID randomId() {
     return new EntityUUID(UUID.randomUUID());
   }

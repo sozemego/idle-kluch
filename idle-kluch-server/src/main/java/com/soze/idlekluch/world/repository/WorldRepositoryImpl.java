@@ -1,6 +1,7 @@
 package com.soze.idlekluch.world.repository;
 
 import com.soze.idlekluch.kingdom.entity.Resource;
+import com.soze.idlekluch.utils.jpa.QueryUtils;
 import com.soze.idlekluch.world.entity.Tile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 public class WorldRepositoryImpl implements WorldRepository {
@@ -47,6 +49,15 @@ public class WorldRepositoryImpl implements WorldRepository {
   public void addResource(final Resource resource) {
     Objects.requireNonNull(resource);
     em.persist(resource);
+  }
+
+  @Override
+  public Optional<Resource> getResource(final String name) {
+    Objects.requireNonNull(name);
+    final Query query = em.createQuery("SELECT r FROM Resource r WHERE UPPER(r.name) = :name");
+    query.setParameter("name", name.toUpperCase());
+
+    return QueryUtils.getOptional(query, Resource.class);
   }
 
 }

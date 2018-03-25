@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityExistsException;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -75,11 +74,9 @@ public class World {
     toAdd.add(new Resource(EntityUUID.randomId(), "Brick"));
 
     for(final Resource resourceToAdd: toAdd) {
-      try {
+      if(!worldRepository.getResource(resourceToAdd.getName()).isPresent()) {
         worldRepository.addResource(resourceToAdd);
         LOG.info("Resource [{}] added", resourceToAdd);
-      } catch (EntityExistsException e) {
-
       }
     }
 

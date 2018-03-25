@@ -4,6 +4,7 @@ import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.world.entity.Tile;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface WorldRepository {
 
@@ -24,5 +25,7 @@ public interface WorldRepository {
   List<Resource> getAllAvailableResources();
 
   void addResource(final Resource resource);
+
+  Optional<Resource> getResource(final String name);
 
 }

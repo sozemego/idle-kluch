@@ -1,0 +1,8 @@
+[
+  {
+    "id": 0,
+    "name": "Small warehouse",
+    "type": "WAREHOUSE",
+    "capacity": 100
+  }
+]
