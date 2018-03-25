@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -23,6 +24,8 @@ public class GameServiceImpl implements GameService {
   private static final Logger LOG = LoggerFactory.getLogger(GameServiceImpl.class);
 
   private final World world;
+
+  private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
   @Autowired
   public GameServiceImpl(final World world) {
@@ -32,6 +35,7 @@ public class GameServiceImpl implements GameService {
   @Override
   public void onConnect(final WebSocketSession session) {
     LOG.info("Connected [{}]", session.getId());
+    sessions.put(session.getId(), session);
 
     final Map<Point, Tile> allTiles = world.getAllTiles();
 
@@ -53,6 +57,7 @@ public class GameServiceImpl implements GameService {
   @Override
   public void onDisconnect(final WebSocketSession session) {
     LOG.info("Disconnected [{}]", session.getId());
+    sessions.remove(session.getId());
   }
 
 }
