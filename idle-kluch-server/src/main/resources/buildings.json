@@ -1,8 +1,28 @@
-[
-  {
+//[
+//  {
+//    "id": 0,
+//    "name": "Small warehouse",
+//    "type": "WAREHOUSE",
+//    "capacity": 100
+//  },
+//  {
+//    "id": 1,
+//    "name": "Warehouse",
+//    "type": "WAREHOUSE",
+//    "capacity": 200
+//  }
+//]
+{
+  "0": {
     "id": 0,
     "name": "Small warehouse",
     "type": "WAREHOUSE",
     "capacity": 100
+  },
+  "1": {
+    "id": 1,
+    "name": "Warehouse",
+    "type": "WAREHOUSE",
+    "capacity": 200
   }
-]
+}
