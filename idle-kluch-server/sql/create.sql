@@ -1,10 +1,10 @@
 DROP TABLE IF EXISTS kingdoms CASCADE;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS tiles;
-DROP TABLE IF EXISTS resources;
-DROP TABLE IF EXISTS buildings;
-DROP TABLE IF EXISTS warehouses;
-DROP TABLE IF EXISTS warehouse_storage_units;
+DROP TABLE IF EXISTS resources CASCADE;
+DROP TABLE IF EXISTS buildings CASCADE;
+DROP TABLE IF EXISTS warehouses CASCADE;
+DROP TABLE IF EXISTS storage_units;
 
 CREATE TABLE users (
   user_id uuid NOT NULL PRIMARY KEY,
@@ -35,6 +35,7 @@ CREATE TABLE kingdoms (
 
 CREATE TABLE buildings (
   building_id uuid NOT NULL PRIMARY KEY,
+  definition_id VARCHAR(32) NOT NULL,
   created_at TIMESTAMP NOT NULL,
   name VARCHAR(100) NOT NULL,
   kingdom_id uuid NOT NULL,
@@ -43,6 +44,7 @@ CREATE TABLE buildings (
 
 CREATE TABLE warehouses (
   building_id uuid NOT NULL PRIMARY KEY,
+  definition_id VARCHAR(32) NOT NULL,
   created_at TIMESTAMP NOT NULL,
   name VARCHAR(100) NOT NULL,
   kingdom_id uuid NOT NULL,
