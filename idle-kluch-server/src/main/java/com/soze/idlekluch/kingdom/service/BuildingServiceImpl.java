@@ -8,9 +8,15 @@ import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.dto.BuildingDto;
 import com.soze.idlekluch.kingdom.dto.BuildingDto.BuildingType;
 import com.soze.idlekluch.kingdom.dto.WarehouseDefinitionDto;
+import com.soze.idlekluch.kingdom.entity.Kingdom;
+import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
+import com.soze.idlekluch.user.entity.User;
+import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
+import com.soze.idlekluch.user.service.UserService;
 import com.soze.idlekluch.utils.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -23,6 +29,15 @@ import java.util.*;
 public class BuildingServiceImpl implements BuildingService {
 
   private static final Logger LOG = LoggerFactory.getLogger(BuildingServiceImpl.class);
+
+  private final UserService userService;
+  private final KingdomService kingdomService;
+
+  @Autowired
+  public BuildingServiceImpl(final UserService userService, final KingdomService kingdomService) {
+    this.userService = Objects.requireNonNull(userService);
+    this.kingdomService = Objects.requireNonNull(kingdomService);
+  }
 
   //TODO move to repository?
   private final Map<String, BuildingDefinitionDto> buildingDefinitions = new HashMap<>();
@@ -63,6 +78,26 @@ public class BuildingServiceImpl implements BuildingService {
   public void buildBuilding(final String owner, final BuildBuildingForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
+
+    LOG.info("User [{}] is trying to place a building [{}]", owner, form);
+
+    //check if owner exists, just in case
+    final Optional<User> userOptional = userService.getUserByUsername(owner);
+    if(!userOptional.isPresent()) {
+      LOG.info("User [{}] does not exist, cannot place building [{}]", owner, form);
+      throw new AuthUserDoesNotExistException(owner);
+    }
+
+    final User user = userOptional.get();
+
+    //now get user's kingdom
+    final Optional<Kingdom> kingdom = kingdomService.getUsersKingdom(owner);
+    if(!kingdom.isPresent()) {
+      LOG.info("User [{}] does not have a kingdom", owner);
+      throw new UserDoesNotHaveKingdomException(owner);
+    }
+
+    throw new IllegalStateException("Cannot place buildings yet!");
   }
 
   @Override
