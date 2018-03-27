@@ -24,6 +24,12 @@ public class Building {
   @JoinColumn
   private Kingdom kingdom;
 
+  @Column(name = "x")
+  private int x;
+
+  @Column(name = "y")
+  private int y;
+
   public Building() {
 
   }
@@ -52,11 +58,27 @@ public class Building {
     this.name = name;
   }
 
-  public Kingdom getKindgom() {
+  public Kingdom getKingdom() {
     return kingdom;
   }
 
   public void setKingdom(final Kingdom kingdom) {
     this.kingdom = kingdom;
+  }
+
+  public int getX() {
+    return x;
+  }
+
+  public void setX(final int x) {
+    this.x = x;
+  }
+
+  public int getY() {
+    return y;
+  }
+
+  public void setY(final int y) {
+    this.y = y;
   }
 }

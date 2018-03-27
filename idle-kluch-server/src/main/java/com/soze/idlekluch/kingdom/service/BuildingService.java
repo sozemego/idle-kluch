@@ -1,6 +1,8 @@
 package com.soze.idlekluch.kingdom.service;
 
+import com.soze.idlekluch.kingdom.dto.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
+import com.soze.idlekluch.kingdom.dto.BuildingDto;
 
 import java.util.List;
 
@@ -15,6 +17,16 @@ public interface BuildingService {
    * @return
    */
   public List<BuildingDefinitionDto> getAllConstructableBuildings();
+
+  /**
+   * Attempts to place a building for a given player.
+   * @param owner
+   * @param form
+   */
+  public void buildBuilding(final String owner, final BuildBuildingForm form);
+
+
+  public List<BuildingDto> getOwnBuildings(final String owner);
 
 
 }

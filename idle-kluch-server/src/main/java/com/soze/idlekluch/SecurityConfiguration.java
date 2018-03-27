@@ -49,7 +49,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
           Routes.AUTH_BASE + Routes.AUTH_LOGOUT,
           Routes.KINGDOM_CREATE,
           Routes.KINGDOM_DELETE,
-          Routes.KINGDOM_OWN
+          Routes.KINGDOM_OWN,
+          Routes.BUILDING_BUILD,
+          Routes.BUILDING_OWN
         )
         .authenticated()
         .anyRequest().permitAll()

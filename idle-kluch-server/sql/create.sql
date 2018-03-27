@@ -39,6 +39,8 @@ CREATE TABLE buildings (
   created_at TIMESTAMP NOT NULL,
   name VARCHAR(100) NOT NULL,
   kingdom_id uuid NOT NULL,
+  x int NOT NULL,
+  y int NOT NULL,
   CONSTRAINT FK_KINGDOM_BUILDING FOREIGN KEY (kingdom_id) REFERENCES kingdoms(kingdom_id)
 );
 
@@ -56,6 +58,8 @@ CREATE TABLE storage_units (
   resource_id uuid NOT NULL,
   amount INTEGER NOT NULL,
   max_amount INTEGER NOT NULL,
+  x int NOT NULL,
+  y int NOT NULL,
   CONSTRAINT FK_STORAGE_UNIT_BUILDING FOREIGN KEY (building_id) REFERENCES buildings(building_id),
   CONSTRAINT FK_STORAGE_UNIT_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
 );

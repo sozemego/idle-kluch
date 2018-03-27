@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.*;
 
 import java.util.Objects;
 
+import static com.soze.idlekluch.kingdom.dto.BuildingDto.*;
+
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.EXISTING_PROPERTY,
@@ -49,10 +51,6 @@ public abstract class BuildingDefinitionDto {
       ", name='" + name + '\'' +
       ", type=" + type +
       '}';
-  }
-
-  public enum BuildingType {
-    WAREHOUSE
   }
 
 }

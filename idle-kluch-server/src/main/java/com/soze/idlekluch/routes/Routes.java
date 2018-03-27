@@ -33,6 +33,8 @@ public interface Routes {
   String BUILDING_BASE = BASE + BUILDING;
 
   String BUILDING_GET_ALL = BUILDING_BASE + "/all";
+  String BUILDING_BUILD = BUILDING_BASE + "/build";
+  String BUILDING_OWN = BUILDING_BASE + "/own";
 
   String WEB_SOCKET = "/ws";
   String GAME = "/game";

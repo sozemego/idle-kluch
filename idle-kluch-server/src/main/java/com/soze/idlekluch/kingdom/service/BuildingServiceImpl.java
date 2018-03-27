@@ -3,8 +3,10 @@ package com.soze.idlekluch.kingdom.service;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.soze.idlekluch.kingdom.dto.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
-import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto.BuildingType;
+import com.soze.idlekluch.kingdom.dto.BuildingDto;
+import com.soze.idlekluch.kingdom.dto.BuildingDto.BuildingType;
 import com.soze.idlekluch.kingdom.dto.WarehouseDefinitionDto;
 import com.soze.idlekluch.utils.io.FileUtils;
 import org.slf4j.Logger;
@@ -15,10 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class BuildingServiceImpl implements BuildingService {
@@ -41,7 +40,8 @@ public class BuildingServiceImpl implements BuildingService {
     final ObjectMapper mapper = new ObjectMapper();
     mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
 
-    final Map<String, Object> rawBuildingDefinitions = mapper.readValue(fileContent, new TypeReference<Map<String, Object>>(){});
+    final Map<String, Object> rawBuildingDefinitions = mapper.readValue(fileContent, new TypeReference<Map<String, Object>>() {
+    });
     parseRawBuildingDefinitions(rawBuildingDefinitions);
 
     LOG.info("Read [{}] building definitions", buildingDefinitions.size());
@@ -59,13 +59,27 @@ public class BuildingServiceImpl implements BuildingService {
     return new ArrayList<>(buildingDefinitions.values());
   }
 
+  @Override
+  public void buildBuilding(final String owner, final BuildBuildingForm form) {
+    Objects.requireNonNull(owner);
+    Objects.requireNonNull(form);
+  }
+
+  @Override
+  public List<BuildingDto> getOwnBuildings(final String owner) {
+    Objects.requireNonNull(owner);
+
+    return null;
+  }
+
   private void parseRawBuildingDefinitions(final Map<String, Object> data) {
-    for(final Map.Entry<String, Object> entry: data.entrySet()) {
+    for (final Map.Entry<String, Object> entry : data.entrySet()) {
       final Map<String, Object> properties = (Map<String, Object>) entry.getValue();
-      final BuildingType type = BuildingType.valueOf(((String)properties.get("type")).toUpperCase());
+      final BuildingType type = BuildingType.valueOf(((String) properties.get("type")).toUpperCase());
 
       switch (type) {
-        case WAREHOUSE: parseWarehouseDefinition(properties);
+        case WAREHOUSE:
+          parseWarehouseDefinition(properties);
           break;
       }
 

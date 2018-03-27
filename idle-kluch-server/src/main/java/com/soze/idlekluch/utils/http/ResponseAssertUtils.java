@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 public class ResponseAssertUtils {
@@ -19,6 +20,10 @@ public class ResponseAssertUtils {
 
   public static void assertResponseIsBadRequest(final HttpClientErrorException response) {
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
+
+  public static void assertResponseIsBadRequest(final Runnable command) {
+    assertCommandIs(command, HttpStatus.BAD_REQUEST);
   }
 
   public static void assertResponseIsNotFound(final ResponseEntity response) {
@@ -45,6 +50,10 @@ public class ResponseAssertUtils {
     assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
   }
 
+  public static void assertResponseIsForbidden(final Runnable command) {
+    assertCommandIs(command, HttpStatus.FORBIDDEN);
+  }
+
   public static void assertResponseIsUnauthorized(final Runnable command) {
     assertCommandIs(command, HttpStatus.UNAUTHORIZED);
   }
@@ -56,6 +65,7 @@ public class ResponseAssertUtils {
   public static void assertCommandIs(final Runnable command, final HttpStatus status) {
     try {
       command.run();
+      fail("It is supposed to throw");
     } catch (HttpClientErrorException e) {
       assertEquals(status, e.getStatusCode());
     }
