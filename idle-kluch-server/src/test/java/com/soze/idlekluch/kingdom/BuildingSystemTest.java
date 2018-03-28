@@ -4,6 +4,7 @@ import com.soze.idlekluch.BaseAuthTest;
 import com.soze.idlekluch.kingdom.dto.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.dto.BuildingDto;
+import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.utils.sql.DatabaseReset;
@@ -37,27 +38,36 @@ public class BuildingSystemTest extends BaseAuthTest {
 
   @Test
   public void testPlaceBuildingUnauthorized() {
-    assertResponseIsForbidden(() -> client.post(new BuildBuildingForm(1, 1, 1), Routes.BUILDING_BUILD));
+    assertResponseIsForbidden(() -> client.post(new BuildBuildingForm("1", 1, 1), Routes.BUILDING_BUILD));
   }
 
   @Test
   public void testPlaceBuildingInvalidBuildingId() {
     login("kingdomowner");
-    final BuildBuildingForm form = new BuildBuildingForm(-5, 5, 5);
+    final RegisterKingdomForm registerKingdomForm = new RegisterKingdomForm("kingdom");
+    client.post(registerKingdomForm, Routes.KINGDOM_CREATE);
+
+    final BuildBuildingForm form = new BuildBuildingForm("-5", 5, 5);
     assertResponseIsBadRequest(() -> client.post(form, Routes.BUILDING_BUILD));
   }
 
   @Test
   public void testPlaceBuildingInvalidPlace() {
     login("kingdomowner");
-    final BuildBuildingForm form = new BuildBuildingForm(1, -500000, 5);
+    final RegisterKingdomForm registerKingdomForm = new RegisterKingdomForm("kingdom");
+    client.post(registerKingdomForm, Routes.KINGDOM_CREATE);
+
+    final BuildBuildingForm form = new BuildBuildingForm("1", -500000, 5);
     assertResponseIsBadRequest(() -> client.post(form, Routes.BUILDING_BUILD));
   }
 
   @Test
   public void testPlaceBuilding() {
     login("kingdomowner");
-    final BuildBuildingForm form = new BuildBuildingForm(1, 150, 150);
+    final RegisterKingdomForm registerKingdomForm = new RegisterKingdomForm("kingdom");
+    client.post(registerKingdomForm, Routes.KINGDOM_CREATE);
+
+    final BuildBuildingForm form = new BuildBuildingForm("1", 150, 150);
     final ResponseEntity buildResponse = client.post(form, Routes.BUILDING_BUILD);
     assertResponseIsCreated(buildResponse);
 
@@ -70,11 +80,14 @@ public class BuildingSystemTest extends BaseAuthTest {
   @Test
   public void testPlaceTwoBuildings() {
     login("kingdomowner");
-    final BuildBuildingForm form = new BuildBuildingForm(1, 150, 150);
+    final RegisterKingdomForm registerKingdomForm = new RegisterKingdomForm("kingdom");
+    client.post(registerKingdomForm, Routes.KINGDOM_CREATE);
+
+    final BuildBuildingForm form = new BuildBuildingForm("1", 150, 150);
     final ResponseEntity buildResponse = client.post(form, Routes.BUILDING_BUILD);
     assertResponseIsCreated(buildResponse);
 
-    final BuildBuildingForm anotherForm = new BuildBuildingForm(0, 250, 250);
+    final BuildBuildingForm anotherForm = new BuildBuildingForm("0", 250, 250);
     final ResponseEntity anotherBuildResponse = client.post(anotherForm, Routes.BUILDING_BUILD);
     assertResponseIsCreated(anotherBuildResponse);
 

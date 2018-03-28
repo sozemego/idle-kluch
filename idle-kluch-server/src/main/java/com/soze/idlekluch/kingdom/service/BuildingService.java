@@ -2,7 +2,7 @@ package com.soze.idlekluch.kingdom.service;
 
 import com.soze.idlekluch.kingdom.dto.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
-import com.soze.idlekluch.kingdom.dto.BuildingDto;
+import com.soze.idlekluch.kingdom.entity.Building;
 
 import java.util.List;
 
@@ -25,8 +25,6 @@ public interface BuildingService {
    */
   public void buildBuilding(final String owner, final BuildBuildingForm form);
 
-
-  public List<BuildingDto> getOwnBuildings(final String owner);
-
+  public List<Building> getOwnBuildings(final String owner);
 
 }

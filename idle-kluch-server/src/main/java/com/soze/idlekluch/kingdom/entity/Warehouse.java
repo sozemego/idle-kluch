@@ -8,7 +8,7 @@ import java.util.List;
 public class Warehouse extends Building {
 
   @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = "storage_units")
+  @CollectionTable(name = "storage_units", joinColumns = @JoinColumn(name = "building_id"))
   private List<StorageUnit> storageUnits;
 
   public Warehouse() {

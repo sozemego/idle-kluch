@@ -32,4 +32,11 @@ public class KingdomExceptionHandler extends ResponseEntityExceptionHandler {
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
+  @ExceptionHandler(BuildingDoesNotExistException.class)
+  public ResponseEntity handleBuildingDoesNotExistException(BuildingDoesNotExistException exception) {
+    final ErrorResponse errorResponse = new ErrorResponse(400, "Building does exist " + exception.getBuildingId());
+    errorResponse.addData("field", "buildingId");
+    return ExceptionUtils.convertErrorResponse(errorResponse);
+  }
+
 }

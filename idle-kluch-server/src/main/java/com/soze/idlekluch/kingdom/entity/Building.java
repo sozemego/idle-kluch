@@ -14,6 +14,9 @@ public class Building {
   @AttributeOverride(name = "id", column = @Column(name = "building_id"))
   private EntityUUID buildingId;
 
+  @Column(name = "definition_id")
+  private String definitionId;
+
   @Column(name = "created_at")
   private Timestamp createdAt;
 
@@ -21,7 +24,7 @@ public class Building {
   private String name;
 
   @OneToOne
-  @JoinColumn
+  @JoinColumn(name = "kingdom_id")
   private Kingdom kingdom;
 
   @Column(name = "x")
@@ -40,6 +43,14 @@ public class Building {
 
   public void setBuildingId(final EntityUUID buildingId) {
     this.buildingId = buildingId;
+  }
+
+  public String getDefinitionId() {
+    return definitionId;
+  }
+
+  public void setDefinitionId(final String definitionId) {
+    this.definitionId = definitionId;
   }
 
   public Timestamp getCreatedAt() {

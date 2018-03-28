@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BuildBuildingForm {
 
-  private final int buildingId;
+  private final String buildingId;
   private final int x;
   private final int y;
 
   @JsonCreator
-  public BuildBuildingForm(@JsonProperty("buildingId") final int buildingId,
+  public BuildBuildingForm(@JsonProperty("buildingId") final String buildingId,
                            @JsonProperty("x") final int x,
                            @JsonProperty("y") final int y) {
     this.buildingId = buildingId;
@@ -18,7 +18,7 @@ public class BuildBuildingForm {
     this.y = y;
   }
 
-  public int getBuildingId() {
+  public String getBuildingId() {
     return buildingId;
   }
 

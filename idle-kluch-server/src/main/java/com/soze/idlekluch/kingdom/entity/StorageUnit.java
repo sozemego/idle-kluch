@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class StorageUnit {
 
   @Embedded
-  @AttributeOverride(name = "id", column = @Column(name = "building_id"))
+  @AttributeOverride(name = "id", column = @Column(name = "building_id", updatable = false, insertable = false))
   private EntityUUID buildingId;
 
   @Embedded
@@ -18,8 +18,8 @@ public class StorageUnit {
   @Column(name = "amount")
   private int amount;
 
-  @Column(name = "max_amount")
-  private int maxAmount;
+  @Column(name = "capacity")
+  private int capacity;
 
   public StorageUnit() {
 
@@ -49,11 +49,11 @@ public class StorageUnit {
     this.amount = amount;
   }
 
-  public int getMaxAmount() {
-    return maxAmount;
+  public int getCapacity() {
+    return capacity;
   }
 
-  public void setMaxAmount(final int maxAmount) {
-    this.maxAmount = maxAmount;
+  public void setCapacity(final int capacity) {
+    this.capacity = capacity;
   }
 }
