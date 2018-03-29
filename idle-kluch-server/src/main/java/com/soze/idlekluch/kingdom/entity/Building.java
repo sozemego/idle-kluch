@@ -1,9 +1,11 @@
 package com.soze.idlekluch.kingdom.entity;
 
+import com.soze.idlekluch.kingdom.dto.BuildingDto.BuildingType;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 @Table(name = "buildings")
@@ -32,6 +34,9 @@ public class Building {
 
   @Column(name = "y")
   private int y;
+
+  @Transient
+  private BuildingType buildingType;
 
   public Building() {
 
@@ -91,5 +96,15 @@ public class Building {
 
   public void setY(final int y) {
     this.y = y;
+  }
+
+  public BuildingType getBuildingType() {
+    //to make sure this property is set
+    Objects.requireNonNull(buildingType, "Building type cannot be null, set it first!");
+    return buildingType;
+  }
+
+  public void setBuildingType(final BuildingType buildingType) {
+    this.buildingType = buildingType;
   }
 }

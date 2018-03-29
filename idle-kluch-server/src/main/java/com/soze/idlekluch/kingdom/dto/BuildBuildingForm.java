@@ -29,4 +29,13 @@ public class BuildBuildingForm {
   public int getY() {
     return y;
   }
+
+  @Override
+  public String toString() {
+    return "BuildBuildingForm{" +
+      "buildingId='" + buildingId + '\'' +
+      ", x=" + x +
+      ", y=" + y +
+      '}';
+  }
 }

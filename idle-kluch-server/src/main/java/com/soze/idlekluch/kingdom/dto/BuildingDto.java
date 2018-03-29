@@ -23,17 +23,21 @@ public abstract class BuildingDto {
   private final int x;
   private final int y;
 
+  private final String type;
+
   @JsonCreator
   public BuildingDto(@JsonProperty("buildingId") final String buildingId,
                      @JsonProperty("createdAt") final String createdAt,
                      @JsonProperty("name") final String name,
                      @JsonProperty("x") final int x,
-                     @JsonProperty("y") final int y) {
+                     @JsonProperty("y") final int y,
+                     @JsonProperty("type") final BuildingType type) {
     this.buildingId = Objects.requireNonNull(buildingId);
     this.createdAt = Objects.requireNonNull(createdAt);
     this.name = Objects.requireNonNull(name);
     this.x = x;
     this.y = y;
+    this.type = Objects.requireNonNull(type.toString());
   }
 
   public String getBuildingId() {
@@ -54,6 +58,10 @@ public abstract class BuildingDto {
 
   public int getY() {
     return y;
+  }
+
+  public String getType() {
+    return type;
   }
 
   public enum BuildingType {

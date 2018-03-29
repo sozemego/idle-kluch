@@ -1,5 +1,7 @@
 package com.soze.idlekluch.kingdom.entity;
 
+import com.soze.idlekluch.kingdom.dto.BuildingDto.BuildingType;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -12,7 +14,7 @@ public class Warehouse extends Building {
   private List<StorageUnit> storageUnits;
 
   public Warehouse() {
-
+    setBuildingType(BuildingType.WAREHOUSE);
   }
 
   public List<StorageUnit> getStorageUnits() {

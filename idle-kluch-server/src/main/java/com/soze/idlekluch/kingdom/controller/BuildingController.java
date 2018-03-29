@@ -3,7 +3,9 @@ package com.soze.idlekluch.kingdom.controller;
 import com.soze.idlekluch.kingdom.dto.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.dto.BuildingDto;
+import com.soze.idlekluch.kingdom.dto.WarehouseDto;
 import com.soze.idlekluch.kingdom.entity.Building;
+import com.soze.idlekluch.kingdom.entity.Warehouse;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +54,32 @@ public class BuildingController {
   }
 
   private List<BuildingDto> convertBuildings(final List<Building> buildings) {
-    return new ArrayList<>();
+    Objects.requireNonNull(buildings);
+
+    final List<BuildingDto> dtos = new ArrayList<>();
+
+    for (final Building building : buildings) {
+      switch (building.getBuildingType()) {
+        case WAREHOUSE:
+          dtos.add(convertWarehouse((Warehouse) building));
+          break;
+      }
+    }
+
+    return dtos;
+  }
+
+  private WarehouseDto convertWarehouse(final Warehouse warehouse) {
+    Objects.requireNonNull(warehouse);
+
+    return new WarehouseDto(
+      warehouse.getBuildingId().toString(),
+      warehouse.getCreatedAt().toString(),
+      warehouse.getName(),
+      warehouse.getX(),
+      warehouse.getY(),
+      warehouse.getStorageUnits()
+    );
   }
 
 }

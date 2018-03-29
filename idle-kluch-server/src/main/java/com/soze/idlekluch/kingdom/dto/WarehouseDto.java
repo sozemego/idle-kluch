@@ -18,7 +18,7 @@ public class WarehouseDto extends BuildingDto {
                       @JsonProperty("x") final int x,
                       @JsonProperty("y") final int y,
                       @JsonProperty("storageUnits") final List<StorageUnit> storageUnits) {
-    super(buildingId, createdAt, name, x, y);
+    super(buildingId, createdAt, name, x, y, BuildingType.WAREHOUSE);
     this.storageUnits = Objects.requireNonNull(storageUnits);
   }
 
