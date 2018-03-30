@@ -8,52 +8,52 @@ export const ADD_TILES_TO_STATE = 'ADD_TILES_TO_STATE';
 export const addTilesToState = makeActionCreator(ADD_TILES_TO_STATE, 'payload');
 
 export const connect = () => {
-	return (dispatch, getState) => {
+  return (dispatch, getState) => {
 
-		gameService.connect()
-				.then(() => dispatch(startGame()));
+	gameService.connect()
+	  .then(() => dispatch(startGame()));
 
-	};
+  };
 };
 
 export const startGame = () => {
-	return (dispatch, getState) => {
+  return (dispatch, getState) => {
 
-		createGame();
+	createGame();
 
-	};
+  };
 };
 
 export const addTiles = (tiles) => {
-	return (dispatch, getState) => {
+  return (dispatch, getState) => {
 
-		dispatch(addTilesToState(tiles));
+	dispatch(addTilesToState(tiles));
 
-	};
+  };
 };
 
 export const selectConstructableBuilding = (id) => {
-	return (dispatch, getState) => {
+  return (dispatch, getState) => {
 
-		const constructableBuildings = getConstructableBuildings(getState);
-		const building = constructableBuildings.find(building => building.id === id);
-		dispatch(setSelectedConstructableBuilding(building));
+	const constructableBuildings = getConstructableBuildings(getState);
+	const building = constructableBuildings.find(building => building.id === id);
+	dispatch(setSelectedConstructableBuilding(building));
 
-	};
+  };
 };
 
 export const onCanvasClicked = (x, y) => {
-	return (dispatch, getState) => {
+  return (dispatch, getState) => {
 
-		console.log('on canvas clicked!', x, y);
+	console.log('on canvas clicked!', x, y);
 
-		//canvas was clicked, lets check what we can do
-		const selectedConstructableBuilding = getSelectedConstructableBuilding(getState);
-		if(selectedConstructableBuilding) {
-			//lets build a building
+	//canvas was clicked, lets check what we can do
+	const selectedConstructableBuilding = getSelectedConstructableBuilding(getState);
+	if (selectedConstructableBuilding) {
+	  //lets build a building
 
-			return;
-		}
+	  return;
+	}
 
-	};
+  };
 };

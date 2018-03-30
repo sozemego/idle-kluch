@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { isFetching } from '../app/selectors';
 
 export default connect(state => {
-	return {
-		isFetching: isFetching(state),
-	};
+  return {
+	isFetching: isFetching(state),
+  };
 }, null)(LinearProgress);

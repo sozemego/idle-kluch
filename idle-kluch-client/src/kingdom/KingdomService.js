@@ -15,36 +15,36 @@ const maxKingdomNameLength = 32;
 export const KingdomService = {};
 
 KingdomService.getOwn = () => {
-	return networkService.get(getOwn);
+  return networkService.get(getOwn);
 };
 
 KingdomService.registerKingdom = (name) => {
-	const kingdomNameError = validateKingdomName(name);
-	if (kingdomNameError) {
-		return Promise.reject({ field: 'name', message: kingdomNameError });
-	}
+  const kingdomNameError = validateKingdomName(name);
+  if (kingdomNameError) {
+	return Promise.reject({ field: 'name', message: kingdomNameError });
+  }
 
-	return networkService.post(create, { name });
+  return networkService.post(create, { name });
 };
 
 KingdomService.deleteKingdom = () => {
-	return networkService.delete(deleteKingdom);
+  return networkService.delete(deleteKingdom);
 };
 
 KingdomService.getConstructableBuildings = () => {
-	return networkService.get(getConstructableBuildings);
+  return networkService.get(getConstructableBuildings);
 };
 
 const validateKingdomName = (kingdomName) => {
-	if (!kingdomName) {
-		return 'Kingdom name cannot be empty!';
-	}
+  if (!kingdomName) {
+	return 'Kingdom name cannot be empty!';
+  }
 
-	if (kingdomName.length > maxKingdomNameLength) {
-		return `Kingdom name cannot be longer than ${maxKingdomNameLength}`;
-	}
+  if (kingdomName.length > maxKingdomNameLength) {
+	return `Kingdom name cannot be longer than ${maxKingdomNameLength}`;
+  }
 
-	if (!kingdomNameRegexp.test(kingdomName)) {
-		return 'Kingdom name can only contain letters, numbers, - and _';
-	}
+  if (!kingdomNameRegexp.test(kingdomName)) {
+	return 'Kingdom name can only contain letters, numbers, - and _';
+  }
 };

@@ -20,27 +20,27 @@ const history = createBrowserHistory();
 
 class App extends Component {
 
-	componentDidMount = () => {
-		store.dispatch(appActions.init());
-	};
+  componentDidMount = () => {
+	store.dispatch(appActions.init());
+  };
 
-	render() {
-		return (
-				<Provider store={store}>
-					<MuiThemeProvider muiTheme={theme}>
-						<Router history={history}>
-							<div>
-								<Header/>
-								<div className={styles.content}>
-									{/*<div>here be one of menus</div>*/}
-									<ContentContainer/>
-								</div>
-							</div>
-						</Router>
-					</MuiThemeProvider>
-				</Provider>
-		);
-	}
+  render() {
+	return (
+	  <Provider store={store}>
+		<MuiThemeProvider muiTheme={theme}>
+		  <Router history={history}>
+			<div>
+			  <Header/>
+			  <div className={styles.content}>
+				{/*<div>here be one of menus</div>*/}
+				<ContentContainer/>
+			  </div>
+			</div>
+		  </Router>
+		</MuiThemeProvider>
+	  </Provider>
+	);
+  }
 }
 
 export default App;

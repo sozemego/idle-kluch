@@ -10,53 +10,53 @@ import styles from './game-menu.css';
 
 class GameMenu extends Component {
 
-	getBuildingsList = () => {
-		const {
-			constructableBuildings,
-			selectConstructableBuilding,
-			selectedConstructableBuilding,
-		} = this.props;
+  getBuildingsList = () => {
+	const {
+	  constructableBuildings,
+	  selectConstructableBuilding,
+	  selectedConstructableBuilding,
+	} = this.props;
 
-		const selectedConstructableBuildingId = _.get(selectedConstructableBuilding, 'id', null);
+	const selectedConstructableBuildingId = _.get(selectedConstructableBuilding, 'id', null);
 
-		return constructableBuildings.map(building => {
-			return (
-					<div id={building.id}
-							 className={`${styles.building} ${selectedConstructableBuildingId === building.id ? styles['building-selected'] : ''}`}
-							 onClick={() => selectConstructableBuilding(building.id)}
-					>
-						{building.name}
-					</div>
-			);
-		});
+	return constructableBuildings.map(building => {
+	  return (
+		<div id={building.id}
+			 className={`${styles.building} ${selectedConstructableBuildingId === building.id ? styles['building-selected'] : ''}`}
+			 onClick={() => selectConstructableBuilding(building.id)}
+		>
+		  {building.name}
+		</div>
+	  );
+	});
 
-	};
+  };
 
-	render() {
-		const {
-			getBuildingsList,
-		} = this;
+  render() {
+	const {
+	  getBuildingsList,
+	} = this;
 
-		return (
-				<div>
-					<div>Buildings</div>
-					{getBuildingsList()}
-				</div>
-		);
-	}
+	return (
+	  <div>
+		<div>Buildings</div>
+		{getBuildingsList()}
+	  </div>
+	);
+  }
 
 }
 
 GameMenu.propTypes = {
-	constructableBuildings: PropTypes.array.isRequired,
-	selectConstructableBuilding: PropTypes.func.isRequired,
+  constructableBuildings: PropTypes.array.isRequired,
+  selectConstructableBuilding: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
-	return {
-		constructableBuildings: getConstructableBuildings(state),
-		selectedConstructableBuilding: getSelectedConstructableBuilding(state),
-	};
+  return {
+	constructableBuildings: getConstructableBuildings(state),
+	selectedConstructableBuilding: getSelectedConstructableBuilding(state),
+  };
 };
 
 export default connect(mapStateToProps, gameActions)(GameMenu);

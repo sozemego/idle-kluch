@@ -21,52 +21,52 @@ export const setSelectedConstructableBuilding = makeActionCreator(SET_SELECTED_C
  * @returns {function(*, *)}
  */
 export const loadKingdom = () => {
-	return (dispatch, getState) => {
+  return (dispatch, getState) => {
 
-		return kingdomService.getOwn()
-				.then(kingdom => {
-					dispatch(setKingdom(kingdom));
-					dispatch(setShowCreateKingdomForm(false));
-					return dispatch(getConstructableBuildings());
-				})
-				.catch(error => {
-					if (error.error === 'Kingdom not found') {
-						return dispatch(setShowCreateKingdomForm(true));
-					}
-					throw error;
-				});
+	return kingdomService.getOwn()
+	  .then(kingdom => {
+		dispatch(setKingdom(kingdom));
+		dispatch(setShowCreateKingdomForm(false));
+		return dispatch(getConstructableBuildings());
+	  })
+	  .catch(error => {
+		if (error.error === 'Kingdom not found') {
+		  return dispatch(setShowCreateKingdomForm(true));
+		}
+		throw error;
+	  });
 
-	};
+  };
 };
 
 export const registerKingdom = (kingdomName) => {
-	return (dispatch, getState) => {
+  return (dispatch, getState) => {
 
-		return kingdomService.registerKingdom(kingdomName)
-				.catch((error) => {
-					if (error.field === 'name') {
-						return dispatch(setKingdomNameRegistrationError(error.message));
-					}
-					throw error;
-				})
-				.then(() => dispatch(loadKingdom()));
+	return kingdomService.registerKingdom(kingdomName)
+	  .catch((error) => {
+		if (error.field === 'name') {
+		  return dispatch(setKingdomNameRegistrationError(error.message));
+		}
+		throw error;
+	  })
+	  .then(() => dispatch(loadKingdom()));
 
-	};
+  };
 };
 
 export const deleteKingdom = () => {
-	return (dispatch, getState) => {
+  return (dispatch, getState) => {
 
-		return kingdomService.deleteKingdom()
-				.then(() => dispatch(setKingdom(null)));
-	};
+	return kingdomService.deleteKingdom()
+	  .then(() => dispatch(setKingdom(null)));
+  };
 };
 
 export const getConstructableBuildings = () => {
-	return (dispatch, getState) => {
+  return (dispatch, getState) => {
 
-		return kingdomService.getConstructableBuildings()
-				.then((buildings) => dispatch(setConstructableBuildings(buildings)));
+	return kingdomService.getConstructableBuildings()
+	  .then((buildings) => dispatch(setConstructableBuildings(buildings)));
 
-	};
+  };
 };

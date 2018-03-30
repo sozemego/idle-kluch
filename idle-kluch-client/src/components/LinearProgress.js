@@ -4,25 +4,25 @@ import PropTypes from 'prop-types';
 
 export class LinearProgress extends Component {
 
-	render() {
-		const {
-			isFetching,
-		} = this.props;
+  render() {
+	const {
+	  isFetching,
+	} = this.props;
 
-		return (
-				<VendorLinearProgress mode={'indeterminate'} color={'red'} style={isFetching ? {} : { visibility: 'hidden' }}/>
-		);
-	}
+	return (
+	  <VendorLinearProgress mode={'indeterminate'} color={'red'} style={isFetching ? {} : { visibility: 'hidden' }}/>
+	);
+  }
 
 }
 
 
 LinearProgress.propTypes = {
-	isFetching: PropTypes.bool,
+  isFetching: PropTypes.bool,
 };
 
 LinearProgress.defaultProps = {
-	isFetching: false,
+  isFetching: false,
 };
 
 
