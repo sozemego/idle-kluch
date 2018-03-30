@@ -22,14 +22,26 @@ public abstract class BuildingDefinitionDto {
   private final String id;
   private final String name;
   private final BuildingType type;
+  private final int width;
+  private final int height;
+  private final String asset;
 
   @JsonCreator
   public BuildingDefinitionDto(@JsonProperty("id") final String id,
                                @JsonProperty("name") final String name,
-                               @JsonProperty("name") final BuildingType type) {
+                               @JsonProperty("name") final BuildingType type,
+                               @JsonProperty("width") final int width,
+                               @JsonProperty("height") final int height,
+                               @JsonProperty("asset") final String asset) {
     this.id = Objects.requireNonNull(id);
     this.name = Objects.requireNonNull(name);
     this.type = Objects.requireNonNull(type);
+    if(width < 0 || height < 0) {
+      throw new IllegalStateException("Width or height cannot be negative");
+    }
+    this.width = width;
+    this.height = height;
+    this.asset = Objects.requireNonNull(asset);
   }
 
   public String getId() {
@@ -44,13 +56,27 @@ public abstract class BuildingDefinitionDto {
     return type;
   }
 
+  public int getWidth() {
+    return width;
+  }
+
+  public int getHeight() {
+    return height;
+  }
+
+  public String getAsset() {
+    return asset;
+  }
+
   @Override
   public String toString() {
     return "BuildingDefinitionDto{" +
       "id='" + id + '\'' +
       ", name='" + name + '\'' +
       ", type=" + type +
+      ", width=" + width +
+      ", height=" + height +
+      ", asset='" + asset + '\'' +
       '}';
   }
-
 }

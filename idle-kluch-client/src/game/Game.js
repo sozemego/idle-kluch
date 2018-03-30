@@ -1,6 +1,7 @@
 import { getTiles as _getTiles } from './selectors';
 import { getSelectedConstructableBuilding as _getSelectedConstructableBuilding } from '../kingdom/selectors';
 import store from '../store/store';
+import EventEmitter from 'event-emitter';
 import Phaser from 'phaser';
 import { onCanvasClicked } from './actions';
 
@@ -24,7 +25,8 @@ const createGame = () => {
   const preload = function () {
 	console.log('preloading!');
 	this.load.image('grass_1', 'grass_1.png');
-	this.load.image('creativity', 'Creativity.png');
+	this.load.image('small_warehouse', 'small_warehouse.png');
+	this.load.image('warehouse', 'warehouse.png');
   };
 
   const create = function () {
@@ -95,13 +97,15 @@ const createGame = () => {
 	  }
 
 	  if (!selectedBuildingSprite) {
-		selectedBuildingSprite = game.add.sprite(mouseX - 24, mouseY - 24, 'creativity');
+		selectedBuildingSprite = game.add.sprite(mouseX - 24, mouseY - 24, selectedConstructableBuilding.asset);
 	  }
 
 	  selectedBuildingSprite.revive();
-	  selectedBuildingSprite.loadTexture('creativity');
+	  selectedBuildingSprite.loadTexture(selectedConstructableBuilding.asset);
 	  selectedBuildingSprite.x = mouseX + x;
 	  selectedBuildingSprite.y = mouseY + y;
+	  selectedBuildingSprite.width = selectedConstructableBuilding.width;
+	  selectedBuildingSprite.height = selectedConstructableBuilding.height;
 
 	}
 
@@ -136,6 +140,8 @@ const createGame = () => {
 
   // camera = new Phaser.Camera(game, 0, 0, 0, config.width, config.height);
   // camera.shake()
+
+  game.emitter = EventEmitter();
 
   return game;
 };

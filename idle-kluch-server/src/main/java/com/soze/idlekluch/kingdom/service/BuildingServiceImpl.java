@@ -156,7 +156,11 @@ public class BuildingServiceImpl implements BuildingService {
       (String) properties.get("id"),
       (String) properties.get("name"),
       BuildingType.WAREHOUSE,
-      (int) properties.get("capacity"));
+      (int) properties.get("width"),
+      (int) properties.get("height"),
+      (String) properties.get("asset"),
+      (int) properties.get("capacity")
+    );
 
     buildingDefinitions.put((String) properties.get("id"), warehouseDefinitionDto);
   }

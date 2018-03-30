@@ -12,8 +12,11 @@ public class WarehouseDefinitionDto extends BuildingDefinitionDto {
   public WarehouseDefinitionDto(@JsonProperty("id") final String id,
                                 @JsonProperty("name") final String name,
                                 @JsonProperty("type") final BuildingType type,
+                                @JsonProperty("width") final int width,
+                                @JsonProperty("height") final int height,
+                                @JsonProperty("asset") final String asset,
                                 @JsonProperty("capacity") final int capacity) {
-    super(id, name, type);
+    super(id, name, type, width, height, asset);
     this.capacity = capacity;
   }
 
