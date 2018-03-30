@@ -1,11 +1,11 @@
-import { GameService as gameService } from "./GameService";
-import { makeActionCreator } from "../store/utils";
-import createGame from "./Game";
-import { getConstructableBuildings } from "../kingdom/selectors";
-import { setSelectedConstructableBuilding } from "../kingdom/actions";
+import { GameService as gameService } from './GameService';
+import { makeActionCreator } from '../store/utils';
+import createGame from './Game';
+import { getConstructableBuildings } from '../kingdom/selectors';
+import { setSelectedConstructableBuilding } from '../kingdom/actions';
 
-export const ADD_TILES_TO_STATE = "ADD_TILES_TO_STATE";
-export const addTilesToState = makeActionCreator(ADD_TILES_TO_STATE, "payload");
+export const ADD_TILES_TO_STATE = 'ADD_TILES_TO_STATE';
+export const addTilesToState = makeActionCreator(ADD_TILES_TO_STATE, 'payload');
 
 export const connect = () => {
 	return (dispatch, getState) => {

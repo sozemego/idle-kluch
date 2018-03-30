@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import _ from "lodash";
-import { connect } from "react-redux";
-import { getConstructableBuildings, getSelectedConstructableBuilding } from "../../kingdom/selectors";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
+import { connect } from 'react-redux';
+import { getConstructableBuildings, getSelectedConstructableBuilding } from '../../kingdom/selectors';
 
-import * as gameActions from "../actions";
+import * as gameActions from '../actions';
 
-import styles from "./game-menu.css";
+import styles from './game-menu.css';
 
 class GameMenu extends Component {
 
@@ -17,12 +17,12 @@ class GameMenu extends Component {
 			selectedConstructableBuilding,
 		} = this.props;
 
-		const selectedConstructableBuildingId = _.get(selectedConstructableBuilding, "id", null);
+		const selectedConstructableBuildingId = _.get(selectedConstructableBuilding, 'id', null);
 
 		return constructableBuildings.map(building => {
 			return (
 					<div id={building.id}
-							 className={`${styles.building} ${selectedConstructableBuildingId === building.id ? styles["building-selected"] : ""}`}
+							 className={`${styles.building} ${selectedConstructableBuildingId === building.id ? styles['building-selected'] : ''}`}
 							 onClick={() => selectConstructableBuilding(building.id)}
 					>
 						{building.name}

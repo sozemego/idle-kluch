@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as gameActions from "./actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as gameActions from './actions';
 
-import styles from "./game-container.css";
-import GameMenu from "./menu/GameMenu";
+import styles from './game-container.css';
+import GameMenu from './menu/GameMenu';
 
 class GameContainer extends Component {
 

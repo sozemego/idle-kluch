@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import * as appActions from "../../app/actions";
-import { getUser, isLoggedIn } from "../../app/selectors";
-import { Menu, MenuItem, Popover } from "material-ui";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import * as appActions from '../../app/actions';
+import { getUser, isLoggedIn } from '../../app/selectors';
+import { Menu, MenuItem, Popover } from 'material-ui';
 
-import avatar from "../avatar_temp.png";
-import styles from "./header-user.css";
+import avatar from '../avatar_temp.png';
+import styles from './header-user.css';
 
 class HeaderUserComponent extends Component {
 
@@ -43,13 +43,13 @@ class HeaderUserComponent extends Component {
 			<div className={styles.name__container}
 					 key={0}
 					 onClick={this.onContainerClicked}>
-				<img src={avatar} className={styles.avatar} alt={"User avatar"}/>
+				<img src={avatar} className={styles.avatar} alt={'User avatar'}/>
 				<div className={styles.name}>
 					{user.name}
 				</div>
-				<i className={"material-icons"}>arrow_drop_down</i>
+				<i className={'material-icons'}>arrow_drop_down</i>
 			</div>,
-			<Popover anchorOrigin={{ horizontal: "middle", vertical: "bottom" }}
+			<Popover anchorOrigin={{ horizontal: 'middle', vertical: 'bottom' }}
 							 open={userMenuOpen}
 							 key={1}
 							 onRequestClose={() => this.setState({ userMenuOpen: false })}
@@ -57,7 +57,7 @@ class HeaderUserComponent extends Component {
 			>
 				<Menu>
 					<MenuItem value="Logout"
-										primaryText={"Logout"}
+										primaryText={'Logout'}
 										onClick={() => {
 											this.setState({ userMenuOpen: false });
 											logout();

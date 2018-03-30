@@ -1,12 +1,12 @@
-import networkService from "../api/NetworkService";
+import networkService from '../api/NetworkService';
 
-const basePath = "/user";
+const basePath = '/user';
 const registerPath = `${basePath}/register`;
 const isAvailablePath = `${basePath}/single/available`;
 const loginPath = `${basePath}/auth/login`;
 const deletePath = `${basePath}/single/delete`;
 
-const passwordValidatorRegExp = new RegExp("^[a-zA-Z0-9_-]+$");
+const passwordValidatorRegExp = new RegExp('^[a-zA-Z0-9_-]+$');
 const maxUsernameLength = 38;
 const maxPasswordLength = 128;
 
@@ -14,10 +14,10 @@ export const UserService = {};
 
 UserService.registerUser = function (username, password) {
 	const usernameError = this.validateUsername(username);
-	if (usernameError) return Promise.reject({ field: "username", message: usernameError });
+	if (usernameError) return Promise.reject({ field: 'username', message: usernameError });
 
 	const passwordError = this.validatePassword(password);
-	if (passwordError) return Promise.reject({ field: "password", message: passwordError });
+	if (passwordError) return Promise.reject({ field: 'password', message: passwordError });
 
 	return networkService.post(`${registerPath}`, { username, password })
 			.catch(error => {
@@ -43,7 +43,7 @@ UserService.login = function (username, password) {
 			.then((data) => {
 				return data.jwt;
 			})
-			.catch(error => Promise.reject("Invalid username or password!"));
+			.catch(error => Promise.reject('Invalid username or password!'));
 };
 
 UserService.delete = function () {
@@ -52,11 +52,11 @@ UserService.delete = function () {
 
 UserService.validateUsername = function (username) {
 	if (!username) {
-		return "Username cannot be empty!";
+		return 'Username cannot be empty!';
 	}
 
 	if (!passwordValidatorRegExp.test(username)) {
-		return "Username can only contain letters, numbers, - and _";
+		return 'Username can only contain letters, numbers, - and _';
 	}
 
 	if (username.length > maxUsernameLength) {
@@ -66,7 +66,7 @@ UserService.validateUsername = function (username) {
 
 UserService.validatePassword = function (password) {
 	if (!password) {
-		return "Password cannot be empty!";
+		return 'Password cannot be empty!';
 	}
 	if (password.length > maxPasswordLength) {
 		return `Password cannot be longer than ${maxPasswordLength} characters!`;

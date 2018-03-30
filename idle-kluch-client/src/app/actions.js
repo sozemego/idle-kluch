@@ -1,29 +1,29 @@
-import { makeActionCreator } from "../store/utils";
-import { UserService as userService } from "./UserService";
-import { NetworkService as networkService } from "../api/NetworkService";
-import { loadKingdom } from "../kingdom/actions";
-import { isLoggedIn } from "./selectors";
+import { makeActionCreator } from '../store/utils';
+import { UserService as userService } from './UserService';
+import { NetworkService as networkService } from '../api/NetworkService';
+import { loadKingdom } from '../kingdom/actions';
+import { isLoggedIn } from './selectors';
 
-export const FETCHING = "FETCHING";
+export const FETCHING = 'FETCHING';
 export const fetching = makeActionCreator(FETCHING);
 
-export const STOP_FETCHING = "STOP_FETCHING";
+export const STOP_FETCHING = 'STOP_FETCHING';
 export const stopFetching = makeActionCreator(STOP_FETCHING);
 
-export const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
-export const setErrorMessage = makeActionCreator(SET_ERROR_MESSAGE, "payload");
+export const SET_ERROR_MESSAGE = 'SET_ERROR_MESSAGE';
+export const setErrorMessage = makeActionCreator(SET_ERROR_MESSAGE, 'payload');
 
-export const SET_TOKEN = "SET_TOKEN";
-export const setToken = makeActionCreator(SET_TOKEN, "payload");
+export const SET_TOKEN = 'SET_TOKEN';
+export const setToken = makeActionCreator(SET_TOKEN, 'payload');
 
-export const SET_USERNAME = "SET_USERNAME";
-export const setUsername = makeActionCreator(SET_USERNAME, "payload");
+export const SET_USERNAME = 'SET_USERNAME';
+export const setUsername = makeActionCreator(SET_USERNAME, 'payload');
 
-export const SET_USERNAME_ERROR = "SET_USERNAME_ERROR";
-const setUsernameError = makeActionCreator(SET_USERNAME_ERROR, "payload");
+export const SET_USERNAME_ERROR = 'SET_USERNAME_ERROR';
+const setUsernameError = makeActionCreator(SET_USERNAME_ERROR, 'payload');
 
-export const SET_PASSWORD_ERROR = "SET_PASSWORD_ERROR";
-const setPasswordError = makeActionCreator(SET_PASSWORD_ERROR, "payload");
+export const SET_PASSWORD_ERROR = 'SET_PASSWORD_ERROR';
+const setPasswordError = makeActionCreator(SET_PASSWORD_ERROR, 'payload');
 
 /**
  * Function used to initialize the application.
@@ -47,10 +47,10 @@ export const register = (username, password) => {
 				.then(() => userService.registerUser(username, password))
 				.then(() => dispatch(login(username, password)))
 				.catch(error => {
-					if (error.field === "username") {
+					if (error.field === 'username') {
 						return dispatch(setUsernameError(error.message));
 					}
-					if (error.field === "password") {
+					if (error.field === 'password') {
 						return dispatch(setPasswordError(error.message));
 					}
 					console.log(error);
@@ -79,7 +79,7 @@ export const logout = () => {
 	return (dispatch, getState) => {
 		dispatch(setToken(null));
 		networkService.clearAuthorizationToken();
-		dispatch(setUsername("Anonymous"));
+		dispatch(setUsername('Anonymous'));
 		return dispatch(clearForms());
 	};
 };

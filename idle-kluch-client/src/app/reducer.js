@@ -1,6 +1,6 @@
-import { createReducer } from "../store/utils";
-import * as APP_ACTIONS from "./actions";
-import { NetworkService as networkService } from "../api/NetworkService";
+import { createReducer } from '../store/utils';
+import * as APP_ACTIONS from './actions';
+import { NetworkService as networkService } from '../api/NetworkService';
 
 const anonymousUser = {
 	name: null,
@@ -9,8 +9,8 @@ const anonymousUser = {
 
 //TODO abstraction over localStorage
 const _getCurrentUser = () => {
-	const name = localStorage.getItem("username");
-	const token = localStorage.getItem("jwt");
+	const name = localStorage.getItem('username');
+	const token = localStorage.getItem('jwt');
 
 	if (!name || !token) {
 		return anonymousUser;
@@ -22,10 +22,10 @@ const _getCurrentUser = () => {
 
 const initialState = {
 	fetchingActions: 0,
-	errorMessage: "",
+	errorMessage: '',
 	user: _getCurrentUser(),
-	usernameError: "",
-	passwordError: "",
+	usernameError: '',
+	passwordError: '',
 };
 
 const fetching = (state, action) => {
@@ -43,12 +43,12 @@ const setErrorMessage = (state, action) => {
 };
 
 const setUsername = (state, action) => {
-	action.payload ? localStorage.setItem("username", action.payload) : localStorage.removeItem("username");
+	action.payload ? localStorage.setItem('username', action.payload) : localStorage.removeItem('username');
 	return { ...state, user: { ...state.user, name: action.payload } };
 };
 
 const setToken = (state, action) => {
-	action.payload ? localStorage.setItem("jwt", action.payload) : localStorage.removeItem("jwt");
+	action.payload ? localStorage.setItem('jwt', action.payload) : localStorage.removeItem('jwt');
 	return { ...state, user: { ...state.user, token: action.payload } };
 };
 

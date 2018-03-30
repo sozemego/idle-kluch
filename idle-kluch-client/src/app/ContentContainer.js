@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { hasKingdom, shouldShowCreateKingdomForm } from "../kingdom/selectors";
-import CreateKingdomForm from "../kingdom/CreateKingdomForm";
-import { isLoggedIn } from "./selectors";
-import * as kingdomActions from "../kingdom/actions";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { hasKingdom, shouldShowCreateKingdomForm } from '../kingdom/selectors';
+import CreateKingdomForm from '../kingdom/CreateKingdomForm';
+import { isLoggedIn } from './selectors';
+import * as kingdomActions from '../kingdom/actions';
 // import styles from './content-container.css';
-import GameContainer from "../game/GameContainer";
+import GameContainer from '../game/GameContainer';
 
 class ContentContainer extends Component {
 

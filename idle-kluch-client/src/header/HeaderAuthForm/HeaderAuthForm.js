@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import * as appActions from "../../app/actions";
-import { getPasswordError, getUsernameError } from "../../app/selectors";
+import * as appActions from '../../app/actions';
+import { getPasswordError, getUsernameError } from '../../app/selectors';
 
-import styles from "./header-auth-form.css";
+import styles from './header-auth-form.css';
 
 class HeaderAuthForm extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			username: "",
-			password: "",
+			username: '',
+			password: '',
 		};
 	}
 
@@ -47,10 +47,10 @@ class HeaderAuthForm extends Component {
 				<div className={styles.container}>
 					<div className={styles.input__row}>
 						<label className={styles.input__label}>Username</label>
-						<input type={"text"}
-									 placeholder={"Username"}
+						<input type={'text'}
+									 placeholder={'Username'}
 									 onChange={e => this.setState({ username: e.target.value })}
-									 autoComplete={"username"}
+									 autoComplete={'username'}
 									 tabIndex={1}
 						/>
 						<button className={styles.button} onClick={register}>Register</button>
@@ -58,9 +58,9 @@ class HeaderAuthForm extends Component {
 					</div>
 					<div className={styles.input__row}>
 						<label className={styles.input__label}>Password</label>
-						<input type={"password"}
-									 placeholder={"Password"}
-									 autoComplete={"current-password"}
+						<input type={'password'}
+									 placeholder={'Password'}
+									 autoComplete={'current-password'}
 									 onChange={e => this.setState({ password: e.target.value })}
 									 tabIndex={2}
 						/>

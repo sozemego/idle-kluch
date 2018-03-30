@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import styles from "./header.css";
-import HeaderLinearProgress from "./HeaderLinearProgress";
-import HeaderAuthButtons from "./HeaderUserSection/HeaderUserSection";
-import * as appActions from "../app/actions";
-import { Divider } from "material-ui";
-import HeaderKingdomSection from "./HeaderKingdomSection/HeaderKingdomSection";
+import styles from './header.css';
+import HeaderLinearProgress from './HeaderLinearProgress';
+import HeaderAuthButtons from './HeaderUserSection/HeaderUserSection';
+import * as appActions from '../app/actions';
+import { Divider } from 'material-ui';
+import HeaderKingdomSection from './HeaderKingdomSection/HeaderKingdomSection';
 
 class Header extends Component {
 
@@ -18,7 +18,7 @@ class Header extends Component {
 							{/*<HeaderAuthButtons/>*/}
 							<HeaderKingdomSection/>
 						</div>
-						<div className={[styles.element, styles.logo].join(" ")}>
+						<div className={[styles.element, styles.logo].join(' ')}>
 							Idle Kluch
 						</div>
 						<div className={styles.element}>

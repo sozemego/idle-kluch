@@ -1,5 +1,5 @@
-import { createReducer } from "../store/utils";
-import * as GAME_ACTIONS from "./actions";
+import { createReducer } from '../store/utils';
+import * as GAME_ACTIONS from './actions';
 
 const initialState = {
 	tiles: {},

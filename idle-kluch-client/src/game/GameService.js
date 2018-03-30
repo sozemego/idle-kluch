@@ -1,7 +1,7 @@
 // import _ from 'lodash';
-import { networkConfig } from "../api/config";
-import { addTiles } from "./actions";
-import store from "../store/store";
+import { networkConfig } from '../api/config';
+import { addTiles } from './actions';
+import store from '../store/store';
 
 const game = `ws/game`;
 
@@ -12,7 +12,7 @@ export const GameService = {};
 GameService.connect = function () {
 	return new Promise((resolve, reject) => {
 		if (socket && socket.readyState !== WebSocket.CLOSED) {
-			reject("Already connected or connecting or closing. Either way, cannot connect right now.");
+			reject('Already connected or connecting or closing. Either way, cannot connect right now.');
 			return;
 		}
 
@@ -29,7 +29,7 @@ GameService.connect = function () {
 
 		socket.onmessage = (message) => {
 			const parsed = JSON.parse(message.data);
-			if (parsed["type"] === "WORLD_CHUNK") {
+			if (parsed['type'] === 'WORLD_CHUNK') {
 				store.dispatch(addTiles(parsed.tiles));
 			}
 		};

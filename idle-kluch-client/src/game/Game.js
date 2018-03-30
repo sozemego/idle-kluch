@@ -1,8 +1,10 @@
-import { getTiles as _getTiles } from "./selectors";
-import store from "../store/store";
-import Phaser from "phaser";
+import { getTiles as _getTiles } from './selectors';
+import { getSelectedConstructableBuilding as _selectedConstructableBuilding } from '../kingdom/selectors';
+import store from '../store/store';
+import Phaser from 'phaser';
 
 const getTiles = () => _getTiles(store.getState());
+const getSelectedConstructableBuilding = () => _selectedConstructableBuilding(store.getState());
 
 const TILE_SIZE = 128;
 
@@ -11,23 +13,26 @@ const createGame = () => {
 	let game = null;
 	let cursors = null;
 
+	let selectedBuildingSprite = null;
+
 	const tileSprites = {};
 	// let background = null;
 
 	const preload = function () {
-		console.log("preloading!");
-		this.load.image("grass_1", "grass_1.png");
+		console.log('preloading!');
+		this.load.image('grass_1', 'grass_1.png');
+		this.load.image('creativity', 'Creativity.png');
 	};
 
 	const create = function () {
-		console.log("creating!");
+		console.log('creating!');
 
 		const tileMap = getTiles();
 		const tiles = Object.values(tileMap);
 		for (let i = 0; i < tiles.length; i++) {
 			const tile = tiles[i];
 			const { x, y } = tile;
-			const sprite = this.add.sprite(x * TILE_SIZE, y * TILE_SIZE, "grass_1");
+			const sprite = this.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'grass_1');
 			sprite.inputEnabled = true;
 
 			tileSprites[`${x}:${y}`] = sprite;
@@ -64,6 +69,21 @@ const createGame = () => {
 			}
 		});
 
+		//selected building highlight
+		const selectedConstructableBuilding = getSelectedConstructableBuilding();
+		if (selectedConstructableBuilding) {
+
+			//remove previous sprite
+			if (selectedBuildingSprite) {
+				selectedBuildingSprite.destroy(true);
+			}
+
+			selectedBuildingSprite = game.add.sprite(12, 12, 'creativity');
+
+
+		}
+		console.log(selectedConstructableBuilding);
+
 	};
 
 	const render = () => {
@@ -72,7 +92,7 @@ const createGame = () => {
 
 	const config = {
 		type: Phaser.CANVAS,
-		parent: "game",
+		parent: 'game',
 		width: TILE_SIZE * 14,
 		height: TILE_SIZE * 6,
 		scene: {

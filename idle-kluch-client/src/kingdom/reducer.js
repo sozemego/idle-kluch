@@ -1,9 +1,9 @@
-import { createReducer } from "../store/utils";
-import * as KINGDOM_ACTIONS from "./actions";
+import { createReducer } from '../store/utils';
+import * as KINGDOM_ACTIONS from './actions';
 
 const initialState = {
 	showCreateKingdomForm: false,
-	kingdomNameRegistrationError: "",
+	kingdomNameRegistrationError: '',
 	kingdom: null,
 	constructableBuildings: [],
 	selectedConstructableBuilding: null,

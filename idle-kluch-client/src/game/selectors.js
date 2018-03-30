@@ -1,5 +1,5 @@
-import { rootSelector } from "../store/utils";
+import { rootSelector } from '../store/utils';
 
-const root = rootSelector("game");
+const root = rootSelector('game');
 
 export const getTiles = (state) => root(state).tiles;

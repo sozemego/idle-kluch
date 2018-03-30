@@ -1,6 +1,6 @@
-import { LinearProgress } from "../components/LinearProgress";
-import { connect } from "react-redux";
-import { isFetching } from "../app/selectors";
+import { LinearProgress } from '../components/LinearProgress';
+import { connect } from 'react-redux';
+import { isFetching } from '../app/selectors';
 
 export default connect(state => {
 	return {

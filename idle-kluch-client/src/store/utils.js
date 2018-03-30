@@ -9,7 +9,7 @@ export const makeActionCreator = (type, ...argNames) => (...args) => {
 };
 
 export const rootSelector = (rootName) => (state) => {
-	return typeof state === "function" ? state()[rootName] : state[rootName];
+	return typeof state === 'function' ? state()[rootName] : state[rootName];
 };
 
 export const createReducer = (initialState, handlers) => {

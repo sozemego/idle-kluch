@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import styles from "./create-kingdom-form.css";
-import { Divider, RaisedButton, TextField } from "material-ui";
+import styles from './create-kingdom-form.css';
+import { Divider, RaisedButton, TextField } from 'material-ui';
 
-import * as kingdomActions from "./actions";
-import { getKingdomNameRegistrationError } from "./selectors";
+import * as kingdomActions from './actions';
+import { getKingdomNameRegistrationError } from './selectors';
 
 class CreateKingdomForm extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			kingdomName: "",
+			kingdomName: '',
 		};
 	}
 
@@ -50,11 +50,11 @@ class CreateKingdomForm extends Component {
 						<TextField value={kingdomName}
 											 onChange={onKingdomNameChange}
 											 floatingLabelFixed
-											 floatingLabelText={"Kingdom name"}
+											 floatingLabelText={'Kingdom name'}
 											 errorText={kingdomNameRegistrationError}
 						/>
 					</div>
-					<RaisedButton label={"Create kingdom!"}
+					<RaisedButton label={'Create kingdom!'}
 												onClick={onSubmit}
 												className={styles.submit_button}
 					/>
