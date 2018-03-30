@@ -10,6 +10,12 @@ export const setKingdomNameRegistrationError = makeActionCreator(SET_KINGDOM_NAM
 export const SET_SHOW_CREATE_KINGDOM_FORM = 'SET_SHOW_CREATE_KINGDOM_FORM';
 export const setShowCreateKingdomForm = makeActionCreator(SET_SHOW_CREATE_KINGDOM_FORM, 'payload');
 
+export const SET_CONSTRUCTABLE_BUILDINGS = 'SET_CONSTRUCTABLE_BUILDINGS';
+export const setConstructableBuildings = makeActionCreator(SET_CONSTRUCTABLE_BUILDINGS, 'payload');
+
+export const SET_SELECTED_CONSTRUCTABLE_BUILDING = 'SET_SELECTED_CONSTRUCTABLE_BUILDING';
+export const setSelectedConstructableBuilding = makeActionCreator(SET_SELECTED_CONSTRUCTABLE_BUILDING, 'payload');
+
 /**
  * Loads kingdom for the logged in user.
  * @returns {function(*, *)}
@@ -20,11 +26,12 @@ export const loadKingdom = () => {
 	return kingdomService.getOwn()
 	  .then(kingdom => {
 		dispatch(setKingdom(kingdom));
-		return dispatch(setShowCreateKingdomForm(false));
+		dispatch(setShowCreateKingdomForm(false));
+		return dispatch(getConstructableBuildings());
 	  })
 	  .catch(error => {
-	    if(error.error === 'Kingdom not found') {
-	      return dispatch(setShowCreateKingdomForm(true));
+		if (error.error === 'Kingdom not found') {
+		  return dispatch(setShowCreateKingdomForm(true));
 		}
 		throw error;
 	  });
@@ -52,5 +59,14 @@ export const deleteKingdom = () => {
 
 	return kingdomService.deleteKingdom()
 	  .then(() => dispatch(setKingdom(null)));
+  };
+};
+
+export const getConstructableBuildings = () => {
+  return (dispatch, getState) => {
+
+	return kingdomService.getConstructableBuildings()
+	  .then((buildings) => dispatch(setConstructableBuildings(buildings)));
+
   };
 };
