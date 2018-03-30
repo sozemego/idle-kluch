@@ -1,10 +1,13 @@
 import { getTiles as _getTiles } from './selectors';
-import { getSelectedConstructableBuilding as _selectedConstructableBuilding } from '../kingdom/selectors';
+import { getSelectedConstructableBuilding as _getSelectedConstructableBuilding } from '../kingdom/selectors';
 import store from '../store/store';
 import Phaser from 'phaser';
+import { onCanvasClicked } from './actions';
 
 const getTiles = () => _getTiles(store.getState());
-const getSelectedConstructableBuilding = () => _selectedConstructableBuilding(store.getState());
+const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
+
+const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 
 const TILE_SIZE = 128;
 
@@ -43,9 +46,17 @@ const createGame = () => {
 		game.world.resize(5000, 5000);
 		game.camera.x = 0;
 		game.camera.y = 0;
+
+		game.input.onDown.add((pointer) => {
+			const x = pointer.x + game.camera.x;
+			const y = pointer.y + game.camera.y;
+			onCanvasClick(x, y);
+		});
 	};
 
 	const update = () => {
+
+		const {x: mouseX, y: mouseY} = game.input;
 
 		const { x, y } = game.camera;
 		if (cursors.up.isDown) {
@@ -69,20 +80,30 @@ const createGame = () => {
 			}
 		});
 
+		//TODO make it all reactive
+		if(selectedBuildingSprite) {
+			selectedBuildingSprite.kill(true);
+		}
+
 		//selected building highlight
 		const selectedConstructableBuilding = getSelectedConstructableBuilding();
 		if (selectedConstructableBuilding) {
 
 			//remove previous sprite
-			if (selectedBuildingSprite) {
-				selectedBuildingSprite.destroy(true);
+			if (selectedBuildingSprite && !selectedConstructableBuilding) {
+				selectedBuildingSprite.kill(true);
 			}
 
-			selectedBuildingSprite = game.add.sprite(12, 12, 'creativity');
+			if(!selectedBuildingSprite) {
+				selectedBuildingSprite = game.add.sprite(mouseX - 24, mouseY - 24, 'creativity');
+			}
 
+			selectedBuildingSprite.revive();
+			selectedBuildingSprite.loadTexture('creativity');
+			selectedBuildingSprite.x = mouseX + x;
+			selectedBuildingSprite.y = mouseY + y;
 
 		}
-		console.log(selectedConstructableBuilding);
 
 	};
 
