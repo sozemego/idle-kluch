@@ -2,17 +2,16 @@ package com.soze.idlekluch.kingdom.entity;
 
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
-import javax.persistence.*;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 
 @Embeddable
 public class StorageUnit {
 
   @Embedded
-  @AttributeOverride(name = "id", column = @Column(name = "building_id", updatable = false, insertable = false))
-  private EntityUUID buildingId;
-
-  @Embedded
-  @AttributeOverride(name = "id", column = @Column(name = "resource_id"))
+  @AttributeOverride(name = "id", column = @Column(name = "resource_id", insertable = false, updatable = false))
   private EntityUUID resourceId;
 
   @Column(name = "amount")
@@ -23,14 +22,6 @@ public class StorageUnit {
 
   public StorageUnit() {
 
-  }
-
-  public EntityUUID getBuildingId() {
-    return buildingId;
-  }
-
-  public void setBuildingId(final EntityUUID buildingId) {
-    this.buildingId = buildingId;
   }
 
   public EntityUUID getResourceId() {

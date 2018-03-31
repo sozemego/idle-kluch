@@ -23,7 +23,7 @@ public interface BuildingService {
    * @param owner
    * @param form
    */
-  public void buildBuilding(final String owner, final BuildBuildingForm form);
+  public Building buildBuilding(final String owner, final BuildBuildingForm form);
 
   public List<Building> getOwnBuildings(final String owner);
 

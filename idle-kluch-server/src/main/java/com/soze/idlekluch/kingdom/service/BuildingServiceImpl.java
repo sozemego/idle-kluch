@@ -86,7 +86,7 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   @Override
-  public void buildBuilding(final String owner, final BuildBuildingForm form) {
+  public Building buildBuilding(final String owner, final BuildBuildingForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
 
@@ -121,6 +121,8 @@ public class BuildingServiceImpl implements BuildingService {
     building.setKingdom(kingdom.get());
 
     buildingRepository.addBuilding(building);
+
+    return building;
   }
 
   @Override
@@ -211,7 +213,6 @@ public class BuildingServiceImpl implements BuildingService {
       final StorageUnit unit = new StorageUnit();
       unit.setAmount(0);
       unit.setCapacity(warehouseDefinition.getCapacity());
-      unit.setBuildingId(warehouse.getBuildingId());
       unit.setResourceId(resource.getResourceId());
       return unit;
     })

@@ -49,8 +49,9 @@ public class BuildingController {
 
   @PostMapping(path = Routes.BUILDING_BUILD)
   public ResponseEntity buildBuilding(final Principal principal, @RequestBody final BuildBuildingForm form) {
-    buildingService.buildBuilding(principal.getName(), form);
-    return ResponseEntity.status(HttpStatus.CREATED).build();
+    final Building building = buildingService.buildBuilding(principal.getName(), form);
+    final BuildingDto buildingDto = convertBuilding(building);
+    return ResponseEntity.status(HttpStatus.CREATED).body(buildingDto);
   }
 
   private List<BuildingDto> convertBuildings(final List<Building> buildings) {
@@ -59,14 +60,18 @@ public class BuildingController {
     final List<BuildingDto> dtos = new ArrayList<>();
 
     for (final Building building : buildings) {
-      switch (building.getBuildingType()) {
-        case WAREHOUSE:
-          dtos.add(convertWarehouse((Warehouse) building));
-          break;
-      }
+      dtos.add(convertBuilding(building));
     }
 
     return dtos;
+  }
+
+  private BuildingDto convertBuilding(final Building building) {
+    switch (building.getBuildingType()) {
+      case WAREHOUSE:
+        return convertWarehouse((Warehouse) building);
+    }
+    return null;
   }
 
   private WarehouseDto convertWarehouse(final Warehouse warehouse) {

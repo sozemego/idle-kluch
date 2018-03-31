@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS kingdoms CASCADE;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS tiles;
 DROP TABLE IF EXISTS resources CASCADE;
 DROP TABLE IF EXISTS buildings CASCADE;
@@ -25,6 +25,12 @@ CREATE TABLE resources (
   name VARCHAR(32) NOT NULL UNIQUE
 );
 
+INSERT INTO resources VALUES
+  (uuid_generate_v4(), 'Wood'),
+  (uuid_generate_v4(), 'Stone'),
+  (uuid_generate_v4(), 'Plank'),
+  (uuid_generate_v4(), 'Brick');
+
 CREATE TABLE kingdoms (
   kingdom_id uuid NOT NULL PRIMARY KEY,
   created_at TIMESTAMP NOT NULL,
@@ -45,14 +51,7 @@ CREATE TABLE buildings (
 );
 
 CREATE TABLE warehouses (
-  building_id uuid NOT NULL PRIMARY KEY,
-  definition_id VARCHAR(32) NOT NULL,
-  created_at TIMESTAMP NOT NULL,
-  name VARCHAR(100) NOT NULL,
-  kingdom_id uuid NOT NULL,
-  x int NOT NULL,
-  y int NOT NULL,
-  CONSTRAINT FK_KINGDOM_BUILDING FOREIGN KEY (kingdom_id) REFERENCES kingdoms(kingdom_id)
+  building_id uuid NOT NULL PRIMARY KEY
 );
 
 CREATE TABLE storage_units (
@@ -60,6 +59,6 @@ CREATE TABLE storage_units (
   resource_id uuid NOT NULL,
   amount INTEGER NOT NULL,
   capacity INTEGER NOT NULL,
-  CONSTRAINT FK_STORAGE_UNIT_BUILDING FOREIGN KEY (building_id) REFERENCES buildings(building_id),
+  CONSTRAINT FK_STORAGE_UNIT_BUILDING FOREIGN KEY (building_id) REFERENCES warehouses(building_id),
   CONSTRAINT FK_STORAGE_UNIT_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
 );
