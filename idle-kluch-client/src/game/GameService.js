@@ -4,8 +4,11 @@ import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import { addTiles } from './actions';
 import store from '../store/store';
+import { getUser } from '../app/selectors';
 
-const game = `ws/game`;
+const getToken = () => getUser(store.getState()).token;
+
+const game = `/game-socket`;
 
 let socket = null;
 
@@ -19,9 +22,16 @@ GameService.connect = function () {
 	}
 
 	const { protocol, base, port, version } = networkConfig;
-	const socket = new SockJS(`${protocol}://${base}:${port}${version}/${game}`);
+	const socket = new SockJS(`${protocol}://${base}:${port}${version}${game}`);
 	// socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
 	const client = Stomp.over(socket);
+	client.connect({ token: getToken() }, frame => {
+	  console.log(frame);
+
+	  // client.subscribe('/game', message => console.log(message));
+	  client.send('/game/inbound', {what: 'nothingfirst'}, "asd");
+
+	});
 	// socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
 	//
 	// socket.onopen = () => {

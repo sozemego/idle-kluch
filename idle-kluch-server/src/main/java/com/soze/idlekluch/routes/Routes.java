@@ -36,10 +36,11 @@ public interface Routes {
   String BUILDING_BUILD = BUILDING_BASE + "/build";
   String BUILDING_OWN = BUILDING_BASE + "/own";
 
-  String WEB_SOCKET = "/ws";
   String GAME = "/game";
+  String GAME_INBOUND = "/inbound";
 
-  String GAME_BASE = BASE + WEB_SOCKET + GAME;
+//  String GAME_BASE = BASE + WEB_SOCKET + GAME;
+  String GAME_SOCKET = BASE + "/game-socket";
 
 
 }

@@ -34,6 +34,10 @@ public class WebSocketSecurityInterceptor extends ChannelInterceptorAdapter {
     if(StompCommand.CONNECT == accessor.getCommand()) {
       final String token = accessor.getFirstNativeHeader(TOKEN);
 
+      if(token == null) {
+        return message;
+      }
+
       final Optional<UsernamePasswordAuthenticationToken> usernamePasswordAuthenticationToken = getAuthentication(token);
       if(usernamePasswordAuthenticationToken.isPresent()) {
         accessor.setUser(usernamePasswordAuthenticationToken.get());
