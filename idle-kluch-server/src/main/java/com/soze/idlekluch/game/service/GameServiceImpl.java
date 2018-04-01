@@ -38,8 +38,10 @@ public class GameServiceImpl implements GameService {
     sessions.put(session.getId(), session);
 
     final Map<Point, Tile> allTiles = world.getAllTiles();
-
+//    System.out.println(SecurityContextHolder.getContext().getAuthentication());
+//    System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
     //convert tiles to a json
+//    maybe send buildings here too?
     final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
     final String json = JsonUtils.objectToJson(worldChunkMessage);
 

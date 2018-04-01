@@ -8,6 +8,7 @@ const getOwn = `${basePath}/own`;
 
 const buildingBase = '/building';
 const getConstructableBuildings = `${buildingBase}/all`;
+const buildingBuild = `${buildingBase}/build`;
 
 const kingdomNameRegexp = new RegExp('^[a-zA-Z0-9_-]+$');
 const maxKingdomNameLength = 32;
@@ -33,6 +34,10 @@ KingdomService.deleteKingdom = () => {
 
 KingdomService.getConstructableBuildings = () => {
   return networkService.get(getConstructableBuildings);
+};
+
+KingdomService.constructBuilding = (buildingId, x, y) => {
+  return networkService.post(buildingBuild, { buildingId, x, y });
 };
 
 const validateKingdomName = (kingdomName) => {

@@ -1,11 +1,15 @@
 import { GameService as gameService } from './GameService';
 import { makeActionCreator } from '../store/utils';
 import createGame from './Game';
+import {events as GAME_EVENTS} from './Game'
 import { getConstructableBuildings, getSelectedConstructableBuilding } from '../kingdom/selectors';
 import { setSelectedConstructableBuilding } from '../kingdom/actions';
+import { KingdomService as kingdomService } from "../kingdom/KingdomService";
 
 export const ADD_TILES_TO_STATE = 'ADD_TILES_TO_STATE';
 export const addTilesToState = makeActionCreator(ADD_TILES_TO_STATE, 'payload');
+
+let game = null;
 
 export const connect = () => {
   return (dispatch, getState) => {
@@ -19,7 +23,7 @@ export const connect = () => {
 export const startGame = () => {
   return (dispatch, getState) => {
 
-	createGame();
+	game = createGame();
 
   };
 };
@@ -50,9 +54,13 @@ export const onCanvasClicked = (x, y) => {
 	//canvas was clicked, lets check what we can do
 	const selectedConstructableBuilding = getSelectedConstructableBuilding(getState);
 	if (selectedConstructableBuilding) {
-	  //lets build a building
+	  //send network request to build
 
-	  return;
+	  return kingdomService.constructBuilding(selectedConstructableBuilding.id, x, y)
+		.then((building) => {
+		  dispatch(setSelectedConstructableBuilding(null));
+		  game.emitter.emit(GAME_EVENTS.BUILDING_PLACED, building);
+		});
 	}
 
   };

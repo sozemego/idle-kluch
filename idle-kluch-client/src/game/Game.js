@@ -141,9 +141,19 @@ const createGame = () => {
   // camera = new Phaser.Camera(game, 0, 0, 0, config.width, config.height);
   // camera.shake()
 
-  game.emitter = EventEmitter();
+  const emitter = EventEmitter();
+
+  emitter.on(events.BUILDING_PLACED, (building) => {
+    console.log(building);
+  });
+
+  game.emitter = emitter;
 
   return game;
+};
+
+export const events = {
+  'BUILDING_PLACED': 'BUILDING_PLACED',
 };
 
 export default createGame;

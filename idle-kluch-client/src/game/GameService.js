@@ -1,5 +1,7 @@
 // import _ from 'lodash';
 import { networkConfig } from '../api/config';
+import Stomp from 'stompjs';
+import SockJS from 'sockjs-client';
 import { addTiles } from './actions';
 import store from '../store/store';
 
@@ -16,23 +18,26 @@ GameService.connect = function () {
 	  return;
 	}
 
-	const { wsProtocol, base, port, version } = networkConfig;
-	socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
-
-	socket.onopen = () => {
-	  resolve();
-	};
-
-	socket.onclose = () => {
-
-	};
-
-	socket.onmessage = (message) => {
-	  const parsed = JSON.parse(message.data);
-	  if (parsed['type'] === 'WORLD_CHUNK') {
-		store.dispatch(addTiles(parsed.tiles));
-	  }
-	};
+	const { protocol, base, port, version } = networkConfig;
+	const socket = new SockJS(`${protocol}://${base}:${port}${version}/${game}`);
+	// socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
+	const client = Stomp.over(socket);
+	// socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
+	//
+	// socket.onopen = () => {
+	//   resolve();
+	// };
+	//
+	// socket.onclose = () => {
+	//
+	// };
+	//
+	// socket.onmessage = (message) => {
+	//   const parsed = JSON.parse(message.data);
+	//   if (parsed['type'] === 'WORLD_CHUNK') {
+	// 	store.dispatch(addTiles(parsed.tiles));
+	//   }
+	// };
   });
 };
 

@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
@@ -51,15 +50,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
           Routes.KINGDOM_DELETE,
           Routes.KINGDOM_OWN,
           Routes.BUILDING_BUILD,
-          Routes.BUILDING_OWN
+          Routes.BUILDING_OWN,
+          Routes.GAME_BASE
         )
         .authenticated()
         .anyRequest().permitAll()
       .and()
         .addFilter(new JWTAuthenticationFilter(authenticationManager(), authService))
-        .addFilter(new JWTAuthorizationFilter(authenticationManager(), authService))
+        .addFilter(new JWTAuthorizationFilter(authenticationManager(), authService));
         // this disables session creation on Spring Security
-      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);;
+//      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
   }
 
   @Override

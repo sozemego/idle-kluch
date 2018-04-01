@@ -4,20 +4,42 @@ import com.soze.idlekluch.game.websocket.GameSocket;
 import com.soze.idlekluch.routes.Routes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
+import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
 @Configuration
-@EnableWebSocket
-public class WebSocketConfiguration implements WebSocketConfigurer {
+@EnableWebSocketMessageBroker
+public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrokerConfigurer {
 
   @Autowired
   private GameSocket gameSocket;
 
   @Override
-  public void registerWebSocketHandlers(final WebSocketHandlerRegistry registry) {
-    registry.addHandler(gameSocket, Routes.GAME_BASE).setAllowedOrigins("*");
+  protected void configureInbound(final MessageSecurityMetadataSourceRegistry messages) {
+    messages.simpDestMatchers(Routes.GAME_BASE).authenticated();
   }
+
+  @Override
+  public void configureMessageBroker(MessageBrokerRegistry registry) {
+    registry.enableSimpleBroker(Routes.GAME_BASE);
+  }
+
+  @Override
+  public void registerStompEndpoints(StompEndpointRegistry registry) {
+    registry.addEndpoint(Routes.GAME_BASE).setAllowedOrigins("*").withSockJS();
+  }
+
+  @Override
+  protected boolean sameOriginDisabled() {
+    return true;
+  }
+
+  //  @Override
+//  public void configureClientInboundChannel(ChannelRegistration registration) {
+////    registration.setInterceptors(interceptor);
+//  }
 
 }
