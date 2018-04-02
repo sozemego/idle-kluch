@@ -9,6 +9,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptorAdapter;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class WebSocketSecurityInterceptor extends ChannelInterceptorAdapter {
       final Optional<UsernamePasswordAuthenticationToken> usernamePasswordAuthenticationToken = getAuthentication(token);
       if(usernamePasswordAuthenticationToken.isPresent()) {
         accessor.setUser(usernamePasswordAuthenticationToken.get());
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken.get());
         return message;
       }
 

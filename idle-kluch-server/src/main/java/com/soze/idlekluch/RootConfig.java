@@ -4,7 +4,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan("com.soze.idlekluch")
+@ComponentScan(
+  value = "com.soze.idlekluch",
+  excludeFilters = {@ComponentScan.Filter(org.springframework.stereotype.Controller.class)})
 public class RootConfig {
 
 }

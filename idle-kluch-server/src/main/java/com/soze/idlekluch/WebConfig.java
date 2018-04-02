@@ -8,7 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("com.soze.idlekluch")
+@ComponentScan(
+  basePackageClasses = RootConfig.class,
+  useDefaultFilters=false,
+  includeFilters={@ComponentScan.Filter(org.springframework.stereotype.Controller.class)})
 public class WebConfig implements WebMvcConfigurer {
 
   @Override

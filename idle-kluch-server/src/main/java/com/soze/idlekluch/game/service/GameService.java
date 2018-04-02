@@ -1,19 +1,18 @@
 package com.soze.idlekluch.game.service;
 
-import org.springframework.web.socket.WebSocketSession;
-
 public interface GameService {
 
   /**
-   * Called when a new player joins the game.
-   * @param session
+   * Called when a player connects through STOMP.
+   * @param sessionId
+   * @param username
    */
-  void onConnect(final WebSocketSession session);
+  void onConnect(final String sessionId, final String username);
 
   /**
-   * Called when a player disconnects.
-   * @param session
+   * Called when a player disconnects (STOMP).
+   * @param sessionId
    */
-  void onDisconnect(final WebSocketSession session);
+  void onDisconnect(final String sessionId);
 
 }
