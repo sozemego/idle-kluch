@@ -1,5 +1,6 @@
 package com.soze.idlekluch;
 
+import com.soze.idlekluch.game.websocket.GameSocketLoggerInterceptor;
 import com.soze.idlekluch.game.websocket.GameSocketSessionInterceptor;
 import com.soze.idlekluch.game.websocket.WebSocketSecurityInterceptor;
 import com.soze.idlekluch.routes.Routes;
@@ -22,9 +23,13 @@ public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrok
   @Autowired
   private GameSocketSessionInterceptor gameSocketSessionInterceptor;
 
+  @Autowired
+  private GameSocketLoggerInterceptor gameSocketLoggerInterceptor;
+
   @Override
   protected void customizeClientInboundChannel(final ChannelRegistration registration) {
     registration.interceptors(
+      gameSocketLoggerInterceptor,
       webSocketSecurityInterceptor,
       gameSocketSessionInterceptor
     );

@@ -7,6 +7,7 @@ import store from '../store/store';
 import { getUser } from '../app/selectors';
 
 const getToken = () => getUser(store.getState()).token;
+const getUsername = () => getUser(store.getState()).name;
 
 const game = `/game-socket`;
 
@@ -28,7 +29,9 @@ GameService.connect = function () {
 	client.connect({ token: getToken() }, frame => {
 	  console.log(frame);
 
-	  // client.subscribe('/game', message => console.log(message));
+	  client.subscribe('/game/outbound/' + getUsername(), message => {
+	    console.log('MESSAGE', message)
+	  });
 	  client.send('/game/inbound', {what: 'nothingfirst'}, "asd");
 
 	});
