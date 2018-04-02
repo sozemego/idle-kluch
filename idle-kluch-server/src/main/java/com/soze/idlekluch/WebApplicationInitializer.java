@@ -6,7 +6,7 @@ public class WebApplicationInitializer extends AbstractAnnotationConfigDispatche
 
   @Override
   protected Class<?>[] getRootConfigClasses() {
-    return new Class[]{RootConfig.class, JPAConfiguration.class, SecurityConfiguration.class, BeanDevPostProcessor.class};
+    return new Class[]{RootConfig.class, JPAConfiguration.class, SecurityConfiguration.class, BeanDevPostProcessor.class, SampleContextApplicationListener.class};
   }
 
   @Override
