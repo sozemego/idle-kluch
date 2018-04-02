@@ -41,11 +41,12 @@ public class WebSocketSecurityInterceptor extends ChannelInterceptorAdapter {
       final Optional<UsernamePasswordAuthenticationToken> usernamePasswordAuthenticationToken = getAuthentication(token);
       if(usernamePasswordAuthenticationToken.isPresent()) {
         accessor.setUser(usernamePasswordAuthenticationToken.get());
+        return message;
       }
 
     }
 
-    return message;
+    return null;
   }
 
   private Optional<UsernamePasswordAuthenticationToken> getAuthentication(final String token) {
