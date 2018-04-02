@@ -1,6 +1,7 @@
 package com.soze.idlekluch;
 
 import com.soze.idlekluch.game.websocket.GameSocketLoggerInterceptor;
+import com.soze.idlekluch.game.websocket.GameSocketOutgoingLoggerInterceptor;
 import com.soze.idlekluch.game.websocket.GameSocketSessionInterceptor;
 import com.soze.idlekluch.routes.Routes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrok
   @Autowired
   private GameSocketLoggerInterceptor gameSocketLoggerInterceptor;
 
+  @Autowired
+  private GameSocketOutgoingLoggerInterceptor gameSocketOutgoingLoggerInterceptor;
+
   @Override
   protected void customizeClientInboundChannel(final ChannelRegistration registration) {
     registration.interceptors(
@@ -32,6 +36,11 @@ public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrok
 //      webSocketSecurityInterceptor,
       gameSocketSessionInterceptor
     );
+  }
+
+  @Override
+  public void configureClientOutboundChannel(final ChannelRegistration registration) {
+    registration.interceptors(gameSocketOutgoingLoggerInterceptor);
   }
 
   @Override

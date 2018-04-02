@@ -29,7 +29,7 @@ GameService.connect = function () {
 	client.connect({ token: getToken() }, frame => {
 	  console.log(frame);
 
-	  client.subscribe('/game/outbound/' + getUsername(), message => {
+	  client.subscribe('/user/game/outbound', message => {
 	    console.log('MESSAGE', message)
 	  });
 	  client.send('/game/inbound', {what: 'nothingfirst'}, "asd");
