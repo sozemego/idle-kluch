@@ -48,7 +48,7 @@ public class WebSocketSecurityInterceptor extends ChannelInterceptorAdapter {
 
     }
 
-    return null;
+    return message;
   }
 
   private Optional<UsernamePasswordAuthenticationToken> getAuthentication(final String token) {
