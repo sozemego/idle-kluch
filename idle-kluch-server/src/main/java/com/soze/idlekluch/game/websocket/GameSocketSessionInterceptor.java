@@ -28,8 +28,8 @@ public class GameSocketSessionInterceptor extends ChannelInterceptorAdapter {
 
     if(StompCommand.CONNECT == accessor.getCommand()) {
       final String sessionId = accessor.getSessionId();
-      final String username = accessor.getUser().getName();
-      gameService.onConnect(sessionId, username);
+//      final String username = accessor.getUser().getName();
+      gameService.onConnect(sessionId, sessionId);
     }
 
     if(StompCommand.DISCONNECT == accessor.getCommand()) {

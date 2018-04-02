@@ -7,10 +7,6 @@ import com.soze.idlekluch.world.service.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.MessageHeaders;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -24,13 +20,10 @@ public class GameServiceImpl implements GameService {
 
   private static final Logger LOG = LoggerFactory.getLogger(GameServiceImpl.class);
 
-//  @Autowired
   private final World world;
 
   @Autowired
-  private SimpMessageSendingOperations messageTemplate;
-
-//  private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
+  private WebSocketMessagingService webSocketMessagingService;
 
   private final Map<String, String> sessionUserMap = new ConcurrentHashMap<>();
   private final Map<String, String> userSessionMap = new ConcurrentHashMap<>();
@@ -51,14 +44,6 @@ public class GameServiceImpl implements GameService {
     final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
     final String json = JsonUtils.objectToJson(worldChunkMessage);
     //SEND THIS DATA IN RESPONSE TO REQUEST
-  }
-
-  //TODO refactor to own class
-  private MessageHeaders createHeaders(String sessionId) {
-    SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
-    headerAccessor.setSessionId(sessionId);
-    headerAccessor.setLeaveMutable(true);
-    return headerAccessor.getMessageHeaders();
   }
 
   @Override

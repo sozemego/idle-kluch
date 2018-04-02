@@ -23,7 +23,7 @@ GameService.connect = function () {
 	}
 
 	const { protocol, base, port, version } = networkConfig;
-	const socket = new SockJS(`${protocol}://${base}:${port}${version}${game}`);
+	const socket = new SockJS(`${protocol}://${base}:${port}${version}${game}?token=${getToken()}`);
 	// socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
 	const client = Stomp.over(socket);
 	client.connect({ token: getToken() }, frame => {

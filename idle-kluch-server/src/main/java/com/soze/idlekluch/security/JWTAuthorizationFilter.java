@@ -5,6 +5,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -32,6 +34,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                                   FilterChain chain) throws IOException, ServletException {
 
     String header = req.getHeader(AUTHORIZATION);
+    if(header == null) {
+      header = getQueryParamToken(req);
+    }
 
     if(header != null) {
       final String[] tokens = header.split(" ");
@@ -46,21 +51,30 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
       return;
     }
 
-    UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
-
+    final UsernamePasswordAuthenticationToken authentication = getAuthentication(header);
     SecurityContextHolder.getContext().setAuthentication(authentication);
+
     chain.doFilter(req, res);
   }
 
-  private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-    String token = request.getHeader(AUTHORIZATION).substring(AUTHENTICATION_SCHEME.length()).trim();
+  private UsernamePasswordAuthenticationToken getAuthentication(final String header) {
+    final String token = header.substring(AUTHENTICATION_SCHEME.length()).trim();
 
     if(!authService.validateToken(token)) {
       return null;
     }
 
-    String username = authService.getUsernameClaim(token);
+    final String username = authService.getUsernameClaim(token);
     return new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+  }
+
+  private String getQueryParamToken(final HttpServletRequest request) {
+    try {
+      return "Bearer " + ServletRequestUtils.getRequiredStringParameter(request, "token");
+    } catch (ServletRequestBindingException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
 }
