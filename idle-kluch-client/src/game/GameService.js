@@ -32,7 +32,7 @@ GameService.connect = function () {
 	  client.subscribe('/user/game/outbound', message => {
 	    console.log('MESSAGE', message)
 	  });
-	  client.send('/game/inbound', {what: 'nothingfirst'}, "asd");
+	  client.send('/game/inbound/init', {}, null);
 
 	});
 	// socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);

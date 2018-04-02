@@ -40,6 +40,8 @@ public interface Routes {
   String GAME_INBOUND = "/inbound";
   String GAME_OUTBOUND = "/outbound";
 
+  String GAME_INIT_MESSAGE = GAME_INBOUND + "/init";
+
 //  String GAME_BASE = BASE + WEB_SOCKET + GAME;
   String GAME_SOCKET = BASE + "/game-socket";
 

@@ -6,6 +6,7 @@ import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.ContextStartedEvent;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,5 +23,9 @@ public class SampleContextApplicationListener implements ApplicationListener<App
 
   public Map<String, ApplicationContext> getContextMap() {
     return contextMap;
+  }
+
+  public void log() {
+    contextMap.values().forEach(ctx -> System.out.println(Arrays.toString(ctx.getBeanDefinitionNames())));
   }
 }

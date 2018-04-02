@@ -11,8 +11,8 @@ public class BeanDevPostProcessor implements BeanPostProcessor {
   @Override
   public Object postProcessBeforeInitialization(final Object bean, final String beanName) throws BeansException {
 
-//    System.out.println("BEAN " + bean);
-//    System.out.println("BeforeInitialization : " + beanName);
+    System.out.println("BEAN " + bean);
+    System.out.println("BeforeInitialization : " + beanName);
 
     return bean;
   }

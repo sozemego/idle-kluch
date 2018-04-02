@@ -1,12 +1,14 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.message.WorldChunkMessage;
+import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.service.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -25,6 +27,9 @@ public class GameServiceImpl implements GameService {
   @Autowired
   private WebSocketMessagingService webSocketMessagingService;
 
+  @Autowired
+  private SimpMessageSendingOperations messageTemplate;
+
   private final Map<String, String> sessionUserMap = new ConcurrentHashMap<>();
   private final Map<String, String> userSessionMap = new ConcurrentHashMap<>();
 
@@ -39,15 +44,24 @@ public class GameServiceImpl implements GameService {
     LOG.info("Connected [{}][{}]", sessionId, username);
     sessionUserMap.put(sessionId, username);
     userSessionMap.put(username, sessionId);
-
-    final Map<Point, Tile> allTiles = world.getAllTiles();
-    final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
-    final String json = JsonUtils.objectToJson(worldChunkMessage);
-    //SEND THIS DATA IN RESPONSE TO REQUEST
   }
 
   @Override
   public void onDisconnect(final String sessionId) {
     LOG.info("Disconnected [{}]", sessionId);
   }
+
+  @Override
+  public void handleInitMessage(final String username) {
+    LOG.info("Init message from [{}]", username);
+
+    final Map<Point, Tile> allTiles = world.getAllTiles();
+    final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
+    final String json = JsonUtils.objectToJson(worldChunkMessage);
+
+    System.out.println("GameServiceImpl" + messageTemplate);
+
+    webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, json);
+  }
+
 }

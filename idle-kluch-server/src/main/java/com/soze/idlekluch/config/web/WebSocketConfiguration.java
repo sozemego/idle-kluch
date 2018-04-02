@@ -1,4 +1,4 @@
-package com.soze.idlekluch;
+package com.soze.idlekluch.config.web;
 
 import com.soze.idlekluch.game.websocket.GameSocketLoggerInterceptor;
 import com.soze.idlekluch.game.websocket.GameSocketOutgoingLoggerInterceptor;
@@ -10,24 +10,32 @@ import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
 import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
+import java.util.Objects;
+
 @Configuration
 @EnableWebSocketMessageBroker
+@Component
 public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrokerConfigurer {
 
 //  @Autowired
 //  private WebSocketSecurityInterceptor webSocketSecurityInterceptor;
 
-  @Autowired
-  private GameSocketSessionInterceptor gameSocketSessionInterceptor;
+  private final GameSocketSessionInterceptor gameSocketSessionInterceptor;
+
+  private final GameSocketLoggerInterceptor gameSocketLoggerInterceptor;
+
+  private final GameSocketOutgoingLoggerInterceptor gameSocketOutgoingLoggerInterceptor;
 
   @Autowired
-  private GameSocketLoggerInterceptor gameSocketLoggerInterceptor;
-
-  @Autowired
-  private GameSocketOutgoingLoggerInterceptor gameSocketOutgoingLoggerInterceptor;
+  public WebSocketConfiguration(final GameSocketSessionInterceptor gameSocketSessionInterceptor, final GameSocketLoggerInterceptor gameSocketLoggerInterceptor, final GameSocketOutgoingLoggerInterceptor gameSocketOutgoingLoggerInterceptor) {
+    this.gameSocketSessionInterceptor = Objects.requireNonNull(gameSocketSessionInterceptor);
+    this.gameSocketLoggerInterceptor = Objects.requireNonNull(gameSocketLoggerInterceptor);
+    this.gameSocketOutgoingLoggerInterceptor = Objects.requireNonNull(gameSocketOutgoingLoggerInterceptor);
+  }
 
   @Override
   protected void customizeClientInboundChannel(final ChannelRegistration registration) {

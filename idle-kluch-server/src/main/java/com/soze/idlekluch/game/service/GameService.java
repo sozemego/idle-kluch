@@ -15,4 +15,6 @@ public interface GameService {
    */
   void onDisconnect(final String sessionId);
 
+  void handleInitMessage(final String username);
+
 }

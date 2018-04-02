@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebMvc
 @ComponentScan(
-  basePackageClasses = RootConfig.class,
+  basePackageClasses = SecurityWebInitializer.class,
   useDefaultFilters = false,
   includeFilters = {@ComponentScan.Filter(org.springframework.stereotype.Controller.class)})
 public class WebConfig implements WebMvcConfigurer {
