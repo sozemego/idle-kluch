@@ -10,8 +10,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 @ComponentScan(
   basePackageClasses = RootConfig.class,
-  useDefaultFilters=false,
-  includeFilters={@ComponentScan.Filter(org.springframework.stereotype.Controller.class)})
+  useDefaultFilters = false,
+  includeFilters = {@ComponentScan.Filter(org.springframework.stereotype.Controller.class)})
 public class WebConfig implements WebMvcConfigurer {
 
   @Override
