@@ -6,16 +6,14 @@ import { getConstructableBuildings, getSelectedConstructableBuilding } from '../
 import { setSelectedConstructableBuilding } from '../kingdom/actions';
 import { KingdomService as kingdomService } from "../kingdom/KingdomService";
 
-export const ADD_TILES_TO_STATE = 'ADD_TILES_TO_STATE';
-export const addTilesToState = makeActionCreator(ADD_TILES_TO_STATE, 'payload');
-
-let game = null;
+export const ADD_TILES = 'ADD_TILES';
+export const addTiles = makeActionCreator(ADD_TILES, 'payload');
 
 export const connect = () => {
   return (dispatch, getState) => {
 
-	gameService.connect()
-	  .then(() => dispatch(startGame()));
+    return dispatch(startGame())
+	  .then(() => gameService.connect());
 
   };
 };
@@ -23,15 +21,7 @@ export const connect = () => {
 export const startGame = () => {
   return (dispatch, getState) => {
 
-	game = createGame();
-
-  };
-};
-
-export const addTiles = (tiles) => {
-  return (dispatch, getState) => {
-
-	dispatch(addTilesToState(tiles));
+	return createGame();
 
   };
 };
@@ -59,7 +49,6 @@ export const onCanvasClicked = (x, y) => {
 	  return kingdomService.constructBuilding(selectedConstructableBuilding.id, x, y)
 		.then((building) => {
 		  dispatch(setSelectedConstructableBuilding(null));
-		  game.emitter.emit(GAME_EVENTS.BUILDING_PLACED, building);
 		});
 	}
 

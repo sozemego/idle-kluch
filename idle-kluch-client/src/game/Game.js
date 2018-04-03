@@ -1,7 +1,6 @@
 import { getTiles as _getTiles } from './selectors';
 import { getSelectedConstructableBuilding as _getSelectedConstructableBuilding } from '../kingdom/selectors';
 import store from '../store/store';
-import EventEmitter from 'event-emitter';
 import Phaser from 'phaser';
 import { onCanvasClicked } from './actions';
 import { createReducer } from '../store/utils';
@@ -13,11 +12,10 @@ const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 
 let game = null;
+const tileSprites = {};
 
 const initialState = {
-  tiles: {
-
-  },
+  tiles: {},
 };
 
 const addTiles = (state, { payload: tiles }) => {
@@ -27,155 +25,136 @@ const addTiles = (state, { payload: tiles }) => {
 	const previousTile = previousTiles[`${x}:${y}`];
 	if(!previousTile) {
 	  previousTiles[`${x}:${y}`] = tile;
+
+	  const { x, y } = tile;
+	  const sprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'grass_1');
+	  sprite.inputEnabled = true;
+
+	  tileSprites[`${x}:${y}`] = sprite;
 	}
   });
   return { ...state, tiles: previousTiles };
 };
 
-const gameEngineReducer = createReducer(initialState, {
-  [GAME_ACTIONS.ADD_TILES_TO_STATE]: addTiles,
+export const gameReducer = createReducer(initialState, {
+  [GAME_ACTIONS.ADD_TILES]: addTiles,
 });
 
 const TILE_SIZE = 128;
 
-
 const createGame = () => {
+  return new Promise((resolve) => {
+	let cursors = null;
+	let selectedBuildingSprite = null;
 
-  let cursors = null;
+	// let background = null;
 
-  let selectedBuildingSprite = null;
+	const preload = function () {
+	  console.log('preloading!');
+	  this.load.image('grass_1', 'grass_1.png');
+	  this.load.image('small_warehouse', 'small_warehouse.png');
+	  this.load.image('warehouse', 'warehouse.png');
+	};
 
-  const tileSprites = {};
-  // let background = null;
+	const create = function () {
+	  console.log('creating!');
 
-  const preload = function () {
-	console.log('preloading!');
-	this.load.image('grass_1', 'grass_1.png');
-	this.load.image('small_warehouse', 'small_warehouse.png');
-	this.load.image('warehouse', 'warehouse.png');
-  };
+	  cursors = game.input.keyboard.createCursorKeys();
 
-  const create = function () {
-	console.log('creating!');
+	  game.world.resize(5000, 5000);
+	  game.camera.x = 0;
+	  game.camera.y = 0;
 
-	const tileMap = getTiles();
-	const tiles = Object.values(tileMap);
-	for (let i = 0; i < tiles.length; i++) {
-	  const tile = tiles[i];
-	  const { x, y } = tile;
-	  const sprite = this.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'grass_1');
-	  sprite.inputEnabled = true;
+	  game.input.onDown.add((pointer) => {
+		const x = pointer.x + game.camera.x;
+		const y = pointer.y + game.camera.y;
+		onCanvasClick(x, y);
+	  });
 
-	  tileSprites[`${x}:${y}`] = sprite;
-	}
+	  return resolve();
+	};
 
-	cursors = game.input.keyboard.createCursorKeys();
+	const update = () => {
 
-	game.world.resize(5000, 5000);
-	game.camera.x = 0;
-	game.camera.y = 0;
+	  const { x: mouseX, y: mouseY } = game.input;
 
-	game.input.onDown.add((pointer) => {
-	  const x = pointer.x + game.camera.x;
-	  const y = pointer.y + game.camera.y;
-	  onCanvasClick(x, y);
-	});
-  };
-
-  const update = () => {
-
-	const { x: mouseX, y: mouseY } = game.input;
-
-	const { x, y } = game.camera;
-	if (cursors.up.isDown) {
-	  game.camera.y = y - 5;
-	}
-	if (cursors.down.isDown) {
-	  game.camera.y = y + 5;
-	}
-	if (cursors.left.isDown) {
-	  game.camera.x = x - 5;
-	}
-	if (cursors.right.isDown) {
-	  game.camera.x = x + 5;
-	}
-
-	//show which tile is hovered with mouse
-	Object.values(tileSprites).forEach(tileSprite => {
-	  tileSprite.tint = 0xffffff;
-	  if (tileSprite.input.pointerOver()) {
-		tileSprite.tint = (200 << 16) | (200 << 8) | 200;
+	  const { x, y } = game.camera;
+	  if (cursors.up.isDown) {
+		game.camera.y = y - 5;
 	  }
-	});
+	  if (cursors.down.isDown) {
+		game.camera.y = y + 5;
+	  }
+	  if (cursors.left.isDown) {
+		game.camera.x = x - 5;
+	  }
+	  if (cursors.right.isDown) {
+		game.camera.x = x + 5;
+	  }
 
-	//TODO make it all reactive
-	if (selectedBuildingSprite) {
-	  selectedBuildingSprite.kill(true);
-	}
+	  //show which tile is hovered with mouse
+	  Object.values(tileSprites).forEach(tileSprite => {
+		tileSprite.tint = 0xffffff;
+		if (tileSprite.input.pointerOver()) {
+		  tileSprite.tint = (200 << 16) | (200 << 8) | 200;
+		}
+	  });
 
-	//selected building highlight
-	const selectedConstructableBuilding = getSelectedConstructableBuilding();
-	if (selectedConstructableBuilding) {
-
-	  //remove previous sprite
-	  if (selectedBuildingSprite && !selectedConstructableBuilding) {
+	  //TODO make it all reactive
+	  if (selectedBuildingSprite) {
 		selectedBuildingSprite.kill(true);
 	  }
 
-	  if (!selectedBuildingSprite) {
-		selectedBuildingSprite = game.add.sprite(mouseX - 24, mouseY - 24, selectedConstructableBuilding.asset);
+	  //selected building highlight
+	  const selectedConstructableBuilding = getSelectedConstructableBuilding();
+	  if (selectedConstructableBuilding) {
+
+		//remove previous sprite
+		if (selectedBuildingSprite && !selectedConstructableBuilding) {
+		  selectedBuildingSprite.kill(true);
+		}
+
+		if (!selectedBuildingSprite) {
+		  selectedBuildingSprite = game.add.sprite(mouseX - 24, mouseY - 24, selectedConstructableBuilding.asset);
+		}
+
+		selectedBuildingSprite.revive();
+		selectedBuildingSprite.loadTexture(selectedConstructableBuilding.asset);
+		selectedBuildingSprite.x = mouseX + x;
+		selectedBuildingSprite.y = mouseY + y;
+		selectedBuildingSprite.width = selectedConstructableBuilding.width;
+		selectedBuildingSprite.height = selectedConstructableBuilding.height;
+
 	  }
 
-	  selectedBuildingSprite.revive();
-	  selectedBuildingSprite.loadTexture(selectedConstructableBuilding.asset);
-	  selectedBuildingSprite.x = mouseX + x;
-	  selectedBuildingSprite.y = mouseY + y;
-	  selectedBuildingSprite.width = selectedConstructableBuilding.width;
-	  selectedBuildingSprite.height = selectedConstructableBuilding.height;
+	};
 
-	}
+	const render = () => {
 
-  };
+	};
 
-  const render = () => {
+	const config = {
+	  type: Phaser.CANVAS,
+	  parent: 'game',
+	  width: TILE_SIZE * 14,
+	  height: TILE_SIZE * 6,
+	  scene: {
+		preload,
+		create,
+		update,
+		render,
+	  }
+	};
 
-  };
+	game = new Phaser.Game(
+	  config.width, config.height,
+	  config.type, config.parent,
+	  {
+		...config.scene
+	  }
+	);
 
-  const config = {
-	type: Phaser.CANVAS,
-	parent: 'game',
-	width: TILE_SIZE * 14,
-	height: TILE_SIZE * 6,
-	scene: {
-	  preload,
-	  create,
-	  update,
-	  render,
-	}
-  };
-
-  game = new Phaser.Game(
-	config.width, config.height,
-	config.type, config.parent,
-	{
-	  ...config.scene
-	}
-  );
-
-  // Phaser.Camera.shake();
-
-  // camera = new Phaser.Camera(game, 0, 0, 0, config.width, config.height);
-  // camera.shake()
-
-  const emitter = EventEmitter();
-
-  emitter.on(events.BUILDING_PLACED, (building) => {
-    console.log(building);
   });
-
-  game.emitter = emitter;
-
-  return game;
 };
 
 export const events = {

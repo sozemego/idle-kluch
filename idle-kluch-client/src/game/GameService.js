@@ -37,6 +37,7 @@ GameService.connect = function () {
 	  });
 	  client.send('/game/inbound/init', {}, null);
 
+	  resolve();
 	});
 	// socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
 	//
