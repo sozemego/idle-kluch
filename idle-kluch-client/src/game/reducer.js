@@ -3,7 +3,6 @@ import * as GAME_ACTIONS from './actions';
 
 const initialState = {
   tiles: {},
-
 };
 
 const addTiles = (state, { payload: tiles }) => {

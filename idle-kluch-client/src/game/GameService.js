@@ -5,6 +5,7 @@ import SockJS from 'sockjs-client';
 import { addTiles } from './actions';
 import store from '../store/store';
 import { getUser } from '../app/selectors';
+import { parseJSON } from '../utils/JSONUtils';
 
 const getToken = () => getUser(store.getState()).token;
 const getUsername = () => getUser(store.getState()).name;
@@ -27,10 +28,12 @@ GameService.connect = function () {
 	// socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
 	const client = Stomp.over(socket);
 	client.connect({ token: getToken() }, frame => {
-	  console.log(frame);
 
 	  client.subscribe('/user/game/outbound', message => {
-	    console.log('MESSAGE', message)
+		const parsed = parseJSON(message.body);
+		if (parsed['type'] === 'WORLD_CHUNK') {
+		  store.dispatch(addTiles(parsed.tiles));
+		}
 	  });
 	  client.send('/game/inbound/init', {}, null);
 

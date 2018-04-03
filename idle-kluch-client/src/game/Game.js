@@ -4,17 +4,43 @@ import store from '../store/store';
 import EventEmitter from 'event-emitter';
 import Phaser from 'phaser';
 import { onCanvasClicked } from './actions';
+import { createReducer } from '../store/utils';
+import * as GAME_ACTIONS from './actions';
 
 const getTiles = () => _getTiles(store.getState());
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 
+let game = null;
+
+const initialState = {
+  tiles: {
+
+  },
+};
+
+const addTiles = (state, { payload: tiles }) => {
+  const previousTiles = { ...state.tiles };
+  tiles.forEach(tile => {
+	const { x, y } = tile;
+	const previousTile = previousTiles[`${x}:${y}`];
+	if(!previousTile) {
+	  previousTiles[`${x}:${y}`] = tile;
+	}
+  });
+  return { ...state, tiles: previousTiles };
+};
+
+const gameEngineReducer = createReducer(initialState, {
+  [GAME_ACTIONS.ADD_TILES_TO_STATE]: addTiles,
+});
+
 const TILE_SIZE = 128;
+
 
 const createGame = () => {
 
-  let game = null;
   let cursors = null;
 
   let selectedBuildingSprite = null;
