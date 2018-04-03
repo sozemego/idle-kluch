@@ -19,26 +19,11 @@ public class GameSocketController {
   @Autowired
   private GameService gameService;
 
-  @Autowired
-  private WebSocketMessagingService webSocketMessagingService;
-
-  @Autowired
-  private SimpMessagingTemplate messageTemplate;
-
-  @Autowired
-  SampleContextApplicationListener sampleContextApplicationListener;
-
   @MessageMapping(Routes.GAME_INIT_MESSAGE)
   public void handleInitMessage(final Principal principal,
                                 final Message message,
                                 final SimpMessageHeaderAccessor headerAccessor) throws Exception {
 
-
-
-    sampleContextApplicationListener.log();
-    System.out.println("GameSocketController " + messageTemplate);
-    webSocketMessagingService.sendToUser(principal.getName(), "/game/outbound", "MESSAGE");
-    messageTemplate.convertAndSendToUser(principal.getName(), "/game/outbound", "MESSAGE");
     gameService.handleInitMessage(principal.getName());
   }
 

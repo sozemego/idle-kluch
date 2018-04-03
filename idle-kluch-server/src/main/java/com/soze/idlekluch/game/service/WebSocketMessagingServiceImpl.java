@@ -13,16 +13,22 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
 
   private static final Logger LOG = LoggerFactory.getLogger(WebSocketMessagingServiceImpl.class);
 
+  private final GameConnectionRegistryService gameConnectionRegistryService;
+  private final SimpMessagingTemplate messagingTemplate;
+
   @Autowired
-  private SimpMessagingTemplate messageTemplate;
+  public WebSocketMessagingServiceImpl(GameConnectionRegistryService gameConnectionRegistryService, SimpMessagingTemplate messagingTemplate) {
+    this.gameConnectionRegistryService = Objects.requireNonNull(gameConnectionRegistryService);
+    this.messagingTemplate = Objects.requireNonNull(messagingTemplate);
+  }
 
   @Override
   public void sendToUser(final String username, final String destination, final Object message) {
     Objects.requireNonNull(username);
     Objects.requireNonNull(destination);
     Objects.requireNonNull(message);
-    System.out.println("WebSocketMessagingServiceImpl " + messageTemplate);
+
     LOG.info("Sending a message to user [{}] at [{}]", username, destination);
-    messageTemplate.convertAndSendToUser(username, "/game/outbound", message);
+    messagingTemplate.convertAndSendToUser(username, "/game/outbound", message);
   }
 }

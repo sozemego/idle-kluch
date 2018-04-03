@@ -21,13 +21,8 @@ import java.util.Objects;
 @Component
 public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrokerConfigurer {
 
-//  @Autowired
-//  private WebSocketSecurityInterceptor webSocketSecurityInterceptor;
-
   private final GameSocketSessionInterceptor gameSocketSessionInterceptor;
-
   private final GameSocketLoggerInterceptor gameSocketLoggerInterceptor;
-
   private final GameSocketOutgoingLoggerInterceptor gameSocketOutgoingLoggerInterceptor;
 
   @Autowired
@@ -41,7 +36,6 @@ public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrok
   protected void customizeClientInboundChannel(final ChannelRegistration registration) {
     registration.interceptors(
       gameSocketLoggerInterceptor,
-//      webSocketSecurityInterceptor,
       gameSocketSessionInterceptor
     );
   }

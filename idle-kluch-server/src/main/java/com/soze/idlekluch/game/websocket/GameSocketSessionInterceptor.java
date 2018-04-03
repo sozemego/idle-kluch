@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.websocket;
 
+import com.soze.idlekluch.game.service.GameConnectionRegistryService;
 import com.soze.idlekluch.game.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -15,26 +16,31 @@ import java.util.Objects;
 @Service
 public class GameSocketSessionInterceptor extends ChannelInterceptorAdapter {
 
-  private final GameService gameService;
+  private final GameConnectionRegistryService gameConnectionRegistryService;
 
   @Autowired
-  public GameSocketSessionInterceptor(final GameService gameService) {
-    this.gameService = Objects.requireNonNull(gameService);
+  public GameSocketSessionInterceptor(GameConnectionRegistryService gameConnectionRegistryService) {
+    this.gameConnectionRegistryService = Objects.requireNonNull(gameConnectionRegistryService);
   }
 
   @Override
   public Message<?> preSend(final Message<?> message, final MessageChannel channel) {
     final StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
+    if(accessor == null) {
+      System.out.println("Accessor is null in GameSocketSessionInterceptor");
+      return message;
+    }
+
     if(StompCommand.CONNECT == accessor.getCommand()) {
       final String sessionId = accessor.getSessionId();
       final String username = accessor.getUser().getName();
-      gameService.onConnect(sessionId, username);
+      gameConnectionRegistryService.onConnect(sessionId, username);
     }
 
     if(StompCommand.DISCONNECT == accessor.getCommand()) {
       final String sessionId = accessor.getSessionId();
-      gameService.onDisconnect(sessionId);
+      gameConnectionRegistryService.onDisconnect(sessionId);
     }
 
     return message;
