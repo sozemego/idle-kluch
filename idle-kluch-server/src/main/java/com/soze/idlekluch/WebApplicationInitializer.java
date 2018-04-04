@@ -1,6 +1,5 @@
 package com.soze.idlekluch;
 
-import com.soze.idlekluch.config.web.WebSocketConfiguration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class WebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {

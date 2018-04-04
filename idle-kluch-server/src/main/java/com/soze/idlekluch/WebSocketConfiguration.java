@@ -1,4 +1,4 @@
-package com.soze.idlekluch.config.web;
+package com.soze.idlekluch;
 
 import com.soze.idlekluch.game.websocket.GameSocketLoggerInterceptor;
 import com.soze.idlekluch.game.websocket.GameSocketOutgoingLoggerInterceptor;
