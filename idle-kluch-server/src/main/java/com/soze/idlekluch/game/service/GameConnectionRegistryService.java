@@ -1,7 +1,7 @@
 package com.soze.idlekluch.game.service;
 
 /**
- * A service whose purpose is to store and query websocket connection data.
+ * A service whose purpose is to store and query WebSocket connection data.
  */
 public interface GameConnectionRegistryService {
 

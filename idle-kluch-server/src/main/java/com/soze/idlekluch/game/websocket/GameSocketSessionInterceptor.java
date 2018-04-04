@@ -1,7 +1,6 @@
 package com.soze.idlekluch.game.websocket;
 
 import com.soze.idlekluch.game.service.GameConnectionRegistryService;
-import com.soze.idlekluch.game.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -13,6 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+/**
+ * This object intercepts WebSocket messages and stores session/user information
+ * in the {@link GameConnectionRegistryService}.
+ */
 @Service
 public class GameSocketSessionInterceptor extends ChannelInterceptorAdapter {
 

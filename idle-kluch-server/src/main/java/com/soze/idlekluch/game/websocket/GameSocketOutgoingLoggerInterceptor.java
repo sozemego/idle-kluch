@@ -9,6 +9,9 @@ import org.springframework.messaging.support.ChannelInterceptorAdapter;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Service;
 
+/**
+ * This object is logging outgoing WebSocket messages.
+ */
 @Service
 public class GameSocketOutgoingLoggerInterceptor extends ChannelInterceptorAdapter {
 

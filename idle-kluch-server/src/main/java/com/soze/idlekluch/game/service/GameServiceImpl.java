@@ -29,6 +29,12 @@ public class GameServiceImpl implements GameService {
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
   }
 
+  /**
+   * Responsibilities right now:
+   * 1. Send all tile data to the joining player
+   * 2. Send all constructed building information to the player.
+   * @param username
+   */
   @Override
   public void handleInitMessage(final String username) {
     LOG.info("Init message from [{}]", username);

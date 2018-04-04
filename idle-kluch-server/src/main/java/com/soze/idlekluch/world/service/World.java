@@ -14,6 +14,9 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * World is the in-memory representation of the game world.
+ */
 @Service
 public class World {
 
