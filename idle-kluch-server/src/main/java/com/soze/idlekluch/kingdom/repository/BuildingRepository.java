@@ -15,4 +15,6 @@ public interface BuildingRepository {
 
   List<Building> getKingdomsBuildings(final EntityUUID kingdomId);
 
+  List<Building> getAllBuildings();
+
 }

@@ -1,6 +1,11 @@
 package com.soze.idlekluch.game.service;
 
+import com.soze.idlekluch.game.message.ConstructedBuildingMessage;
 import com.soze.idlekluch.game.message.WorldChunkMessage;
+import com.soze.idlekluch.kingdom.dto.BuildingDto;
+import com.soze.idlekluch.kingdom.dto.BuildingDtoConverter;
+import com.soze.idlekluch.kingdom.entity.Building;
+import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.world.entity.Tile;
@@ -12,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -22,11 +28,15 @@ public class GameServiceImpl implements GameService {
 
   private final World world;
   private final WebSocketMessagingService webSocketMessagingService;
+  private final BuildingService buildingService;
 
   @Autowired
-  public GameServiceImpl(final World world, WebSocketMessagingService webSocketMessagingService) {
+  public GameServiceImpl(final World world,
+                         final WebSocketMessagingService webSocketMessagingService,
+                         final BuildingService buildingService) {
     this.world = Objects.requireNonNull(world);
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
+    this.buildingService = Objects.requireNonNull(buildingService);
   }
 
   /**
@@ -40,10 +50,18 @@ public class GameServiceImpl implements GameService {
     LOG.info("Init message from [{}]", username);
 
     final Map<Point, Tile> allTiles = world.getAllTiles();
-    final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
-    final String json = JsonUtils.objectToJson(worldChunkMessage);
 
-    webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, json);
+    final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
+    final String worldChunkJson = JsonUtils.objectToJson(worldChunkMessage);
+
+    webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, worldChunkJson);
+
+    final List<Building> buildings = buildingService.getAllConstructedBuildings();
+    final List<BuildingDto> buildingDtos = BuildingDtoConverter.convertBuildings(buildings);
+    final ConstructedBuildingMessage constructedBuildingMessage = new ConstructedBuildingMessage(buildingDtos);
+    final String constructedBuildingsJson = JsonUtils.objectToJson(constructedBuildingMessage);
+
+    webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, constructedBuildingsJson);
   }
 
 }

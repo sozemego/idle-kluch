@@ -52,5 +52,10 @@ public class BuildingRepositoryImpl implements BuildingRepository {
     return query.getResultList();
   }
 
+  @Override
+  public List<Building> getAllBuildings() {
+    return em.createQuery("SELECT b FROM Building b").getResultList();
+  }
+
 
 }

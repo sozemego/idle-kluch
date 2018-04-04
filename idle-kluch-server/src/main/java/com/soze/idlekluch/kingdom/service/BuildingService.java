@@ -27,4 +27,10 @@ public interface BuildingService {
 
   public List<Building> getOwnBuildings(final String owner);
 
+  /**
+   * Returns all buildings constructed in the game.
+   * @return
+   */
+  public List<Building> getAllConstructedBuildings();
+
 }

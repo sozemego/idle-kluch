@@ -138,6 +138,11 @@ public class BuildingServiceImpl implements BuildingService {
     return buildingRepository.getKingdomsBuildings(kingdom.get().getKingdomId());
   }
 
+  @Override
+  public List<Building> getAllConstructedBuildings() {
+    return buildingRepository.getAllBuildings();
+  }
+
   private void parseRawBuildingDefinitions(final Map<String, Object> data) {
     for (final Map.Entry<String, Object> entry : data.entrySet()) {
       final Map<String, Object> properties = (Map<String, Object>) entry.getValue();

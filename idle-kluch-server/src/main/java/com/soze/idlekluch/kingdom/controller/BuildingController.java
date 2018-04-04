@@ -3,9 +3,8 @@ package com.soze.idlekluch.kingdom.controller;
 import com.soze.idlekluch.kingdom.dto.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.dto.BuildingDto;
-import com.soze.idlekluch.kingdom.dto.WarehouseDto;
+import com.soze.idlekluch.kingdom.dto.BuildingDtoConverter;
 import com.soze.idlekluch.kingdom.entity.Building;
-import com.soze.idlekluch.kingdom.entity.Warehouse;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,48 +41,15 @@ public class BuildingController {
   @GetMapping(path = Routes.BUILDING_OWN)
   public ResponseEntity getOwnBuildings(final Principal principal) {
     final List<Building> buildings = buildingService.getOwnBuildings(principal.getName());
-    final List<BuildingDto> dtos = convertBuildings(buildings);
+    final List<BuildingDto> dtos = BuildingDtoConverter.convertBuildings(buildings);
     return ResponseEntity.ok(dtos);
   }
 
   @PostMapping(path = Routes.BUILDING_BUILD)
   public ResponseEntity buildBuilding(final Principal principal, @RequestBody final BuildBuildingForm form) {
     final Building building = buildingService.buildBuilding(principal.getName(), form);
-    final BuildingDto buildingDto = convertBuilding(building);
+    final BuildingDto buildingDto = BuildingDtoConverter.convertBuilding(building);
     return ResponseEntity.status(HttpStatus.CREATED).body(buildingDto);
-  }
-
-  private List<BuildingDto> convertBuildings(final List<Building> buildings) {
-    Objects.requireNonNull(buildings);
-
-    final List<BuildingDto> dtos = new ArrayList<>();
-
-    for (final Building building : buildings) {
-      dtos.add(convertBuilding(building));
-    }
-
-    return dtos;
-  }
-
-  private BuildingDto convertBuilding(final Building building) {
-    switch (building.getBuildingType()) {
-      case WAREHOUSE:
-        return convertWarehouse((Warehouse) building);
-    }
-    return null;
-  }
-
-  private WarehouseDto convertWarehouse(final Warehouse warehouse) {
-    Objects.requireNonNull(warehouse);
-
-    return new WarehouseDto(
-      warehouse.getBuildingId().toString(),
-      warehouse.getCreatedAt().toString(),
-      warehouse.getName(),
-      warehouse.getX(),
-      warehouse.getY(),
-      warehouse.getStorageUnits()
-    );
   }
 
 }
