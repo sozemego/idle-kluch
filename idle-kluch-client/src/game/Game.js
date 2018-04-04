@@ -13,31 +13,49 @@ const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 
 let game = null;
 const tileSprites = {};
+const buildingSprites = {};
 
 const initialState = {
   tiles: {},
+  buildings: {},
 };
 
 const addTiles = (state, { payload: tiles }) => {
   const previousTiles = { ...state.tiles };
   tiles.forEach(tile => {
 	const { x, y } = tile;
-	const previousTile = previousTiles[`${x}:${y}`];
-	if(!previousTile) {
-	  previousTiles[`${x}:${y}`] = tile;
-
-	  const { x, y } = tile;
+	const key = `${x}:${y}`;
+	const previousTile = previousTiles[key];
+	if (!previousTile) {
+	  previousTiles[key] = tile;
 	  const sprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'grass_1');
 	  sprite.inputEnabled = true;
 
-	  tileSprites[`${x}:${y}`] = sprite;
+	  tileSprites[key] = sprite;
 	}
   });
   return { ...state, tiles: previousTiles };
 };
 
+const addBuildings = (state, { payload: buildings }) => {
+  const previousBuildings = { ...state.tiles };
+  buildings.forEach(building => {
+	const { buildingId, x, y } = building;
+	const previousBuilding = previousBuildings[buildingId];
+	if (!previousBuilding) {
+	  previousBuildings[buildingId] = building;
+	  const sprite = game.add.sprite(x, y, building.asset);
+	  sprite.inputEnabled = true;
+
+	  buildingSprites[buildingId] = sprite;
+	}
+  });
+  return { ...state, buildings: previousBuildings };
+};
+
 export const gameReducer = createReducer(initialState, {
   [GAME_ACTIONS.ADD_TILES]: addTiles,
+  [GAME_ACTIONS.ADD_BUILDINGS]: addBuildings,
 });
 
 const TILE_SIZE = 128;
