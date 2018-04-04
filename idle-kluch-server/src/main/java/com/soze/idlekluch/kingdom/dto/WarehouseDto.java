@@ -15,10 +15,11 @@ public class WarehouseDto extends BuildingDto {
   public WarehouseDto(@JsonProperty("buildingId") final String buildingId,
                       @JsonProperty("createdAt") final String createdAt,
                       @JsonProperty("name") final String name,
+                      @JsonProperty("asset") final String asset,
                       @JsonProperty("x") final int x,
                       @JsonProperty("y") final int y,
                       @JsonProperty("storageUnits") final List<StorageUnit> storageUnits) {
-    super(buildingId, createdAt, name, x, y, BuildingType.WAREHOUSE);
+    super(buildingId, createdAt, name, asset, x, y, BuildingType.WAREHOUSE);
     this.storageUnits = Objects.requireNonNull(storageUnits);
   }
 

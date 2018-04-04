@@ -3,7 +3,7 @@ package com.soze.idlekluch.kingdom.controller;
 import com.soze.idlekluch.kingdom.dto.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.dto.BuildingDto;
-import com.soze.idlekluch.kingdom.dto.BuildingDtoConverter;
+import com.soze.idlekluch.kingdom.service.BuildingDtoConverter;
 import com.soze.idlekluch.kingdom.entity.Building;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
@@ -23,10 +23,13 @@ import java.util.Objects;
 public class BuildingController {
 
   private final BuildingService buildingService;
+  private final BuildingDtoConverter buildingDtoConverter;
 
   @Autowired
-  public BuildingController(final BuildingService buildingService) {
+  public BuildingController(final BuildingService buildingService,
+                            final BuildingDtoConverter buildingDtoConverter) {
     this.buildingService = Objects.requireNonNull(buildingService);
+    this.buildingDtoConverter = Objects.requireNonNull(buildingDtoConverter);
   }
 
   @GetMapping(path = Routes.BUILDING_GET_ALL)
@@ -41,14 +44,14 @@ public class BuildingController {
   @GetMapping(path = Routes.BUILDING_OWN)
   public ResponseEntity getOwnBuildings(final Principal principal) {
     final List<Building> buildings = buildingService.getOwnBuildings(principal.getName());
-    final List<BuildingDto> dtos = BuildingDtoConverter.convertBuildings(buildings);
+    final List<BuildingDto> dtos = buildingDtoConverter.convertBuildings(buildings);
     return ResponseEntity.ok(dtos);
   }
 
   @PostMapping(path = Routes.BUILDING_BUILD)
   public ResponseEntity buildBuilding(final Principal principal, @RequestBody final BuildBuildingForm form) {
     final Building building = buildingService.buildBuilding(principal.getName(), form);
-    final BuildingDto buildingDto = BuildingDtoConverter.convertBuilding(building);
+    final BuildingDto buildingDto = buildingDtoConverter.convertBuilding(building);
     return ResponseEntity.status(HttpStatus.CREATED).body(buildingDto);
   }
 

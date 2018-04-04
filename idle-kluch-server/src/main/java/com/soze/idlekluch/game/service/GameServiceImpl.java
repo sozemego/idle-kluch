@@ -3,7 +3,7 @@ package com.soze.idlekluch.game.service;
 import com.soze.idlekluch.game.message.ConstructedBuildingMessage;
 import com.soze.idlekluch.game.message.WorldChunkMessage;
 import com.soze.idlekluch.kingdom.dto.BuildingDto;
-import com.soze.idlekluch.kingdom.dto.BuildingDtoConverter;
+import com.soze.idlekluch.kingdom.service.BuildingDtoConverter;
 import com.soze.idlekluch.kingdom.entity.Building;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
@@ -29,14 +29,17 @@ public class GameServiceImpl implements GameService {
   private final World world;
   private final WebSocketMessagingService webSocketMessagingService;
   private final BuildingService buildingService;
+  private final BuildingDtoConverter buildingDtoConverter;
 
   @Autowired
   public GameServiceImpl(final World world,
                          final WebSocketMessagingService webSocketMessagingService,
-                         final BuildingService buildingService) {
+                         final BuildingService buildingService,
+                         final BuildingDtoConverter buildingDtoConverter) {
     this.world = Objects.requireNonNull(world);
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
     this.buildingService = Objects.requireNonNull(buildingService);
+    this.buildingDtoConverter = Objects.requireNonNull(buildingDtoConverter);
   }
 
   /**
@@ -57,7 +60,7 @@ public class GameServiceImpl implements GameService {
     webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, worldChunkJson);
 
     final List<Building> buildings = buildingService.getAllConstructedBuildings();
-    final List<BuildingDto> buildingDtos = BuildingDtoConverter.convertBuildings(buildings);
+    final List<BuildingDto> buildingDtos = buildingDtoConverter.convertBuildings(buildings);
     final ConstructedBuildingMessage constructedBuildingMessage = new ConstructedBuildingMessage(buildingDtos);
     final String constructedBuildingsJson = JsonUtils.objectToJson(constructedBuildingMessage);
 
