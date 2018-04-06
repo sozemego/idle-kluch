@@ -74,7 +74,6 @@ public class GameServiceImpl implements GameService {
     final String constructedBuildingsJson = JsonUtils.objectToJson(constructedBuildingMessage);
 
     webSocketMessagingService.send(Routes.GAME + Routes.GAME_OUTBOUND, constructedBuildingsJson);
-
   }
 
 }
