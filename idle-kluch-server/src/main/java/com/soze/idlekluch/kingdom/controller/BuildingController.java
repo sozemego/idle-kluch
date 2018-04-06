@@ -1,6 +1,6 @@
 package com.soze.idlekluch.kingdom.controller;
 
-import com.soze.idlekluch.kingdom.dto.BuildBuildingForm;
+import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.dto.BuildingDto;
 import com.soze.idlekluch.kingdom.service.BuildingDtoConverter;

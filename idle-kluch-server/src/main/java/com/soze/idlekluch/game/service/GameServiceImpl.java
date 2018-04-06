@@ -2,6 +2,7 @@ package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.message.ConstructedBuildingMessage;
 import com.soze.idlekluch.game.message.WorldChunkMessage;
+import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.dto.BuildingDto;
 import com.soze.idlekluch.kingdom.service.BuildingDtoConverter;
 import com.soze.idlekluch.kingdom.entity.Building;
@@ -16,10 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -46,7 +45,6 @@ public class GameServiceImpl implements GameService {
    * Responsibilities right now:
    * 1. Send all tile data to the joining player
    * 2. Send all constructed building information to the player.
-   * @param username
    */
   @Override
   public void handleInitMessage(final String username) {
@@ -65,6 +63,18 @@ public class GameServiceImpl implements GameService {
     final String constructedBuildingsJson = JsonUtils.objectToJson(constructedBuildingMessage);
 
     webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, constructedBuildingsJson);
+  }
+
+  @Override
+  public void handleBuildBuildingMessage(final String username, final BuildBuildingForm form) {
+    final Building building = buildingService.buildBuilding(username, form);
+
+    final BuildingDto buildingDto = buildingDtoConverter.convertBuilding(building);
+    final ConstructedBuildingMessage constructedBuildingMessage = new ConstructedBuildingMessage(Collections.singletonList(buildingDto));
+    final String constructedBuildingsJson = JsonUtils.objectToJson(constructedBuildingMessage);
+
+    webSocketMessagingService.send(Routes.GAME + Routes.GAME_OUTBOUND, constructedBuildingsJson);
+
   }
 
 }

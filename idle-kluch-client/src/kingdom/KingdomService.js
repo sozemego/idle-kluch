@@ -36,10 +36,6 @@ KingdomService.getConstructableBuildings = () => {
   return networkService.get(getConstructableBuildings);
 };
 
-KingdomService.constructBuilding = (buildingId, x, y) => {
-  return networkService.post(buildingBuild, { buildingId, x, y });
-};
-
 const validateKingdomName = (kingdomName) => {
   if (!kingdomName) {
 	return 'Kingdom name cannot be empty!';

@@ -12,7 +12,10 @@ const getUsername = () => getUser(store.getState()).name;
 
 const game = `/game-socket`;
 
-let socket = null;
+const base = `/game/inbound`;
+const buildingBuild = `${base}/build`;
+
+let client = null;
 
 export const GameService = {};
 
@@ -26,7 +29,7 @@ GameService.connect = function () {
 	const { protocol, base, port, version } = networkConfig;
 	const socket = new SockJS(`${protocol}://${base}:${port}${version}${game}?token=${getToken()}`);
 	// socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
-	const client = Stomp.over(socket);
+	client = Stomp.over(socket);
 	client.connect({ token: getToken() }, frame => {
 
 	  client.subscribe('/user/game/outbound', message => {
@@ -62,9 +65,13 @@ GameService.connect = function () {
 };
 
 GameService.disconnect = function () {
-  if (socket) {
-	socket.close();
+  if (client) {
+	client.close();
   }
+};
+
+GameService.constructBuilding = (buildingId, x, y) => {
+  client.send(buildingBuild, {}, JSON.stringify({buildingId, x, y, type: "BUILD_BUILDING"}));
 };
 
 // const isOpen = () => {

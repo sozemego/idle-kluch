@@ -3,7 +3,6 @@ import { makeActionCreator } from '../store/utils';
 import createGame from './Game';
 import { getConstructableBuildings, getSelectedConstructableBuilding } from '../kingdom/selectors';
 import { setSelectedConstructableBuilding } from '../kingdom/actions';
-import { KingdomService as kingdomService } from "../kingdom/KingdomService";
 
 export const ADD_TILES = 'ADD_TILES';
 export const addTiles = makeActionCreator(ADD_TILES, 'payload');
@@ -48,11 +47,8 @@ export const onCanvasClicked = (x, y) => {
 	if (selectedConstructableBuilding) {
 	  //send network request to build
 
-	  return kingdomService.constructBuilding(selectedConstructableBuilding.id, x, y)
-		.then((building) => {
-		  dispatch(setSelectedConstructableBuilding(null));
-		});
+	  gameService.constructBuilding(selectedConstructableBuilding.id, x, y)
 	}
-
+	return Promise.resolve();
   };
 };

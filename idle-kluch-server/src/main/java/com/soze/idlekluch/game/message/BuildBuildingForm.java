@@ -1,9 +1,12 @@
-package com.soze.idlekluch.kingdom.dto;
+package com.soze.idlekluch.game.message;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.soze.idlekluch.game.message.IncomingMessage;
 
-public class BuildBuildingForm {
+import java.util.Objects;
+
+public class BuildBuildingForm extends IncomingMessage {
 
   private final String buildingId;
   private final int x;
@@ -13,7 +16,8 @@ public class BuildBuildingForm {
   public BuildBuildingForm(@JsonProperty("buildingId") final String buildingId,
                            @JsonProperty("x") final int x,
                            @JsonProperty("y") final int y) {
-    this.buildingId = buildingId;
+    super(IncomingMessageType.BUILD_BUILDING);
+    this.buildingId = Objects.requireNonNull(buildingId);
     this.x = x;
     this.y = y;
   }

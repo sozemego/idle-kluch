@@ -3,7 +3,7 @@ package com.soze.idlekluch.kingdom.service;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.soze.idlekluch.kingdom.dto.BuildBuildingForm;
+import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.dto.BuildingDto.BuildingType;
 import com.soze.idlekluch.kingdom.dto.WarehouseDefinitionDto;

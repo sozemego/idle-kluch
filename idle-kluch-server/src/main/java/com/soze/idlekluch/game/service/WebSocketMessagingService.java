@@ -2,6 +2,8 @@ package com.soze.idlekluch.game.service;
 
 public interface WebSocketMessagingService {
 
-  public void sendToUser(final String username, final String destination, final Object message);
+  void sendToUser(final String username, final String destination, final Object message);
+
+  void send(final String destination, final Object message);
 
 }
