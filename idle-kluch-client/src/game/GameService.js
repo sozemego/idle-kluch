@@ -30,17 +30,21 @@ GameService.connect = function () {
 	const socket = new SockJS(`${protocol}://${base}:${port}${version}${game}?token=${getToken()}`);
 	// socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
 	client = Stomp.over(socket);
+
+	const messageHandler = message => {
+	  const parsed = parseJSON(message.body);
+	  if (parsed['type'] === 'WORLD_CHUNK') {
+		store.dispatch(addTiles(parsed.tiles));
+	  }
+	  if (parsed['type'] === 'CONSTRUCTED_BUILDING') {
+		store.dispatch(addBuildings(parsed.buildings));
+	  }
+	};
+
 	client.connect({ token: getToken() }, frame => {
 
-	  client.subscribe('/user/game/outbound', message => {
-		const parsed = parseJSON(message.body);
-		if (parsed['type'] === 'WORLD_CHUNK') {
-		  store.dispatch(addTiles(parsed.tiles));
-		}
-		if (parsed['type'] === 'CONSTRUCTED_BUILDING') {
-		  store.dispatch(addBuildings(parsed.buildings));
-		}
-	  });
+	  client.subscribe('/user/game/outbound', messageHandler);
+	  client.subscribe('/game/outbound', messageHandler);
 	  client.send('/game/inbound/init', {}, null);
 
 	  resolve();
