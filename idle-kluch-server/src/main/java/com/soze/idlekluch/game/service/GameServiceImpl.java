@@ -29,16 +29,19 @@ public class GameServiceImpl implements GameService {
   private final WebSocketMessagingService webSocketMessagingService;
   private final BuildingService buildingService;
   private final BuildingDtoConverter buildingDtoConverter;
+  private final GameEngine gameEngine;
 
   @Autowired
   public GameServiceImpl(final World world,
                          final WebSocketMessagingService webSocketMessagingService,
                          final BuildingService buildingService,
-                         final BuildingDtoConverter buildingDtoConverter) {
+                         final BuildingDtoConverter buildingDtoConverter,
+                         final GameEngine gameEngine) {
     this.world = Objects.requireNonNull(world);
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
     this.buildingService = Objects.requireNonNull(buildingService);
     this.buildingDtoConverter = Objects.requireNonNull(buildingDtoConverter);
+    this.gameEngine = Objects.requireNonNull(gameEngine);
   }
 
   /**
