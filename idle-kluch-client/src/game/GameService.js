@@ -21,10 +21,10 @@ export const GameService = {};
 
 GameService.connect = function () {
   return new Promise((resolve, reject) => {
-	if (socket && socket.readyState !== WebSocket.CLOSED) {
-	  reject('Already connected or connecting or closing. Either way, cannot connect right now.');
-	  return;
-	}
+	// if (client && client.readyState !== WebSocket.CLOSED) {
+	//   reject('Already connected or connecting or closing. Either way, cannot connect right now.');
+	//   return;
+	// }
 
 	const { protocol, base, port, version } = networkConfig;
 	const socket = new SockJS(`${protocol}://${base}:${port}${version}${game}?token=${getToken()}`);
