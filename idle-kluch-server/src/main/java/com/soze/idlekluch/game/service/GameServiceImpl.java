@@ -83,6 +83,10 @@ public class GameServiceImpl implements GameService {
 
     webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, worldChunkJson);
 
+    //TODO
+    //get all entities
+    //convert to dtos
+    //send to client
     final List<Building> buildings = buildingService.getAllConstructedBuildings();
     final List<BuildingDto> buildingDtos = buildingDtoConverter.convertBuildings(buildings);
     final ConstructedBuildingMessage constructedBuildingMessage = new ConstructedBuildingMessage(buildingDtos);
