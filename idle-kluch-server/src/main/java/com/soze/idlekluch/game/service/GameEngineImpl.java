@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.service;
 
+import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
 import org.springframework.stereotype.Service;
@@ -13,11 +14,18 @@ public class GameEngineImpl implements GameEngine {
 
   public GameEngineImpl() {
     this.engine = new Engine();
+    this.engine.addSystem(new PhysicsSystem(this.engine));
+
   }
 
   @Override
   public void update(float delta) {
     engine.update(delta);
+  }
+
+  @Override
+  public Entity createEmptyEntity() {
+    return engine.getEntityFactory().createEntity();
   }
 
   @Override

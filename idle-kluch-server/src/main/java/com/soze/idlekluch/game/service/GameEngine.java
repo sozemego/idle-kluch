@@ -12,6 +12,8 @@ public interface GameEngine {
    */
   void update(float delta);
 
+  Entity createEmptyEntity();
+
   /**
    * Adds an entity to the engine.
    */

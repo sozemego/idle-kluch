@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -42,6 +43,20 @@ public class GameServiceImpl implements GameService {
     this.buildingService = Objects.requireNonNull(buildingService);
     this.buildingDtoConverter = Objects.requireNonNull(buildingDtoConverter);
     this.gameEngine = Objects.requireNonNull(gameEngine);
+  }
+
+  /**
+   * Initializes the game.
+   * Loads all entities from DB, converts them to game entities and adds them to the game engine.
+   */
+  @PostConstruct
+  public void init() {
+    LOG.info("Initializing the game");
+
+    LOG.info("Initializing buildings");
+    final List<Building> buildings = buildingService.getAllConstructedBuildings();
+
+
   }
 
   /**

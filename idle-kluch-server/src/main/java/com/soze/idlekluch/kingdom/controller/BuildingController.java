@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,7 +37,7 @@ public class BuildingController {
   public ResponseEntity getAllBuildings() {
     //temporary endpoint
     //later a list of buildings will be filtered according to tech and player
-    final List<BuildingDefinitionDto> buildingDefinitions = buildingService.getAllConstructableBuildings();
+    final Collection<BuildingDefinitionDto> buildingDefinitions = buildingService.getAllConstructableBuildings().values();
 
     return ResponseEntity.ok(buildingDefinitions);
   }

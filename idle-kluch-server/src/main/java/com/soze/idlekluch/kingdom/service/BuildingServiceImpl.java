@@ -81,8 +81,8 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   @Override
-  public List<BuildingDefinitionDto> getAllConstructableBuildings() {
-    return new ArrayList<>(buildingDefinitions.values());
+  public Map<String, BuildingDefinitionDto> getAllConstructableBuildings() {
+    return buildingDefinitions;
   }
 
   @Override

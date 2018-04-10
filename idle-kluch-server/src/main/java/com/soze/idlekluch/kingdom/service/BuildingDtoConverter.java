@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -59,16 +60,8 @@ public class BuildingDtoConverter {
   }
 
   private String getAsset(final Building building) {
-    final List<BuildingDefinitionDto> constructableBuildings = buildingService.getAllConstructableBuildings();
-    final String definitionId = building.getDefinitionId();
-
-    for(final BuildingDefinitionDto buildingDefinitionDto: constructableBuildings) {
-      if(buildingDefinitionDto.getId().equalsIgnoreCase(definitionId)) {
-        return buildingDefinitionDto.getAsset();
-      }
-    }
-
-    throw new IllegalStateException("No asset for " + building.getName());
+    final Map<String, BuildingDefinitionDto> constructableBuildings = buildingService.getAllConstructableBuildings();
+    return constructableBuildings.get(building.getDefinitionId()).getAsset();
   }
 
 }

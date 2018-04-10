@@ -5,17 +5,15 @@ import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.entity.Building;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BuildingService {
 
   /**
    * Returns a list of constructable buildings.
    * This means all buildings, not specific to any kingdom or player.
-   *
-   * This is a list of <code>Map<String, Object></code> objects,
-   * because there isn't a class which represents building definitions.
    */
-  public List<BuildingDefinitionDto> getAllConstructableBuildings();
+  public Map<String, BuildingDefinitionDto> getAllConstructableBuildings();
 
   /**
    * Attempts to place a building for a given player.
