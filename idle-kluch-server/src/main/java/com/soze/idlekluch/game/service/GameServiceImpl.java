@@ -41,7 +41,8 @@ public class GameServiceImpl implements GameService {
                          final WebSocketMessagingService webSocketMessagingService,
                          final BuildingService buildingService,
                          final BuildingDtoConverter buildingDtoConverter,
-                         final GameEngine gameEngine, EntityConverter entityConverter) {
+                         final GameEngine gameEngine,
+                         final EntityConverter entityConverter) {
     this.world = Objects.requireNonNull(world);
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
     this.buildingService = Objects.requireNonNull(buildingService);
