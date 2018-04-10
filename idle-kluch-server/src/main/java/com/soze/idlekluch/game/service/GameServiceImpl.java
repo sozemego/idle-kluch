@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.service;
 
+import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.message.ConstructedBuildingMessage;
 import com.soze.idlekluch.game.message.WorldChunkMessage;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
@@ -11,6 +12,7 @@ import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.service.World;
+import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -31,18 +34,20 @@ public class GameServiceImpl implements GameService {
   private final BuildingService buildingService;
   private final BuildingDtoConverter buildingDtoConverter;
   private final GameEngine gameEngine;
+  private final EntityConverter entityConverter;
 
   @Autowired
   public GameServiceImpl(final World world,
                          final WebSocketMessagingService webSocketMessagingService,
                          final BuildingService buildingService,
                          final BuildingDtoConverter buildingDtoConverter,
-                         final GameEngine gameEngine) {
+                         final GameEngine gameEngine, EntityConverter entityConverter) {
     this.world = Objects.requireNonNull(world);
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
     this.buildingService = Objects.requireNonNull(buildingService);
     this.buildingDtoConverter = Objects.requireNonNull(buildingDtoConverter);
     this.gameEngine = Objects.requireNonNull(gameEngine);
+    this.entityConverter = Objects.requireNonNull(entityConverter);
   }
 
   /**
@@ -56,6 +61,9 @@ public class GameServiceImpl implements GameService {
     LOG.info("Initializing buildings");
     final List<Building> buildings = buildingService.getAllConstructedBuildings();
 
+    final List<Entity> buildingEntities = buildings.stream().map(entityConverter::convert).collect(Collectors.toList());
+    buildingEntities.forEach(gameEngine::addEntity);
+    LOG.info("Added [{}] building entities to engine", buildingEntities.size());
 
   }
 

@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.engine;
 
+import com.soze.idlekluch.game.engine.components.GraphicsComponent;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
@@ -39,6 +40,9 @@ public class EntityConverter {
     physicsComponent.setWidth(buildingDefinitionDto.getWidth());
     physicsComponent.setHeight(buildingDefinitionDto.getHeight());
     entity.addComponent(physicsComponent);
+
+    final GraphicsComponent graphicsComponent = new GraphicsComponent(buildingDefinitionDto.getAsset());
+    entity.addComponent(graphicsComponent);
 
     return entity;
   }

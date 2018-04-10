@@ -13,17 +13,8 @@ public class PhysicsSystem extends BaseEntitySystem {
   }
 
   @Override
-  public boolean shouldUpdate(float delta) {
-    return true;
-  }
-
-  @Override
   public void update(float delta) {
 
   }
 
-  @Override
-  public Engine getEngine() {
-    return null;
-  }
 }
