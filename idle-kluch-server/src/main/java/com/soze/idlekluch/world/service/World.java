@@ -27,13 +27,11 @@ public class World {
   private final int worldHeight = 25;
 
   private final WorldRepository worldRepository;
-  private final Engine engine;
   private final Map<Point, Tile> allTiles;
 
   @Autowired
   public World(final WorldRepository worldRepository) {
     this.worldRepository = Objects.requireNonNull(worldRepository);
-    this.engine = new Engine();
     this.allTiles = new HashMap<>();
   }
 
