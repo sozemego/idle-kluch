@@ -10,6 +10,9 @@ export const addTiles = makeActionCreator(ADD_TILES, 'payload');
 export const ADD_BUILDINGS = 'ADD_BUILDINGS';
 export const addBuildings = makeActionCreator(ADD_BUILDINGS, 'payload');
 
+export const ADD_ENTITY = 'ADD_ENTITY';
+export const addEntity = makeActionCreator(ADD_ENTITY, 'payload');
+
 export const connect = () => {
   return (dispatch, getState) => {
 

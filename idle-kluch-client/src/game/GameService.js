@@ -2,7 +2,7 @@
 import { networkConfig } from '../api/config';
 import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
-import { addBuildings, addTiles } from './actions';
+import { addBuildings, addEntity, addTiles } from './actions';
 import store from '../store/store';
 import { getUser } from '../app/selectors';
 import { parseJSON } from '../utils/JSONUtils';
@@ -36,8 +36,8 @@ GameService.connect = function () {
 	  if (parsed['type'] === 'WORLD_CHUNK') {
 		store.dispatch(addTiles(parsed.tiles));
 	  }
-	  if (parsed['type'] === 'CONSTRUCTED_BUILDING') {
-		store.dispatch(addBuildings(parsed.buildings));
+	  if(parsed['type'] === 'ENTITY') {
+	    store.dispatch(addEntity(parsed));
 	  }
 	};
 

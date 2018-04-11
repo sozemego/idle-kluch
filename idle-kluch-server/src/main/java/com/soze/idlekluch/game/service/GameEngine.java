@@ -2,6 +2,8 @@ package com.soze.idlekluch.game.service;
 
 import com.soze.klecs.entity.Entity;
 
+import java.util.List;
+
 /**
  * Contains the ECS for the game.
  */
@@ -18,6 +20,8 @@ public interface GameEngine {
    * Adds an entity to the engine.
    */
   void addEntity(final Entity entity);
+
+  List<Entity> getAllEntities();
 
 
 }

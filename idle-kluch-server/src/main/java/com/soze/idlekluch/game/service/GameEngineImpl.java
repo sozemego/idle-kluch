@@ -5,6 +5,7 @@ import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -32,6 +33,11 @@ public class GameEngineImpl implements GameEngine {
   public void addEntity(Entity entity) {
     Objects.requireNonNull(entity);
     engine.addEntity(entity);
+  }
+
+  @Override
+  public List<Entity> getAllEntities() {
+    return engine.getAllEntities();
   }
 
 }

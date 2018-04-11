@@ -1,6 +1,6 @@
 package com.soze.idlekluch.game.engine.components;
 
-public class PhysicsComponent {
+public class PhysicsComponent extends BaseComponent {
 
   private float x;
   private float y;
@@ -9,7 +9,7 @@ public class PhysicsComponent {
   private float height;
 
   public PhysicsComponent() {
-
+    super(ComponentType.PHYSICS);
   }
 
   public float getX() {

@@ -1,12 +1,11 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.engine.EntityConverter;
-import com.soze.idlekluch.game.message.ConstructedBuildingMessage;
-import com.soze.idlekluch.game.message.WorldChunkMessage;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
-import com.soze.idlekluch.kingdom.dto.BuildingDto;
-import com.soze.idlekluch.kingdom.service.BuildingDtoConverter;
+import com.soze.idlekluch.game.message.EntityMessage;
+import com.soze.idlekluch.game.message.WorldChunkMessage;
 import com.soze.idlekluch.kingdom.entity.Building;
+import com.soze.idlekluch.kingdom.service.BuildingDtoConverter;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
@@ -20,8 +19,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -84,27 +85,38 @@ public class GameServiceImpl implements GameService {
 
     webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, worldChunkJson);
 
-    //TODO
-    //get all entities
-    //convert to dtos
-    //send to client
-    final List<Building> buildings = buildingService.getAllConstructedBuildings();
-    final List<BuildingDto> buildingDtos = buildingDtoConverter.convertBuildings(buildings);
-    final ConstructedBuildingMessage constructedBuildingMessage = new ConstructedBuildingMessage(buildingDtos);
-    final String constructedBuildingsJson = JsonUtils.objectToJson(constructedBuildingMessage);
+//    //TODO
+//    //get all entities
+//    //convert to dtos
+//    //send to client
+//    final List<Building> buildings = buildingService.getAllConstructedBuildings();
+//    final List<BuildingDto> buildingDtos = buildingDtoConverter.convertBuildings(buildings);
+//    final ConstructedBuildingMessage constructedBuildingMessage = new ConstructedBuildingMessage(buildingDtos);
+//    final String constructedBuildingsJson = JsonUtils.objectToJson(constructedBuildingMessage);
+//
+//    webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, constructedBuildingsJson);
+    final List<Entity> entities = gameEngine.getAllEntities();
+    final List<EntityMessage> entityMessages = entities.stream()
+      .map(entityConverter::toMessage)
+      .collect(Collectors.toList());
 
-    webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, constructedBuildingsJson);
+    entityMessages.forEach(message -> {
+      final String entityJson = JsonUtils.objectToJson(message);
+      webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, entityJson);
+    });
   }
 
   @Override
   public void handleBuildBuildingMessage(final String username, final BuildBuildingForm form) {
     final Building building = buildingService.buildBuilding(username, form);
 
-    final BuildingDto buildingDto = buildingDtoConverter.convertBuilding(building);
-    final ConstructedBuildingMessage constructedBuildingMessage = new ConstructedBuildingMessage(Collections.singletonList(buildingDto));
-    final String constructedBuildingsJson = JsonUtils.objectToJson(constructedBuildingMessage);
+    final Entity entity = entityConverter.convert(building);
+    gameEngine.addEntity(entity);
 
-    webSocketMessagingService.send(Routes.GAME + Routes.GAME_OUTBOUND, constructedBuildingsJson);
+    final EntityMessage entityMessage = entityConverter.toMessage(entity);
+    final String entityMessageJSon = JsonUtils.objectToJson(entityMessage);
+
+    webSocketMessagingService.send(Routes.GAME + Routes.GAME_OUTBOUND, entityMessageJSon);
   }
 
 }

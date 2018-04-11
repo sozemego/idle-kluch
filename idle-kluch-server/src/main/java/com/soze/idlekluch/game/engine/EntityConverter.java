@@ -1,7 +1,9 @@
 package com.soze.idlekluch.game.engine;
 
+import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.game.engine.components.GraphicsComponent;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.game.message.EntityMessage;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.entity.Building;
@@ -10,6 +12,7 @@ import com.soze.klecs.entity.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -45,6 +48,11 @@ public class EntityConverter {
     entity.addComponent(graphicsComponent);
 
     return entity;
+  }
+
+  public EntityMessage toMessage(final Entity entity) {
+    final List<BaseComponent> components = entity.getAllComponents();
+    return new EntityMessage(entity.getId(), components);
   }
 
 }

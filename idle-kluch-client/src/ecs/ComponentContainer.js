@@ -27,7 +27,16 @@ export class ComponentContainer {
   };
 
   getEntitiesByNode = (node) => {
-
+    return Object.entries(this.components)
+	  .filter(([entityId, components]) => {
+	    let hasAllComponents = true;
+	    node.getComponents().forEach(comp => {
+	      if(!components[comp]) {
+	        hasAllComponents = false;
+		  }
+		});
+	    return hasAllComponents;
+	  }).map(([entityId]) => entityId);
   };
 
   getEntityComponents = (entityId) => {
