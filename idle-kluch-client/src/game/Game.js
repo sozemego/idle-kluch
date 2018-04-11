@@ -5,6 +5,7 @@ import Phaser from 'phaser';
 import { onCanvasClicked } from './actions';
 import { createReducer } from '../store/utils';
 import * as GAME_ACTIONS from './actions';
+import { Engine } from "../ecs/Engine";
 
 const getTiles = () => _getTiles(store.getState());
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
@@ -12,6 +13,7 @@ const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 
 let game = null;
+let engine = null;
 const tileSprites = {};
 const buildingSprites = {};
 
@@ -172,11 +174,9 @@ const createGame = () => {
 	  }
 	);
 
-  });
-};
+	engine = new Engine();
 
-export const events = {
-  'BUILDING_PLACED': 'BUILDING_PLACED',
+  });
 };
 
 export default createGame;
