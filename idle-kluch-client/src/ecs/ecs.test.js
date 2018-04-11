@@ -43,6 +43,7 @@ describe('component container', () => {
 describe('engine', () => {
 
   let engine = null;
+  let id = 0;
 
   beforeEach(() => {
     engine = new Engine();
@@ -90,24 +91,24 @@ describe('engine', () => {
 
   it('should add entity', () => {
   	const factory = engine.getEntityFactory();
-  	const entity = factory.createEntity();
+  	const entity = factory.createEntity(++id);
   	engine.addEntity(entity);
   	expect(engine.getAllEntities().length).toBe(1);
   });
 
   it('should add five entities', () => {
     const factory = engine.getEntityFactory();
-    factory.createEntityAndAddToEngine();
-    factory.createEntityAndAddToEngine();
-    factory.createEntityAndAddToEngine();
-    factory.createEntityAndAddToEngine();
-    factory.createEntityAndAddToEngine();
+    factory.createEntityAndAddToEngine(++id);
+    factory.createEntityAndAddToEngine(++id);
+    factory.createEntityAndAddToEngine(++id);
+    factory.createEntityAndAddToEngine(++id);
+    factory.createEntityAndAddToEngine(++id);
 	expect(engine.getAllEntities().length).toBe(5);
   });
 
   it('should not add already added entity', () => {
 	const factory = engine.getEntityFactory();
-	const entity = factory.createEntity();
+	const entity = factory.createEntity(++id);
 	engine.addEntity(entity);
 	expect(() => engine.addEntity(entity)).toThrow();
   });
@@ -126,7 +127,7 @@ describe('engine', () => {
   it('should not add entity while updating', () => {
   	const system = new EntitySystem(engine);
   	system.update = () => {
-  	  engine.addEntity(engine.getEntityFactory().createEntity());
+  	  engine.addEntity(engine.getEntityFactory().createEntity(++id));
   	  expect(engine.getAllEntities().length).toBe(0);
 	};
   	engine.addSystem(system);
@@ -138,7 +139,7 @@ describe('engine', () => {
     expect.assertions = 1;
 	const system = new EntitySystem(engine);
 	system.update = () => {
-	  const entity = engine.getEntityFactory().createEntity();
+	  const entity = engine.getEntityFactory().createEntity(++id);
 	  engine.addEntity(entity);
 	  expect(() => engine.addEntity(entity)).toThrow();
 	};
@@ -147,7 +148,7 @@ describe('engine', () => {
   });
 
   it('should not update entities added while updating', () => {
-    const entity = engine.getEntityFactory().createEntity();
+    const entity = engine.getEntityFactory().createEntity(++id);
     const system = new EntitySystem(engine);
     const counts = [];
     system.update = () => {
