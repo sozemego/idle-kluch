@@ -120,7 +120,7 @@ const createGame = () => {
 		onCanvasClick(x, y);
 	  });
 
-	  return resolve();
+	  return resolve(game);
 	};
 
 	const update = () => {
