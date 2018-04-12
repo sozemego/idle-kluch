@@ -1,23 +1,24 @@
-import { getTiles as _getTiles } from './selectors';
-import { getSelectedConstructableBuilding as _getSelectedConstructableBuilding } from '../kingdom/selectors';
 import store from '../store/store';
 import Phaser from 'phaser';
 import { onCanvasClicked } from './actions';
 import { createReducer } from '../store/utils';
 import * as GAME_ACTIONS from './actions';
+import * as KINGDOM_ACTIONS from '../kingdom/actions';
 import { Engine } from "../ecs/Engine";
 import { GraphicsComponent } from "../ecs/components/GraphicsComponent";
 import { PhysicsComponent } from "../ecs/components/PhysicsComponent";
 import { PhysicsSystem } from "../ecs/systems/PhysicsSystem";
 import { GraphicsSystem } from "../ecs/systems/GraphicsSystem";
+import { getSelectedConstructableBuilding as _getSelectedConstructableBuilding } from "../kingdom/selectors";
 
-const getTiles = () => _getTiles(store.getState());
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
-
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 
 let game = null;
 let engine = null;
+
+let selectedBuildingSprite = null;
+
 const tileSprites = {};
 
 const initialState = {
@@ -40,23 +41,6 @@ const addTiles = (state, { payload: tiles }) => {
 	}
   });
   return { ...state, tiles: previousTiles };
-};
-
-const addBuildings = (state, { payload: buildings }) => {
-  console.log('NOT ADDING BUILDINGS ANYMORE');
-  return {...state};
-
-  const previousBuildings = { ...state.tiles };
-  buildings.forEach(building => {
-	const { buildingId, x, y } = building;
-	const previousBuilding = previousBuildings[buildingId];
-	if (!previousBuilding) {
-	  previousBuildings[buildingId] = building;
-	  const sprite = game.add.sprite(x, y, building.asset);
-	  sprite.inputEnabled = true;
-	}
-  });
-  return { ...state, buildings: previousBuildings };
 };
 
 const addEntity = (state, {payload: entity}) => {
@@ -83,10 +67,27 @@ const addEntity = (state, {payload: entity}) => {
   return { ...state };
 };
 
+const setConstructableBuilding = (state, action) => {
+  const { payload: building } = action;
+  if(!building && selectedBuildingSprite) {
+    selectedBuildingSprite.kill(true);
+    return state;
+  }
+
+  if (!selectedBuildingSprite) {
+	selectedBuildingSprite = game.add.sprite(0, 0, building.asset);
+  }
+
+  selectedBuildingSprite.revive();
+  selectedBuildingSprite.loadTexture(building.asset);
+
+  return state;
+};
+
 export const gameReducer = createReducer(initialState, {
   [GAME_ACTIONS.ADD_TILES]: addTiles,
-  [GAME_ACTIONS.ADD_BUILDINGS]: addBuildings,
   [GAME_ACTIONS.ADD_ENTITY]: addEntity,
+  [KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING]: setConstructableBuilding,
 });
 
 const TILE_SIZE = 128;
@@ -94,7 +95,6 @@ const TILE_SIZE = 128;
 const createGame = () => {
   return new Promise((resolve) => {
 	let cursors = null;
-	let selectedBuildingSprite = null;
 
 	// let background = null;
 
@@ -149,26 +149,10 @@ const createGame = () => {
 		}
 	  });
 
-	  //TODO make it all reactive
-	  if (selectedBuildingSprite) {
-		selectedBuildingSprite.kill(true);
-	  }
-
 	  //selected building highlight
 	  const selectedConstructableBuilding = getSelectedConstructableBuilding();
-	  if (selectedConstructableBuilding) {
+	  if (selectedConstructableBuilding && selectedBuildingSprite && selectedBuildingSprite.alive) {
 
-		//remove previous sprite
-		if (selectedBuildingSprite && !selectedConstructableBuilding) {
-		  selectedBuildingSprite.kill(true);
-		}
-
-		if (!selectedBuildingSprite) {
-		  selectedBuildingSprite = game.add.sprite(mouseX - 24, mouseY - 24, selectedConstructableBuilding.asset);
-		}
-
-		selectedBuildingSprite.revive();
-		selectedBuildingSprite.loadTexture(selectedConstructableBuilding.asset);
 		selectedBuildingSprite.x = mouseX + x;
 		selectedBuildingSprite.y = mouseY + y;
 		selectedBuildingSprite.width = selectedConstructableBuilding.width;
