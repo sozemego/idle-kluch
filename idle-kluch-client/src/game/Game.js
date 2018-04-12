@@ -120,6 +120,8 @@ const createGame = () => {
 		onCanvasClick(x, y);
 	  });
 
+	  game.stage.disableVisibilityChange = true;
+
 	  return resolve(game);
 	};
 
