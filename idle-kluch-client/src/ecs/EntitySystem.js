@@ -1,5 +1,4 @@
 export class EntitySystem {
-
   constructor(engine) {
     this.engine = engine;
   }
@@ -8,8 +7,5 @@ export class EntitySystem {
 
   getEngine = () => this.engine;
 
-  update = (delta) => {
-
-  }
-
+  update = delta => {};
 }

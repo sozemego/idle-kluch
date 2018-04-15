@@ -1,5 +1,4 @@
 export class Node {
-
   constructor(components) {
     this.components = components;
   }
@@ -11,5 +10,4 @@ export class Node {
   getComponents = () => {
     return this.components;
   };
-
 }

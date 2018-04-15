@@ -1,20 +1,18 @@
 export class Entity {
-
   constructor(id, componentContainer) {
     this.id = id;
     this.componentContainer = componentContainer;
   }
 
-  addComponent = (component) => {
+  addComponent = component => {
     return this.componentContainer.addComponent(this.id, component);
   };
 
-  getComponent = (clazz) => {
+  getComponent = clazz => {
     return this.componentContainer.getComponent(this.id, clazz);
   };
 
-  removeComponent = (clazz) => {
+  removeComponent = clazz => {
     return this.componentContainer.removeComponent(this.id, clazz);
   };
-
 }

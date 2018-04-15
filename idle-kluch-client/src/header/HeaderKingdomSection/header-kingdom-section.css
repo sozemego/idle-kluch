@@ -1,23 +1,22 @@
 .container {
-    display: flex;
-    margin-left: 4px;
+  display: flex;
+  margin-left: 4px;
 }
 
 .name__container {
-    font-size: 1.25em;
-    font-weight: 800;
-    color: burlywood;
-    margin: 6px;
-    display: flex;
-    align-items: center;
+  font-size: 1.25em;
+  font-weight: 800;
+  color: burlywood;
+  margin: 6px;
+  display: flex;
+  align-items: center;
 }
 
 .name {
-    margin: 4px 2px 4px 4px;
+  margin: 4px 2px 4px 4px;
 }
 
 .avatar {
-    width: 32px;
-    height: 32px;
+  width: 32px;
+  height: 32px;
 }
-

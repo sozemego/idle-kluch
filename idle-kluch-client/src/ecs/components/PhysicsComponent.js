@@ -1,42 +1,40 @@
 export class PhysicsComponent {
-
   constructor(x = 0, y = 0, width = 0, height = 0) {
-	this.x = x;
-	this.y = y;
-	this.width = width;
-	this.height = height;
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
   }
 
-
   getX() {
-	return this.x;
+    return this.x;
   }
 
   getY() {
-	return this.y;
+    return this.y;
   }
 
   getWidth() {
-	return this.width;
+    return this.width;
   }
 
   getHeight() {
-	return this.height;
+    return this.height;
   }
 
   setX(x) {
-	this.x = x;
+    this.x = x;
   }
 
   setY(y) {
-	this.y = y;
+    this.y = y;
   }
 
   setWidth(width) {
-	this.width = width;
+    this.width = width;
   }
 
   setHeight(height) {
-	this.height = height;
+    this.height = height;
   }
 }

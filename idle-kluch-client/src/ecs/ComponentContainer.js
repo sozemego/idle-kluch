@@ -1,8 +1,7 @@
 export class ComponentContainer {
-
   constructor() {
-	this.components = {};
-	this.nodeCache = {};
+    this.components = {};
+    this.nodeCache = {};
   }
 
   addComponent = (entityId, component) => {
@@ -13,35 +12,35 @@ export class ComponentContainer {
   };
 
   getComponent = (entityId, clazz) => {
-	const components = this.getEntityComponents(entityId);
-	return components[clazz] || null;
+    const components = this.getEntityComponents(entityId);
+    return components[clazz] || null;
   };
 
   removeComponent = (entityId, clazz) => {
-	const components = this.getEntityComponents(entityId);
-	delete components[clazz];
+    const components = this.getEntityComponents(entityId);
+    delete components[clazz];
   };
 
-  removeEntityComponents = (entityId) => {
+  removeEntityComponents = entityId => {
     delete this.components[entityId];
   };
 
-  getEntitiesByNode = (node) => {
+  getEntitiesByNode = node => {
     return Object.entries(this.components)
-	  .filter(([entityId, components]) => {
-	    let hasAllComponents = true;
-	    node.getComponents().forEach(comp => {
-	      if(!components[comp]) {
-	        hasAllComponents = false;
-		  }
-		});
-	    return hasAllComponents;
-	  }).map(([entityId]) => entityId);
+      .filter(([entityId, components]) => {
+        let hasAllComponents = true;
+        node.getComponents().forEach(comp => {
+          if (!components[comp]) {
+            hasAllComponents = false;
+          }
+        });
+        return hasAllComponents;
+      })
+      .map(([entityId]) => entityId);
   };
 
-  getEntityComponents = (entityId) => {
+  getEntityComponents = entityId => {
     this.components[entityId] = this.components[entityId] || {};
     return this.components[entityId];
   };
-
 }

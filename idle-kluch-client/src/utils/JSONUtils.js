@@ -4,11 +4,11 @@
  * @param body
  * @returns {{}}
  */
-export const parseJSON = (body) => {
-	if (typeof body !== 'string') return {};//consider throwing error here
-	try {
-		return JSON.parse(body);
-	} catch (error) {
-		return {};
-	}
+export const parseJSON = body => {
+  if (typeof body !== "string") return {}; //consider throwing error here
+  try {
+    return JSON.parse(body);
+  } catch (error) {
+    return {};
+  }
 };
