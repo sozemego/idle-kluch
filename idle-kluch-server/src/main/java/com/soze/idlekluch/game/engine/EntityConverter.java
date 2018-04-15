@@ -8,6 +8,7 @@ import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.entity.Building;
 import com.soze.idlekluch.kingdom.service.BuildingService;
+import com.soze.idlekluch.world.entity.Tree;
 import com.soze.klecs.entity.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,18 @@ public class EntityConverter {
     entity.addComponent(graphicsComponent);
 
     return entity;
+  }
+
+  public Entity convert(final Tree tree) {
+    Objects.requireNonNull(tree);
+
+    final Entity entity = gameEngine.createEmptyEntity();
+
+    final PhysicsComponent physicsComponent = new PhysicsComponent();
+    physicsComponent.setX(tree.getX());
+    physicsComponent.setY(tree.getY());
+
+
   }
 
   public EntityMessage toMessage(final Entity entity) {

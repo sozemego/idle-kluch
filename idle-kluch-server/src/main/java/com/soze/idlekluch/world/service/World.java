@@ -2,6 +2,7 @@ package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
+import com.soze.idlekluch.world.entity.Tree;
 import com.soze.idlekluch.world.repository.WorldRepository;
 import com.soze.klecs.engine.Engine;
 import org.slf4j.Logger;
@@ -58,6 +59,10 @@ public class World {
 
   public Map<Point, Tile> getAllTiles() {
     return allTiles;
+  }
+
+  public List<Tree> getAllTrees() {
+    return worldRepository.getAllTrees();
   }
 
   private List<Tile> createInitialTiles() {

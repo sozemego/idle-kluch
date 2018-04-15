@@ -3,6 +3,7 @@ package com.soze.idlekluch.world.repository;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.utils.jpa.QueryUtils;
 import com.soze.idlekluch.world.entity.Tile;
+import com.soze.idlekluch.world.entity.Tree;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,6 +59,17 @@ public class WorldRepositoryImpl implements WorldRepository {
     query.setParameter("name", name.toUpperCase());
 
     return QueryUtils.getOptional(query, Resource.class);
+  }
+
+  @Override
+  public List<Tree> getAllTrees() {
+    return em.createQuery("SELECT t FROM Tree t").getResultList();
+  }
+
+  @Override
+  public void addTree(final Tree tree) {
+    Objects.requireNonNull(tree);
+    em.persist(tree);
   }
 
 }

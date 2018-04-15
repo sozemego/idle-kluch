@@ -10,6 +10,7 @@ import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.world.entity.Tile;
+import com.soze.idlekluch.world.entity.Tree;
 import com.soze.idlekluch.world.service.World;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
@@ -33,7 +34,6 @@ public class GameServiceImpl implements GameService {
   private final World world;
   private final WebSocketMessagingService webSocketMessagingService;
   private final BuildingService buildingService;
-  private final BuildingDtoConverter buildingDtoConverter;
   private final GameEngine gameEngine;
   private final EntityConverter entityConverter;
 
@@ -41,13 +41,11 @@ public class GameServiceImpl implements GameService {
   public GameServiceImpl(final World world,
                          final WebSocketMessagingService webSocketMessagingService,
                          final BuildingService buildingService,
-                         final BuildingDtoConverter buildingDtoConverter,
                          final GameEngine gameEngine,
                          final EntityConverter entityConverter) {
     this.world = Objects.requireNonNull(world);
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
     this.buildingService = Objects.requireNonNull(buildingService);
-    this.buildingDtoConverter = Objects.requireNonNull(buildingDtoConverter);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.entityConverter = Objects.requireNonNull(entityConverter);
   }
@@ -67,6 +65,10 @@ public class GameServiceImpl implements GameService {
     buildingEntities.forEach(gameEngine::addEntity);
     LOG.info("Added [{}] building entities to engine", buildingEntities.size());
 
+    final List<Tree> trees = world.getAllTrees();
+    final List<Entity> treeEntities = trees.stream().map(entityConverter::convert).collect(Collectors.toList());
+    GET ALL TREES HERE AND ADD AS ENTITIES
+
   }
 
   /**
@@ -85,16 +87,6 @@ public class GameServiceImpl implements GameService {
 
     webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, worldChunkJson);
 
-//    //TODO
-//    //get all entities
-//    //convert to dtos
-//    //send to client
-//    final List<Building> buildings = buildingService.getAllConstructedBuildings();
-//    final List<BuildingDto> buildingDtos = buildingDtoConverter.convertBuildings(buildings);
-//    final ConstructedBuildingMessage constructedBuildingMessage = new ConstructedBuildingMessage(buildingDtos);
-//    final String constructedBuildingsJson = JsonUtils.objectToJson(constructedBuildingMessage);
-//
-//    webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, constructedBuildingsJson);
     final List<Entity> entities = gameEngine.getAllEntities();
     final List<EntityMessage> entityMessages = entities.stream()
       .map(entityConverter::toMessage)
