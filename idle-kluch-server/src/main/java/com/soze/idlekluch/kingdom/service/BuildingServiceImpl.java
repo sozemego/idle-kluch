@@ -71,9 +71,6 @@ public class BuildingServiceImpl implements BuildingService {
     parseRawBuildingDefinitions(rawBuildingDefinitions);
 
     LOG.info("Read [{}] building definitions", buildingDefinitions.size());
-    System.out.println(buildingDefinitions);
-
-    //then later create them, add to ECS, transform them etc.
   }
 
   private String readBuildings() {
@@ -108,13 +105,9 @@ public class BuildingServiceImpl implements BuildingService {
       throw new UserDoesNotHaveKingdomException(owner);
     }
 
-    //TODO there should be a in-memory and db representation of buildings
-    //just so it's much faster to place them, build them, check for collisions, update them
-
+    //TODO all that in the GameEngine
     //check world bounds
-
     //check for collisions with other buildings
-
     //check if player's kingdom has enough cash
 
     final Building building = constructBuilding(form);

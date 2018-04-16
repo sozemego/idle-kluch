@@ -1,5 +1,7 @@
 package com.soze.idlekluch.world.service;
 
+import com.soze.idlekluch.utils.CommonUtils;
+import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.entity.Tree;
@@ -26,6 +28,7 @@ public class World {
   //TODO externalize
   private final int worldWidth = 25;
   private final int worldHeight = 25;
+  private final int tileSize = 128;
 
   private final WorldRepository worldRepository;
   private final Map<Point, Tile> allTiles;
@@ -53,6 +56,31 @@ public class World {
 
     for(final Tile tile: allTiles) {
       this.allTiles.put(new Point(tile.getX(), tile.getY()), tile);
+    }
+
+    final List<Tree> allTrees = worldRepository.getAllTrees();
+    LOG.info("Retrieved [{}] trees", allTrees.size());
+
+    if(allTrees.isEmpty()) {
+      LOG.info("There are no trees, generating!");
+      final int trees = 125;
+      final int maxX = worldWidth * tileSize;
+      final int maxY = worldHeight * tileSize;
+
+      for(int i = 0; i < trees; i++) {
+        final int x = CommonUtils.randomNumber(0, maxX);
+        final int y = CommonUtils.randomNumber(0, maxY);
+
+        final Tree tree = new Tree();
+        tree.setTreeId(EntityUUID.randomId());
+        tree.setX(x);
+        tree.setY(y);
+        tree.setYield(25);
+        tree.setDefinitionId("tree_" + CommonUtils.randomNumber(1, 2));
+
+        worldRepository.addTree(tree);
+      }
+
     }
 
   }

@@ -1,0 +1,14 @@
+{
+  "tree_1": {
+    "id": "tree_1",
+    "asset": "tree_1",
+    "width": 20,
+    "height": 46
+  },
+  "tree_2": {
+    "id": "tree_2",
+    "asset": "tree_2",
+    "width": 26,
+    "height": 40
+  }
+}

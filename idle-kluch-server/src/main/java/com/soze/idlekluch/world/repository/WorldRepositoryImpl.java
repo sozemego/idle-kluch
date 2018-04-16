@@ -67,6 +67,7 @@ public class WorldRepositoryImpl implements WorldRepository {
   }
 
   @Override
+  @Transactional
   public void addTree(final Tree tree) {
     Objects.requireNonNull(tree);
     em.persist(tree);

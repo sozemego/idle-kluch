@@ -67,7 +67,8 @@ public class GameServiceImpl implements GameService {
 
     final List<Tree> trees = world.getAllTrees();
     final List<Entity> treeEntities = trees.stream().map(entityConverter::convert).collect(Collectors.toList());
-    GET ALL TREES HERE AND ADD AS ENTITIES
+    treeEntities.forEach(gameEngine::addEntity);
+    LOG.info("Added [{}] tree entities to engine", treeEntities.size());
 
   }
 

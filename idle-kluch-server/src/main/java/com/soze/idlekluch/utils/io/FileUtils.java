@@ -7,13 +7,6 @@ import java.util.Objects;
 
 public class FileUtils {
 
-  public static String readFile(final File file) {
-    Objects.requireNonNull(file);
-
-
-    return "";
-  }
-
   public static String readInputStream(final InputStream inputStream) {
     final StringBuilder stringBuilder = new StringBuilder();
 

@@ -10,5 +10,6 @@ public interface TreeService {
 
   void addTree(final Tree tree);
 
+  String getTreeAsset(final String definitionId);
 
 }
