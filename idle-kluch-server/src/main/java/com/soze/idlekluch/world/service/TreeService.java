@@ -1,15 +1,15 @@
 package com.soze.idlekluch.world.service;
 
-import com.soze.idlekluch.world.entity.Tree;
+import com.soze.idlekluch.world.entity.Forest;
 
 import java.util.List;
 
 public interface TreeService {
 
-  List<Tree> getAllTrees();
+  List<Forest> getAllTrees();
 
-  void addTree(final Tree tree);
+  void addForest(final Forest forest);
 
-  String getTreeAsset(final String definitionId);
+  String getForestAsset(final String definitionId);
 
 }

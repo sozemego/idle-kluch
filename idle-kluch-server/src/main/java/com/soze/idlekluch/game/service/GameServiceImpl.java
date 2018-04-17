@@ -5,12 +5,11 @@ import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.message.EntityMessage;
 import com.soze.idlekluch.game.message.WorldChunkMessage;
 import com.soze.idlekluch.kingdom.entity.Building;
-import com.soze.idlekluch.kingdom.service.BuildingDtoConverter;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.world.entity.Tile;
-import com.soze.idlekluch.world.entity.Tree;
+import com.soze.idlekluch.world.entity.Forest;
 import com.soze.idlekluch.world.service.World;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
@@ -65,8 +64,8 @@ public class GameServiceImpl implements GameService {
     buildingEntities.forEach(gameEngine::addEntity);
     LOG.info("Added [{}] building entities to engine", buildingEntities.size());
 
-    final List<Tree> trees = world.getAllTrees();
-    final List<Entity> treeEntities = trees.stream().map(entityConverter::convert).collect(Collectors.toList());
+    final List<Forest> forests = world.getAllForests();
+    final List<Entity> treeEntities = forests.stream().map(entityConverter::convert).collect(Collectors.toList());
     treeEntities.forEach(gameEngine::addEntity);
     LOG.info("Added [{}] tree entities to engine", treeEntities.size());
 

@@ -1,0 +1,14 @@
+{
+  "forest_1": {
+    "id": "forest_1",
+    "asset": "forest_1",
+    "width": 20,
+    "height": 46
+  },
+  "forest_2": {
+    "id": "forest_2",
+    "asset": "forest_2",
+    "width": 26,
+    "height": 40
+  }
+}

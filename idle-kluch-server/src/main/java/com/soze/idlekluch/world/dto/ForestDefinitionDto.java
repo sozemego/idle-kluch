@@ -2,14 +2,14 @@ package com.soze.idlekluch.world.dto;
 
 import java.util.Objects;
 
-public class TreeDefinitionDto {
+public class ForestDefinitionDto {
 
   private final String id;
   private final String asset;
   private final int width;
   private final int height;
 
-  public TreeDefinitionDto(final String id, final String asset, final int width, final int height) {
+  public ForestDefinitionDto(final String id, final String asset, final int width, final int height) {
     this.id = Objects.requireNonNull(id);
     this.asset = Objects.requireNonNull(asset);
     this.width = width;

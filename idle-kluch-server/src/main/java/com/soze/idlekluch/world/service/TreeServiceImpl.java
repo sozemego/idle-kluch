@@ -1,7 +1,7 @@
 package com.soze.idlekluch.world.service;
 
-import com.soze.idlekluch.world.dto.TreeDefinitionDto;
-import com.soze.idlekluch.world.entity.Tree;
+import com.soze.idlekluch.world.dto.ForestDefinitionDto;
+import com.soze.idlekluch.world.entity.Forest;
 import com.soze.idlekluch.world.repository.WorldRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +26,10 @@ public class TreeServiceImpl implements TreeService {
 
   private final WorldRepository worldRepository;
 
-  private final Map<String, TreeDefinitionDto> treeDefinitions = new HashMap<>();
+  private final Map<String, ForestDefinitionDto> forestDefinitions = new HashMap<>();
 
-  @Value("trees.json")
-  private ClassPathResource trees;
+  @Value("forests.json")
+  private ClassPathResource forests;
 
   @Autowired
   public TreeServiceImpl(final WorldRepository worldRepository) {
@@ -41,38 +41,38 @@ public class TreeServiceImpl implements TreeService {
     LOG.info("Initializing TreeService");
 
     //read trees
-    final Map<String, Object> rawTreeDefinitions = resourceToMap(trees, String.class, Object.class);
-    parseRawTreeDefinitions(rawTreeDefinitions);
-    LOG.info("Loaded [{}] tree definitions", treeDefinitions.size());
+    final Map<String, Object> rawTreeDefinitions = resourceToMap(forests, String.class, Object.class);
+    parseRawForestDefinitions(rawTreeDefinitions);
+    LOG.info("Loaded [{}] forest definitions", forestDefinitions.size());
   }
 
   @Override
-  public List<Tree> getAllTrees() {
-    return worldRepository.getAllTrees();
+  public List<Forest> getAllTrees() {
+    return worldRepository.getAllForests();
   }
 
   @Override
-  public void addTree(final Tree tree) {
-    worldRepository.addTree(tree);
+  public void addForest(final Forest forest) {
+    worldRepository.addForest(forest);
   }
 
   @Override
-  public String getTreeAsset(final String definitionId) {
-    return treeDefinitions.get(definitionId).getAsset();
+  public String getForestAsset(final String definitionId) {
+    return forestDefinitions.get(definitionId).getAsset();
   }
 
-  private void parseRawTreeDefinitions(final Map<String, Object> data) {
+  private void parseRawForestDefinitions(final Map<String, Object> data) {
     for(final Map.Entry<String, Object> entry: data.entrySet()) {
       final Map<String, Object> properties = (Map<String, Object>) entry.getValue();
 
-      final TreeDefinitionDto treeDefinitionDto = new TreeDefinitionDto(
+      final ForestDefinitionDto forestDefinitionDto = new ForestDefinitionDto(
         (String) properties.get("id"),
         (String) properties.get("asset"),
         (int) properties.get("width"),
         (int) properties.get("height")
       );
 
-      treeDefinitions.put(treeDefinitionDto.getId(), treeDefinitionDto);
+      forestDefinitions.put(forestDefinitionDto.getId(), forestDefinitionDto);
     }
   }
 

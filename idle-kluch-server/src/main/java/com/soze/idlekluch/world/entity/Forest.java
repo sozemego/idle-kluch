@@ -1,17 +1,16 @@
 package com.soze.idlekluch.world.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "trees")
-public class Tree {
+@Table(name = "forests")
+public class Forest {
 
   @EmbeddedId
-  @AttributeOverride(name = "id", column = @Column(name = "tree_id"))
-  private EntityUUID treeId;
+  @AttributeOverride(name = "id", column = @Column(name = "forest_id"))
+  private EntityUUID forestId;
 
   @Column(name = "x")
   private int x;
@@ -24,16 +23,16 @@ public class Tree {
   @Column(name = "yield")
   private float yield;
 
-  public Tree() {
+  public Forest() {
 
   }
 
-  public EntityUUID getTreeId() {
-    return treeId;
+  public EntityUUID getForestId() {
+    return forestId;
   }
 
-  public void setTreeId(final EntityUUID treeId) {
-    this.treeId = treeId;
+  public void setForestId(final EntityUUID forestId) {
+    this.forestId = forestId;
   }
 
   public int getX() {

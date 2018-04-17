@@ -2,11 +2,10 @@ package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.utils.CommonUtils;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.idlekluch.world.entity.Forest;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
-import com.soze.idlekluch.world.entity.Tree;
 import com.soze.idlekluch.world.repository.WorldRepository;
-import com.soze.klecs.engine.Engine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,27 +57,27 @@ public class World {
       this.allTiles.put(new Point(tile.getX(), tile.getY()), tile);
     }
 
-    final List<Tree> allTrees = worldRepository.getAllTrees();
-    LOG.info("Retrieved [{}] trees", allTrees.size());
+    final List<Forest> allForests = worldRepository.getAllForests();
+    LOG.info("Retrieved [{}] forests", allForests.size());
 
-    if(allTrees.isEmpty()) {
-      LOG.info("There are no trees, generating!");
-      final int trees = 125;
+    if(allForests.isEmpty()) {
+      final int forests = 125;
+      LOG.info("There are no forests, generating [{]] forests!", forests);
       final int maxX = worldWidth * tileSize;
       final int maxY = worldHeight * tileSize;
 
-      for(int i = 0; i < trees; i++) {
+      for(int i = 0; i < forests; i++) {
         final int x = CommonUtils.randomNumber(0, maxX);
         final int y = CommonUtils.randomNumber(0, maxY);
 
-        final Tree tree = new Tree();
-        tree.setTreeId(EntityUUID.randomId());
-        tree.setX(x);
-        tree.setY(y);
-        tree.setYield(25);
-        tree.setDefinitionId("tree_" + CommonUtils.randomNumber(1, 2));
+        final Forest forest = new Forest();
+        forest.setForestId(EntityUUID.randomId());
+        forest.setX(x);
+        forest.setY(y);
+        forest.setYield(25);
+        forest.setDefinitionId("forest_" + CommonUtils.randomNumber(1, 2));
 
-        worldRepository.addTree(tree);
+        worldRepository.addForest(forest);
       }
 
     }
@@ -89,8 +88,8 @@ public class World {
     return allTiles;
   }
 
-  public List<Tree> getAllTrees() {
-    return worldRepository.getAllTrees();
+  public List<Forest> getAllForests() {
+    return worldRepository.getAllForests();
   }
 
   private List<Tile> createInitialTiles() {

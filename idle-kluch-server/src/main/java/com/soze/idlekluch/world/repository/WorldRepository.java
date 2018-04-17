@@ -1,8 +1,8 @@
 package com.soze.idlekluch.world.repository;
 
 import com.soze.idlekluch.kingdom.entity.Resource;
+import com.soze.idlekluch.world.entity.Forest;
 import com.soze.idlekluch.world.entity.Tile;
-import com.soze.idlekluch.world.entity.Tree;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +27,8 @@ public interface WorldRepository {
 
   Optional<Resource> getResource(final String name);
 
-  List<Tree> getAllTrees();
+  List<Forest> getAllForests();
 
-  void addTree(final Tree tree);
+  void addForest(final Forest forest);
 
 }
