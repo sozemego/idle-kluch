@@ -27,7 +27,7 @@ public class CommonUtils {
   }
 
   /**
-   * Generates a random number between min and max. Min is inclusive, max is exclusive.
+   * Generates a random number between min and max. Min is inclusive, max is inclusive.
    *
    * @param min min
    * @param max max
@@ -38,7 +38,7 @@ public class CommonUtils {
       throw new IllegalArgumentException("Max cannot be less than min.");
     }
 
-    return ThreadLocalRandom.current().nextInt(min, max);
+    return ThreadLocalRandom.current().nextInt(min, max + 1);
   }
 
   public static int parseInt(String str, int defaultValue) {

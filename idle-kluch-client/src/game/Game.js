@@ -106,8 +106,8 @@ const createGame = () => {
       this.load.image("grass_1", "grass_1.png");
       this.load.image("small_warehouse", "small_warehouse.png");
       this.load.image("warehouse", "warehouse.png");
-      this.load.image("tree_1", "tree_1.png");
-      this.load.image("tree_2", "tree_2.png");
+      this.load.image("forest_1", "forest_1.png");
+      this.load.image("forest_2", "forest_2.png");
     };
 
     const create = function() {
