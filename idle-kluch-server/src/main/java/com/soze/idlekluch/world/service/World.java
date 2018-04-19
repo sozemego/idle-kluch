@@ -75,7 +75,7 @@ public class World {
         forest.setX(x);
         forest.setY(y);
         forest.setYield(25);
-        forest.setDefinitionId("forest_" + CommonUtils.randomNumber(1, 2));
+        forest.setDefinitionId("forest_" + CommonUtils.randomNumber(1, 4));
 
         worldRepository.addForest(forest);
       }

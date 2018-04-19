@@ -2,13 +2,25 @@
   "forest_1": {
     "id": "forest_1",
     "asset": "forest_1",
-    "width": 20,
-    "height": 46
+    "width": 64,
+    "height": 64
   },
   "forest_2": {
     "id": "forest_2",
     "asset": "forest_2",
-    "width": 26,
-    "height": 40
+    "width": 64,
+    "height": 64
+  },
+  "forest_3": {
+    "id": "forest_3",
+    "asset": "forest_3",
+    "width": 64,
+    "height": 64
+  },
+  "forest_4": {
+    "id": "forest_4",
+    "asset": "forest_4",
+    "width": 64,
+    "height": 64
   }
 }
