@@ -145,6 +145,9 @@ public class BuildingServiceImpl implements BuildingService {
         case WAREHOUSE:
           parseWarehouseDefinition(properties);
           break;
+        case GATHERER:
+          parseGathererDefinition(properties);
+          break;
       }
 
     }
@@ -163,6 +166,10 @@ public class BuildingServiceImpl implements BuildingService {
     );
 
     buildingDefinitions.put((String) properties.get("id"), warehouseDefinitionDto);
+  }
+
+  private void parseGathererDefinition(final Map<String, Object> properties) {
+
   }
 
   private Building constructBuilding(final BuildBuildingForm form) {

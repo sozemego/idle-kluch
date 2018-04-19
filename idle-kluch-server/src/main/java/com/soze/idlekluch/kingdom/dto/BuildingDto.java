@@ -72,7 +72,7 @@ public abstract class BuildingDto {
   }
 
   public enum BuildingType {
-    WAREHOUSE
+    WAREHOUSE, GATHERER
   }
 
 }
