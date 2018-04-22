@@ -169,7 +169,7 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   private void parseGathererDefinition(final Map<String, Object> properties) {
-
+      //TODO implement this
   }
 
   private Building constructBuilding(final BuildBuildingForm form) {
