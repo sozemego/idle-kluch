@@ -3,6 +3,7 @@ package com.soze.idlekluch.kingdom.service;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.entity.Building;
+import com.soze.idlekluch.utils.jpa.EntityUUID;
 
 import java.util.List;
 import java.util.Map;
@@ -26,5 +27,15 @@ public interface BuildingService {
    * Returns all buildings constructed in the game.
    */
   public List<Building> getAllConstructedBuildings();
+
+  /**
+   * Attempts to delete a given building.
+   */
+  void destroyBuilding(final Building building);
+
+  /**
+   * Attempts to delete a building with given buildingId.
+   */
+  void destroyBuilding(final EntityUUID buildingId);
 
 }

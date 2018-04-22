@@ -4,6 +4,8 @@ import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,12 +14,13 @@ import java.util.Objects;
 @Service
 public class GameEngineImpl implements GameEngine {
 
-  private final Engine engine;
+  private static final Logger LOG = LoggerFactory.getLogger(GameEngineImpl.class);
+
+  private final Engine<EntityUUID> engine;
 
   public GameEngineImpl() {
-    this.engine = new Engine(() -> EntityUUID.randomId());
+    this.engine = new Engine<>(() -> EntityUUID.randomId());
     this.engine.addSystem(new PhysicsSystem(this.engine));
-
   }
 
   @Override

@@ -136,6 +136,18 @@ public class BuildingServiceImpl implements BuildingService {
     return buildingRepository.getAllBuildings();
   }
 
+  @Override
+  public void destroyBuilding(final Building building) {
+    Objects.requireNonNull(building);
+    destroyBuilding(building.getBuildingId());
+  }
+
+  @Override
+  public void destroyBuilding(final EntityUUID buildingId) {
+    Objects.requireNonNull(buildingId);
+    buildingRepository.removeBuilding(buildingId);
+  }
+
   private void parseRawBuildingDefinitions(final Map<String, Object> data) {
     for (final Map.Entry<String, Object> entry : data.entrySet()) {
       final Map<String, Object> properties = (Map<String, Object>) entry.getValue();

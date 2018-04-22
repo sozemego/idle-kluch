@@ -27,9 +27,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(
@@ -53,7 +51,6 @@ public class GameServiceIntTests extends IntAuthTest {
   @Before
   public void setup() {
     messagingService.clearMessages();
-    System.out.println(messagingService);
   }
 
   @BeforeClass
