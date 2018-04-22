@@ -7,6 +7,7 @@ import com.soze.idlekluch.game.message.WorldChunkMessage;
 import com.soze.idlekluch.game.service.GameService;
 import com.soze.idlekluch.game.service.WebSocketMessagingServiceTest;
 import com.soze.idlekluch.kingdom.entity.Building;
+import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
@@ -96,6 +97,19 @@ public class GameServiceIntTests extends IntAuthTest {
     final List<Building> buildings = buildingService.getOwnBuildings(username);
     gameService.handleBuildBuildingMessage(username, form);
     assertTrue(buildings.size() < buildingService.getOwnBuildings(username).size());
+  }
+
+  @Test(expected = BuildingDoesNotExistException.class)
+  public void testBuildBuildingDoesNotExist() throws Exception {
+    final String username = CommonUtils.generateRandomString(15);
+    register(username);
+    createKingdom(username, CommonUtils.generateRandomString(15));
+
+    final BuildBuildingForm form = new BuildBuildingForm(
+      "5", 15, 15
+    );
+
+    gameService.handleBuildBuildingMessage(username, form);
   }
 
 }
