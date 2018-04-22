@@ -6,7 +6,9 @@ import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.message.WorldChunkMessage;
 import com.soze.idlekluch.game.service.GameService;
 import com.soze.idlekluch.game.service.WebSocketMessagingServiceTest;
+import com.soze.idlekluch.kingdom.entity.Building;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
+import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.utils.CommonUtils;
@@ -22,8 +24,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(
@@ -40,6 +45,9 @@ public class GameServiceIntTests extends IntAuthTest {
 
   @Autowired
   private WebSocketMessagingServiceTest messagingService;
+
+  @Autowired
+  private BuildingService buildingService;
 
   @Before
   public void setup() {
@@ -75,7 +83,6 @@ public class GameServiceIntTests extends IntAuthTest {
     gameService.handleBuildBuildingMessage(username, form);
   }
 
-
   @Test
   public void testBuildBuilding() throws Exception {
     final String username = CommonUtils.generateRandomString(15);
@@ -86,7 +93,9 @@ public class GameServiceIntTests extends IntAuthTest {
       "1", 15, 15
     );
 
+    final List<Building> buildings = buildingService.getOwnBuildings(username);
     gameService.handleBuildBuildingMessage(username, form);
+    assertTrue(buildings.size() < buildingService.getOwnBuildings(username).size());
   }
 
 }
