@@ -23,7 +23,7 @@ public class CommonUtils {
   }
 
   public static Character generateRandomCharacterAlphanumeric() {
-    return ALPHANUMERIC_CHARACTERS.charAt(randomNumber(0, ALPHANUMERIC_CHARACTERS.length()));
+    return ALPHANUMERIC_CHARACTERS.charAt(randomNumber(0, ALPHANUMERIC_CHARACTERS.length() - 1));
   }
 
   /**
