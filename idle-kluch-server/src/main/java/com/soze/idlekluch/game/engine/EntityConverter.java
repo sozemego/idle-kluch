@@ -9,7 +9,7 @@ import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.entity.Building;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.world.entity.Forest;
-import com.soze.idlekluch.world.service.TreeService;
+import com.soze.idlekluch.world.service.ForestService;
 import com.soze.klecs.entity.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,13 +25,13 @@ public class EntityConverter {
 
   private final GameEngine gameEngine;
   private final BuildingService buildingService;
-  private final TreeService treeService;
+  private final ForestService forestService;
 
   @Autowired
-  public EntityConverter(final GameEngine gameEngine, final BuildingService buildingService, final TreeService treeService) {
+  public EntityConverter(final GameEngine gameEngine, final BuildingService buildingService, final ForestService forestService) {
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.buildingService = Objects.requireNonNull(buildingService);
-    this.treeService = Objects.requireNonNull(treeService);
+    this.forestService = Objects.requireNonNull(forestService);
   }
 
   public Entity convert(final Building building) {
@@ -64,7 +64,7 @@ public class EntityConverter {
     physicsComponent.setY(forest.getY());
     entity.addComponent(physicsComponent);
 
-    final GraphicsComponent graphicsComponent = new GraphicsComponent(treeService.getForestAsset(forest.getDefinitionId()));
+    final GraphicsComponent graphicsComponent = new GraphicsComponent(forestService.getForestAsset(forest.getDefinitionId()));
     entity.addComponent(graphicsComponent);
 
     return entity;

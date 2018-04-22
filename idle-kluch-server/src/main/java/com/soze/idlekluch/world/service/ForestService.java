@@ -4,7 +4,7 @@ import com.soze.idlekluch.world.entity.Forest;
 
 import java.util.List;
 
-public interface TreeService {
+public interface ForestService {
 
   List<Forest> getAllTrees();
 

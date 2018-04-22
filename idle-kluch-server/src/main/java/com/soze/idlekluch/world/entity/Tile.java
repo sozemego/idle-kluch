@@ -1,6 +1,8 @@
 package com.soze.idlekluch.world.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -16,6 +18,11 @@ public class Tile {
 
   public Tile() {
 
+  }
+
+  @JsonCreator
+  public Tile(@JsonProperty("x") final int x, @JsonProperty("y") final int y) {
+    setTileId(new TileId(x, y));
   }
 
   @JsonIgnore

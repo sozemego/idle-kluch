@@ -20,9 +20,9 @@ import java.util.Objects;
 import static com.soze.idlekluch.utils.JsonUtils.resourceToMap;
 
 @Service
-public class TreeServiceImpl implements TreeService {
+public class ForestServiceImpl implements ForestService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(TreeServiceImpl.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ForestServiceImpl.class);
 
   private final WorldRepository worldRepository;
 
@@ -32,13 +32,13 @@ public class TreeServiceImpl implements TreeService {
   private ClassPathResource forests;
 
   @Autowired
-  public TreeServiceImpl(final WorldRepository worldRepository) {
+  public ForestServiceImpl(final WorldRepository worldRepository) {
     this.worldRepository = Objects.requireNonNull(worldRepository);
   }
 
   @PostConstruct
   public void setup() throws IOException {
-    LOG.info("Initializing TreeService");
+    LOG.info("Initializing ForestService");
 
     //read trees
     final Map<String, Object> rawTreeDefinitions = resourceToMap(forests, String.class, Object.class);

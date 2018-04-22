@@ -39,7 +39,7 @@ public class JsonUtils {
    * Parses a given string and attempts to construct an object of given clazz.
    */
   public static <T> T jsonToObject(String json, Class<T> clazz) {
-    System.out.println(Thread.currentThread().getName() + " " + json + " deserializing");
+    System.out.println(Thread.currentThread().getName() + " deserializing " + json);
     Objects.requireNonNull(json);
     Objects.requireNonNull(clazz);
     try {
