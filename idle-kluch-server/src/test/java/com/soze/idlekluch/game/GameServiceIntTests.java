@@ -106,7 +106,7 @@ public class GameServiceIntTests extends IntAuthTest {
     createKingdom(username, CommonUtils.generateRandomString(15));
 
     final BuildBuildingForm form = new BuildBuildingForm(
-      "5", 15, 15
+      "AGEBAGE@!$%$$", 15, 15
     );
 
     gameService.handleBuildBuildingMessage(username, form);
