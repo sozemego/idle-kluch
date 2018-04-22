@@ -8,6 +8,7 @@ import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.entity.Building;
 import com.soze.idlekluch.kingdom.service.BuildingService;
+import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.Forest;
 import com.soze.idlekluch.world.service.ForestService;
 import com.soze.klecs.entity.Entity;
@@ -70,8 +71,8 @@ public class EntityConverter {
     return entity;
   }
 
-  public EntityMessage toMessage(final Entity entity) {
-    final List<BaseComponent> components = entity.getAllComponents();
+  public EntityMessage toMessage(final Entity<EntityUUID> entity) {
+    final List<BaseComponent> components = entity.getAllComponents(BaseComponent.class);
     return new EntityMessage(entity.getId(), components);
   }
 

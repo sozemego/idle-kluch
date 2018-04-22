@@ -8,6 +8,7 @@ import com.soze.idlekluch.kingdom.entity.Building;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
+import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.Forest;
 import com.soze.idlekluch.world.service.World;
@@ -87,7 +88,7 @@ public class GameServiceImpl implements GameService {
 
     webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, worldChunkJson);
 
-    final List<Entity> entities = gameEngine.getAllEntities();
+    final List<Entity<EntityUUID>> entities = gameEngine.getAllEntities();
     final List<EntityMessage> entityMessages = entities.stream()
       .map(entityConverter::toMessage)
       .collect(Collectors.toList());
