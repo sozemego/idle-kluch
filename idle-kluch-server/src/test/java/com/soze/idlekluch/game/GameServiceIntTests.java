@@ -11,6 +11,7 @@ import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.utils.sql.DatabaseReset;
 import com.soze.idlekluch.world.service.World;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,12 @@ public class GameServiceIntTests {
 
   @Before
   public void setup() {
+    messagingService.clearMessages();
+    System.out.println(messagingService);
+  }
+
+  @BeforeClass
+  public static void beforeClass() {
     DatabaseReset.resetDatabase();
   }
 

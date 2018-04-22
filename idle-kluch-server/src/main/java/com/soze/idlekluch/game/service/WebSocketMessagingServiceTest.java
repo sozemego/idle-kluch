@@ -25,4 +25,9 @@ public class WebSocketMessagingServiceTest implements WebSocketMessagingService 
   public List<Object[]> getUserMessages() {
     return userMessages;
   }
+
+  public void clearMessages() {
+    userMessages.clear();
+  }
+
 }
