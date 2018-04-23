@@ -30,7 +30,7 @@ public class UserRepositoryImpl implements UserRepository {
   public Optional<User> getUserById(EntityUUID userId) {
     Objects.requireNonNull(userId);
 
-    Query query = em.createQuery("SELECT u FROM User u WHERE UPPER(u.userId) = :userId AND u.nuked = false");
+    Query query = em.createQuery("SELECT u FROM User u WHERE UPPER(u.userId) = :userId AND u.deleted = false");
     query.setParameter("userId", userId);
 
     try {

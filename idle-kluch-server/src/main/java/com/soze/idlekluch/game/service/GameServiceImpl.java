@@ -1,16 +1,15 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.engine.EntityConverter;
+import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.message.EntityMessage;
 import com.soze.idlekluch.game.message.WorldChunkMessage;
-import com.soze.idlekluch.kingdom.entity.Building;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.Tile;
-import com.soze.idlekluch.world.entity.Forest;
 import com.soze.idlekluch.world.service.World;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
@@ -59,23 +58,27 @@ public class GameServiceImpl implements GameService {
     LOG.info("Initializing the game");
 
     LOG.info("Initializing buildings");
-    final List<Building> buildings = buildingService.getAllConstructedBuildings();
+    final List<PersistentEntity> buildings = buildingService.getAllConstructedBuildings();
 
-    final List<Entity> buildingEntities = buildings.stream().map(entityConverter::convert).collect(Collectors.toList());
+    final List<Entity> buildingEntities = buildings
+                                            .stream()
+                                            .map(entityConverter::convert)
+                                            .collect(Collectors.toList());
+
     buildingEntities.forEach(gameEngine::addEntity);
     LOG.info("Added [{}] building entities to engine", buildingEntities.size());
 
-    final List<Forest> forests = world.getAllForests();
-    final List<Entity> treeEntities = forests.stream().map(entityConverter::convert).collect(Collectors.toList());
-    treeEntities.forEach(gameEngine::addEntity);
-    LOG.info("Added [{}] tree entities to engine", treeEntities.size());
+//    final List<Forest> forests = world.getAllForests();
+//    final List<Entity> treeEntities = forests.stream().map(entityConverter::convert).collect(Collectors.toList());
+//    treeEntities.forEach(gameEngine::addEntity);
+//    LOG.info("Added [{}] tree entities to engine", treeEntities.size());
 
   }
 
   /**
    * Responsibilities right now:
    * 1. Send all tile data to the joining player
-   * 2. Send all constructed building information to the player.
+   * 2. Send all entities to the joining player
    */
   @Override
   public void handleInitMessage(final String username) {
@@ -101,12 +104,11 @@ public class GameServiceImpl implements GameService {
 
   @Override
   public void handleBuildBuildingMessage(final String username, final BuildBuildingForm form) {
-    final Building building = buildingService.buildBuilding(username, form);
+    final Entity building = buildingService.buildBuilding(username, form);
 
-    final Entity entity = entityConverter.convert(building);
-    gameEngine.addEntity(entity);
+    gameEngine.addEntity(building);
 
-    final EntityMessage entityMessage = entityConverter.toMessage(entity);
+    final EntityMessage entityMessage = entityConverter.toMessage(building);
     final String entityMessageJSon = JsonUtils.objectToJson(entityMessage);
 
     webSocketMessagingService.send(Routes.GAME + Routes.GAME_OUTBOUND, entityMessageJSon);

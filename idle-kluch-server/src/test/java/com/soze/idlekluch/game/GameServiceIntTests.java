@@ -6,7 +6,6 @@ import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.message.WorldChunkMessage;
 import com.soze.idlekluch.game.service.GameService;
 import com.soze.idlekluch.game.service.WebSocketMessagingServiceTest;
-import com.soze.idlekluch.kingdom.entity.Building;
 import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.kingdom.service.BuildingService;
@@ -14,7 +13,9 @@ import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.utils.CommonUtils;
 import com.soze.idlekluch.utils.JsonUtils;
+import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.utils.sql.DatabaseReset;
+import com.soze.klecs.entity.Entity;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -91,7 +92,7 @@ public class GameServiceIntTests extends IntAuthTest {
       "1", 15, 15
     );
 
-    final List<Building> buildings = buildingService.getOwnBuildings(username);
+    final List<Entity<EntityUUID>> buildings = buildingService.getOwnBuildings(username);
     gameService.handleBuildBuildingMessage(username, form);
     assertTrue(buildings.size() < buildingService.getOwnBuildings(username).size());
   }

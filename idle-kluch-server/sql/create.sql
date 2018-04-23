@@ -1,11 +1,8 @@
 DROP TABLE IF EXISTS kingdoms CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS tiles;
-DROP TABLE IF EXISTS forests CASCADE;
 DROP TABLE IF EXISTS resources CASCADE;
-DROP TABLE IF EXISTS buildings CASCADE;
-DROP TABLE IF EXISTS warehouses CASCADE;
-DROP TABLE IF EXISTS storage_units;
+DROP TABLE IF EXISTS entities CASCADE;
 
 CREATE TABLE users (
   user_id uuid NOT NULL PRIMARY KEY,
@@ -19,14 +16,6 @@ CREATE TABLE tiles (
   x INTEGER NOT NULL,
   y INTEGER NOT NULL,
   PRIMARY KEY (x, y)
-);
-
-CREATE TABLE forests (
-  forest_id uuid PRIMARY KEY NOT NULL,
-  x INTEGER NOT NULL,
-  y INTEGER NOT NULL,
-  definition_id VARCHAR(32) NOT NULL,
-  yield FLOAT NOT NULL
 );
 
 CREATE TABLE resources (
@@ -48,26 +37,24 @@ CREATE TABLE kingdoms (
   CONSTRAINT FK_KINGDOM_USER FOREIGN KEY (owner) REFERENCES users(user_id)
 );
 
-CREATE TABLE buildings (
-  building_id uuid NOT NULL PRIMARY KEY,
-  definition_id VARCHAR(32) NOT NULL,
-  created_at TIMESTAMP NOT NULL,
-  name VARCHAR(100) NOT NULL,
-  kingdom_id uuid NOT NULL,
-  x int NOT NULL,
-  y int NOT NULL,
-  CONSTRAINT FK_KINGDOM_BUILDING FOREIGN KEY (kingdom_id) REFERENCES kingdoms(kingdom_id)
+CREATE TABLE entities (
+  entity_id uuid PRIMARY KEY,
+  owner uuid NOT NULL,
+  CONSTRAINT FK_ENTITY_USER FOREIGN KEY (owner) REFERENCES users(user_id)
 );
 
-CREATE TABLE warehouses (
-  building_id uuid NOT NULL PRIMARY KEY
+CREATE TABLE physics_components (
+  entity_id uuid,
+  x real NOT NULL,
+  y real NOT NULL,
+  width real NOT NULL,
+  height real NOT NULL,
+  CONSTRAINT FK_PHYSICS_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
 );
 
-CREATE TABLE storage_units (
-  building_id uuid NOT NULL,
-  resource_id uuid NOT NULL,
-  amount INTEGER NOT NULL,
-  capacity INTEGER NOT NULL,
-  CONSTRAINT FK_STORAGE_UNIT_BUILDING FOREIGN KEY (building_id) REFERENCES warehouses(building_id),
-  CONSTRAINT FK_STORAGE_UNIT_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
-);
+CREATE TABLE graphics_components (
+  entity_id uuid NOT NULL,
+  asset varchar NOT NULL,
+  CONSTRAINT FK_PHYSICS_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
+)
+

@@ -1,22 +1,24 @@
 package com.soze.idlekluch.kingdom.service;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.soze.idlekluch.game.engine.components.GraphicsComponent;
+import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
+import com.soze.idlekluch.game.repository.EntityRepository;
+import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
 import com.soze.idlekluch.kingdom.dto.BuildingDto.BuildingType;
 import com.soze.idlekluch.kingdom.dto.WarehouseDefinitionDto;
-import com.soze.idlekluch.kingdom.entity.*;
+import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
-import com.soze.idlekluch.kingdom.repository.BuildingRepository;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.service.UserService;
-import com.soze.idlekluch.utils.io.FileUtils;
+import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.repository.WorldRepository;
+import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +28,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,42 +40,39 @@ public class BuildingServiceImpl implements BuildingService {
   private final UserService userService;
   private final KingdomService kingdomService;
 
-  private final BuildingRepository buildingRepository;
+  private final GameEngine gameEngine;
   private final WorldRepository worldRepository;
+  private final EntityRepository entityRepository;
+
+  private final Set<EntityUUID> buildings = ConcurrentHashMap.newKeySet();
 
   //TODO move to repository?
   private final Map<String, BuildingDefinitionDto> buildingDefinitions = new HashMap<>();
 
   @Value("buildings.json")
-  private ClassPathResource buildings;
+  private ClassPathResource buildingData;
 
   @Autowired
-  public BuildingServiceImpl(final UserService userService, final KingdomService kingdomService, final BuildingRepository buildingRepository, final WorldRepository worldRepository) {
+  public BuildingServiceImpl(final UserService userService,
+                             final KingdomService kingdomService,
+                             final GameEngine gameEngine,
+                             final WorldRepository worldRepository,
+                             final EntityRepository entityRepository) {
     this.userService = Objects.requireNonNull(userService);
     this.kingdomService = Objects.requireNonNull(kingdomService);
-    this.buildingRepository = Objects.requireNonNull(buildingRepository);
+    this.gameEngine = Objects.requireNonNull(gameEngine);
     this.worldRepository = Objects.requireNonNull(worldRepository);
+    this.entityRepository = Objects.requireNonNull(entityRepository);
   }
 
   @PostConstruct
   public void setup() throws IOException {
     LOG.info("Initializing building service.");
 
-    //read buildings here
-    final String fileContent = readBuildings();
-
-    final ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-
-    final Map<String, Object> rawBuildingDefinitions = mapper.readValue(fileContent, new TypeReference<Map<String, Object>>() {
-    });
+    final Map<String, Object> rawBuildingDefinitions = JsonUtils.resourceToMap(buildingData, String.class, Object.class);
     parseRawBuildingDefinitions(rawBuildingDefinitions);
 
     LOG.info("Read [{}] building definitions", buildingDefinitions.size());
-  }
-
-  private String readBuildings() {
-    return FileUtils.readClassPathResource(buildings);
   }
 
   @Override
@@ -83,7 +81,7 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   @Override
-  public Building buildBuilding(final String owner, final BuildBuildingForm form) {
+  public Entity<EntityUUID> buildBuilding(final String owner, final BuildBuildingForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
 
@@ -110,16 +108,16 @@ public class BuildingServiceImpl implements BuildingService {
     //check for collisions with other buildings
     //check if player's kingdom has enough cash
 
-    final Building building = constructBuilding(form);
-    building.setKingdom(kingdom.get());
+    final Entity<EntityUUID> building = constructBuilding(form);
+    gameEngine.addEntity(building);
 
-    buildingRepository.addBuilding(building);
+    buildings.add(building.getId());
 
     return building;
   }
 
   @Override
-  public List<Building> getOwnBuildings(final String owner) {
+  public List<Entity<EntityUUID>> getOwnBuildings(final String owner) {
     Objects.requireNonNull(owner);
 
     final Optional<Kingdom> kingdom = kingdomService.getUsersKingdom(owner);
@@ -128,24 +126,24 @@ public class BuildingServiceImpl implements BuildingService {
       throw new UserDoesNotHaveKingdomException(owner);
     }
 
-    return buildingRepository.getKingdomsBuildings(kingdom.get().getKingdomId());
+    return new ArrayList<>();
   }
 
   @Override
-  public List<Building> getAllConstructedBuildings() {
-    return buildingRepository.getAllBuildings();
-  }
-
-  @Override
-  public void destroyBuilding(final Building building) {
-    Objects.requireNonNull(building);
-    destroyBuilding(building.getBuildingId());
+  public List<PersistentEntity> getAllConstructedBuildings() {
+    return buildings
+             .stream()
+             .map(id -> entityRepository.getEntity(id))
+             .filter(Optional::isPresent)
+             .map(Optional::get)
+             .collect(Collectors.toList());
   }
 
   @Override
   public void destroyBuilding(final EntityUUID buildingId) {
     Objects.requireNonNull(buildingId);
-    buildingRepository.removeBuilding(buildingId);
+    throw new IllegalStateException("NOT IMPLEMENTED YET DESTROY BUILDING");
+//    buildingRepository.removeBuilding(buildingId);
   }
 
   private void parseRawBuildingDefinitions(final Map<String, Object> data) {
@@ -184,7 +182,7 @@ public class BuildingServiceImpl implements BuildingService {
       //TODO implement this
   }
 
-  private Building constructBuilding(final BuildBuildingForm form) {
+  private Entity<EntityUUID> constructBuilding(final BuildBuildingForm form) {
     Objects.requireNonNull(form);
 
     final BuildingDefinitionDto buildingDefinition = buildingDefinitions.get(form.getBuildingId());
@@ -192,12 +190,11 @@ public class BuildingServiceImpl implements BuildingService {
       throw new BuildingDoesNotExistException(form.getBuildingId());
     }
 
-    final Building building = constructBuilding(buildingDefinition);
+    final Entity<EntityUUID> building = constructBuilding(buildingDefinition);
 
-    building.setCreatedAt(Timestamp.from(Instant.now()));
-    building.setName(buildingDefinition.getName());
-    building.setX(form.getX());
-    building.setY(form.getY());
+    final PhysicsComponent physicsComponent = building.getComponent(PhysicsComponent.class);
+    physicsComponent.setX(form.getX());
+    physicsComponent.setY(form.getY());
 
     if (building == null) {
       throw new IllegalStateException("Building cannot be null");
@@ -206,7 +203,7 @@ public class BuildingServiceImpl implements BuildingService {
     return building;
   }
 
-  private Building constructBuilding(final BuildingDefinitionDto buildingDefinition) {
+  private Entity<EntityUUID> constructBuilding(final BuildingDefinitionDto buildingDefinition) {
     Objects.requireNonNull(buildingDefinition);
 
     switch (buildingDefinition.getType()) {
@@ -217,27 +214,21 @@ public class BuildingServiceImpl implements BuildingService {
     throw new IllegalStateException("Ops, could not construct building " + buildingDefinition.getId());
   }
 
-  private Warehouse constructWarehouse(final WarehouseDefinitionDto warehouseDefinition) {
+  private Entity<EntityUUID> constructWarehouse(final WarehouseDefinitionDto warehouseDefinition) {
     Objects.requireNonNull(warehouseDefinition);
 
-    final Warehouse warehouse = new Warehouse();
-    warehouse.setBuildingId(EntityUUID.randomId());
-    warehouse.setDefinitionId(warehouseDefinition.getId());
+    final Entity<EntityUUID> entity = gameEngine.createEmptyEntity();
 
-    //TODO resources are very unlikely to change during runtime, so they should be cached
-    final List<Resource> allResources = worldRepository.getAllAvailableResources();
-    final List<StorageUnit> storageUnits = allResources.stream().map(resource -> {
-        final StorageUnit unit = new StorageUnit();
-        unit.setAmount(0);
-        unit.setCapacity(warehouseDefinition.getCapacity());
-        unit.setResourceId(resource.getResourceId());
-        return unit;
-      })
-      .collect(Collectors.toList());
+    final PhysicsComponent physicsComponent = new PhysicsComponent();
+    physicsComponent.setWidth(warehouseDefinition.getWidth());
+    physicsComponent.setHeight(warehouseDefinition.getHeight());
+    entity.addComponent(physicsComponent);
 
-    warehouse.setStorageUnits(storageUnits);
+    final GraphicsComponent graphicsComponent = new GraphicsComponent();
+    graphicsComponent.setAsset(warehouseDefinition.getAsset());
+    entity.addComponent(graphicsComponent);
 
-    return warehouse;
+    return entity;
   }
 
 }

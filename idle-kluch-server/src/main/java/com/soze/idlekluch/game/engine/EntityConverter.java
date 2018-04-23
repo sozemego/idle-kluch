@@ -1,15 +1,11 @@
 package com.soze.idlekluch.game.engine;
 
 import com.soze.idlekluch.game.engine.components.BaseComponent;
-import com.soze.idlekluch.game.engine.components.GraphicsComponent;
-import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.EntityMessage;
 import com.soze.idlekluch.game.service.GameEngine;
-import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
-import com.soze.idlekluch.kingdom.entity.Building;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
-import com.soze.idlekluch.world.entity.Forest;
 import com.soze.idlekluch.world.service.ForestService;
 import com.soze.klecs.entity.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,41 +31,48 @@ public class EntityConverter {
     this.forestService = Objects.requireNonNull(forestService);
   }
 
-  public Entity convert(final Building building) {
-    Objects.requireNonNull(building);
+  public Entity convert(final PersistentEntity entity) {
+    Objects.requireNonNull(entity);
 
-    final Entity entity = gameEngine.createEmptyEntity();
 
-    final PhysicsComponent physicsComponent = new PhysicsComponent();
-    physicsComponent.setX(building.getX());
-    physicsComponent.setY(building.getY());
-
-    final BuildingDefinitionDto buildingDefinitionDto = buildingService.getAllConstructableBuildings().get(building.getDefinitionId());
-    physicsComponent.setWidth(buildingDefinitionDto.getWidth());
-    physicsComponent.setHeight(buildingDefinitionDto.getHeight());
-    entity.addComponent(physicsComponent);
-
-    final GraphicsComponent graphicsComponent = new GraphicsComponent(buildingDefinitionDto.getAsset());
-    entity.addComponent(graphicsComponent);
-
-    return entity;
+    return null;
   }
 
-  public Entity convert(final Forest forest) {
-    Objects.requireNonNull(forest);
-
-    final Entity entity = gameEngine.createEmptyEntity();
-
-    final PhysicsComponent physicsComponent = new PhysicsComponent();
-    physicsComponent.setX(forest.getX());
-    physicsComponent.setY(forest.getY());
-    entity.addComponent(physicsComponent);
-
-    final GraphicsComponent graphicsComponent = new GraphicsComponent(forestService.getForestAsset(forest.getDefinitionId()));
-    entity.addComponent(graphicsComponent);
-
-    return entity;
-  }
+//  public Entity convert(final Building building) {
+//    Objects.requireNonNull(building);
+//
+//    final Entity entity = gameEngine.createEmptyEntity();
+//
+//    final PhysicsComponent physicsComponent = new PhysicsComponent();
+//    physicsComponent.setX(building.getX());
+//    physicsComponent.setY(building.getY());
+//
+//    final BuildingDefinitionDto buildingDefinitionDto = buildingService.getAllConstructableBuildings().get(building.getDefinitionId());
+//    physicsComponent.setWidth(buildingDefinitionDto.getWidth());
+//    physicsComponent.setHeight(buildingDefinitionDto.getHeight());
+//    entity.addComponent(physicsComponent);
+//
+//    final GraphicsComponent graphicsComponent = new GraphicsComponent(buildingDefinitionDto.getAsset());
+//    entity.addComponent(graphicsComponent);
+//
+//    return entity;
+//  }
+//
+//  public Entity convert(final Forest forest) {
+//    Objects.requireNonNull(forest);
+//
+//    final Entity entity = gameEngine.createEmptyEntity();
+//
+//    final PhysicsComponent physicsComponent = new PhysicsComponent();
+//    physicsComponent.setX(forest.getX());
+//    physicsComponent.setY(forest.getY());
+//    entity.addComponent(physicsComponent);
+//
+//    final GraphicsComponent graphicsComponent = new GraphicsComponent(forestService.getForestAsset(forest.getDefinitionId()));
+//    entity.addComponent(graphicsComponent);
+//
+//    return entity;
+//  }
 
   public EntityMessage toMessage(final Entity<EntityUUID> entity) {
     final List<BaseComponent> components = entity.getAllComponents(BaseComponent.class);

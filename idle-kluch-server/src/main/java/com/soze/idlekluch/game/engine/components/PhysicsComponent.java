@@ -1,5 +1,8 @@
 package com.soze.idlekluch.game.engine.components;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class PhysicsComponent extends BaseComponent {
 
   private float x;
