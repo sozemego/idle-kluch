@@ -126,7 +126,7 @@ public class BuildingServiceImpl implements BuildingService {
       throw new UserDoesNotHaveKingdomException(owner);
     }
 
-    return new ArrayList<>();
+    throw new IllegalStateException("NOT IMPLEMENTED YET GET OWN BUILDINGS");
   }
 
   @Override

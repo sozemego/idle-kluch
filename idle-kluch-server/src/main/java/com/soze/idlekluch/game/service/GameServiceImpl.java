@@ -106,8 +106,6 @@ public class GameServiceImpl implements GameService {
   public void handleBuildBuildingMessage(final String username, final BuildBuildingForm form) {
     final Entity building = buildingService.buildBuilding(username, form);
 
-    gameEngine.addEntity(building);
-
     final EntityMessage entityMessage = entityConverter.toMessage(building);
     final String entityMessageJSon = JsonUtils.objectToJson(entityMessage);
 
