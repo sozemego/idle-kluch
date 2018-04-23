@@ -227,12 +227,12 @@ public class BuildingServiceImpl implements BuildingService {
     //TODO resources are very unlikely to change during runtime, so they should be cached
     final List<Resource> allResources = worldRepository.getAllAvailableResources();
     final List<StorageUnit> storageUnits = allResources.stream().map(resource -> {
-      final StorageUnit unit = new StorageUnit();
-      unit.setAmount(0);
-      unit.setCapacity(warehouseDefinition.getCapacity());
-      unit.setResourceId(resource.getResourceId());
-      return unit;
-    })
+        final StorageUnit unit = new StorageUnit();
+        unit.setAmount(0);
+        unit.setCapacity(warehouseDefinition.getCapacity());
+        unit.setResourceId(resource.getResourceId());
+        return unit;
+      })
       .collect(Collectors.toList());
 
     warehouse.setStorageUnits(storageUnits);
