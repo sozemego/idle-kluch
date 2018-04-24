@@ -55,11 +55,7 @@ public class GameEngineImpl implements GameEngine {
   @Override
   public Optional<Entity> getEntity(final EntityUUID entityId) {
     Objects.requireNonNull(entityId);
-
-    return getAllEntities()
-             .stream()
-             .filter(e -> e.getId().equals(entityId))
-             .findFirst();
+    return engine.getEntityById(entityId);
   }
 
 }
