@@ -1,15 +1,13 @@
 package com.soze.idlekluch.world.service;
 
-import com.soze.idlekluch.world.entity.Forest;
 
-import java.util.List;
 
 public interface ForestService {
 
-  List<Forest> getAllTrees();
+//  List<PersistentEntity> getAllTrees();
 
-  void addForest(final Forest forest);
+//  void addForest(final Forest forest);
 
-  String getForestAsset(final String definitionId);
+//  String getForestAsset(final String definitionId);
 
 }

@@ -4,6 +4,7 @@ import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
+import com.soze.klecs.node.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class GameEngineImpl implements GameEngine {
 
   private static final Logger LOG = LoggerFactory.getLogger(GameEngineImpl.class);
 
-  private final Engine<EntityUUID> engine;
+  private final Engine engine;
 
   public GameEngineImpl() {
     this.engine = new Engine<>(() -> EntityUUID.randomId());
@@ -35,18 +36,24 @@ public class GameEngineImpl implements GameEngine {
   }
 
   @Override
-  public void addEntity(Entity<EntityUUID> entity) {
+  public void addEntity(Entity entity) {
     Objects.requireNonNull(entity);
     engine.addEntity(entity);
   }
 
   @Override
-  public List<Entity<EntityUUID>> getAllEntities() {
+  public List<Entity> getAllEntities() {
     return engine.getAllEntities();
   }
 
   @Override
-  public Optional<Entity<EntityUUID>> getEntity(final EntityUUID entityId) {
+  public List<Entity> getEntitiesByNode(final Node node) {
+    Objects.requireNonNull(node);
+    return engine.getEntitiesByNode(node);
+  }
+
+  @Override
+  public Optional<Entity> getEntity(final EntityUUID entityId) {
     Objects.requireNonNull(entityId);
 
     return getAllEntities()

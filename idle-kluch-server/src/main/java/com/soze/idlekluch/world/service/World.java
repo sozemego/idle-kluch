@@ -1,8 +1,5 @@
 package com.soze.idlekluch.world.service;
 
-import com.soze.idlekluch.utils.CommonUtils;
-import com.soze.idlekluch.utils.jpa.EntityUUID;
-import com.soze.idlekluch.world.entity.Forest;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.repository.WorldRepository;
@@ -57,39 +54,22 @@ public class World {
       this.allTiles.put(new Point(tile.getX(), tile.getY()), tile);
     }
 
-    final List<Forest> allForests = worldRepository.getAllForests();
-    LOG.info("Retrieved [{}] forests", allForests.size());
-
-    if(allForests.isEmpty()) {
-      final int forests = 125;
-      LOG.info("There are no forests, generating [{]] forests!", forests);
-      final int maxX = worldWidth * tileSize;
-      final int maxY = worldHeight * tileSize;
-
-      for(int i = 0; i < forests; i++) {
-        final int x = CommonUtils.randomNumber(0, maxX);
-        final int y = CommonUtils.randomNumber(0, maxY);
-
-        final Forest forest = new Forest();
-        forest.setForestId(EntityUUID.randomId());
-        forest.setX(x);
-        forest.setY(y);
-        forest.setYield(25);
-        forest.setDefinitionId("forest_" + CommonUtils.randomNumber(1, 4));
-
-        worldRepository.addForest(forest);
-      }
-
-    }
-
   }
 
   public Map<Point, Tile> getAllTiles() {
     return allTiles;
   }
 
-  public List<Forest> getAllForests() {
-    return worldRepository.getAllForests();
+  public int getWorldWidth() {
+    return worldWidth;
+  }
+
+  public int getWorldHeight() {
+    return worldHeight;
+  }
+
+  public int getTileSize() {
+    return tileSize;
   }
 
   private List<Tile> createInitialTiles() {
@@ -103,6 +83,5 @@ public class World {
     }
     return newTiles;
   }
-
 
 }

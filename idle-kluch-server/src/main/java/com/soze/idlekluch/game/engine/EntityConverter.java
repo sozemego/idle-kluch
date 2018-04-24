@@ -6,7 +6,6 @@ import com.soze.idlekluch.game.message.EntityMessage;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
-import com.soze.idlekluch.world.service.ForestService;
 import com.soze.klecs.entity.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,13 +21,11 @@ public class EntityConverter {
 
   private final GameEngine gameEngine;
   private final BuildingService buildingService;
-  private final ForestService forestService;
 
   @Autowired
-  public EntityConverter(final GameEngine gameEngine, final BuildingService buildingService, final ForestService forestService) {
+  public EntityConverter(final GameEngine gameEngine, final BuildingService buildingService) {
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.buildingService = Objects.requireNonNull(buildingService);
-    this.forestService = Objects.requireNonNull(forestService);
   }
 
   public Entity convert(final PersistentEntity entity) {
@@ -74,9 +71,9 @@ public class EntityConverter {
 //    return entity;
 //  }
 
-  public EntityMessage toMessage(final Entity<EntityUUID> entity) {
+  public EntityMessage toMessage(final Entity entity) {
     final List<BaseComponent> components = entity.getAllComponents(BaseComponent.class);
-    return new EntityMessage(entity.getId(), components);
+    return new EntityMessage((EntityUUID)entity.getId(), components);
   }
 
 }

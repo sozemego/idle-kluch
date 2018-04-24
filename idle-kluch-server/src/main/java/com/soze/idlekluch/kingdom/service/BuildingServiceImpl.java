@@ -1,7 +1,9 @@
 package com.soze.idlekluch.kingdom.service;
 
 import com.soze.idlekluch.game.engine.components.GraphicsComponent;
+import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.repository.EntityRepository;
@@ -81,7 +83,7 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   @Override
-  public Entity<EntityUUID> buildBuilding(final String owner, final BuildBuildingForm form) {
+  public Entity buildBuilding(final String owner, final BuildBuildingForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
 
@@ -103,21 +105,25 @@ public class BuildingServiceImpl implements BuildingService {
       throw new UserDoesNotHaveKingdomException(owner);
     }
 
-    //TODO all that in the GameEngine
+    //TODO all that in the GameEngine / actually it can be here now
     //check world bounds
     //check for collisions with other buildings
     //check if player's kingdom has enough cash
 
-    final Entity<EntityUUID> building = constructBuilding(form);
+    final Entity building = constructBuilding(form);
+    final OwnershipComponent ownershipComponent = new OwnershipComponent();
+    ownershipComponent.setOwnerId(kingdom.get().getKingdomId());
+    building.addComponent(ownershipComponent);
+
     gameEngine.addEntity(building);
 
-    buildings.add(building.getId());
+    buildings.add((EntityUUID) building.getId());
 
     return building;
   }
 
   @Override
-  public List<Entity<EntityUUID>> getOwnBuildings(final String owner) {
+  public List<Entity> getOwnBuildings(final String owner) {
     Objects.requireNonNull(owner);
 
     final Optional<Kingdom> kingdom = kingdomService.getUsersKingdom(owner);
@@ -126,7 +132,16 @@ public class BuildingServiceImpl implements BuildingService {
       throw new UserDoesNotHaveKingdomException(owner);
     }
 
-    throw new IllegalStateException("NOT IMPLEMENTED YET GET OWN BUILDINGS");
+    final EntityUUID kingdomId = kingdom.get().getKingdomId();
+
+    return gameEngine.getEntitiesByNode(Nodes.OWNERSHIP)
+             .stream()
+             .filter(entity -> {
+               final OwnershipComponent ownershipComponent = (OwnershipComponent) entity.getComponent(OwnershipComponent.class);
+               return kingdomId.equals(ownershipComponent.getOwnerId());
+             })
+             .collect(Collectors.toList());
+
   }
 
   @Override
@@ -182,7 +197,7 @@ public class BuildingServiceImpl implements BuildingService {
       //TODO implement this
   }
 
-  private Entity<EntityUUID> constructBuilding(final BuildBuildingForm form) {
+  private Entity constructBuilding(final BuildBuildingForm form) {
     Objects.requireNonNull(form);
 
     final BuildingDefinitionDto buildingDefinition = buildingDefinitions.get(form.getBuildingId());
@@ -190,9 +205,9 @@ public class BuildingServiceImpl implements BuildingService {
       throw new BuildingDoesNotExistException(form.getBuildingId());
     }
 
-    final Entity<EntityUUID> building = constructBuilding(buildingDefinition);
+    final Entity building = constructBuilding(buildingDefinition);
 
-    final PhysicsComponent physicsComponent = building.getComponent(PhysicsComponent.class);
+    final PhysicsComponent physicsComponent = (PhysicsComponent) building.getComponent(PhysicsComponent.class);
     physicsComponent.setX(form.getX());
     physicsComponent.setY(form.getY());
 
@@ -214,10 +229,10 @@ public class BuildingServiceImpl implements BuildingService {
     throw new IllegalStateException("Ops, could not construct building " + buildingDefinition.getId());
   }
 
-  private Entity<EntityUUID> constructWarehouse(final WarehouseDefinitionDto warehouseDefinition) {
+  private Entity constructWarehouse(final WarehouseDefinitionDto warehouseDefinition) {
     Objects.requireNonNull(warehouseDefinition);
 
-    final Entity<EntityUUID> entity = gameEngine.createEmptyEntity();
+    final Entity entity = gameEngine.createEmptyEntity();
 
     final PhysicsComponent physicsComponent = new PhysicsComponent();
     physicsComponent.setWidth(warehouseDefinition.getWidth());

@@ -3,6 +3,9 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS tiles;
 DROP TABLE IF EXISTS resources CASCADE;
 DROP TABLE IF EXISTS entities CASCADE;
+DROP TABLE IF EXISTS physics_components CASCADE;
+DROP TABLE IF EXISTS graphics_components CASCADE;
+DROP TABLE IF EXISTS ownership_components CASCADE;
 
 CREATE TABLE users (
   user_id uuid NOT NULL PRIMARY KEY,
@@ -56,5 +59,11 @@ CREATE TABLE graphics_components (
   entity_id uuid NOT NULL,
   asset varchar NOT NULL,
   CONSTRAINT FK_PHYSICS_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
-)
+);
+
+CREATE TABLE ownership_components (
+  entity_id uuid NOT NULL,
+  owner_id uuid NOT NULL,
+  CONSTRAINT FK_OWNERSHIP_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
+);
 

@@ -15,7 +15,7 @@ public abstract class BaseComponent {
   }
 
   public enum ComponentType {
-    PHYSICS, GRAPHICS
+    PHYSICS, GRAPHICS, OWNERSHIP
   }
 
 }

@@ -8,7 +8,6 @@ import com.soze.idlekluch.game.message.WorldChunkMessage;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
-import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.service.World;
 import com.soze.klecs.entity.Entity;
@@ -68,6 +67,30 @@ public class GameServiceImpl implements GameService {
     buildingEntities.forEach(gameEngine::addEntity);
     LOG.info("Added [{}] building entities to engine", buildingEntities.size());
 
+//    final List<Forest> allForests = worldRepository.getAllForests();
+//    LOG.info("Retrieved [{}] forests", allForests.size());
+//
+//    if(allForests.isEmpty()) {
+//      final int forests = 125;
+//      LOG.info("There are no forests, generating [{]] forests!", forests);
+//      final int maxX = worldWidth * tileSize;
+//      final int maxY = worldHeight * tileSize;
+//
+//      for(int i = 0; i < forests; i++) {
+//        final int x = CommonUtils.randomNumber(0, maxX);
+//        final int y = CommonUtils.randomNumber(0, maxY);
+//
+//        final Forest forest = new Forest();
+//        forest.setForestId(EntityUUID.randomId());
+//        forest.setX(x);
+//        forest.setY(y);
+//        forest.setYield(25);
+//        forest.setDefinitionId("forest_" + CommonUtils.randomNumber(1, 4));
+//
+//        worldRepository.addForest(forest);
+//      }
+//    }
+
 //    final List<Forest> forests = world.getAllForests();
 //    final List<Entity> treeEntities = forests.stream().map(entityConverter::convert).collect(Collectors.toList());
 //    treeEntities.forEach(gameEngine::addEntity);
@@ -91,7 +114,7 @@ public class GameServiceImpl implements GameService {
 
     webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, worldChunkJson);
 
-    final List<Entity<EntityUUID>> entities = gameEngine.getAllEntities();
+    final List<Entity> entities = gameEngine.getAllEntities();
     final List<EntityMessage> entityMessages = entities.stream()
       .map(entityConverter::toMessage)
       .collect(Collectors.toList());

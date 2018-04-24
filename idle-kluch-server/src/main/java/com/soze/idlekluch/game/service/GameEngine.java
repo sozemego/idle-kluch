@@ -2,6 +2,7 @@ package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.entity.Entity;
+import com.soze.klecs.node.Node;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,11 +22,13 @@ public interface GameEngine {
   /**
    * Adds an entity to the engine.
    */
-  void addEntity(final Entity<EntityUUID> entity);
+  void addEntity(final Entity entity);
 
-  List<Entity<EntityUUID>> getAllEntities();
+  List<Entity> getAllEntities();
 
-  Optional<Entity<EntityUUID>> getEntity(final EntityUUID entityId);
+  List<Entity> getEntitiesByNode(final Node node);
+
+  Optional<Entity> getEntity(final EntityUUID entityId);
 
 
 }

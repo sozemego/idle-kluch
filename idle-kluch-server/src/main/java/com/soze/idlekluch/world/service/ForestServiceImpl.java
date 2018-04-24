@@ -1,7 +1,6 @@
 package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.world.dto.ForestDefinitionDto;
-import com.soze.idlekluch.world.entity.Forest;
 import com.soze.idlekluch.world.repository.WorldRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -46,20 +44,10 @@ public class ForestServiceImpl implements ForestService {
     LOG.info("Loaded [{}] forest definitions", forestDefinitions.size());
   }
 
-  @Override
-  public List<Forest> getAllTrees() {
-    return worldRepository.getAllForests();
-  }
-
-  @Override
-  public void addForest(final Forest forest) {
-    worldRepository.addForest(forest);
-  }
-
-  @Override
-  public String getForestAsset(final String definitionId) {
-    return forestDefinitions.get(definitionId).getAsset();
-  }
+//  @Override
+//  public String getForestAsset(final String definitionId) {
+//    return forestDefinitions.get(definitionId).getAsset();
+//  }
 
   private void parseRawForestDefinitions(final Map<String, Object> data) {
     for(final Map.Entry<String, Object> entry: data.entrySet()) {

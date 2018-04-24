@@ -20,9 +20,9 @@ public interface BuildingService {
   /**
    * Attempts to place a building for a given player.
    */
-  Entity<EntityUUID> buildBuilding(final String owner, final BuildBuildingForm form);
+  Entity buildBuilding(final String owner, final BuildBuildingForm form);
 
-  List<Entity<EntityUUID>> getOwnBuildings(final String owner);
+  List<Entity> getOwnBuildings(final String owner);
 
   /**
    * Returns all buildings constructed in the game, from the DB.
