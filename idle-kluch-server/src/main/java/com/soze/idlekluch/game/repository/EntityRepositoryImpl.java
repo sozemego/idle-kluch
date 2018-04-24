@@ -36,4 +36,5 @@ public class EntityRepositoryImpl implements EntityRepository {
     Objects.requireNonNull(id);
     getEntity(id).ifPresent(e -> em.remove(e));
   }
+
 }
