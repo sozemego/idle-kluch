@@ -30,5 +30,4 @@ public interface GameEngine {
 
   Optional<Entity> getEntity(final EntityUUID entityId);
 
-
 }

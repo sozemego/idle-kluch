@@ -7,8 +7,11 @@ import com.soze.klecs.entity.Entity;
 import com.soze.klecs.node.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,9 +23,18 @@ public class GameEngineImpl implements GameEngine {
 
   private final Engine engine;
 
-  public GameEngineImpl() {
+  private final ApplicationEventPublisher publisher;
+
+  @Autowired
+  public GameEngineImpl(final ApplicationEventPublisher publisher) {
     this.engine = new Engine<>(() -> EntityUUID.randomId());
     this.engine.addSystem(new PhysicsSystem(this.engine));
+    this.publisher = Objects.requireNonNull(publisher);
+  }
+
+  @PostConstruct
+  public void setup() {
+    engine.addEntityEventListener(e -> publisher.publishEvent(e));
   }
 
   @Override
