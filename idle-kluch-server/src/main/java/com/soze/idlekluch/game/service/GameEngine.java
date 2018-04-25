@@ -19,6 +19,8 @@ public interface GameEngine {
 
   Entity createEmptyEntity();
 
+  Entity createEmptyEntity(final EntityUUID entityId);
+
   /**
    * Adds an entity to the engine.
    */

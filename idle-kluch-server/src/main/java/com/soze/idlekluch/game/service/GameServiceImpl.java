@@ -61,7 +61,7 @@ public class GameServiceImpl implements GameService {
 
     final List<Entity> buildingEntities = buildings
                                             .stream()
-                                            .map(entityConverter::convert)
+                                            .map(entityConverter::convertPersistentToEntity)
                                             .collect(Collectors.toList());
 
     buildingEntities.forEach(gameEngine::addEntity);

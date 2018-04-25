@@ -48,6 +48,11 @@ public class GameEngineImpl implements GameEngine {
   }
 
   @Override
+  public Entity createEmptyEntity(final EntityUUID entityId) {
+    return null;
+  }
+
+  @Override
   public void addEntity(Entity entity) {
     Objects.requireNonNull(entity);
     engine.addEntity(entity);
