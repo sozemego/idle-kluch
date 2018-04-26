@@ -17,18 +17,22 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EntityServiceImpl implements EntityService {
 
   private static final Logger LOG = LoggerFactory.getLogger(EntityServiceImpl.class);
 
+  private final GameEngine gameEngine;
   private final EntityRepository entityRepository;
   private final EntityConverter entityConverter;
 
   @Autowired
-  public EntityServiceImpl(final EntityRepository entityRepository,
+  public EntityServiceImpl(final GameEngine gameEngine,
+                           final EntityRepository entityRepository,
                            final EntityConverter entityConverter) {
+    this.gameEngine = Objects.requireNonNull(gameEngine);
     this.entityRepository = Objects.requireNonNull(entityRepository);
     this.entityConverter = Objects.requireNonNull(entityConverter);
   }
@@ -38,11 +42,15 @@ public class EntityServiceImpl implements EntityService {
     LOG.info("Initializing [{}]", EntityServiceImpl.class);
 
     final List<PersistentEntity> persistentEntities = entityRepository.getAllEntities();
-    //TODO check if World is initiated. if not, generate some chunks
+    final List<Entity> entities = persistentEntities
+                                    .stream()
+                                    .peek(e -> LOG.info("Converting persistent entity with ID:[{}] to ECS Entity", e.getEntityId()))
+                                    .map(entityConverter::convertPersistentToEntity)
+                                    .peek(gameEngine::addEntity)
+                                    .collect(Collectors.toList());
 
-
-    //TODO convert all PE to E and add to engine.
-
+    LOG.info("Loaded and converted [{}] entities", entities.size());
+    entities.forEach(e -> gameEngine.addEntity(e));
   }
 
   @Override
