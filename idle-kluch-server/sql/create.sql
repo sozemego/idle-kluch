@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS kingdoms CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS world;
 DROP TABLE IF EXISTS tiles;
 DROP TABLE IF EXISTS resources CASCADE;
 DROP TABLE IF EXISTS entities CASCADE;
@@ -13,6 +14,11 @@ CREATE TABLE users (
   deleted boolean DEFAULT FALSE NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
   username citext NOT NULL UNIQUE
+);
+
+-- there can only be one world --
+CREATE TABLE world (
+  world_id BIGINT PRIMARY KEY
 );
 
 CREATE TABLE tiles (

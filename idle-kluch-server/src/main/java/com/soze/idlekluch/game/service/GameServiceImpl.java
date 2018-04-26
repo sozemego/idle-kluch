@@ -9,7 +9,7 @@ import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.world.entity.Tile;
-import com.soze.idlekluch.world.service.World;
+import com.soze.idlekluch.world.service.WorldService;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,19 +29,19 @@ public class GameServiceImpl implements GameService {
 
   private static final Logger LOG = LoggerFactory.getLogger(GameServiceImpl.class);
 
-  private final World world;
+  private final WorldService worldService;
   private final WebSocketMessagingService webSocketMessagingService;
   private final BuildingService buildingService;
   private final GameEngine gameEngine;
   private final EntityConverter entityConverter;
 
   @Autowired
-  public GameServiceImpl(final World world,
+  public GameServiceImpl(final WorldService worldService,
                          final WebSocketMessagingService webSocketMessagingService,
                          final BuildingService buildingService,
                          final GameEngine gameEngine,
                          final EntityConverter entityConverter) {
-    this.world = Objects.requireNonNull(world);
+    this.worldService = Objects.requireNonNull(worldService);
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
     this.buildingService = Objects.requireNonNull(buildingService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
@@ -107,7 +107,7 @@ public class GameServiceImpl implements GameService {
   public void handleInitMessage(final String username) {
     LOG.info("Init message from [{}]", username);
 
-    final Map<Point, Tile> allTiles = world.getAllTiles();
+    final Map<Point, Tile> allTiles = worldService.getAllTiles();
 
     final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
     final String worldChunkJson = JsonUtils.objectToJson(worldChunkMessage);

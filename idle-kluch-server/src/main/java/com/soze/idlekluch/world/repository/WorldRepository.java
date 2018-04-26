@@ -2,11 +2,16 @@ package com.soze.idlekluch.world.repository;
 
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.world.entity.Tile;
+import com.soze.idlekluch.world.entity.World;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface WorldRepository {
+
+  Optional<World> getCurrentWorld();
+
+  void saveWorld(final World world);
 
   /**
    * Returns all tiles in the database.

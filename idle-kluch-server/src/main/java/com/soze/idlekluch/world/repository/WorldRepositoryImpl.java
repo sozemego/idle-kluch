@@ -3,6 +3,7 @@ package com.soze.idlekluch.world.repository;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.utils.jpa.QueryUtils;
 import com.soze.idlekluch.world.entity.Tile;
+import com.soze.idlekluch.world.entity.World;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,24 @@ public class WorldRepositoryImpl implements WorldRepository {
 
   @PersistenceContext
   private EntityManager em;
+
+  @Override
+  public Optional<World> getCurrentWorld() {
+    final Query query = em.createQuery("SELECT w FROM World w");
+    final List<World> worlds = query.getResultList();
+    return worlds.isEmpty() ? Optional.empty() : Optional.of(worlds.get(0));
+  }
+
+  @Override
+  @Transactional
+  public void saveWorld(final World world) {
+    Objects.requireNonNull(world);
+    if(getCurrentWorld().isPresent()) {
+      em.merge(world);
+    } else {
+      em.persist(world);
+    }
+  }
 
   @Override
   public List<Tile> getAllTiles() {
