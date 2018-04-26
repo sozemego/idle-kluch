@@ -76,6 +76,7 @@ public class EntityServiceImpl implements EntityService {
     final Entity entity = addedEntityEvent.getEntity();
     LOG.info("Added event for entity ID:[{}]", entity.getId());
     final Optional<PersistentEntity> persistentEntityOptional = getEntity((EntityUUID) entity.getId());
+    LOG.info("Entity [{}] is already present [{}]", entity.getId(), persistentEntityOptional.isPresent());
     if(!persistentEntityOptional.isPresent()) {
       final PersistentEntity persistentEntity = entityConverter.convertEntityToPersistent(entity);
       entityRepository.addEntity(persistentEntity);
