@@ -1,6 +1,8 @@
 package com.soze.idlekluch.game.engine.components;
 
-import javax.persistence.Embeddable;
+import com.soze.idlekluch.utils.jpa.EntityUUID;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
@@ -8,9 +10,15 @@ import java.util.Objects;
  * This component is not used on the back-end, but it's data
  * is sent to clients.
  */
-@Embeddable
+@Entity
+@Table(name = "graphics_components")
 public class GraphicsComponent extends BaseComponent {
 
+  @EmbeddedId
+  @AttributeOverride(name = "id", column = @Column(name = "entity_id"))
+  private EntityUUID entityId;
+
+  @Column(name = "asset")
   private String asset;
 
   public GraphicsComponent() {
@@ -20,6 +28,14 @@ public class GraphicsComponent extends BaseComponent {
   public GraphicsComponent(String asset) {
     super(ComponentType.GRAPHICS);
     this.asset = Objects.requireNonNull(asset);
+  }
+
+  public EntityUUID getEntityId() {
+    return entityId;
+  }
+
+  public void setEntityId(final EntityUUID entityId) {
+    this.entityId = entityId;
   }
 
   public String getAsset() {

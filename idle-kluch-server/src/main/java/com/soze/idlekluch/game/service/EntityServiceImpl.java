@@ -49,6 +49,7 @@ public class EntityServiceImpl implements EntityService {
       physicsComponent.setY(6);
       physicsComponent.setWidth(7);
       physicsComponent.setHeight(8);
+      physicsComponent.setEntityId(persistentEntity.getEntityId());
       persistentEntity.setPhysicsComponent(physicsComponent);
       entityRepository.addEntity(persistentEntity);
     }

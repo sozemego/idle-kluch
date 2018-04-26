@@ -41,9 +41,7 @@ CREATE TABLE kingdoms (
 );
 
 CREATE TABLE entities (
-  entity_id uuid PRIMARY KEY,
-  owner uuid NOT NULL,
-  CONSTRAINT FK_ENTITY_USER FOREIGN KEY (owner) REFERENCES users(user_id)
+  entity_id uuid PRIMARY KEY
 );
 
 CREATE TABLE physics_components (
