@@ -1,11 +1,13 @@
 package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.world.dto.ForestDefinitionDto;
+import com.soze.idlekluch.world.events.InitializeWorldEvent;
 import com.soze.idlekluch.world.repository.WorldRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -44,10 +46,15 @@ public class ForestServiceImpl implements ForestService {
     LOG.info("Loaded [{}] forest definitions", forestDefinitions.size());
   }
 
-//  @Override
-//  public String getForestAsset(final String definitionId) {
-//    return forestDefinitions.get(definitionId).getAsset();
-//  }
+  @EventListener
+  public void handleInitializeWorldEvent(final InitializeWorldEvent initializeWorldEvent) {
+    LOG.info("[{}] received [{}]", this.getClass(), initializeWorldEvent);
+  }
+
+  @Override
+  public String getForestAsset(final String definitionId) {
+    return forestDefinitions.get(definitionId).getAsset();
+  }
 
   private void parseRawForestDefinitions(final Map<String, Object> data) {
     for(final Map.Entry<String, Object> entry: data.entrySet()) {

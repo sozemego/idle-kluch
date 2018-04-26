@@ -15,6 +15,9 @@ import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * World is the in-memory representation of the game world.
@@ -49,7 +52,14 @@ public class WorldServiceImpl implements WorldService {
       LOG.info("World is not initialized, starting.");
       worldRepository.saveWorld(new World());
       initTiles();
-      publisher.publishEvent(new InitializeWorldEvent());
+
+      //TODO instead of this, listen to spring on init event and then call initWorld
+      final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+      scheduledExecutorService.schedule(
+        () -> publisher.publishEvent(new InitializeWorldEvent()),
+        5, TimeUnit.SECONDS
+      );
+
     }
   }
 
