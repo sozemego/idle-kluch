@@ -1,7 +1,6 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.engine.EntityConverter;
-import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.repository.EntityRepository;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
@@ -39,20 +38,10 @@ public class EntityServiceImpl implements EntityService {
     LOG.info("Initializing [{}]", EntityServiceImpl.class);
 
     final List<PersistentEntity> persistentEntities = entityRepository.getAllEntities();
+    //TODO check if World is initiated. if not, generate some chunks
 
-    if(persistentEntities.isEmpty()) {
-      LOG.info("No entities added, creating one for test.");
-      final PersistentEntity persistentEntity = new PersistentEntity();
-      persistentEntity.setEntityId(EntityUUID.randomId());
-      final PhysicsComponent physicsComponent = new PhysicsComponent();
-      physicsComponent.setX(5);
-      physicsComponent.setY(6);
-      physicsComponent.setWidth(7);
-      physicsComponent.setHeight(8);
-      physicsComponent.setEntityId(persistentEntity.getEntityId());
-      persistentEntity.setPhysicsComponent(physicsComponent);
-      entityRepository.addEntity(persistentEntity);
-    }
+
+    //TODO convert all PE to E and add to engine.
 
   }
 
