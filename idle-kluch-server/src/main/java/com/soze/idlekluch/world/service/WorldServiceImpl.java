@@ -9,22 +9,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ApplicationContextEvent;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * World is the in-memory representation of the game world.
  * This means tiles, and some world data, NOT entities.
  */
 @Service
-public class WorldServiceImpl implements WorldService {
+public class WorldServiceImpl implements WorldService, ApplicationListener<ApplicationContextEvent> {
 
   private static final Logger LOG = LoggerFactory.getLogger(WorldServiceImpl.class);
 
@@ -45,21 +44,26 @@ public class WorldServiceImpl implements WorldService {
     this.allTiles = new HashMap<>();
   }
 
-  @PostConstruct
-  public void initWorld() {
+  @Override
+  public void onApplicationEvent(ApplicationContextEvent event) {
+    if (event instanceof ContextRefreshedEvent) {
+      final String displayName = event.getApplicationContext().getDisplayName();
+      if ("Root WebApplicationContext".equals(displayName)) {
+        LOG.info("Context [{}] started, starting world", displayName);
+        startWorld();
+      }
+    }
+  }
+
+  @Override
+  public void startWorld() {
     final Optional<World> worldOptional = worldRepository.getCurrentWorld();
     if(!worldOptional.isPresent()) {
       LOG.info("World is not initialized, starting.");
       worldRepository.saveWorld(new World());
       initTiles();
 
-      //TODO instead of this, listen to spring on init event and then call initWorld
-      final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-      scheduledExecutorService.schedule(
-        () -> publisher.publishEvent(new InitializeWorldEvent()),
-        5, TimeUnit.SECONDS
-      );
-
+      publisher.publishEvent(new InitializeWorldEvent());
     }
   }
 
