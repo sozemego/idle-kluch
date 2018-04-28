@@ -55,8 +55,7 @@ public class WorldServiceImpl implements WorldService, ApplicationListener<Appli
     }
   }
 
-  @Override
-  public void startWorld() {
+  private void startWorld() {
     final Optional<World> worldOptional = worldRepository.getCurrentWorld();
     if(!worldOptional.isPresent()) {
       LOG.info("World is not initialized, starting.");
