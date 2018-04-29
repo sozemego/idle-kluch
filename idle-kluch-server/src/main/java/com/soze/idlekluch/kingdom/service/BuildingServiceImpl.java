@@ -207,13 +207,13 @@ public class BuildingServiceImpl implements BuildingService {
 
     final Entity building = constructBuilding(buildingDefinition);
 
-    final PhysicsComponent physicsComponent = (PhysicsComponent) building.getComponent(PhysicsComponent.class);
-    physicsComponent.setX(form.getX());
-    physicsComponent.setY(form.getY());
-
     if (building == null) {
       throw new IllegalStateException("Building cannot be null");
     }
+
+    final PhysicsComponent physicsComponent = (PhysicsComponent) building.getComponent(PhysicsComponent.class);
+    physicsComponent.setX(form.getX());
+    physicsComponent.setY(form.getY());
 
     return building;
   }
