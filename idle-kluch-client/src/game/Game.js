@@ -1,15 +1,17 @@
 import store from "../store/store";
 import Phaser from "phaser";
-import { onCanvasClicked } from "./actions";
-import { createReducer } from "../store/utils";
 import * as GAME_ACTIONS from "./actions";
+import {onCanvasClicked} from "./actions";
+import {createReducer} from "../store/utils";
 import * as KINGDOM_ACTIONS from "../kingdom/actions";
-import { Engine } from "../ecs/Engine";
-import { GraphicsComponent } from "../ecs/components/GraphicsComponent";
-import { PhysicsComponent } from "../ecs/components/PhysicsComponent";
-import { PhysicsSystem } from "../ecs/systems/PhysicsSystem";
-import { GraphicsSystem } from "../ecs/systems/GraphicsSystem";
-import { getSelectedConstructableBuilding as _getSelectedConstructableBuilding } from "../kingdom/selectors";
+import {Engine} from "../ecs/Engine";
+import {GraphicsComponent} from "../ecs/components/GraphicsComponent";
+import {PhysicsComponent} from "../ecs/components/PhysicsComponent";
+import {PhysicsSystem} from "../ecs/systems/PhysicsSystem";
+import {GraphicsSystem} from "../ecs/systems/GraphicsSystem";
+import {getSelectedConstructableBuilding as _getSelectedConstructableBuilding} from "../kingdom/selectors";
+import {COMPONENT_TYPES} from "./constants";
+import {OwnershipComponent} from "../ecs/components/OwnershipComponent";
 
 const getSelectedConstructableBuilding = () =>
   _getSelectedConstructableBuilding(store.getState());
@@ -49,12 +51,12 @@ const addEntity = (state, { payload: entity }) => {
 
   entity.components
     .map(component => {
-      if (component.componentType === "GRAPHICS") {
+      if (component.componentType === COMPONENT_TYPES.GRAPHICS) {
         const sprite = game.add.sprite(0, 0, component.asset);
         sprite.inputEnabled = true;
         return new GraphicsComponent(sprite);
       }
-      if (component.componentType === "PHYSICS") {
+      if (component.componentType === COMPONENT_TYPES.PHYSICS) {
         return new PhysicsComponent(
           component.x,
           component.y,
@@ -62,6 +64,10 @@ const addEntity = (state, { payload: entity }) => {
           component.height
         );
       }
+      if (component.componentType === COMPONENT_TYPES.OWNERSHIP) {
+        return new OwnershipComponent(entity.id);
+      }
+      throw new Error("INVALID COMPONENT TYPE");
     })
     .forEach(component => newEntity.addComponent(component));
 
