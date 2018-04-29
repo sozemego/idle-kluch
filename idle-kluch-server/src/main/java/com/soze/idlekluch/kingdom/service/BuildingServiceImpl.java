@@ -113,6 +113,7 @@ public class BuildingServiceImpl implements BuildingService {
     final Entity building = constructBuilding(form);
     final OwnershipComponent ownershipComponent = new OwnershipComponent();
     ownershipComponent.setOwnerId(kingdom.get().getKingdomId());
+    ownershipComponent.setEntityId((EntityUUID) building.getId());
     building.addComponent(ownershipComponent);
 
     gameEngine.addEntity(building);
@@ -237,10 +238,12 @@ public class BuildingServiceImpl implements BuildingService {
     final PhysicsComponent physicsComponent = new PhysicsComponent();
     physicsComponent.setWidth(warehouseDefinition.getWidth());
     physicsComponent.setHeight(warehouseDefinition.getHeight());
+    physicsComponent.setEntityId((EntityUUID) entity.getId());
     entity.addComponent(physicsComponent);
 
     final GraphicsComponent graphicsComponent = new GraphicsComponent();
     graphicsComponent.setAsset(warehouseDefinition.getAsset());
+    graphicsComponent.setEntityId((EntityUUID) entity.getId());
     entity.addComponent(graphicsComponent);
 
     return entity;

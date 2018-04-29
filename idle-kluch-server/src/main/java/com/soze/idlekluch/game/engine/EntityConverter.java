@@ -2,6 +2,7 @@ package com.soze.idlekluch.game.engine;
 
 import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.game.engine.components.GraphicsComponent;
+import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.EntityMessage;
@@ -47,7 +48,7 @@ public class EntityConverter {
     persistentEntity.setEntityId((EntityUUID) entity.getId());
     persistentEntity.setGraphicsComponent((GraphicsComponent) entity.getComponent(GraphicsComponent.class));
     persistentEntity.setPhysicsComponent((PhysicsComponent) entity.getComponent(PhysicsComponent.class));
-//    persistentEntity.setOwnershipComponent((OwnershipComponent)entity.getComponent(OwnershipComponent.class));
+    persistentEntity.setOwnershipComponent((OwnershipComponent) entity.getComponent(OwnershipComponent.class));
 
     return persistentEntity;
   }

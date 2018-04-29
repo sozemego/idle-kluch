@@ -63,7 +63,12 @@ public class WorldServiceImpl implements WorldService, ApplicationListener<Appli
       initTiles();
 
       publisher.publishEvent(new InitializeWorldEvent());
+    } else {
+      final List<Tile> currentTiles = worldRepository.getAllTiles();
+      LOG.info("World already present, loaded [{}] tiles", currentTiles.size());
+      currentTiles.forEach(tile -> this.allTiles.put(new Point(tile.getX(), tile.getY()), tile));
     }
+
   }
 
   @Override

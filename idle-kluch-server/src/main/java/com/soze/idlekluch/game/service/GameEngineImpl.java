@@ -49,7 +49,7 @@ public class GameEngineImpl implements GameEngine {
 
   @Override
   public Entity createEmptyEntity(final EntityUUID entityId) {
-    return null;
+    return engine.getEntityFactory().createEntity(entityId);
   }
 
   @Override

@@ -50,7 +50,6 @@ public class EntityServiceImpl implements EntityService {
                                     .collect(Collectors.toList());
 
     LOG.info("Loaded and converted [{}] entities", entities.size());
-    entities.forEach(gameEngine::addEntity);
   }
 
   @Override
