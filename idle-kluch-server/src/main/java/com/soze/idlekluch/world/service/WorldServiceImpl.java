@@ -87,16 +87,16 @@ public class WorldServiceImpl implements WorldService, ApplicationListener<Appli
   }
 
   private void initTiles() {
-    final List<Tile> allTiles = worldRepository.getAllTiles();
+    final List<Tile> currentTiles = worldRepository.getAllTiles();
     LOG.info("Retrieved [{}] tiles.", allTiles.size());
-    if(allTiles.isEmpty()) {
-      final List<Tile> newTiles = createInitialTiles();
-      allTiles.addAll(newTiles);
-      worldRepository.addTiles(newTiles);
-      LOG.info("Added [{}] tiles", newTiles.size());
-    }
+    worldRepository.removeTiles(currentTiles);
+    LOG.info("Removed all tiles");
 
-    allTiles.forEach(tile -> this.allTiles.put(new Point(tile.getX(), tile.getY()), tile));
+    final List<Tile> newTiles = createInitialTiles();
+    currentTiles.addAll(newTiles);
+    worldRepository.addTiles(newTiles);
+    LOG.info("Added [{}] tiles", newTiles.size());
+    currentTiles.forEach(tile -> this.allTiles.put(new Point(tile.getX(), tile.getY()), tile));
   }
 
   private List<Tile> createInitialTiles() {

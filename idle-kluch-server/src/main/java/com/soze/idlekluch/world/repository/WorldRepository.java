@@ -25,6 +25,8 @@ public interface WorldRepository {
 
   public void addTiles(final List<Tile> tiles);
 
+  void removeTiles(final List<Tile> tile);
+
   List<Resource> getAllAvailableResources();
 
   void addResource(final Resource resource);

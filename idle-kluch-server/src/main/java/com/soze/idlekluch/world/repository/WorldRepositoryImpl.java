@@ -59,6 +59,18 @@ public class WorldRepositoryImpl implements WorldRepository {
   }
 
   @Override
+  @Transactional
+  public void removeTiles(final List<Tile> tiles) {
+    Objects.requireNonNull(tiles);
+    tiles.forEach(tile -> {
+      final Tile foundTile = em.find(Tile.class, tile.getTileId());
+      if(foundTile != null) {
+        em.remove(foundTile);
+      }
+    });
+  }
+
+  @Override
   public List<Resource> getAllAvailableResources() {
     return em.createQuery("SELECT r FROM Resource r").getResultList();
   }
