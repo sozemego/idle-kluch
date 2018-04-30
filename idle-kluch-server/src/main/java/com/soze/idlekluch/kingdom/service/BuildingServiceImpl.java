@@ -149,7 +149,7 @@ public class BuildingServiceImpl implements BuildingService {
   public List<PersistentEntity> getAllConstructedBuildings() {
     return buildings
              .stream()
-             .map(id -> entityRepository.getEntity(id))
+             .map(entityRepository::getEntity)
              .filter(Optional::isPresent)
              .map(Optional::get)
              .collect(Collectors.toList());
@@ -219,7 +219,7 @@ public class BuildingServiceImpl implements BuildingService {
     return building;
   }
 
-  private Entity<EntityUUID> constructBuilding(final BuildingDefinitionDto buildingDefinition) {
+  private Entity constructBuilding(final BuildingDefinitionDto buildingDefinition) {
     Objects.requireNonNull(buildingDefinition);
 
     switch (buildingDefinition.getType()) {

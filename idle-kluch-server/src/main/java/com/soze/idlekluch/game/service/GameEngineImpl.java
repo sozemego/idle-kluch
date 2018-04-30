@@ -27,14 +27,14 @@ public class GameEngineImpl implements GameEngine {
 
   @Autowired
   public GameEngineImpl(final ApplicationEventPublisher publisher) {
-    this.engine = new Engine<>(() -> EntityUUID.randomId());
+    this.engine = new Engine(EntityUUID::randomId);
     this.engine.addSystem(new PhysicsSystem(this.engine));
     this.publisher = Objects.requireNonNull(publisher);
   }
 
   @PostConstruct
   public void setup() {
-    engine.addEntityEventListener(e -> publisher.publishEvent(e));
+    engine.addEntityEventListener(publisher::publishEvent);
   }
 
   @Override
@@ -43,7 +43,7 @@ public class GameEngineImpl implements GameEngine {
   }
 
   @Override
-  public Entity<EntityUUID> createEmptyEntity() {
+  public Entity createEmptyEntity() {
     return engine.getEntityFactory().createEntity();
   }
 
