@@ -1,4 +1,5 @@
 export class GraphicsComponent {
+
   constructor(sprite) {
     this.sprite = sprite;
   }
@@ -7,4 +8,5 @@ export class GraphicsComponent {
     this.sprite.x = x;
     this.sprite.y = y;
   };
+
 }

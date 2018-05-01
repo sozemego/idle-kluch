@@ -1,7 +1,11 @@
 import { GameService as gameService } from "./GameService";
 import { makeActionCreator } from "../store/utils";
 import createGame from "./Game";
-import { getConstructableBuildings, getSelectedConstructableBuilding } from "../kingdom/selectors";
+import {
+  getConstructableBuildings,
+  getConstructableBuildingsData,
+  getSelectedConstructableBuilding,
+} from "../kingdom/selectors";
 import { setSelectedConstructableBuilding } from "../kingdom/actions";
 
 export const ADD_TILES = "ADD_TILES";
@@ -27,7 +31,7 @@ export const startGame = () => {
 
 export const selectConstructableBuilding = id => {
   return (dispatch, getState) => {
-    const constructableBuildings = getConstructableBuildings(getState);
+    const constructableBuildings = getConstructableBuildingsData(getState);
     const building = constructableBuildings.find(
       building => building.id === id,
     );

@@ -1,4 +1,5 @@
 export class PhysicsComponent {
+
   constructor(x = 0, y = 0, width = 0, height = 0) {
     this.x = x;
     this.y = y;
@@ -37,4 +38,5 @@ export class PhysicsComponent {
   setHeight(height) {
     this.height = height;
   }
+
 }

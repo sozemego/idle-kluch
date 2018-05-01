@@ -1,4 +1,5 @@
 export class OwnershipComponent {
+
   constructor(ownerId) {
     this.ownerId = ownerId;
   }
@@ -10,4 +11,5 @@ export class OwnershipComponent {
   setOwnerId = ownerId => {
     this.ownerId = ownerId;
   };
+
 }

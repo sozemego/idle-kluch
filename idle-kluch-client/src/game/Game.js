@@ -12,9 +12,12 @@ import { GraphicsSystem } from "../ecs/systems/GraphicsSystem";
 import { getSelectedConstructableBuilding as _getSelectedConstructableBuilding } from "../kingdom/selectors";
 import { COMPONENT_TYPES } from "./constants";
 import { OwnershipComponent } from "../ecs/components/OwnershipComponent";
+import { NameComponent } from "../ecs/components/NameComponent";
+import { BuildableComponent } from "../ecs/components/BuildableComponent";
+import { StaticOccupySpaceComponent } from "../ecs/components/StaticOccupySpaceComponent";
+import { findComponent } from "../ecs/utils";
 
-const getSelectedConstructableBuilding = () =>
-  _getSelectedConstructableBuilding(store.getState());
+const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 
 let game = null;
@@ -26,7 +29,6 @@ const tileSprites = {};
 
 const initialState = {
   tiles: {},
-  buildings: {},
 };
 
 const addTiles = (state, { payload: tiles }) => {
@@ -67,6 +69,15 @@ const addEntity = (state, { payload: entity }) => {
       if (component.componentType === COMPONENT_TYPES.OWNERSHIP) {
         return new OwnershipComponent(entity.id);
       }
+      if(component.componentType === COMPONENT_TYPES.NAME) {
+        return new NameComponent(component.name);
+      }
+      if(component.componentType === COMPONENT_TYPES.BUILDABLE) {
+        return new BuildableComponent();
+      }
+      if(component.componentType === COMPONENT_TYPES.STATIC_OCCUPY_SPACE) {
+        return new StaticOccupySpaceComponent();
+      }
       throw new Error("INVALID COMPONENT TYPE");
     })
     .forEach(component => newEntity.addComponent(component));
@@ -83,12 +94,14 @@ const setConstructableBuilding = (state, action) => {
     return state;
   }
 
+  const graphicsComponent = findComponent(building, COMPONENT_TYPES.GRAPHICS);
+
   if (!selectedBuildingSprite) {
-    selectedBuildingSprite = game.add.sprite(0, 0, building.asset);
+    selectedBuildingSprite = game.add.sprite(0, 0, graphicsComponent.asset);
   }
 
   selectedBuildingSprite.revive();
-  selectedBuildingSprite.loadTexture(building.asset);
+  selectedBuildingSprite.loadTexture(graphicsComponent.asset);
 
   return state;
 };
@@ -166,15 +179,12 @@ const createGame = () => {
 
       //selected building highlight
       const selectedConstructableBuilding = getSelectedConstructableBuilding();
-      if (
-        selectedConstructableBuilding &&
-        selectedBuildingSprite &&
-        selectedBuildingSprite.alive
-      ) {
+      if (selectedConstructableBuilding && selectedBuildingSprite && selectedBuildingSprite.alive) {
+        const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
         selectedBuildingSprite.x = mouseX + x;
         selectedBuildingSprite.y = mouseY + y;
-        selectedBuildingSprite.width = selectedConstructableBuilding.width;
-        selectedBuildingSprite.height = selectedConstructableBuilding.height;
+        selectedBuildingSprite.width = physicsComponent.width;
+        selectedBuildingSprite.height = physicsComponent.height;
       }
 
       engine.update(game.time.physicsElapsed);
