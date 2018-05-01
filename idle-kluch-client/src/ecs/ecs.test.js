@@ -1,7 +1,6 @@
-import { ComponentContainer } from "./ComponentContainer";
-import { Node } from "./Node";
-import { Engine } from "./Engine";
-import { EntitySystem } from "./EntitySystem";
+import {ComponentContainer} from "./ComponentContainer";
+import {Engine} from "./Engine";
+import {EntitySystem} from "./EntitySystem";
 
 const { describe, it, beforeEach, expect } = global;
 
@@ -94,11 +93,11 @@ describe("engine", () => {
 
   it("should add five entities", () => {
     const factory = engine.getEntityFactory();
-    factory.createEntityAndAddToEngine(++id);
-    factory.createEntityAndAddToEngine(++id);
-    factory.createEntityAndAddToEngine(++id);
-    factory.createEntityAndAddToEngine(++id);
-    factory.createEntityAndAddToEngine(++id);
+    engine.addEntity(factory.createEntity(++id));
+    engine.addEntity(factory.createEntity(++id));
+    engine.addEntity(factory.createEntity(++id));
+    engine.addEntity(factory.createEntity(++id));
+    engine.addEntity(factory.createEntity(++id));
     expect(engine.getAllEntities().length).toBe(5);
   });
 
