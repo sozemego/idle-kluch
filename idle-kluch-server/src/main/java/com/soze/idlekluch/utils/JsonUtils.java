@@ -79,4 +79,8 @@ public class JsonUtils {
     return jsonToMap(FileUtils.readClassPathResource(resource), key, value);
   }
 
+  public static <T> List<T> resourceToList(final ClassPathResource resource, Class<T> clazz) {
+    return jsonToList(FileUtils.readClassPathResource(resource), clazz);
+  }
+
 }
