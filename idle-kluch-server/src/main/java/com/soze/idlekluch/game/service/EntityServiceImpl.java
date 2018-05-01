@@ -28,7 +28,7 @@ public class EntityServiceImpl implements EntityService {
   private final EntityRepository entityRepository;
   private final EntityConverter entityConverter;
 
-  private final Map<String, Entity> entities = new HashMap<>();
+  private final Map<EntityUUID, PersistentEntity> entityTemplates = new HashMap<>();
 
   @Value("entities.json")
   private ClassPathResource entityData;
@@ -45,7 +45,7 @@ public class EntityServiceImpl implements EntityService {
   @PostConstruct
   public void setup() {
     LOG.info("Initializing [{}]", EntityServiceImpl.class);
-
+    loadEntityTemplates();
     loadExistingEntitiesFromDB();
   }
 
@@ -87,6 +87,14 @@ public class EntityServiceImpl implements EntityService {
     entityRepository.deleteEntity((EntityUUID) entity.getId());
   }
 
+  private void loadEntityTemplates() {
+    LOG.info("Loading entity templates");
+
+    final List<PersistentEntity> templates = entityRepository.getAllEntityTemplates();
+    LOG.info("Found [{}] entity templates", templates.size());
+    templates.forEach(template -> entityTemplates.put(template.getEntityId(), template));
+  }
+
   private void loadExistingEntitiesFromDB() {
     final List<PersistentEntity> persistentEntities = entityRepository.getAllEntities();
     final List<Entity> entities = persistentEntities
@@ -96,6 +104,6 @@ public class EntityServiceImpl implements EntityService {
                                     .peek(gameEngine::addEntity)
                                     .collect(Collectors.toList());
 
-    LOG.info("Loaded and converted [{}] entityData", entities.size());
+    LOG.info("Loaded and converted [{}] persistent entities", entities.size());
   }
 }

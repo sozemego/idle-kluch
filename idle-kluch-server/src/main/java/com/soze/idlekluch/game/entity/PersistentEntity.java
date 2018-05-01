@@ -15,6 +15,9 @@ public class PersistentEntity {
   @AttributeOverride(name = "id", column = @Column(name = "entity_id"))
   private EntityUUID entityId;
 
+  @Column(name = "template")
+  private boolean template;
+
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "entity_id")
   private GraphicsComponent graphicsComponent;
@@ -37,6 +40,14 @@ public class PersistentEntity {
 
   public void setEntityId(final EntityUUID entityId) {
     this.entityId = entityId;
+  }
+
+  public boolean isTemplate() {
+    return template;
+  }
+
+  public void setTemplate(final boolean template) {
+    this.template = template;
   }
 
   public GraphicsComponent getGraphicsComponent() {

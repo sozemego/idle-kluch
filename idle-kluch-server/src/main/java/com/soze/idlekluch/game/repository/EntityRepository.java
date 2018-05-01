@@ -16,4 +16,6 @@ public interface EntityRepository {
 
   List<PersistentEntity> getAllEntities();
 
+  List<PersistentEntity> getAllEntityTemplates();
+
 }

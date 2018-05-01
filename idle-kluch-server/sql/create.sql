@@ -48,7 +48,8 @@ CREATE TABLE kingdoms (
 );
 
 CREATE TABLE entities (
-  entity_id uuid PRIMARY KEY
+  entity_id uuid PRIMARY KEY,
+  template BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE physics_components (
@@ -77,3 +78,28 @@ CREATE TABLE static_occupy_space_components (
   CONSTRAINT FK_STATIC_OCCUPY_SPACE_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
 );
 
+-- here entity templates exist --
+INSERT INTO entities VALUES
+  ('7a4df465-b4c3-4e9f-854a-248988220dfb', true),
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', true)
+;
+
+INSERT INTO physics_components VALUES
+  ('7a4df465-b4c3-4e9f-854a-248988220dfb', 0, 0, 50, 55),
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 0, 0, 80, 81)
+;
+
+INSERT INTO graphics_components VALUES
+  ('7a4df465-b4c3-4e9f-854a-248988220dfb', 'small_warehouse'),
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 'warehouse')
+;
+
+INSERT INTO ownership_components VALUES
+  ('7a4df465-b4c3-4e9f-854a-248988220dfb', '7a4df465-b4c3-4e9f-854a-248988220dfb'),
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', '4517e8b9-de2e-473d-98e8-4c6c73c46c4d')
+;
+
+INSERT INTO static_occupy_space_components VALUES
+  ('7a4df465-b4c3-4e9f-854a-248988220dfb'),
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d')
+;

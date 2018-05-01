@@ -39,9 +39,16 @@ public class EntityRepositoryImpl implements EntityRepository {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public List<PersistentEntity> getAllEntities() {
-    final Query query = em.createQuery("SELECT pe FROM PersistentEntity pe");
+    final Query query = em.createQuery("SELECT pe FROM PersistentEntity pe WHERE pe.template = false");
     return query.getResultList();
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public List<PersistentEntity> getAllEntityTemplates() {
+    return em.createQuery("SELECT pe FROM PersistentEntity pe WHERE pe.template = true").getResultList();
   }
 
 }
