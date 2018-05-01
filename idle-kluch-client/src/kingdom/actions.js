@@ -4,8 +4,7 @@ import { KingdomService as kingdomService } from "./KingdomService";
 export const SET_KINGDOM = "SET_KINGDOM";
 export const setKingdom = makeActionCreator(SET_KINGDOM, "payload");
 
-export const SET_KINGDOM_NAME_REGISTRATION_ERROR =
-  "SET_KINGDOM_NAME_REGISTRATION_ERROR";
+export const SET_KINGDOM_NAME_REGISTRATION_ERROR = "SET_KINGDOM_NAME_REGISTRATION_ERROR";
 export const setKingdomNameRegistrationError = makeActionCreator(
   SET_KINGDOM_NAME_REGISTRATION_ERROR,
   "payload",
@@ -23,8 +22,7 @@ export const setConstructableBuildings = makeActionCreator(
   "payload",
 );
 
-export const SET_SELECTED_CONSTRUCTABLE_BUILDING =
-  "SET_SELECTED_CONSTRUCTABLE_BUILDING";
+export const SET_SELECTED_CONSTRUCTABLE_BUILDING = "SET_SELECTED_CONSTRUCTABLE_BUILDING";
 export const setSelectedConstructableBuilding = makeActionCreator(
   SET_SELECTED_CONSTRUCTABLE_BUILDING,
   "payload",
