@@ -25,6 +25,12 @@ public class GraphicsComponent extends BaseComponent {
     super(ComponentType.GRAPHICS);
   }
 
+  public GraphicsComponent(final EntityUUID entityId, final String asset) {
+    this();
+    this.entityId = entityId;
+    this.asset = Objects.requireNonNull(asset);
+  }
+
   public GraphicsComponent(String asset) {
     super(ComponentType.GRAPHICS);
     this.asset = Objects.requireNonNull(asset);
@@ -44,5 +50,10 @@ public class GraphicsComponent extends BaseComponent {
 
   public void setAsset(final String asset) {
     this.asset = Objects.requireNonNull(asset);
+  }
+
+  @Override
+  public BaseComponent copy() {
+    return new GraphicsComponent(getEntityId(), getAsset());
   }
 }

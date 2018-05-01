@@ -26,6 +26,15 @@ public class PhysicsComponent extends BaseComponent {
     super(ComponentType.PHYSICS);
   }
 
+  public PhysicsComponent(final EntityUUID entityId, final float x, final float y, final float width, final float height) {
+    this();
+    this.entityId = entityId;
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+
   public EntityUUID getEntityId() {
     return entityId;
   }
@@ -64,5 +73,10 @@ public class PhysicsComponent extends BaseComponent {
 
   public void setHeight(float height) {
     this.height = height;
+  }
+
+  @Override
+  public BaseComponent copy() {
+    return new PhysicsComponent(getEntityId(), getX(), getY(), getWidth(), getHeight());
   }
 }

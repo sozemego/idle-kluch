@@ -14,8 +14,17 @@ public abstract class BaseComponent {
     return componentType;
   }
 
+  /**
+   * A method which copies (clones) the component.
+   * This is to implement a Template pattern for entities, so that they can be loaded
+   * from a file and then copied when they need to be added to the game.
+   * This will stop us from having a parallel line of objects which describe how to convert
+   * data from file to entity.
+   */
+  public abstract BaseComponent copy();
+
   public enum ComponentType {
-    PHYSICS, GRAPHICS, OWNERSHIP
+    PHYSICS, GRAPHICS, OWNERSHIP, STATIC_OCCUPY_SPACE,
   }
 
 }

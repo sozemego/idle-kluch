@@ -24,6 +24,12 @@ public class OwnershipComponent extends BaseComponent {
     super(ComponentType.OWNERSHIP);
   }
 
+  public OwnershipComponent(final EntityUUID entityId, final EntityUUID ownerId) {
+    this();
+    this.entityId = entityId;
+    this.ownerId = ownerId;
+  }
+
   public EntityUUID getEntityId() {
     return entityId;
   }
@@ -38,5 +44,10 @@ public class OwnershipComponent extends BaseComponent {
 
   public void setOwnerId(final EntityUUID ownerId) {
     this.ownerId = ownerId;
+  }
+
+  @Override
+  public BaseComponent copy() {
+    return new OwnershipComponent(getEntityId(), getOwnerId());
   }
 }
