@@ -76,7 +76,7 @@ public class PhysicsComponent extends BaseComponent {
   }
 
   @Override
-  public BaseComponent copy() {
+  public PhysicsComponent copy() {
     return new PhysicsComponent(getEntityId(), getX(), getY(), getWidth(), getHeight());
   }
 }

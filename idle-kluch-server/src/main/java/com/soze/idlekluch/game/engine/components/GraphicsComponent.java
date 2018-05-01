@@ -53,7 +53,7 @@ public class GraphicsComponent extends BaseComponent {
   }
 
   @Override
-  public BaseComponent copy() {
+  public GraphicsComponent copy() {
     return new GraphicsComponent(getEntityId(), getAsset());
   }
 }

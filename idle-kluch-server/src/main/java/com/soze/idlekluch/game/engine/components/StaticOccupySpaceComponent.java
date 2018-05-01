@@ -33,7 +33,7 @@ public class StaticOccupySpaceComponent extends BaseComponent {
   }
 
   @Override
-  public BaseComponent copy() {
+  public StaticOccupySpaceComponent copy() {
     return new StaticOccupySpaceComponent(getEntityId());
   }
 }

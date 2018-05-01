@@ -47,7 +47,7 @@ public class OwnershipComponent extends BaseComponent {
   }
 
   @Override
-  public BaseComponent copy() {
+  public OwnershipComponent copy() {
     return new OwnershipComponent(getEntityId(), getOwnerId());
   }
 }
