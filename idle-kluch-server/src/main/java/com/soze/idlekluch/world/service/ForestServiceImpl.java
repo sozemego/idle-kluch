@@ -11,13 +11,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import static com.soze.idlekluch.utils.JsonUtils.resourceToMap;
 
 @Service
 public class ForestServiceImpl implements ForestService {
@@ -34,16 +30,6 @@ public class ForestServiceImpl implements ForestService {
   @Autowired
   public ForestServiceImpl(final WorldRepository worldRepository) {
     this.worldRepository = Objects.requireNonNull(worldRepository);
-  }
-
-  @PostConstruct
-  public void setup() throws IOException {
-    LOG.info("Initializing ForestService");
-
-    //read trees
-    final Map<String, Object> rawTreeDefinitions = resourceToMap(forests, String.class, Object.class);
-    parseRawForestDefinitions(rawTreeDefinitions);
-    LOG.info("Loaded [{}] forest definitions", forestDefinitions.size());
   }
 
   @EventListener
