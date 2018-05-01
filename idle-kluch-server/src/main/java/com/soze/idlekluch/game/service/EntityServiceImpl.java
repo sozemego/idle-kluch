@@ -10,13 +10,13 @@ import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +27,11 @@ public class EntityServiceImpl implements EntityService {
   private final GameEngine gameEngine;
   private final EntityRepository entityRepository;
   private final EntityConverter entityConverter;
+
+  private final Map<String, Entity> entities = new HashMap<>();
+
+  @Value("entities.json")
+  private ClassPathResource entityData;
 
   @Autowired
   public EntityServiceImpl(final GameEngine gameEngine,
@@ -41,15 +46,7 @@ public class EntityServiceImpl implements EntityService {
   public void setup() {
     LOG.info("Initializing [{}]", EntityServiceImpl.class);
 
-    final List<PersistentEntity> persistentEntities = entityRepository.getAllEntities();
-    final List<Entity> entities = persistentEntities
-                                    .stream()
-                                    .peek(e -> LOG.info("Converting persistent entity with ID:[{}] to ECS Entity", e.getEntityId()))
-                                    .map(entityConverter::convertPersistentToEntity)
-                                    .peek(gameEngine::addEntity)
-                                    .collect(Collectors.toList());
-
-    LOG.info("Loaded and converted [{}] entities", entities.size());
+    loadExistingEntitiesFromDB();
   }
 
   @Override
@@ -88,5 +85,17 @@ public class EntityServiceImpl implements EntityService {
     final Entity entity = removedEntityEvent.getEntity();
     LOG.info("Removed event for entity ID:[{}]", entity.getId());
     entityRepository.deleteEntity((EntityUUID) entity.getId());
+  }
+
+  private void loadExistingEntitiesFromDB() {
+    final List<PersistentEntity> persistentEntities = entityRepository.getAllEntities();
+    final List<Entity> entities = persistentEntities
+                                    .stream()
+                                    .peek(e -> LOG.info("Converting persistent entity with ID:[{}] to ECS Entity", e.getEntityId()))
+                                    .map(entityConverter::convertPersistentToEntity)
+                                    .peek(gameEngine::addEntity)
+                                    .collect(Collectors.toList());
+
+    LOG.info("Loaded and converted [{}] entityData", entities.size());
   }
 }
