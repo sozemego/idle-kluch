@@ -21,7 +21,7 @@ export class Engine {
       system => system.constructor === clazz
     );
     if (index > -1) {
-      return this.systems[index];
+      return this.systems[ index ];
     }
 
     return null;
@@ -35,25 +35,25 @@ export class Engine {
   };
 
   addEntity = entity => {
-    if (this.entities[entity.id] || this.addEntityQueue[entity.id]) {
+    if (this.entities[ entity.id ] || this.addEntityQueue[ entity.id ]) {
       throw new Error(entity.id + " entity already added");
     }
 
     if (!this.updating) {
-      this.entities[entity.id] = entity;
+      this.entities[ entity.id ] = entity;
     } else {
-      this.addEntityQueue[entity.id] = entity;
+      this.addEntityQueue[ entity.id ] = entity;
     }
   };
 
   removeEntity = entityId => {
-    if (!this.entities[entityId]) {
+    if (!this.entities[ entityId ]) {
       throw new Error(entityId + " entity not added");
     }
 
     if (!this.updating) {
       //delete might be slow, profile it and check
-      delete this.entities[entityId];
+      delete this.entities[ entityId ];
       this.componentContainer.removeEntityComponents(entityId);
     } else {
       this.removeEntityQueue.push(entityId);
@@ -67,7 +67,7 @@ export class Engine {
   getEntitiesByNode = node => {
     const entityIds = this.componentContainer.getEntitiesByNode(node);
 
-    return entityIds.map(id => this.entities[id]).filter(Boolean);
+    return entityIds.map(id => this.entities[ id ]).filter(Boolean);
   };
 
   update = delta => {
@@ -89,7 +89,7 @@ export class Engine {
     this.addEntityQueue = {};
     entitiesToAdd.forEach(entity => this.addEntity(entity));
 
-    const entitiesToRemove = [...this.removeEntityQueue];
+    const entitiesToRemove = [ ...this.removeEntityQueue ];
     this.removeEntityQueue = [];
     entitiesToRemove.forEach(entity => this.removeEntity(entity));
   };

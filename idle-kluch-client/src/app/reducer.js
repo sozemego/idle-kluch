@@ -65,13 +65,13 @@ const setPasswordError = (state, action) => {
 };
 
 const app = createReducer(initialState, {
-  [APP_ACTIONS.FETCHING]: fetching,
-  [APP_ACTIONS.STOP_FETCHING]: stopFetching,
-  [APP_ACTIONS.SET_ERROR_MESSAGE]: setErrorMessage,
-  [APP_ACTIONS.SET_USERNAME]: setUsername,
-  [APP_ACTIONS.SET_TOKEN]: setToken,
-  [APP_ACTIONS.SET_USERNAME_ERROR]: setUsernameError,
-  [APP_ACTIONS.SET_PASSWORD_ERROR]: setPasswordError
+  [ APP_ACTIONS.FETCHING ]: fetching,
+  [ APP_ACTIONS.STOP_FETCHING ]: stopFetching,
+  [ APP_ACTIONS.SET_ERROR_MESSAGE ]: setErrorMessage,
+  [ APP_ACTIONS.SET_USERNAME ]: setUsername,
+  [ APP_ACTIONS.SET_TOKEN ]: setToken,
+  [ APP_ACTIONS.SET_USERNAME_ERROR ]: setUsernameError,
+  [ APP_ACTIONS.SET_PASSWORD_ERROR ]: setPasswordError
 });
 
 export default app;

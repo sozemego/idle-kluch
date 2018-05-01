@@ -2,7 +2,7 @@
 import { networkConfig } from "../api/config";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
-import { addBuildings, addEntity, addTiles } from "./actions";
+import { addEntity, addTiles } from "./actions";
 import store from "../store/store";
 import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
@@ -19,7 +19,7 @@ let client = null;
 
 export const GameService = {};
 
-GameService.connect = function() {
+GameService.connect = function () {
   return new Promise((resolve, reject) => {
     // if (client && client.readyState !== WebSocket.CLOSED) {
     //   reject('Already connected or connecting or closing. Either way, cannot connect right now.');
@@ -35,10 +35,10 @@ GameService.connect = function() {
 
     const messageHandler = message => {
       const parsed = parseJSON(message.body);
-      if (parsed["type"] === "WORLD_CHUNK") {
+      if (parsed[ "type" ] === "WORLD_CHUNK") {
         store.dispatch(addTiles(parsed.tiles));
       }
-      if (parsed["type"] === "ENTITY") {
+      if (parsed[ "type" ] === "ENTITY") {
         store.dispatch(addEntity(parsed));
       }
     };
@@ -69,7 +69,7 @@ GameService.connect = function() {
   });
 };
 
-GameService.disconnect = function() {
+GameService.disconnect = function () {
   if (client) {
     client.close();
   }

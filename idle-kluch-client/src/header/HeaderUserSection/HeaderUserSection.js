@@ -14,9 +14,9 @@ class HeaderUserSection extends Component {
 
     switch (true) {
       case !isLoggedIn:
-        return <HeaderAuthForm />;
+        return <HeaderAuthForm/>;
       case isLoggedIn:
-        return <HeaderUserComponent />;
+        return <HeaderUserComponent/>;
       default:
         return null;
     }

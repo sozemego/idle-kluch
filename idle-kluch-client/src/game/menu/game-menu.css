@@ -1,8 +1,8 @@
 .building {
-  margin-left: 12px;
-  pointer: cursor;
+    margin-left: 12px;
+    pointer: cursor;
 }
 
 .building-selected {
-  color: red;
+    color: red;
 }

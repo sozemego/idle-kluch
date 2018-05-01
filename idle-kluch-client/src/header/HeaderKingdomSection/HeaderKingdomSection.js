@@ -41,7 +41,7 @@ class HeaderKingdomSection extends Component {
         key={0}
         onClick={this.onContainerClicked}
       >
-        <img src={avatar} className={styles.avatar} alt={"Kingdom avatar"} />
+        <img src={avatar} className={styles.avatar} alt={"Kingdom avatar"}/>
         <div className={styles.name}>{kingdom.name}</div>
         <i className={"material-icons"}>arrow_drop_down</i>
       </div>,

@@ -1,17 +1,17 @@
 .container {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background: aliceblue;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background: aliceblue;
 }
 
 .input_row {
-  display: flex;
+    display: flex;
 }
 
 .submit_button {
-  margin-top: 36px;
-  margin-bottom: 12px;
+    margin-top: 36px;
+    margin-bottom: 12px;
 }

@@ -5,21 +5,21 @@ const prodEnv = "PROD";
 const currentEnv = localEnv;
 
 const configurations = {
-  [localEnv]: {
+  [ localEnv ]: {
     protocol: "http",
     wsProtocol: "ws",
     base: "localhost",
     port: 8080,
     version: "/api/0.1"
   },
-  [testEnv]: {
+  [ testEnv ]: {
     protocol: "http",
     wsProtocol: "ws",
     base: "localhost",
     port: 8180,
     version: "/api/0.1"
   },
-  [prodEnv]: {
+  [ prodEnv ]: {
     protocol: "http",
     wsProtocol: "ws",
     base: "localhost",
@@ -29,7 +29,7 @@ const configurations = {
 };
 
 const findCurrentConfig = () => {
-  const config = configurations[currentEnv];
+  const config = configurations[ currentEnv ];
   if (!config) {
     throw new Error(`Could not find a valid network configuration for current env: ${currentEnv}
      and configurations ${JSON.stringify(configurations)}`);

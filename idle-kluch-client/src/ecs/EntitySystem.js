@@ -7,5 +7,6 @@ export class EntitySystem {
 
   getEngine = () => this.engine;
 
-  update = delta => {};
+  update = delta => {
+  };
 }

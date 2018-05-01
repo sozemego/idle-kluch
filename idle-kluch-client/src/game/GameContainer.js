@@ -14,9 +14,9 @@ class GameContainer extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.menu}>
-          <GameMenu />
+          <GameMenu/>
         </div>
-        <div className={styles.game} id="game" />
+        <div className={styles.game} id="game"/>
       </div>
     );
   }

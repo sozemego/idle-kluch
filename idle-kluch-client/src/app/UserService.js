@@ -12,7 +12,7 @@ const maxPasswordLength = 128;
 
 export const UserService = {};
 
-UserService.registerUser = function(username, password) {
+UserService.registerUser = function (username, password) {
   const usernameError = this.validateUsername(username);
   if (usernameError)
     return Promise.reject({ field: "username", message: usernameError });
@@ -36,11 +36,11 @@ UserService.registerUser = function(username, password) {
     });
 };
 
-UserService.checkUsernameAvailability = function(username) {
+UserService.checkUsernameAvailability = function (username) {
   return networkService.get(`${isAvailablePath}/${username}`);
 };
 
-UserService.login = function(username, password) {
+UserService.login = function (username, password) {
   return networkService
     .post(`${loginPath}`, { username, password })
     .then(data => {
@@ -49,11 +49,11 @@ UserService.login = function(username, password) {
     .catch(error => Promise.reject("Invalid username or password!"));
 };
 
-UserService.delete = function() {
+UserService.delete = function () {
   return networkService.delete(`${deletePath}`);
 };
 
-UserService.validateUsername = function(username) {
+UserService.validateUsername = function (username) {
   if (!username) {
     return "Username cannot be empty!";
   }
@@ -67,7 +67,7 @@ UserService.validateUsername = function(username) {
   }
 };
 
-UserService.validatePassword = function(password) {
+UserService.validatePassword = function (password) {
   if (!password) {
     return "Password cannot be empty!";
   }

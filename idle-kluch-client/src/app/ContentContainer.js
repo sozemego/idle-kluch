@@ -14,9 +14,9 @@ class ContentContainer extends Component {
 
     switch (true) {
       case showCreateKingdomForm && isLoggedIn:
-        return <CreateKingdomForm />;
+        return <CreateKingdomForm/>;
       case hasKingdom && isLoggedIn:
-        return <GameContainer />;
+        return <GameContainer/>;
       default:
         return null;
     }

@@ -1,6 +1,6 @@
-import {ComponentContainer} from "./ComponentContainer";
-import {Engine} from "./Engine";
-import {EntitySystem} from "./EntitySystem";
+import { ComponentContainer } from "./ComponentContainer";
+import { Engine } from "./Engine";
+import { EntitySystem } from "./EntitySystem";
 
 const { describe, it, beforeEach, expect } = global;
 
@@ -152,10 +152,10 @@ describe("engine", () => {
     engine.addSystem(system);
     expect(engine.getAllEntities().length).toBe(0);
     engine.update();
-    expect(counts[0]).toBe(0);
+    expect(counts[ 0 ]).toBe(0);
 
     engine.addEntity(entity);
     engine.update();
-    expect(counts[1]).toBe(1);
+    expect(counts[ 1 ]).toBe(1);
   });
 });

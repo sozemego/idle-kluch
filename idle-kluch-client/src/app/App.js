@@ -29,10 +29,10 @@ class App extends Component {
         <MuiThemeProvider muiTheme={theme}>
           <Router history={history}>
             <div>
-              <Header />
+              <Header/>
               <div className={styles.content}>
                 {/*<div>here be one of menus</div>*/}
-                <ContentContainer />
+                <ContentContainer/>
               </div>
             </div>
           </Router>

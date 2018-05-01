@@ -1,16 +1,16 @@
 .container {
-  background: rgba(16, 12, 12, 0.1);
-  display: flex;
-  align-items: center;
-  height: 4.5em;
+    background: rgba(16, 12, 12, 0.1);
+    display: flex;
+    align-items: center;
+    height: 4.5em;
 }
 
 .element {
-  flex: 1 1 33%;
+    flex: 1 1 33%;
 }
 
 .logo {
-  display: flex;
-  justify-content: center;
-  font-weight: 700;
+    display: flex;
+    justify-content: center;
+    font-weight: 700;
 }

@@ -5,5 +5,6 @@ export class PhysicsSystem extends EntitySystem {
     super(engine);
   }
 
-  update = delta => {};
+  update = delta => {
+  };
 }

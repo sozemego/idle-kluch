@@ -30,11 +30,11 @@ const setSelectedConstructableBuilding = (state, action) => {
 };
 
 const kingdom = createReducer(initialState, {
-  [KINGDOM_ACTIONS.SET_KINGDOM]: setKingdom,
-  [KINGDOM_ACTIONS.SET_KINGDOM_NAME_REGISTRATION_ERROR]: setKingdomRegistrationError,
-  [KINGDOM_ACTIONS.SET_SHOW_CREATE_KINGDOM_FORM]: setShowCreateKingdomForm,
-  [KINGDOM_ACTIONS.SET_CONSTRUCTABLE_BUILDINGS]: setConstructableBuildings,
-  [KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING]: setSelectedConstructableBuilding
+  [ KINGDOM_ACTIONS.SET_KINGDOM ]: setKingdom,
+  [ KINGDOM_ACTIONS.SET_KINGDOM_NAME_REGISTRATION_ERROR ]: setKingdomRegistrationError,
+  [ KINGDOM_ACTIONS.SET_SHOW_CREATE_KINGDOM_FORM ]: setShowCreateKingdomForm,
+  [ KINGDOM_ACTIONS.SET_CONSTRUCTABLE_BUILDINGS ]: setConstructableBuildings,
+  [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setSelectedConstructableBuilding
 });
 
 export default kingdom;

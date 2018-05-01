@@ -1,38 +1,38 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid gray;
-  border-radius: 5px;
-  padding: 4px;
-  background-color: rgba(12, 12, 12, 0.1);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 4px;
+    background-color: rgba(12, 12, 12, 0.1);
 }
 
 .input {
-  font-size: 5em;
+    font-size: 5em;
 }
 
 .input__label {
-  width: 60px;
-  color: gray;
-  font-size: 0.75em;
+    width: 60px;
+    color: gray;
+    font-size: 0.75em;
 }
 
 .input__row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .button {
-  width: 75px;
+    width: 75px;
 }
 
 .error {
-  font-size: 0.75em;
-  color: crimson;
-  font-weight: 700;
-  max-width: 125px;
-  max-height: 2em;
-  padding: 2px 4px 2px 4px;
-  justify-self: flex-start;
+    font-size: 0.75em;
+    color: crimson;
+    font-weight: 700;
+    max-width: 125px;
+    max-height: 2em;
+    padding: 2px 4px 2px 4px;
+    justify-self: flex-start;
 }

@@ -15,17 +15,17 @@ class Header extends Component {
         <div className={styles.container}>
           <div className={styles.element}>
             {/*<HeaderAuthButtons/>*/}
-            <HeaderKingdomSection />
+            <HeaderKingdomSection/>
           </div>
-          <div className={[styles.element, styles.logo].join(" ")}>
+          <div className={[ styles.element, styles.logo ].join(" ")}>
             Idle Kluch
           </div>
           <div className={styles.element}>
-            <HeaderAuthButtons />
+            <HeaderAuthButtons/>
           </div>
         </div>
-        <Divider />
-        <HeaderLinearProgress />
+        <Divider/>
+        <HeaderLinearProgress/>
       </div>
     );
   }

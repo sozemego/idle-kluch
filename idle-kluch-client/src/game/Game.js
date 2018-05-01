@@ -1,17 +1,17 @@
 import store from "../store/store";
 import Phaser from "phaser";
 import * as GAME_ACTIONS from "./actions";
-import {onCanvasClicked} from "./actions";
-import {createReducer} from "../store/utils";
+import { onCanvasClicked } from "./actions";
+import { createReducer } from "../store/utils";
 import * as KINGDOM_ACTIONS from "../kingdom/actions";
-import {Engine} from "../ecs/Engine";
-import {GraphicsComponent} from "../ecs/components/GraphicsComponent";
-import {PhysicsComponent} from "../ecs/components/PhysicsComponent";
-import {PhysicsSystem} from "../ecs/systems/PhysicsSystem";
-import {GraphicsSystem} from "../ecs/systems/GraphicsSystem";
-import {getSelectedConstructableBuilding as _getSelectedConstructableBuilding} from "../kingdom/selectors";
-import {COMPONENT_TYPES} from "./constants";
-import {OwnershipComponent} from "../ecs/components/OwnershipComponent";
+import { Engine } from "../ecs/Engine";
+import { GraphicsComponent } from "../ecs/components/GraphicsComponent";
+import { PhysicsComponent } from "../ecs/components/PhysicsComponent";
+import { PhysicsSystem } from "../ecs/systems/PhysicsSystem";
+import { GraphicsSystem } from "../ecs/systems/GraphicsSystem";
+import { getSelectedConstructableBuilding as _getSelectedConstructableBuilding } from "../kingdom/selectors";
+import { COMPONENT_TYPES } from "./constants";
+import { OwnershipComponent } from "../ecs/components/OwnershipComponent";
 
 const getSelectedConstructableBuilding = () =>
   _getSelectedConstructableBuilding(store.getState());
@@ -34,13 +34,13 @@ const addTiles = (state, { payload: tiles }) => {
   tiles.forEach(tile => {
     const { x, y } = tile;
     const key = `${x}:${y}`;
-    const previousTile = previousTiles[key];
+    const previousTile = previousTiles[ key ];
     if (!previousTile) {
-      previousTiles[key] = tile;
+      previousTiles[ key ] = tile;
       const sprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, "grass_1");
       sprite.inputEnabled = true;
 
-      tileSprites[key] = sprite;
+      tileSprites[ key ] = sprite;
     }
   });
   return { ...state, tiles: previousTiles };
@@ -94,9 +94,9 @@ const setConstructableBuilding = (state, action) => {
 };
 
 export const gameReducer = createReducer(initialState, {
-  [GAME_ACTIONS.ADD_TILES]: addTiles,
-  [GAME_ACTIONS.ADD_ENTITY]: addEntity,
-  [KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING]: setConstructableBuilding
+  [ GAME_ACTIONS.ADD_TILES ]: addTiles,
+  [ GAME_ACTIONS.ADD_ENTITY ]: addEntity,
+  [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding
 });
 
 const TILE_SIZE = 128;
@@ -107,7 +107,7 @@ const createGame = () => {
 
     // let background = null;
 
-    const preload = function() {
+    const preload = function () {
       console.log("preloading!");
       this.load.image("grass_1", "grass_1.png");
       this.load.image("small_warehouse", "small_warehouse.png");
@@ -119,7 +119,7 @@ const createGame = () => {
       this.load.image("woodcutter", "woodcutter.png");
     };
 
-    const create = function() {
+    const create = function () {
       console.log("creating!");
 
       cursors = game.input.keyboard.createCursorKeys();
@@ -180,7 +180,8 @@ const createGame = () => {
       engine.update(game.time.physicsElapsed);
     };
 
-    const render = () => {};
+    const render = () => {
+    };
 
     const config = {
       type: Phaser.CANVAS,

@@ -37,7 +37,7 @@ class HeaderUserComponent extends Component {
         key={0}
         onClick={this.onContainerClicked}
       >
-        <img src={avatar} className={styles.avatar} alt={"User avatar"} />
+        <img src={avatar} className={styles.avatar} alt={"User avatar"}/>
         <div className={styles.name}>{user.name}</div>
         <i className={"material-icons"}>arrow_drop_down</i>
       </div>,

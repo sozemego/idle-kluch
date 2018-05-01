@@ -35,7 +35,7 @@ class CreateKingdomForm extends Component {
     return (
       <div className={styles.container}>
         <h2>Create new kingdom</h2>
-        <Divider />
+        <Divider/>
         <div className={styles.input_row}>
           <TextField
             value={kingdomName}

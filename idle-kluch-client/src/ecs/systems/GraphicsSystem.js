@@ -6,7 +6,7 @@ import { Node } from "../Node";
 export class GraphicsSystem extends EntitySystem {
   constructor(engine) {
     super(engine);
-    this.node = Node.of([GraphicsComponent, PhysicsComponent]);
+    this.node = Node.of([ GraphicsComponent, PhysicsComponent ]);
   }
 
   update = delta => {

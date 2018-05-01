@@ -2,13 +2,7 @@ import axios from "axios";
 import _ from "lodash";
 import store from "../store/store";
 import { networkConfig } from "./config";
-import {
-  fetching,
-  setErrorMessage,
-  setToken,
-  setUsername,
-  stopFetching
-} from "../app/actions";
+import { fetching, setErrorMessage, setToken, setUsername, stopFetching } from "../app/actions";
 
 const fetch = () => store.dispatch(fetching());
 
@@ -88,11 +82,11 @@ NetworkService.setAuthorizationToken = token => {
     );
   }
 
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  axios.defaults.headers.common[ "Authorization" ] = `Bearer ${token}`;
 };
 
 NetworkService.clearAuthorizationToken = () => {
-  delete axios.defaults.headers.common["Authorization"];
+  delete axios.defaults.headers.common[ "Authorization" ];
 };
 
 export default NetworkService;
