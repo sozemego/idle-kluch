@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.engine.components;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ public abstract class BaseComponent {
 
   @EmbeddedId
   @AttributeOverride(name = "id", column = @Column(name = "entity_id"))
+  @JsonUnwrapped
   private EntityUUID entityId;
 
   @Transient
