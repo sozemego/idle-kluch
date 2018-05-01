@@ -1,5 +1,7 @@
 package com.soze.idlekluch.game.engine.components;
 
+import com.soze.idlekluch.utils.jpa.EntityUUID;
+
 import java.util.Objects;
 
 public abstract class BaseComponent {
@@ -13,6 +15,8 @@ public abstract class BaseComponent {
   public ComponentType getComponentType() {
     return componentType;
   }
+
+  public abstract void setEntityId(final EntityUUID entityId);
 
   /**
    * A method which copies (clones) the component.

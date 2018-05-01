@@ -1,6 +1,7 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.engine.EntityConverter;
+import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.repository.EntityRepository;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
@@ -65,6 +66,28 @@ public class EntityServiceImpl implements EntityService {
   public void deleteEntity(final EntityUUID id) {
     Objects.requireNonNull(id);
     entityRepository.deleteEntity(id);
+  }
+
+  @Override
+  public Optional<Entity> getEntityTemplate(final EntityUUID templateId) {
+    Objects.requireNonNull(templateId);
+    final PersistentEntity template = entityTemplates.get(templateId);
+    if(template == null) {
+      return Optional.empty();
+    }
+
+    return Optional.of(entityConverter.convertPersistentToEntity(template));
+  }
+
+  @Override
+  public void copyEntity(final Entity source, final Entity target) {
+    source.getAllComponents(BaseComponent.class)
+      .stream()
+      .map(BaseComponent::copy)
+      .forEach(component -> {
+        component.setEntityId((EntityUUID) target.getId());
+        target.addComponent(component);
+      });
   }
 
   @EventListener

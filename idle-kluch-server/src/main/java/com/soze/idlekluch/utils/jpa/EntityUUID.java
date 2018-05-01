@@ -39,7 +39,12 @@ public class EntityUUID implements Serializable {
 
   @JsonCreator
   public static EntityUUID fromString(String id) {
-    return new EntityUUID(id);
+    Objects.requireNonNull(id);
+    try {
+      return new EntityUUID(id);
+    } catch (IllegalArgumentException e) {
+      throw new InvalidUUIDException(id);
+    }
   }
 
   @Override

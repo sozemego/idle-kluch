@@ -1,15 +1,12 @@
 package com.soze.idlekluch.kingdom.service;
 
-import com.soze.idlekluch.game.engine.components.GraphicsComponent;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
-import com.soze.idlekluch.game.repository.EntityRepository;
+import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
-import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
-import com.soze.idlekluch.kingdom.dto.WarehouseDefinitionDto;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
@@ -17,16 +14,16 @@ import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.service.UserService;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
-import com.soze.idlekluch.world.repository.WorldRepository;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -39,33 +36,19 @@ public class BuildingServiceImpl implements BuildingService {
   private final KingdomService kingdomService;
 
   private final GameEngine gameEngine;
-  private final WorldRepository worldRepository;
-  private final EntityRepository entityRepository;
+  private final EntityService entityService;
 
   private final Set<EntityUUID> buildings = ConcurrentHashMap.newKeySet();
-
-  //TODO move to repository?
-  private final Map<String, BuildingDefinitionDto> buildingDefinitions = new HashMap<>();
-
-  @Value("buildings.json")
-  private ClassPathResource buildingData;
 
   @Autowired
   public BuildingServiceImpl(final UserService userService,
                              final KingdomService kingdomService,
                              final GameEngine gameEngine,
-                             final WorldRepository worldRepository,
-                             final EntityRepository entityRepository) {
+                             final EntityService entityService) {
     this.userService = Objects.requireNonNull(userService);
     this.kingdomService = Objects.requireNonNull(kingdomService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
-    this.worldRepository = Objects.requireNonNull(worldRepository);
-    this.entityRepository = Objects.requireNonNull(entityRepository);
-  }
-
-  @Override
-  public Map<String, BuildingDefinitionDto> getAllConstructableBuildings() {
-    return buildingDefinitions;
+    this.entityService = Objects.requireNonNull(entityService);
   }
 
   @Override
@@ -132,10 +115,15 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   @Override
+  public List<Entity> getAllConstructableBuildings() {
+    return gameEngine.getEntitiesByNode(Nodes.BUILDABLE);
+  }
+
+  @Override
   public List<PersistentEntity> getAllConstructedBuildings() {
     return buildings
              .stream()
-             .map(entityRepository::getEntity)
+             .map(entityService::getEntity)
              .filter(Optional::isPresent)
              .map(Optional::get)
              .collect(Collectors.toList());
@@ -151,52 +139,21 @@ public class BuildingServiceImpl implements BuildingService {
   private Entity constructBuilding(final BuildBuildingForm form) {
     Objects.requireNonNull(form);
 
-    final BuildingDefinitionDto buildingDefinition = buildingDefinitions.get(form.getBuildingId());
-    if (buildingDefinition == null) {
+    final Optional<Entity> templateOptional = entityService.getEntityTemplate(EntityUUID.fromString(form.getBuildingId()));
+
+    if(!templateOptional.isPresent()) {
       throw new BuildingDoesNotExistException(form.getBuildingId());
     }
 
-    final Entity building = constructBuilding(buildingDefinition);
+    final Entity buildingTemplate = templateOptional.get();
+    final Entity building = gameEngine.createEmptyEntity();
+    entityService.copyEntity(buildingTemplate, building);
 
-    if (building == null) {
-      throw new IllegalStateException("Building cannot be null");
-    }
-
-    final PhysicsComponent physicsComponent = (PhysicsComponent) building.getComponent(PhysicsComponent.class);
+    final PhysicsComponent physicsComponent = building.getComponent(PhysicsComponent.class);
     physicsComponent.setX(form.getX());
     physicsComponent.setY(form.getY());
 
     return building;
-  }
-
-  private Entity constructBuilding(final BuildingDefinitionDto buildingDefinition) {
-    Objects.requireNonNull(buildingDefinition);
-
-    switch (buildingDefinition.getType()) {
-      case WAREHOUSE:
-        return constructWarehouse((WarehouseDefinitionDto) buildingDefinition);
-    }
-
-    throw new IllegalStateException("Ops, could not construct building " + buildingDefinition.getId());
-  }
-
-  private Entity constructWarehouse(final WarehouseDefinitionDto warehouseDefinition) {
-    Objects.requireNonNull(warehouseDefinition);
-
-    final Entity entity = gameEngine.createEmptyEntity();
-
-    final PhysicsComponent physicsComponent = new PhysicsComponent();
-    physicsComponent.setWidth(warehouseDefinition.getWidth());
-    physicsComponent.setHeight(warehouseDefinition.getHeight());
-    physicsComponent.setEntityId((EntityUUID) entity.getId());
-    entity.addComponent(physicsComponent);
-
-    final GraphicsComponent graphicsComponent = new GraphicsComponent();
-    graphicsComponent.setAsset(warehouseDefinition.getAsset());
-    graphicsComponent.setEntityId((EntityUUID) entity.getId());
-    entity.addComponent(graphicsComponent);
-
-    return entity;
   }
 
 }

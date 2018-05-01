@@ -1,13 +1,9 @@
 package com.soze.idlekluch.game.engine;
 
-import com.soze.idlekluch.game.engine.components.BaseComponent;
-import com.soze.idlekluch.game.engine.components.GraphicsComponent;
-import com.soze.idlekluch.game.engine.components.OwnershipComponent;
-import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.game.engine.components.*;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.EntityMessage;
 import com.soze.idlekluch.game.service.GameEngine;
-import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.entity.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +19,10 @@ import java.util.Objects;
 public class EntityConverter {
 
   private final GameEngine gameEngine;
-  private final BuildingService buildingService;
 
   @Autowired
-  public EntityConverter(final GameEngine gameEngine, final BuildingService buildingService) {
+  public EntityConverter(final GameEngine gameEngine) {
     this.gameEngine = Objects.requireNonNull(gameEngine);
-    this.buildingService = Objects.requireNonNull(buildingService);
   }
 
   public Entity convertPersistentToEntity(final PersistentEntity persistentEntity) {
@@ -37,6 +31,10 @@ public class EntityConverter {
     final Entity entity = gameEngine.createEmptyEntity(persistentEntity.getEntityId());
     entity.addComponent(persistentEntity.getGraphicsComponent());
     entity.addComponent(persistentEntity.getPhysicsComponent());
+    entity.addComponent(persistentEntity.getOwnershipComponent());
+    entity.addComponent(persistentEntity.getNameComponent());
+    entity.addComponent(persistentEntity.getBuildableComponent());
+    entity.addComponent(persistentEntity.getStaticOccupySpaceComponent());
 
     return entity;
   }
@@ -46,9 +44,12 @@ public class EntityConverter {
 
     final PersistentEntity persistentEntity = new PersistentEntity();
     persistentEntity.setEntityId((EntityUUID) entity.getId());
-    persistentEntity.setGraphicsComponent((GraphicsComponent) entity.getComponent(GraphicsComponent.class));
-    persistentEntity.setPhysicsComponent((PhysicsComponent) entity.getComponent(PhysicsComponent.class));
-    persistentEntity.setOwnershipComponent((OwnershipComponent) entity.getComponent(OwnershipComponent.class));
+    persistentEntity.setGraphicsComponent(entity.getComponent(GraphicsComponent.class));
+    persistentEntity.setPhysicsComponent(entity.getComponent(PhysicsComponent.class));
+    persistentEntity.setOwnershipComponent(entity.getComponent(OwnershipComponent.class));
+    persistentEntity.setNameComponent(entity.getComponent(NameComponent.class));
+    persistentEntity.setBuildableComponent(entity.getComponent(BuildableComponent.class));
+    persistentEntity.setStaticOccupySpaceComponent(entity.getComponent(StaticOccupySpaceComponent.class));
 
     return persistentEntity;
   }
