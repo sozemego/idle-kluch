@@ -1,5 +1,6 @@
 package com.soze.idlekluch.kingdom.service;
 
+import com.soze.idlekluch.game.engine.components.BuildableComponent;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
@@ -116,7 +117,10 @@ public class BuildingServiceImpl implements BuildingService {
 
   @Override
   public List<Entity> getAllConstructableBuildings() {
-    return gameEngine.getEntitiesByNode(Nodes.BUILDABLE);
+    return entityService.getEntityTemplates()
+             .stream()
+             .filter(entity -> entity.getComponent(BuildableComponent.class) != null)
+             .collect(Collectors.toList());
   }
 
   @Override

@@ -29,7 +29,7 @@ public class EntityServiceImpl implements EntityService {
   private final EntityRepository entityRepository;
   private final EntityConverter entityConverter;
 
-  private final Map<EntityUUID, PersistentEntity> entityTemplates = new HashMap<>();
+  private final Map<EntityUUID, Entity> entityTemplates = new HashMap<>();
 
   @Value("entities.json")
   private ClassPathResource entityData;
@@ -71,12 +71,12 @@ public class EntityServiceImpl implements EntityService {
   @Override
   public Optional<Entity> getEntityTemplate(final EntityUUID templateId) {
     Objects.requireNonNull(templateId);
-    final PersistentEntity template = entityTemplates.get(templateId);
-    if(template == null) {
-      return Optional.empty();
-    }
+    return Optional.ofNullable(entityTemplates.get(templateId));
+  }
 
-    return Optional.of(entityConverter.convertPersistentToEntity(template));
+  @Override
+  public List<Entity> getEntityTemplates() {
+    return new ArrayList<>(entityTemplates.values());
   }
 
   @Override
@@ -115,7 +115,7 @@ public class EntityServiceImpl implements EntityService {
 
     final List<PersistentEntity> templates = entityRepository.getAllEntityTemplates();
     LOG.info("Found [{}] entity templates", templates.size());
-    templates.forEach(template -> entityTemplates.put(template.getEntityId(), template));
+    templates.forEach(template -> entityTemplates.put(template.getEntityId(), entityConverter.convertPersistentToEntity(template)));
   }
 
   private void loadExistingEntitiesFromDB() {
