@@ -3,6 +3,7 @@ package com.soze.idlekluch.game.engine.components;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "physics_components")
@@ -28,7 +29,7 @@ public class PhysicsComponent extends BaseComponent {
 
   public PhysicsComponent(final EntityUUID entityId, final float x, final float y, final float width, final float height) {
     this();
-    this.entityId = entityId;
+    this.entityId = Objects.requireNonNull(entityId);
     this.x = x;
     this.y = y;
     this.width = width;
@@ -40,7 +41,7 @@ public class PhysicsComponent extends BaseComponent {
   }
 
   public void setEntityId(final EntityUUID entityId) {
-    this.entityId = entityId;
+    this.entityId = Objects.requireNonNull(entityId);
   }
 
   public float getX() {

@@ -27,7 +27,7 @@ public class GraphicsComponent extends BaseComponent {
 
   public GraphicsComponent(final EntityUUID entityId, final String asset) {
     this();
-    this.entityId = entityId;
+    this.entityId = Objects.requireNonNull(entityId);
     this.asset = Objects.requireNonNull(asset);
   }
 

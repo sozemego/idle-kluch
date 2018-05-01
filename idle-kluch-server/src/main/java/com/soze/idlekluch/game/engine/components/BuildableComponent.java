@@ -6,21 +6,22 @@ import javax.persistence.*;
 import java.util.Objects;
 
 /**
- * A component for objects on which you cannot travel or build.
+ * Specifies that this component is buildable.
+ * Later this will be extended for sure, this component is now a marker.
  */
 @Entity
-@Table(name = "static_occupy_space_components")
-public class StaticOccupySpaceComponent extends BaseComponent {
+@Table(name = "buildable_components")
+public class BuildableComponent extends BaseComponent {
 
   @EmbeddedId
   @AttributeOverride(name = "id", column = @Column(name = "entity_id"))
   private EntityUUID entityId;
 
-  public StaticOccupySpaceComponent() {
-    super(ComponentType.STATIC_OCCUPY_SPACE);
+  public BuildableComponent() {
+    super(ComponentType.BUILDABLE);
   }
 
-  public StaticOccupySpaceComponent(final EntityUUID entityId) {
+  public BuildableComponent(final EntityUUID entityId) {
     this();
     this.entityId = Objects.requireNonNull(entityId);
   }
@@ -34,7 +35,7 @@ public class StaticOccupySpaceComponent extends BaseComponent {
   }
 
   @Override
-  public StaticOccupySpaceComponent copy() {
-    return new StaticOccupySpaceComponent(getEntityId());
+  public BuildableComponent copy() {
+    return new BuildableComponent(getEntityId());
   }
 }

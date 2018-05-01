@@ -1,8 +1,6 @@
 package com.soze.idlekluch.game.entity;
 
-import com.soze.idlekluch.game.engine.components.GraphicsComponent;
-import com.soze.idlekluch.game.engine.components.OwnershipComponent;
-import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.game.engine.components.*;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
 import javax.persistence.*;
@@ -29,6 +27,19 @@ public class PersistentEntity {
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "entity_id")
   private OwnershipComponent ownershipComponent;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "entity_id")
+  private StaticOccupySpaceComponent staticOccupySpaceComponent;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "entity_id")
+  private NameComponent nameComponent;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "entity_id")
+  private BuildableComponent buildableComponent;
+
 
   public PersistentEntity() {
 
@@ -74,4 +85,27 @@ public class PersistentEntity {
     this.ownershipComponent = ownershipComponent;
   }
 
+  public StaticOccupySpaceComponent getStaticOccupySpaceComponent() {
+    return staticOccupySpaceComponent;
+  }
+
+  public void setStaticOccupySpaceComponent(final StaticOccupySpaceComponent staticOccupySpaceComponent) {
+    this.staticOccupySpaceComponent = staticOccupySpaceComponent;
+  }
+
+  public NameComponent getNameComponent() {
+    return nameComponent;
+  }
+
+  public void setNameComponent(final NameComponent nameComponent) {
+    this.nameComponent = nameComponent;
+  }
+
+  public BuildableComponent getBuildableComponent() {
+    return buildableComponent;
+  }
+
+  public void setBuildableComponent(final BuildableComponent buildableComponent) {
+    this.buildableComponent = buildableComponent;
+  }
 }

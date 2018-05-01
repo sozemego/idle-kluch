@@ -8,6 +8,8 @@ DROP TABLE IF EXISTS physics_components CASCADE;
 DROP TABLE IF EXISTS graphics_components CASCADE;
 DROP TABLE IF EXISTS ownership_components CASCADE;
 DROP TABLE IF EXISTS static_occupy_space_components CASCADE;
+DROP TABLE IF EXISTS name_components CASCADE;
+DROP TABLE IF EXISTS buildable_components CASCADE;
 
 CREATE TABLE users (
   user_id uuid NOT NULL PRIMARY KEY,
@@ -78,6 +80,17 @@ CREATE TABLE static_occupy_space_components (
   CONSTRAINT FK_STATIC_OCCUPY_SPACE_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
 );
 
+CREATE TABLE name_components (
+  entity_id uuid NOT NULL,
+  name VARCHAR(64) NOT NULL,
+  CONSTRAINT FK_NAME_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
+);
+
+CREATE TABLE buildable_components (
+  entity_id uuid NOT NULL,
+  CONSTRAINT FK_BUILDABLE_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
+);
+
 -- here entity templates exist --
 INSERT INTO entities VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb', true),
@@ -100,6 +113,16 @@ INSERT INTO ownership_components VALUES
 ;
 
 INSERT INTO static_occupy_space_components VALUES
+  ('7a4df465-b4c3-4e9f-854a-248988220dfb'),
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d')
+;
+
+INSERT INTO name_components VALUES
+  ('7a4df465-b4c3-4e9f-854a-248988220dfb', 'Small warehouse'),
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 'Warehouse')
+;
+
+INSERT INTO buildable_components VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb'),
   ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d')
 ;

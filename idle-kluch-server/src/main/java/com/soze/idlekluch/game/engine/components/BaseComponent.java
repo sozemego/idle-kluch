@@ -24,7 +24,7 @@ public abstract class BaseComponent {
   public abstract BaseComponent copy();
 
   public enum ComponentType {
-    PHYSICS, GRAPHICS, OWNERSHIP, STATIC_OCCUPY_SPACE,
+    PHYSICS, GRAPHICS, OWNERSHIP, STATIC_OCCUPY_SPACE, NAME, BUILDABLE,
   }
 
 }

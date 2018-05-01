@@ -3,6 +3,7 @@ package com.soze.idlekluch.game.engine.components;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * Component responsible for keeping an identifier of the owner
@@ -26,8 +27,8 @@ public class OwnershipComponent extends BaseComponent {
 
   public OwnershipComponent(final EntityUUID entityId, final EntityUUID ownerId) {
     this();
-    this.entityId = entityId;
-    this.ownerId = ownerId;
+    this.entityId = Objects.requireNonNull(entityId);
+    this.ownerId = Objects.requireNonNull(ownerId);
   }
 
   public EntityUUID getEntityId() {
