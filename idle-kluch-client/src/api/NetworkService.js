@@ -78,7 +78,7 @@ const applyPath = path => {
 NetworkService.setAuthorizationToken = token => {
   if (token == null || typeof token !== "string") {
     throw new Error(
-      `Token has to be defined and be a string, it was ${token}.`
+      `Token has to be defined and be a string, it was ${token}.`,
     );
   }
 

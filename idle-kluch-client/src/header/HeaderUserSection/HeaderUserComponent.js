@@ -13,7 +13,7 @@ class HeaderUserComponent extends Component {
     super(props);
     this.state = {
       userMenuAnchor: null,
-      userMenuOpen: false
+      userMenuOpen: false,
     };
   }
 
@@ -58,20 +58,20 @@ class HeaderUserComponent extends Component {
             }}
           />
         </Menu>
-      </Popover>
+      </Popover>,
     ];
   }
 }
 
 HeaderUserComponent.propTypes = {
   user: PropTypes.object.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired
+  isLoggedIn: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
     user: getUser(state),
-    isLoggedIn: isLoggedIn(state)
+    isLoggedIn: isLoggedIn(state),
   };
 };
 

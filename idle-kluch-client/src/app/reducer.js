@@ -4,7 +4,7 @@ import { NetworkService as networkService } from "../api/NetworkService";
 
 const anonymousUser = {
   name: null,
-  token: null
+  token: null,
 };
 
 //TODO abstraction over localStorage
@@ -25,7 +25,7 @@ const initialState = {
   errorMessage: "",
   user: _getCurrentUser(),
   usernameError: "",
-  passwordError: ""
+  passwordError: "",
 };
 
 const fetching = (state, action) => {
@@ -71,7 +71,7 @@ const app = createReducer(initialState, {
   [ APP_ACTIONS.SET_USERNAME ]: setUsername,
   [ APP_ACTIONS.SET_TOKEN ]: setToken,
   [ APP_ACTIONS.SET_USERNAME_ERROR ]: setUsernameError,
-  [ APP_ACTIONS.SET_PASSWORD_ERROR ]: setPasswordError
+  [ APP_ACTIONS.SET_PASSWORD_ERROR ]: setPasswordError,
 });
 
 export default app;

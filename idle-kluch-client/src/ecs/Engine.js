@@ -18,7 +18,7 @@ export class Engine {
 
   getSystem = clazz => {
     const index = this.systems.findIndex(
-      system => system.constructor === clazz
+      system => system.constructor === clazz,
     );
     if (index > -1) {
       return this.systems[ index ];

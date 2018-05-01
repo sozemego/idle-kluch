@@ -7,5 +7,5 @@ import { gameReducer as game } from "../game/Game";
 export default combineReducers({
   app,
   kingdom,
-  game
+  game,
 });

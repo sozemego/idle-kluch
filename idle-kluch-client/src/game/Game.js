@@ -26,7 +26,7 @@ const tileSprites = {};
 
 const initialState = {
   tiles: {},
-  buildings: {}
+  buildings: {},
 };
 
 const addTiles = (state, { payload: tiles }) => {
@@ -61,7 +61,7 @@ const addEntity = (state, { payload: entity }) => {
           component.x,
           component.y,
           component.width,
-          component.height
+          component.height,
         );
       }
       if (component.componentType === COMPONENT_TYPES.OWNERSHIP) {
@@ -96,7 +96,7 @@ const setConstructableBuilding = (state, action) => {
 export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.ADD_TILES ]: addTiles,
   [ GAME_ACTIONS.ADD_ENTITY ]: addEntity,
-  [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding
+  [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
 });
 
 const TILE_SIZE = 128;
@@ -192,8 +192,8 @@ const createGame = () => {
         preload,
         create,
         update,
-        render
-      }
+        render,
+      },
     };
 
     game = new Phaser.Game(
@@ -202,8 +202,8 @@ const createGame = () => {
       config.type,
       config.parent,
       {
-        ...config.scene
-      }
+        ...config.scene,
+      },
     );
 
     engine = new Engine();

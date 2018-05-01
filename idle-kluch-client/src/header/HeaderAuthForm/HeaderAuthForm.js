@@ -11,7 +11,7 @@ class HeaderAuthForm extends Component {
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
     };
   }
 
@@ -70,7 +70,7 @@ class HeaderAuthForm extends Component {
 const mapStateToProps = state => {
   return {
     usernameError: getUsernameError(state),
-    passwordError: getPasswordError(state)
+    passwordError: getPasswordError(state),
   };
 };
 

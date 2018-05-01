@@ -4,6 +4,6 @@ import { isFetching } from "../app/selectors";
 
 export default connect(state => {
   return {
-    isFetching: isFetching(state)
+    isFetching: isFetching(state),
   };
 }, null)(LinearProgress);

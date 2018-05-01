@@ -30,14 +30,14 @@ class ContentContainer extends Component {
 }
 
 ContentContainer.propTypes = {
-  loadKingdom: PropTypes.func.isRequired
+  loadKingdom: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
     isLoggedIn: isLoggedIn(state),
     hasKingdom: hasKingdom(state),
-    showCreateKingdomForm: shouldShowCreateKingdomForm(state)
+    showCreateKingdomForm: shouldShowCreateKingdomForm(state),
   };
 };
 

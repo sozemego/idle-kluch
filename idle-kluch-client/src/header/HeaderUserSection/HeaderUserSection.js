@@ -31,13 +31,13 @@ class HeaderUserSection extends Component {
 
 HeaderUserSection.propTypes = {
   user: PropTypes.object.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired
+  isLoggedIn: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
     user: getUser(state),
-    isLoggedIn: isLoggedIn(state)
+    isLoggedIn: isLoggedIn(state),
   };
 };
 

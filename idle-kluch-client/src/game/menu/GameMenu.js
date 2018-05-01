@@ -13,13 +13,13 @@ class GameMenu extends Component {
     const {
       constructableBuildings,
       selectConstructableBuilding,
-      selectedConstructableBuilding
+      selectedConstructableBuilding,
     } = this.props;
 
     const selectedConstructableBuildingId = _.get(
       selectedConstructableBuilding,
       "id",
-      null
+      null,
     );
 
     return constructableBuildings.map(building => {
@@ -54,13 +54,13 @@ class GameMenu extends Component {
 
 GameMenu.propTypes = {
   constructableBuildings: PropTypes.array.isRequired,
-  selectConstructableBuilding: PropTypes.func.isRequired
+  selectConstructableBuilding: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
     constructableBuildings: getConstructableBuildings(state),
-    selectedConstructableBuilding: getSelectedConstructableBuilding(state)
+    selectedConstructableBuilding: getSelectedConstructableBuilding(state),
   };
 };
 

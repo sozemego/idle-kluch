@@ -14,7 +14,7 @@ class HeaderKingdomSection extends Component {
     super(props);
     this.state = {
       kingdomMenuAnchor: null,
-      kingdomMenuOpen: false
+      kingdomMenuOpen: false,
     };
   }
 
@@ -22,7 +22,7 @@ class HeaderKingdomSection extends Component {
     event.preventDefault();
     this.setState({
       kingdomMenuOpen: true,
-      kingdomMenuAnchor: event.currentTarget
+      kingdomMenuAnchor: event.currentTarget,
     });
   };
 
@@ -62,27 +62,27 @@ class HeaderKingdomSection extends Component {
             }}
           />
         </Menu>
-      </Popover>
+      </Popover>,
     ];
   }
 }
 
 HeaderKingdomSection.propTypes = {
   hasKingdom: PropTypes.bool.isRequired,
-  kingdom: PropTypes.object
+  kingdom: PropTypes.object,
 };
 
 HeaderKingdomSection.defaultProps = {
-  kingdom: null
+  kingdom: null,
 };
 
 const mapStateToProps = state => {
   return {
     hasKingdom: hasKingdom(state),
-    kingdom: getKingdom(state)
+    kingdom: getKingdom(state),
   };
 };
 
 export default connect(mapStateToProps, { ...appActions, ...kingdomActions })(
-  HeaderKingdomSection
+  HeaderKingdomSection,
 );

@@ -17,9 +17,9 @@ export class LinearProgress extends Component {
 }
 
 LinearProgress.propTypes = {
-  isFetching: PropTypes.bool
+  isFetching: PropTypes.bool,
 };
 
 LinearProgress.defaultProps = {
-  isFetching: false
+  isFetching: false,
 };

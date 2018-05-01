@@ -16,7 +16,7 @@ export class GraphicsSystem extends EntitySystem {
       const physicsComponent = entity.getComponent(PhysicsComponent);
       graphicsComponent.setSpritePosition(
         physicsComponent.getX(),
-        physicsComponent.getY()
+        physicsComponent.getY(),
       );
     });
   };

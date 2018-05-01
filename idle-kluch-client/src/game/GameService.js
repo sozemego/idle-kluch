@@ -28,7 +28,7 @@ GameService.connect = function () {
 
     const { protocol, base, port, version } = networkConfig;
     const socket = new SockJS(
-      `${protocol}://${base}:${port}${version}${game}?token=${getToken()}`
+      `${protocol}://${base}:${port}${version}${game}?token=${getToken()}`,
     );
     // socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
     client = Stomp.over(socket);
@@ -79,7 +79,7 @@ GameService.constructBuilding = (buildingId, x, y) => {
   client.send(
     buildingBuild,
     {},
-    JSON.stringify({ buildingId, x, y, type: "BUILD_BUILDING" })
+    JSON.stringify({ buildingId, x, y, type: "BUILD_BUILDING" }),
   );
 };
 

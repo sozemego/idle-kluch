@@ -27,7 +27,7 @@ UserService.registerUser = function (username, password) {
       if (error.statusCode) {
         return Promise.reject({
           message: error.error,
-          field: error.data.field
+          field: error.data.field,
         });
       }
       //todo handle network errors

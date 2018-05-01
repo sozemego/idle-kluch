@@ -8,26 +8,26 @@ export const SET_KINGDOM_NAME_REGISTRATION_ERROR =
   "SET_KINGDOM_NAME_REGISTRATION_ERROR";
 export const setKingdomNameRegistrationError = makeActionCreator(
   SET_KINGDOM_NAME_REGISTRATION_ERROR,
-  "payload"
+  "payload",
 );
 
 export const SET_SHOW_CREATE_KINGDOM_FORM = "SET_SHOW_CREATE_KINGDOM_FORM";
 export const setShowCreateKingdomForm = makeActionCreator(
   SET_SHOW_CREATE_KINGDOM_FORM,
-  "payload"
+  "payload",
 );
 
 export const SET_CONSTRUCTABLE_BUILDINGS = "SET_CONSTRUCTABLE_BUILDINGS";
 export const setConstructableBuildings = makeActionCreator(
   SET_CONSTRUCTABLE_BUILDINGS,
-  "payload"
+  "payload",
 );
 
 export const SET_SELECTED_CONSTRUCTABLE_BUILDING =
   "SET_SELECTED_CONSTRUCTABLE_BUILDING";
 export const setSelectedConstructableBuilding = makeActionCreator(
   SET_SELECTED_CONSTRUCTABLE_BUILDING,
-  "payload"
+  "payload",
 );
 
 /**

@@ -11,7 +11,7 @@ class CreateKingdomForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      kingdomName: ""
+      kingdomName: "",
     };
   }
 
@@ -57,7 +57,7 @@ class CreateKingdomForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    kingdomNameRegistrationError: getKingdomNameRegistrationError(state)
+    kingdomNameRegistrationError: getKingdomNameRegistrationError(state),
   };
 };
 
