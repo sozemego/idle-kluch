@@ -9,7 +9,6 @@ import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.repository.EntityRepository;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.dto.BuildingDefinitionDto;
-import com.soze.idlekluch.kingdom.dto.BuildingDto.BuildingType;
 import com.soze.idlekluch.kingdom.dto.WarehouseDefinitionDto;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
@@ -17,7 +16,6 @@ import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.service.UserService;
-import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.repository.WorldRepository;
 import com.soze.klecs.entity.Entity;
@@ -28,8 +26,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -65,16 +61,6 @@ public class BuildingServiceImpl implements BuildingService {
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.worldRepository = Objects.requireNonNull(worldRepository);
     this.entityRepository = Objects.requireNonNull(entityRepository);
-  }
-
-  @PostConstruct
-  public void setup() throws IOException {
-    LOG.info("Initializing building service.");
-
-    final Map<String, Object> rawBuildingDefinitions = JsonUtils.resourceToMap(buildingData, String.class, Object.class);
-    parseRawBuildingDefinitions(rawBuildingDefinitions);
-
-    LOG.info("Read [{}] building definitions", buildingDefinitions.size());
   }
 
   @Override
@@ -138,7 +124,7 @@ public class BuildingServiceImpl implements BuildingService {
     return gameEngine.getEntitiesByNode(Nodes.OWNERSHIP)
              .stream()
              .filter(entity -> {
-               final OwnershipComponent ownershipComponent = (OwnershipComponent) entity.getComponent(OwnershipComponent.class);
+               final OwnershipComponent ownershipComponent = entity.getComponent(OwnershipComponent.class);
                return kingdomId.equals(ownershipComponent.getOwnerId());
              })
              .collect(Collectors.toList());
@@ -160,42 +146,6 @@ public class BuildingServiceImpl implements BuildingService {
     Objects.requireNonNull(buildingId);
     throw new IllegalStateException("NOT IMPLEMENTED YET DESTROY BUILDING");
 //    buildingRepository.removeBuilding(buildingId);
-  }
-
-  private void parseRawBuildingDefinitions(final Map<String, Object> data) {
-    for (final Map.Entry<String, Object> entry : data.entrySet()) {
-      final Map<String, Object> properties = (Map<String, Object>) entry.getValue();
-      final BuildingType type = BuildingType.valueOf(((String) properties.get("type")).toUpperCase());
-
-      switch (type) {
-        case WAREHOUSE:
-          parseWarehouseDefinition(properties);
-          break;
-        case GATHERER:
-          parseGathererDefinition(properties);
-          break;
-      }
-
-    }
-  }
-
-  private void parseWarehouseDefinition(final Map<String, Object> properties) {
-
-    final WarehouseDefinitionDto warehouseDefinitionDto = new WarehouseDefinitionDto(
-      (String) properties.get("id"),
-      (String) properties.get("name"),
-      BuildingType.WAREHOUSE,
-      (int) properties.get("width"),
-      (int) properties.get("height"),
-      (String) properties.get("asset"),
-      (int) properties.get("capacity")
-    );
-
-    buildingDefinitions.put((String) properties.get("id"), warehouseDefinitionDto);
-  }
-
-  private void parseGathererDefinition(final Map<String, Object> properties) {
-      //TODO implement this
   }
 
   private Entity constructBuilding(final BuildBuildingForm form) {
