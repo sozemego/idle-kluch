@@ -1,4 +1,4 @@
-import { Entity } from "./Entity";
+import {Entity} from "./Entity";
 
 export class EntityFactory {
   constructor(engine, componentContainer) {
@@ -10,9 +10,4 @@ export class EntityFactory {
     return new Entity(id, this.componentContainer);
   };
 
-  createEntityAndAddToEngine = id => {
-    const entity = this.createEntity(id);
-    this.engine.addEntity(entity);
-    return entity;
-  };
 }
