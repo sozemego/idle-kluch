@@ -2,11 +2,22 @@ package com.soze.idlekluch.game.engine.components;
 
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@MappedSuperclass
 public abstract class BaseComponent {
 
-  private final ComponentType componentType;
+  @EmbeddedId
+  @AttributeOverride(name = "id", column = @Column(name = "entity_id"))
+  private EntityUUID entityId;
+
+  @Transient
+  private ComponentType componentType;
+
+  public BaseComponent() {
+
+  }
 
   public BaseComponent(final ComponentType componentType) {
     this.componentType = Objects.requireNonNull(componentType);
@@ -16,7 +27,13 @@ public abstract class BaseComponent {
     return componentType;
   }
 
-  public abstract void setEntityId(final EntityUUID entityId);
+  public EntityUUID getEntityId() {
+    return entityId;
+  }
+
+  public void setEntityId(final EntityUUID entityId) {
+    this.entityId = Objects.requireNonNull(entityId);
+  }
 
   /**
    * A method which copies (clones) the component.

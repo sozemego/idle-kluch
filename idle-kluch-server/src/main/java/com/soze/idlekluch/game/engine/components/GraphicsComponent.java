@@ -2,7 +2,9 @@ package com.soze.idlekluch.game.engine.components;
 
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Objects;
 
 /**
@@ -14,10 +16,6 @@ import java.util.Objects;
 @Table(name = "graphics_components")
 public class GraphicsComponent extends BaseComponent {
 
-  @EmbeddedId
-  @AttributeOverride(name = "id", column = @Column(name = "entity_id"))
-  private EntityUUID entityId;
-
   @Column(name = "asset")
   private String asset;
 
@@ -27,21 +25,13 @@ public class GraphicsComponent extends BaseComponent {
 
   public GraphicsComponent(final EntityUUID entityId, final String asset) {
     this();
-    this.entityId = Objects.requireNonNull(entityId);
+    setEntityId(entityId);
     this.asset = Objects.requireNonNull(asset);
   }
 
   public GraphicsComponent(String asset) {
     super(ComponentType.GRAPHICS);
     this.asset = Objects.requireNonNull(asset);
-  }
-
-  public EntityUUID getEntityId() {
-    return entityId;
-  }
-
-  public void setEntityId(final EntityUUID entityId) {
-    this.entityId = entityId;
   }
 
   public String getAsset() {

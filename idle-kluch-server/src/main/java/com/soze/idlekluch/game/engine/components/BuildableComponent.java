@@ -2,8 +2,8 @@ package com.soze.idlekluch.game.engine.components;
 
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
-import javax.persistence.*;
-import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * Specifies that this component is buildable.
@@ -13,25 +13,13 @@ import java.util.Objects;
 @Table(name = "buildable_components")
 public class BuildableComponent extends BaseComponent {
 
-  @EmbeddedId
-  @AttributeOverride(name = "id", column = @Column(name = "entity_id"))
-  private EntityUUID entityId;
-
   public BuildableComponent() {
     super(ComponentType.BUILDABLE);
   }
 
   public BuildableComponent(final EntityUUID entityId) {
     this();
-    this.entityId = Objects.requireNonNull(entityId);
-  }
-
-  public EntityUUID getEntityId() {
-    return entityId;
-  }
-
-  public void setEntityId(final EntityUUID entityId) {
-    this.entityId = Objects.requireNonNull(entityId);
+    setEntityId(entityId);
   }
 
   @Override

@@ -3,7 +3,9 @@ package com.soze.idlekluch.game.engine.components;
 
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Objects;
 
 /**
@@ -12,10 +14,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "name_components")
 public class NameComponent extends BaseComponent {
-
-  @EmbeddedId
-  @AttributeOverride(name = "id", column = @Column(name = "entity_id"))
-  private EntityUUID entityId;
 
   @Column(name = "name")
   private String name;
@@ -26,16 +24,8 @@ public class NameComponent extends BaseComponent {
 
   public NameComponent(final EntityUUID entityId, final String name) {
     this();
-    this.entityId = Objects.requireNonNull(entityId);
+    setEntityId(entityId);
     this.name = Objects.requireNonNull(name);
-  }
-
-  public EntityUUID getEntityId() {
-    return entityId;
-  }
-
-  public void setEntityId(final EntityUUID entityId) {
-    this.entityId = Objects.requireNonNull(entityId);
   }
 
   public String getName() {
