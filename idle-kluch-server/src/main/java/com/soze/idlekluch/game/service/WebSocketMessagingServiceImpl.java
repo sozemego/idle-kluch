@@ -31,7 +31,7 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
     Objects.requireNonNull(destination);
     Objects.requireNonNull(message);
 
-    LOG.info("Sending a message to user [{}] at [{}]", username, destination);
+    LOG.info("[WEB_SOCKET_MESSAGING] Sending a message to user [{}] at [{}]", username, destination);
     messagingTemplate.convertAndSendToUser(username, "/game/outbound", convertMessage(message));
   }
 
@@ -40,7 +40,7 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
     Objects.requireNonNull(destination);
     Objects.requireNonNull(message);
 
-    LOG.info("Sending a message to all users at [{}]", destination);
+    LOG.info("[WEB_SOCKET_MESSAGING] Sending a message to all users at [{}]", destination);
     messagingTemplate.convertAndSend("/game/outbound", convertMessage(message));
   }
 

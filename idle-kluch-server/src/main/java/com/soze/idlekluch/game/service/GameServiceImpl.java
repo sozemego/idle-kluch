@@ -1,7 +1,6 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.engine.EntityConverter;
-import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.message.EntityMessage;
 import com.soze.idlekluch.game.message.WorldChunkMessage;
@@ -16,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,63 +47,13 @@ public class GameServiceImpl implements GameService {
   }
 
   /**
-   * Initializes the game.
-   * Loads all entities from DB, converts them to game entities and adds them to the game engine.
-   */
-  @PostConstruct
-  public void init() {
-    LOG.info("Initializing the game");
-
-    LOG.info("Initializing buildings");
-    final List<PersistentEntity> buildings = buildingService.getAllConstructedBuildings();
-
-    final List<Entity> buildingEntities = buildings
-                                            .stream()
-                                            .map(entityConverter::convertPersistentToEntity)
-                                            .collect(Collectors.toList());
-
-    buildingEntities.forEach(gameEngine::addEntity);
-    LOG.info("Added [{}] building entities to engine", buildingEntities.size());
-
-//    final List<Forest> allForests = worldRepository.getAllForests();
-//    LOG.info("Retrieved [{}] forests", allForests.size());
-//
-//    if(allForests.isEmpty()) {
-//      final int forests = 125;
-//      LOG.info("There are no forests, generating [{]] forests!", forests);
-//      final int maxX = worldWidth * tileSize;
-//      final int maxY = worldHeight * tileSize;
-//
-//      for(int i = 0; i < forests; i++) {
-//        final int x = CommonUtils.randomNumber(0, maxX);
-//        final int y = CommonUtils.randomNumber(0, maxY);
-//
-//        final Forest forest = new Forest();
-//        forest.setForestId(EntityUUID.randomId());
-//        forest.setX(x);
-//        forest.setY(y);
-//        forest.setYield(25);
-//        forest.setDefinitionId("forest_" + CommonUtils.randomNumber(1, 4));
-//
-//        worldRepository.addForest(forest);
-//      }
-//    }
-
-//    final List<Forest> forests = world.getAllForests();
-//    final List<Entity> treeEntities = forests.stream().map(entityConverter::convert).collect(Collectors.toList());
-//    treeEntities.forEach(gameEngine::addEntity);
-//    LOG.info("Added [{}] tree entities to engine", treeEntities.size());
-
-  }
-
-  /**
    * Responsibilities right now:
    * 1. Send all tile data to the joining player
    * 2. Send all entities to the joining player
    */
   @Override
   public void handleInitMessage(final String username) {
-    LOG.info("Init message from [{}]", username);
+    LOG.info("[GAME_SERVICE] Init message from [{}]", username);
 
     final Map<Point, Tile> allTiles = worldService.getAllTiles();
 
