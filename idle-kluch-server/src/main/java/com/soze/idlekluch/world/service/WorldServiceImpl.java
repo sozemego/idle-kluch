@@ -76,6 +76,7 @@ public class WorldServiceImpl implements WorldService {
 
   @Override
   public void createWorldChunk(final TileId startingPoint) {
+    //TODO TEST THIS
     LOG.info("Creating chunk at a point [{}]", startingPoint);
     //1. a world chunk will be a 15x15 tile region
     //   containing trees/mountains/resources etc.
