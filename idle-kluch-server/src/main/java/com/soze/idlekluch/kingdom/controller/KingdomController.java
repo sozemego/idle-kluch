@@ -86,7 +86,12 @@ public class KingdomController {
   }
 
   private KingdomDto convertKingdomDto(final Kingdom kingdom) {
-    return new KingdomDto(kingdom.getName(), kingdom.getOwner().getUsername(), kingdom.getCreatedAt().toString());
+    return new KingdomDto(
+      kingdom.getName(),
+      kingdom.getOwner().getUsername(),
+      kingdom.getCreatedAt().toString(),
+      kingdom.getStartingPoint()
+    );
   }
 
 }
