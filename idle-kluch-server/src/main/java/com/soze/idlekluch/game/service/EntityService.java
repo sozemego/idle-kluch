@@ -8,6 +8,10 @@ import com.soze.klecs.entity.Entity;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Handles the layer between {@link Entity} and {@link PersistentEntity}.
+ * Also loads entity templates from database. The templates are just normal {@link Entity}'s.
+ */
 public interface EntityService {
 
   void addEntity(final PersistentEntity entity);
