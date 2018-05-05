@@ -3,12 +3,11 @@ package com.soze.idlekluch.world.service;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 
-import java.awt.*;
 import java.util.Map;
 
 public interface WorldService {
 
-  Map<Point, Tile> getAllTiles();
+  Map<TileId, Tile> getAllTiles();
 
   int getMaxWorldWidth();
 

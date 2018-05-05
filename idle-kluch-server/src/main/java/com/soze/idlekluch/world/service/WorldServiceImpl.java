@@ -3,27 +3,23 @@ package com.soze.idlekluch.world.service;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.entity.World;
-import com.soze.idlekluch.world.events.InitializeWorldEvent;
 import com.soze.idlekluch.world.repository.WorldRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ApplicationContextEvent;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import javax.annotation.PostConstruct;
 import java.util.*;
-import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * World is the in-memory representation of the game world.
  * This means tiles, and some world data, NOT entities.
  */
 @Service
-public class WorldServiceImpl implements WorldService, ApplicationListener<ApplicationContextEvent> {
+public class WorldServiceImpl implements WorldService {
 
   private static final Logger LOG = LoggerFactory.getLogger(WorldServiceImpl.class);
 
@@ -34,7 +30,7 @@ public class WorldServiceImpl implements WorldService, ApplicationListener<Appli
 
   private final WorldRepository worldRepository;
   private final ApplicationEventPublisher publisher;
-  private final Map<Point, Tile> allTiles;
+  private final Map<TileId, Tile> allTiles;
 
   @Autowired
   public WorldServiceImpl(final WorldRepository worldRepository,
@@ -44,35 +40,22 @@ public class WorldServiceImpl implements WorldService, ApplicationListener<Appli
     this.allTiles = new HashMap<>();
   }
 
-  @Override
-  public void onApplicationEvent(ApplicationContextEvent event) {
-    if (event instanceof ContextRefreshedEvent) {
-      final String displayName = event.getApplicationContext().getDisplayName();
-      if ("Root WebApplicationContext".equals(displayName)) {
-        LOG.info("Context [{}] started, starting world", displayName);
-        startWorld();
-      }
-    }
-  }
-
-  private void startWorld() {
+  @PostConstruct
+  public void setup() {
+    LOG.info("Initializing world");
     final Optional<World> worldOptional = worldRepository.getCurrentWorld();
     if(!worldOptional.isPresent()) {
-      LOG.info("World is not initialized, starting.");
+      LOG.info("World is not initialized, creating new one.");
       worldRepository.saveWorld(new World());
-      initTiles();
-
-      publisher.publishEvent(new InitializeWorldEvent());
-    } else {
-      final List<Tile> currentTiles = worldRepository.getAllTiles();
-      LOG.info("World already present, loaded [{}] tiles", currentTiles.size());
-      currentTiles.forEach(tile -> this.allTiles.put(new Point(tile.getX(), tile.getY()), tile));
     }
 
+    final List<Tile> currentTiles = worldRepository.getAllTiles();
+    LOG.info("Loaded [{}] tiles", currentTiles.size());
+    currentTiles.forEach(tile -> this.allTiles.put(tile.getTileId(), tile));
   }
 
   @Override
-  public Map<Point, Tile> getAllTiles() {
+  public Map<TileId, Tile> getAllTiles() {
     return allTiles;
   }
 
@@ -94,23 +77,40 @@ public class WorldServiceImpl implements WorldService, ApplicationListener<Appli
   @Override
   public void createWorldChunk(final TileId startingPoint) {
     LOG.info("Creating chunk at a point [{}]", startingPoint);
+    //1. a world chunk will be a 15x15 tile region
+    //   containing trees/mountains/resources etc.
+
+    //2. find tileIds which will be part of the chunk
+    final List<TileId> chunkTiles = new ArrayList<>();
+    for (int i = -7; i < 8; i++) {
+      for (int j = -7; j < 8; j++) {
+        chunkTiles.add(new TileId(startingPoint.getX() + i, startingPoint.getY() + j));
+      }
+    }
+    LOG.info("Will generate chunk from [{}, {}] to [{}, {}]",
+      startingPoint.getX() - 7, startingPoint.getX() + 7,
+      startingPoint.getY() - 7, startingPoint.getY() + 7
+    );
+
+    //3. remove those tileIds which already exist
+    LOG.info("Removing tiles from chunk which already exist.");
+    chunkTiles.removeIf(tileId -> allTiles.get(tileId) != null);
+
+    //4. create Tile objects
+    final List<Tile> tiles = chunkTiles
+                               .stream()
+                               .map(Tile::new)
+                               .collect(Collectors.toList());
+
+    worldRepository.addTiles(tiles);
+    tiles.forEach(tile -> allTiles.put(tile.getTileId(), tile));
+
+    //5. nothing more for now. forests/mountains/etc soon to come
+
   }
 
-  private void initTiles() {
-    final List<Tile> currentTiles = worldRepository.getAllTiles();
-    LOG.info("Retrieved [{}] tiles.", allTiles.size());
-    worldRepository.removeTiles(currentTiles);
-    LOG.info("Removed all tiles");
-
-    final List<Tile> newTiles = createInitialTiles();
-    currentTiles.addAll(newTiles);
-    worldRepository.addTiles(newTiles);
-    LOG.info("Added [{}] tiles", newTiles.size());
-    currentTiles.forEach(tile -> this.allTiles.put(new Point(tile.getX(), tile.getY()), tile));
-  }
-
-  private List<Tile> createInitialTiles() {
-    final List<Tile> newTiles = new ArrayList<>();
+//  private List<Tile> createInitialTiles() {
+//    final List<Tile> newTiles = new ArrayList<>();
 //    for(int i = 0; i < maxWorldWidth; i++) {
 //      for(int j = 0; j < maxWorldHeight; j++) {
 //        final Tile tile = new Tile();
@@ -118,7 +118,7 @@ public class WorldServiceImpl implements WorldService, ApplicationListener<Appli
 //        newTiles.add(tile);
 //      }
 //    }
-    return newTiles;
-  }
+//    return newTiles;
+//  }
 
 }

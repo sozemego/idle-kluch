@@ -136,14 +136,18 @@ public class KingdomServiceImpl implements KingdomService {
       final int y = CommonUtils.randomNumber(0, worldService.getMaxWorldHeight());
 
       //3a. check if all existing points are at least minDistance away
-
+      boolean foundTileTooClose = false;
       for (final TileId kingdomStartingPoint: startingPoints) {
         final double distance = Math.hypot(x - kingdomStartingPoint.getX(), y - kingdomStartingPoint.getY());
         if(distance < minDistance) {
+          foundTileTooClose = true;
           break;
         }
       }
 
+      if(foundTileTooClose) {
+        continue;
+      }
       startingPoint = new TileId(x, y);
     }
 

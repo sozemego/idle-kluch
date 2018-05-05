@@ -8,6 +8,7 @@ import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.world.entity.Tile;
+import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
@@ -15,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +55,7 @@ public class GameServiceImpl implements GameService {
   public void handleInitMessage(final String username) {
     LOG.info("[GAME_SERVICE] Init message from [{}]", username);
 
-    final Map<Point, Tile> allTiles = worldService.getAllTiles();
+    final Map<TileId, Tile> allTiles = worldService.getAllTiles();
 
     final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
     final String worldChunkJson = JsonUtils.objectToJson(worldChunkMessage);

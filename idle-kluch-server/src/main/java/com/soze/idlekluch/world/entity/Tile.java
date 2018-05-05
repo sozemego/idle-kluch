@@ -8,6 +8,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tiles")
@@ -22,7 +23,11 @@ public class Tile {
 
   @JsonCreator
   public Tile(@JsonProperty("x") final int x, @JsonProperty("y") final int y) {
-    setTileId(new TileId(x, y));
+    this(new TileId(x, y));
+  }
+
+  public Tile(final TileId tileId) {
+    this.tileId = Objects.requireNonNull(tileId);
   }
 
   @JsonIgnore
