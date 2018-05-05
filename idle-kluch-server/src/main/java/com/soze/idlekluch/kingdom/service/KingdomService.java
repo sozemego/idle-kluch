@@ -12,8 +12,6 @@ public interface KingdomService {
 
   /**
    * Adds a kingdom.
-   * @param owner
-   * @param form
    * @throws EntityAlreadyExistsException if a kingdom with given name already exists.
    * @throws UserAlreadyHasKingdomException if this user already has a kingdom
    */
@@ -21,13 +19,18 @@ public interface KingdomService {
 
   /**
    * Deletes the kingdom.
-   * @param owner
    * @throws UserDoesNotHaveKingdomException if kingdom does not exist
    */
   public void removeKingdom(final String owner);
 
+  /**
+   * Retrieves {@link Kingdom} by kingdom name.
+   */
   public Optional<Kingdom> getKingdom(final String name);
 
+  /**
+   * Retrieves {@link Kingdom} by username.
+   */
   public Optional<Kingdom> getUsersKingdom(final String username);
 
 }
