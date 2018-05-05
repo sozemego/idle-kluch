@@ -17,7 +17,7 @@ public interface KingdomService {
    * @throws EntityAlreadyExistsException if a kingdom with given name already exists.
    * @throws UserAlreadyHasKingdomException if this user already has a kingdom
    */
-  public TileId addKingdom(final String owner, final RegisterKingdomForm form);
+  public void addKingdom(final String owner, final RegisterKingdomForm form);
 
   /**
    * Deletes the kingdom.

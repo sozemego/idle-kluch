@@ -43,7 +43,7 @@ public class KingdomServiceImpl implements KingdomService {
   }
 
   @Override
-  public TileId addKingdom(final String owner, final RegisterKingdomForm form) {
+  public void addKingdom(final String owner, final RegisterKingdomForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
 
@@ -75,7 +75,7 @@ public class KingdomServiceImpl implements KingdomService {
     kingdomRepository.addKingdom(kingdom);
     LOG.info("User [{}] successfully created kingdom [{}]", owner, form.getName());
 
-    return startingPoint;
+    worldService.createWorldChunk(startingPoint);
   }
 
   @Override

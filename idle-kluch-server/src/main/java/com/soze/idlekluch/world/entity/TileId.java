@@ -56,4 +56,12 @@ public class TileId implements Serializable {
   public int hashCode() {
     return Objects.hash(getX(), getY());
   }
+
+  @Override
+  public String toString() {
+    return "TileId{" +
+             "x=" + x +
+             ", y=" + y +
+             '}';
+  }
 }

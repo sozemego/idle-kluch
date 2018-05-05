@@ -1,6 +1,7 @@
 package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.world.entity.Tile;
+import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.entity.World;
 import com.soze.idlekluch.world.events.InitializeWorldEvent;
 import com.soze.idlekluch.world.repository.WorldRepository;
@@ -88,6 +89,11 @@ public class WorldServiceImpl implements WorldService, ApplicationListener<Appli
   @Override
   public int getTileSize() {
     return tileSize;
+  }
+
+  @Override
+  public void createWorldChunk(final TileId startingPoint) {
+    LOG.info("Creating chunk at a point [{}]", startingPoint);
   }
 
   private void initTiles() {
