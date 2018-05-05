@@ -4,6 +4,7 @@ import com.soze.idlekluch.exception.EntityAlreadyExistsException;
 import com.soze.idlekluch.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface KingdomRepository {
@@ -16,6 +17,8 @@ public interface KingdomRepository {
   public void addKingdom(final Kingdom kingdom);
 
   public Optional<Kingdom> getKingdom(final String name);
+
+  List<Kingdom> getAllKingdoms();
 
   public Optional<Kingdom> getUsersKingdom(final String username);
 

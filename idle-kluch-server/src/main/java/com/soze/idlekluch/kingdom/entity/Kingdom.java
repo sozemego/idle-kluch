@@ -2,6 +2,7 @@ package com.soze.idlekluch.kingdom.entity;
 
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.idlekluch.world.entity.TileId;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -23,6 +24,13 @@ public class Kingdom {
   @OneToOne
   @JoinColumn(name = "owner")
   private User owner;
+
+  @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name = "x", column = @Column(name="starting_point_x")),
+    @AttributeOverride(name = "y", column = @Column(name="starting_point_y"))
+  })
+  private TileId startingPoint;
 
   public Kingdom() {
 
@@ -60,4 +68,11 @@ public class Kingdom {
     this.createdAt = createdAt;
   }
 
+  public TileId getStartingPoint() {
+    return startingPoint;
+  }
+
+  public void setStartingPoint(final TileId startingPoint) {
+    this.startingPoint = startingPoint;
+  }
 }

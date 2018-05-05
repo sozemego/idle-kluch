@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -30,6 +31,11 @@ public class KingdomRepositoryImpl implements KingdomRepository {
     query.setParameter("name", name.toUpperCase());
 
     return QueryUtils.getOptional(query, Kingdom.class);
+  }
+
+  @Override
+  public List<Kingdom> getAllKingdoms() {
+    return em.createQuery("SELECT k FROM Kingdom k").getResultList();
   }
 
   @Override

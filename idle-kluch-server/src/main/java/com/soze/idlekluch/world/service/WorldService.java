@@ -9,9 +9,9 @@ public interface WorldService {
 
   Map<Point, Tile> getAllTiles();
 
-  int getWorldWidth();
+  int getMaxWorldWidth();
 
-  int getWorldHeight();
+  int getMaxWorldHeight();
 
   int getTileSize();
 

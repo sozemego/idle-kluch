@@ -1,7 +1,6 @@
 package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.world.entity.Tile;
-import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.entity.World;
 import com.soze.idlekluch.world.events.InitializeWorldEvent;
 import com.soze.idlekluch.world.repository.WorldRepository;
@@ -28,8 +27,8 @@ public class WorldServiceImpl implements WorldService, ApplicationListener<Appli
   private static final Logger LOG = LoggerFactory.getLogger(WorldServiceImpl.class);
 
   //TODO externalize
-  private final int worldWidth = 25;
-  private final int worldHeight = 25;
+  private final int maxWorldWidth = 2500;
+  private final int maxWorldHeight = 2500;
   private final int tileSize = 128;
 
   private final WorldRepository worldRepository;
@@ -77,13 +76,13 @@ public class WorldServiceImpl implements WorldService, ApplicationListener<Appli
   }
 
   @Override
-  public int getWorldWidth() {
-    return worldWidth;
+  public int getMaxWorldWidth() {
+    return maxWorldWidth;
   }
 
   @Override
-  public int getWorldHeight() {
-    return worldHeight;
+  public int getMaxWorldHeight() {
+    return maxWorldHeight;
   }
 
   @Override
@@ -106,13 +105,13 @@ public class WorldServiceImpl implements WorldService, ApplicationListener<Appli
 
   private List<Tile> createInitialTiles() {
     final List<Tile> newTiles = new ArrayList<>();
-    for(int i = 0; i < worldWidth; i++) {
-      for(int j = 0; j < worldHeight; j++) {
-        final Tile tile = new Tile();
-        tile.setTileId(TileId.from(i, j));
-        newTiles.add(tile);
-      }
-    }
+//    for(int i = 0; i < maxWorldWidth; i++) {
+//      for(int j = 0; j < maxWorldHeight; j++) {
+//        final Tile tile = new Tile();
+//        tile.setTileId(TileId.from(i, j));
+//        newTiles.add(tile);
+//      }
+//    }
     return newTiles;
   }
 
