@@ -9,7 +9,10 @@ import { GraphicsComponent } from "../ecs/components/GraphicsComponent";
 import { PhysicsComponent } from "../ecs/components/PhysicsComponent";
 import { PhysicsSystem } from "../ecs/systems/PhysicsSystem";
 import { GraphicsSystem } from "../ecs/systems/GraphicsSystem";
-import { getSelectedConstructableBuilding as _getSelectedConstructableBuilding } from "../kingdom/selectors";
+import {
+  getKingdom,
+  getSelectedConstructableBuilding as _getSelectedConstructableBuilding,
+} from "../kingdom/selectors";
 import { COMPONENT_TYPES } from "./constants";
 import { OwnershipComponent } from "../ecs/components/OwnershipComponent";
 import { NameComponent } from "../ecs/components/NameComponent";
@@ -19,6 +22,7 @@ import { findComponent } from "../ecs/utils";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
+const getKingdomStartingPosition = () => getKingdom(store.getState()).startingPoint;
 
 let game = null;
 let engine = null;
@@ -138,8 +142,11 @@ const createGame = () => {
       cursors = game.input.keyboard.createCursorKeys();
 
       game.world.resize(5000, 5000);
-      game.camera.x = 0;
-      game.camera.y = 0;
+
+      const kingdomStartingPoint = getKingdomStartingPosition();
+//TODO FIX THIS
+      game.camera.x = kingdomStartingPoint.x * TILE_SIZE;
+      game.camera.y = kingdomStartingPoint.y * TILE_SIZE;
 
       game.input.onDown.add(pointer => {
         const x = pointer.x + game.camera.x;
