@@ -7,7 +7,6 @@ import com.soze.idlekluch.world.repository.WorldRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -29,14 +28,11 @@ public class WorldServiceImpl implements WorldService {
   private final int tileSize = 128;
 
   private final WorldRepository worldRepository;
-  private final ApplicationEventPublisher publisher;
   private final Map<TileId, Tile> allTiles;
 
   @Autowired
-  public WorldServiceImpl(final WorldRepository worldRepository,
-                          final ApplicationEventPublisher publisher) {
+  public WorldServiceImpl(final WorldRepository worldRepository) {
     this.worldRepository = Objects.requireNonNull(worldRepository);
-    this.publisher = Objects.requireNonNull(publisher);
     this.allTiles = new HashMap<>();
   }
 
