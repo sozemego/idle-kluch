@@ -53,7 +53,7 @@ public class GameServiceImpl implements GameService {
    */
   @Override
   public void handleInitMessage(final String username) {
-    LOG.info("[GAME_SERVICE] Init message from [{}]", username);
+    LOG.info("Init message from [{}]", username);
 
     final Map<TileId, Tile> allTiles = worldService.getAllTiles();
 
