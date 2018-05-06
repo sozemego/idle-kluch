@@ -5,6 +5,7 @@ import { findComponent } from "../ecs/utils";
 export const root = rootSelector("kingdom");
 
 export const getKingdom = state => root(state).kingdom;
+export const getKingdomStartingPoint = (state) => getKingdom(state).startingPoint;
 export const hasKingdom = state => !!getKingdom(state);
 export const shouldShowCreateKingdomForm = state => root(state).showCreateKingdomForm;
 export const getKingdomNameRegistrationError = state => root(state).kingdomNameRegistrationError;

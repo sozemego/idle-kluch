@@ -10,10 +10,10 @@ import { PhysicsComponent } from "../ecs/components/PhysicsComponent";
 import { PhysicsSystem } from "../ecs/systems/PhysicsSystem";
 import { GraphicsSystem } from "../ecs/systems/GraphicsSystem";
 import {
-  getKingdom,
+  getKingdomStartingPoint as _getKingdomStartingPoint,
   getSelectedConstructableBuilding as _getSelectedConstructableBuilding,
 } from "../kingdom/selectors";
-import { COMPONENT_TYPES, TILE_SIZE } from "./constants";
+import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE } from "./constants";
 import { OwnershipComponent } from "../ecs/components/OwnershipComponent";
 import { NameComponent } from "../ecs/components/NameComponent";
 import { BuildableComponent } from "../ecs/components/BuildableComponent";
@@ -23,7 +23,7 @@ import { centerCameraAt } from "./utils";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
-const getKingdomStartingPosition = () => getKingdom(store.getState()).startingPoint;
+const getKingdomStartingPoint = () => _getKingdomStartingPoint(store.getState());
 
 let game = null;
 let engine = null;
@@ -125,14 +125,9 @@ const createGame = () => {
 
     const preload = function () {
       console.log("preloading!");
-      this.load.image("grass_1", "grass_1.png");
-      this.load.image("small_warehouse", "small_warehouse.png");
-      this.load.image("warehouse", "warehouse.png");
-      this.load.image("forest_1", "forest_1.png");
-      this.load.image("forest_2", "forest_2.png");
-      this.load.image("forest_3", "forest_3.png");
-      this.load.image("forest_4", "forest_4.png");
-      this.load.image("woodcutter", "woodcutter.png");
+      Object.entries(IMAGES).forEach(([asset, filename]) => {
+        this.load.image(asset, filename);
+      });
     };
 
     const create = function () {
@@ -140,9 +135,9 @@ const createGame = () => {
 
       cursors = game.input.keyboard.createCursorKeys();
 
-      game.world.resize(2500 * TILE_SIZE, 2500 * TILE_SIZE);
+      game.world.resize(MAX_WIDTH * TILE_SIZE, MAX_HEIGHT * TILE_SIZE);
 
-      centerCameraAt(game, getKingdomStartingPosition());
+      centerCameraAt(game, getKingdomStartingPoint());
 
       game.input.onDown.add(pointer => {
         const x = pointer.x + game.camera.x;
