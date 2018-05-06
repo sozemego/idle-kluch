@@ -28,12 +28,10 @@ public class WorldServiceImpl implements WorldService {
   private final int tileSize = 128;
 
   private final WorldRepository worldRepository;
-  private final Map<TileId, Tile> allTiles;
 
   @Autowired
   public WorldServiceImpl(final WorldRepository worldRepository) {
     this.worldRepository = Objects.requireNonNull(worldRepository);
-    this.allTiles = new HashMap<>();
   }
 
   @PostConstruct
@@ -45,14 +43,11 @@ public class WorldServiceImpl implements WorldService {
       worldRepository.saveWorld(new World());
     }
 
-    final List<Tile> currentTiles = worldRepository.getAllTiles();
-    LOG.info("Loaded [{}] tiles", currentTiles.size());
-    currentTiles.forEach(tile -> this.allTiles.put(tile.getTileId(), tile));
   }
 
   @Override
   public Map<TileId, Tile> getAllTiles() {
-    return allTiles;
+    return worldRepository.getAllTiles();
   }
 
   @Override
@@ -85,13 +80,13 @@ public class WorldServiceImpl implements WorldService {
       }
     }
     LOG.info("Will generate chunk from [{}, {}] to [{}, {}]",
-      startingPoint.getX() - 7, startingPoint.getX() + 7,
-      startingPoint.getY() - 7, startingPoint.getY() + 7
+      startingPoint.getX() - 7, startingPoint.getY() - 7,
+      startingPoint.getX() + 7, startingPoint.getY() + 7
     );
 
     //3. remove those tileIds which already exist
     LOG.info("Removing tiles from chunk which already exist.");
-    chunkTiles.removeIf(tileId -> allTiles.get(tileId) != null);
+    chunkTiles.removeIf(tileId -> worldRepository.getTile(tileId).isPresent());
 
     //4. create Tile objects
     final List<Tile> tiles = chunkTiles
@@ -100,22 +95,8 @@ public class WorldServiceImpl implements WorldService {
                                .collect(Collectors.toList());
 
     worldRepository.addTiles(tiles);
-    tiles.forEach(tile -> allTiles.put(tile.getTileId(), tile));
 
     //5. nothing more for now. forests/mountains/etc soon to come
-
   }
-
-//  private List<Tile> createInitialTiles() {
-//    final List<Tile> newTiles = new ArrayList<>();
-//    for(int i = 0; i < maxWorldWidth; i++) {
-//      for(int j = 0; j < maxWorldHeight; j++) {
-//        final Tile tile = new Tile();
-//        tile.setTileId(TileId.from(i, j));
-//        newTiles.add(tile);
-//      }
-//    }
-//    return newTiles;
-//  }
 
 }

@@ -2,9 +2,11 @@ package com.soze.idlekluch.world.repository;
 
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.world.entity.Tile;
+import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.entity.World;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface WorldRepository {
@@ -13,14 +15,10 @@ public interface WorldRepository {
 
   void saveWorld(final World world);
 
-  /**
-   * Returns all tiles in the database.
-   */
-  List<Tile> getAllTiles();
+  Map<TileId, Tile> getAllTiles();
 
-  /**
-   * Adds a new tile.
-   */
+  Optional<Tile> getTile(final TileId tileId);
+
   public void addTile(final Tile tile);
 
   public void addTiles(final List<Tile> tiles);

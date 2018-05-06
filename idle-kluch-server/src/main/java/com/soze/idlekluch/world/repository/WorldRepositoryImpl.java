@@ -3,22 +3,44 @@ package com.soze.idlekluch.world.repository;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.utils.jpa.QueryUtils;
 import com.soze.idlekluch.world.entity.Tile;
+import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.entity.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class WorldRepositoryImpl implements WorldRepository {
 
+  private static final Logger LOG = LoggerFactory.getLogger(WorldRepositoryImpl.class);
+
   @PersistenceContext
   private EntityManager em;
+
+  private final Map<TileId, Tile> tiles;
+
+  public WorldRepositoryImpl() {
+    this.tiles = new ConcurrentHashMap<>();
+  }
+
+  @PostConstruct
+  public void setup() {
+    LOG.info("Loading all tiles");
+    final List<Tile> tileList = getTileList();
+    LOG.info("Retrieved [{}] tiles from DB", tileList.size());
+    tileList.forEach(tile -> tiles.put(tile.getTileId(), tile));
+  }
 
   @Override
   public Optional<World> getCurrentWorld() {
@@ -31,7 +53,7 @@ public class WorldRepositoryImpl implements WorldRepository {
   @Transactional
   public void saveWorld(final World world) {
     Objects.requireNonNull(world);
-    if(getCurrentWorld().isPresent()) {
+    if (getCurrentWorld().isPresent()) {
       em.merge(world);
     } else {
       em.persist(world);
@@ -39,9 +61,13 @@ public class WorldRepositoryImpl implements WorldRepository {
   }
 
   @Override
-  public List<Tile> getAllTiles() {
-    final Query query = em.createQuery("SELECT t FROM Tile t");
-    return query.getResultList();
+  public Map<TileId, Tile> getAllTiles() {
+    return tiles;
+  }
+
+  @Override
+  public Optional<Tile> getTile(final TileId tileId) {
+    return Optional.ofNullable(tiles.get(tileId));
   }
 
   @Override
@@ -49,6 +75,7 @@ public class WorldRepositoryImpl implements WorldRepository {
   public void addTile(final Tile tile) {
     Objects.requireNonNull(tile);
     em.persist(tile);
+    tiles.put(tile.getTileId(), tile);
   }
 
   @Override
@@ -56,6 +83,7 @@ public class WorldRepositoryImpl implements WorldRepository {
   public void addTiles(final List<Tile> tiles) {
     Objects.requireNonNull(tiles);
     tiles.forEach(em::persist);
+    tiles.forEach(tile -> this.tiles.put(tile.getTileId(), tile));
   }
 
   @Override
@@ -64,8 +92,9 @@ public class WorldRepositoryImpl implements WorldRepository {
     Objects.requireNonNull(tiles);
     tiles.forEach(tile -> {
       final Tile foundTile = em.find(Tile.class, tile.getTileId());
-      if(foundTile != null) {
+      if (foundTile != null) {
         em.remove(foundTile);
+        this.tiles.remove(tile.getTileId());
       }
     });
   }
@@ -91,16 +120,9 @@ public class WorldRepositoryImpl implements WorldRepository {
     return QueryUtils.getOptional(query, Resource.class);
   }
 
-//  @Override
-//  public List<Forest> getAllForests() {
-//    return em.createQuery("SELECT f FROM Forest f").getResultList();
-//  }
-
-//  @Override
-//  @Transactional
-//  public void addForest(final Forest forest) {
-//    Objects.requireNonNull(forest);
-//    em.persist(forest);
-//  }
+  private List<Tile> getTileList() {
+    final Query query = em.createQuery("SELECT t FROM Tile t");
+    return query.getResultList();
+  }
 
 }
