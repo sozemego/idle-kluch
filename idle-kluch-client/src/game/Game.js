@@ -13,12 +13,13 @@ import {
   getKingdom,
   getSelectedConstructableBuilding as _getSelectedConstructableBuilding,
 } from "../kingdom/selectors";
-import { COMPONENT_TYPES } from "./constants";
+import { COMPONENT_TYPES, TILE_SIZE } from "./constants";
 import { OwnershipComponent } from "../ecs/components/OwnershipComponent";
 import { NameComponent } from "../ecs/components/NameComponent";
 import { BuildableComponent } from "../ecs/components/BuildableComponent";
 import { StaticOccupySpaceComponent } from "../ecs/components/StaticOccupySpaceComponent";
 import { findComponent } from "../ecs/utils";
+import { centerCameraAt } from "./utils";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
@@ -116,8 +117,6 @@ export const gameReducer = createReducer(initialState, {
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
 });
 
-const TILE_SIZE = 128;
-
 const createGame = () => {
   return new Promise(resolve => {
     let cursors = null;
@@ -143,9 +142,7 @@ const createGame = () => {
 
       game.world.resize(2500 * TILE_SIZE, 2500 * TILE_SIZE);
 
-      const kingdomStartingPoint = getKingdomStartingPosition();
-      game.camera.x = (kingdomStartingPoint.x * TILE_SIZE) - (game.scale.width / 2);
-      game.camera.y = (kingdomStartingPoint.y * TILE_SIZE) - (game.scale.height / 2);
+      centerCameraAt(game, getKingdomStartingPosition());
 
       game.input.onDown.add(pointer => {
         const x = pointer.x + game.camera.x;

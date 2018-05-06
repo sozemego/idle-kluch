@@ -6,3 +6,10 @@ export const COMPONENT_TYPES = {
   BUILDABLE: "BUILDABLE",
   STATIC_OCCUPY_SPACE: "STATIC_OCCUPY_SPACE",
 };
+
+/**
+ * Size, in pixels, of one side of the tile.
+ * Tiles are squares.
+ * @type {number}
+ */
+export const TILE_SIZE = 128;
