@@ -141,12 +141,11 @@ const createGame = () => {
 
       cursors = game.input.keyboard.createCursorKeys();
 
-      game.world.resize(5000, 5000);
+      game.world.resize(2500 * TILE_SIZE, 2500 * TILE_SIZE);
 
       const kingdomStartingPoint = getKingdomStartingPosition();
-//TODO FIX THIS
-      game.camera.x = kingdomStartingPoint.x * TILE_SIZE;
-      game.camera.y = kingdomStartingPoint.y * TILE_SIZE;
+      game.camera.x = (kingdomStartingPoint.x * TILE_SIZE) - (game.scale.width / 2);
+      game.camera.y = (kingdomStartingPoint.y * TILE_SIZE) - (game.scale.height / 2);
 
       game.input.onDown.add(pointer => {
         const x = pointer.x + game.camera.x;
