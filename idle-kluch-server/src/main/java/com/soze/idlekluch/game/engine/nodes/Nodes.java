@@ -13,4 +13,6 @@ public interface Nodes {
   Node BUILDABLE = Node.of(BuildableComponent.class);
   Node OCCUPY_SPACE = Node.of(PhysicsComponent.class, StaticOccupySpaceComponent.class);
 
+  Node BUILDING = Node.of(PhysicsComponent.class, OwnershipComponent.class, BuildableComponent.class, StaticOccupySpaceComponent.class);
+
 }

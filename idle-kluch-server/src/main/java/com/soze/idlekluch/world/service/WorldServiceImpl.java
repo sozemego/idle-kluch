@@ -22,11 +22,6 @@ public class WorldServiceImpl implements WorldService {
 
   private static final Logger LOG = LoggerFactory.getLogger(WorldServiceImpl.class);
 
-  //TODO externalize
-  private final int maxWorldWidth = 2500;
-  private final int maxWorldHeight = 2500;
-  private final int tileSize = 128;
-
   private final WorldRepository worldRepository;
 
   @Autowired
@@ -48,21 +43,6 @@ public class WorldServiceImpl implements WorldService {
   @Override
   public Map<TileId, Tile> getAllTiles() {
     return worldRepository.getAllTiles();
-  }
-
-  @Override
-  public int getMaxWorldWidth() {
-    return maxWorldWidth;
-  }
-
-  @Override
-  public int getMaxWorldHeight() {
-    return maxWorldHeight;
-  }
-
-  @Override
-  public int getTileSize() {
-    return tileSize;
   }
 
   @Override
