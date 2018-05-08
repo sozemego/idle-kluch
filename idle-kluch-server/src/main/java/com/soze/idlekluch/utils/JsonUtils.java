@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class JsonUtils {
+public final class JsonUtils {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -22,35 +22,40 @@ public class JsonUtils {
 
   /**
    * Attempts to stringify a given object to json.
-   * Returns empty string if conversion fails. This will probably be reworked.
+   * If the conversion fails, wraps {@link JsonProcessingException} in {@link IllegalArgumentException}.
    */
-  public static String objectToJson(Object object) {
+  public static String objectToJson(final Object object) {
     Objects.requireNonNull(object);
 
     try {
       return MAPPER.writeValueAsString(object);
-    } catch (JsonProcessingException e) {
+    } catch (final JsonProcessingException e) {
       //TODO throw own exception
       throw new IllegalArgumentException(e);
     }
   }
 
   /**
-   * Parses a given string and attempts to construct an object of given clazz.
+   * Parses a given string and attempts to construct an object of a given class.
+   * If the conversion fails, wraps {@link IOException} in {@link IllegalArgumentException}.
    */
-  public static <T> T jsonToObject(String json, Class<T> clazz) {
-    System.out.println(Thread.currentThread().getName() + " deserializing " + json);
+  public static <T> T jsonToObject(final String json, final Class<T> target) {
     Objects.requireNonNull(json);
-    Objects.requireNonNull(clazz);
+    Objects.requireNonNull(target);
+
     try {
-      return MAPPER.readValue(json, clazz);
+      return MAPPER.readValue(json, target);
     } catch (IOException e) {
       //TODO throw own exception
       throw new IllegalArgumentException(e);
     }
   }
 
-  public static <T> List<T> jsonToList(String json, Class<T> clazz) {
+  /**
+   * Attempts to parse a given json to a list of objects of Class clazz.
+   * If the conversion fails, wraps {@link IOException} in a {@link IllegalArgumentException}.
+   */
+  public static <T> List<T> jsonToList(final String json, final Class<T> clazz) {
     Objects.requireNonNull(json);
     Objects.requireNonNull(clazz);
 
@@ -62,7 +67,11 @@ public class JsonUtils {
     }
   }
 
-  public static <T, E> Map<T, E> jsonToMap(String json, Class<T> key, Class<E> value) {
+  /**
+   * Parses a string into a Map (json Object).
+   * If the parsing fails, wraps {@link IOException} in a {@link IllegalArgumentException}.
+   */
+  public static <T, E> Map<T, E> jsonToMap(final String json, final Class<T> key, final Class<E> value) {
     Objects.requireNonNull(json);
     Objects.requireNonNull(key);
     Objects.requireNonNull(value);
@@ -75,12 +84,24 @@ public class JsonUtils {
     }
   }
 
-  public static <T, E> Map<T, E> resourceToMap(final ClassPathResource resource, Class<T> key, Class<E> value) {
-    return jsonToMap(FileUtils.readClassPathResource(resource), key, value);
+  /**
+   * Loads a string from a given resource, then parses the result into a map (json Object).
+   * @see FileUtils#readClassPathResource(ClassPathResource)
+   * @see JsonUtils#jsonToMap(String, Class, Class)
+   */
+  public static <T, E> Map<T, E> resourceToMap(final ClassPathResource resource, final Class<T> key, final Class<E> value) {
+    final String fileContent = FileUtils.readClassPathResource(resource);
+    return jsonToMap(fileContent, key, value);
   }
 
-  public static <T> List<T> resourceToList(final ClassPathResource resource, Class<T> clazz) {
-    return jsonToList(FileUtils.readClassPathResource(resource), clazz);
+  /**
+   * Loads a string from a given resource, then parses the result into a list.
+   * @see FileUtils#readClassPathResource(ClassPathResource)
+   * @see JsonUtils#jsonToList(String, Class)
+   */
+  public static <T> List<T> resourceToList(final ClassPathResource resource, final Class<T> clazz) {
+    final String fileContent = FileUtils.readClassPathResource(resource);
+    return jsonToList(fileContent, clazz);
   }
 
 }
