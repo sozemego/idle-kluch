@@ -42,7 +42,6 @@ public class PoissonDiscSamplerTest {
       assertTrue(isMinimumDistanceAwayFromAllPoints(point, generatedPoints));
       generatedPoints.add(point);
     }
-    System.out.println(generatedPoints);
   }
 
   private boolean isMinimumDistanceAwayFromAllPoints(final Point nextPoint, final List<Point> points) {
