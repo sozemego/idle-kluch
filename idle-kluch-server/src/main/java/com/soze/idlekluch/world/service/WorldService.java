@@ -7,13 +7,12 @@ import java.util.Map;
 
 public interface WorldService {
 
+  /**
+   * Length of edge of a tile. Tiles are squares.
+   */
+  int TILE_SIZE = 128;
+
   Map<TileId, Tile> getAllTiles();
-
-  int getMaxWorldWidth();
-
-  int getMaxWorldHeight();
-
-  int getTileSize();
 
   /**
    * Creates a world chunk at a given coordinates.

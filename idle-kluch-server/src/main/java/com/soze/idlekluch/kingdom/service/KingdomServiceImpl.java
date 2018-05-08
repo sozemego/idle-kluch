@@ -1,6 +1,9 @@
 package com.soze.idlekluch.kingdom.service;
 
 import com.soze.idlekluch.exception.EntityAlreadyExistsException;
+import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.game.engine.nodes.Nodes;
+import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.UserAlreadyHasKingdomException;
@@ -8,16 +11,18 @@ import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.kingdom.repository.KingdomRepository;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.repository.UserRepository;
-import com.soze.idlekluch.utils.CommonUtils;
+import com.soze.idlekluch.utils.PoissonDiscSampler;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.service.WorldService;
+import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.*;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -29,17 +34,26 @@ public class KingdomServiceImpl implements KingdomService {
 
   private static final Logger LOG = LoggerFactory.getLogger(KingdomServiceImpl.class);
 
+  /**
+   * Distance in tiles between kingdoms. When new kingdom is created, it will be at least
+   * this many tiles away from any buildings belonging to other kingdoms.
+   */
+  private static final int MINIMUM_DISTANCE_BETWEEN_KINGDOMS = 10;
+
   private final KingdomRepository kingdomRepository;
   private final UserRepository userRepository;
   private final WorldService worldService;
+  private final EntityService entityService;
 
   @Autowired
   public KingdomServiceImpl(final KingdomRepository kingdomRepository,
                             final UserRepository userRepository,
-                            final WorldService worldService) {
+                            final WorldService worldService,
+                            final EntityService entityService) {
     this.kingdomRepository = Objects.requireNonNull(kingdomRepository);
     this.userRepository = Objects.requireNonNull(userRepository);
     this.worldService = Objects.requireNonNull(worldService);
+    this.entityService = Objects.requireNonNull(entityService);
   }
 
   @Override
@@ -61,6 +75,7 @@ public class KingdomServiceImpl implements KingdomService {
     }
 
     final TileId startingPoint = findStartingPoint();
+    LOG.info("Starting point for kingdom [{}] is [{}]", form.getName(), startingPoint);
 
     final Kingdom kingdom = new Kingdom();
     kingdom.setKingdomId(EntityUUID.randomId());
@@ -72,10 +87,10 @@ public class KingdomServiceImpl implements KingdomService {
     final User user = userRepository.getUserByUsername(owner).get();
     kingdom.setOwner(user);
 
+    worldService.createWorldChunk(startingPoint);
+
     kingdomRepository.addKingdom(kingdom);
     LOG.info("User [{}] successfully created kingdom [{}]", owner, form.getName());
-
-    worldService.createWorldChunk(startingPoint);
   }
 
   @Override
@@ -109,49 +124,27 @@ public class KingdomServiceImpl implements KingdomService {
 
   /**
    * Finds a starting point for the kingdom.
-   * //TODO make it into a generic algorithm, like Poisson Disc Sampling?
+   * This method takes all constructable entities and finds a point at least {@link KingdomServiceImpl#MINIMUM_DISTANCE_BETWEEN_KINGDOMS}
+   * tiles away.
    */
   private TileId findStartingPoint() {
-    //1. Load all kingdoms
-    final List<Kingdom> kingdoms = kingdomRepository.getAllKingdoms();
+    //1. Load all buildings
+    final List<Entity> buildings = entityService.getEntitiesByNode(Nodes.BUILDING);
+    //2. Get all their positions and translate them to coordinates of tiles
+    final List<Point> points = buildings
+                                 .stream()
+                                 .map(building -> {
+                                   final PhysicsComponent physicsComponent = building.getComponent(PhysicsComponent.class);
+                                   final float x = physicsComponent.getX();
+                                   final float y = physicsComponent.getY();
+                                   return new Point((int) x / WorldService.TILE_SIZE, (int) y / WorldService.TILE_SIZE);
+                                 })
+                                 .collect(Collectors.toList());
 
-    //2. For prototyping, finding a starting point will not be fancy.
-    //   We just need to find a point that is not too close to any of the kingdoms
-    //   or too far away.
-    //   Let's brute force it for now.
+    final PoissonDiscSampler sampler = new PoissonDiscSampler(points, MINIMUM_DISTANCE_BETWEEN_KINGDOMS);
+    final Point nextPoint = sampler.nextPoint();
 
-    //3. All starting points
-    final List<TileId> startingPoints = kingdoms
-                                          .stream()
-                                          .map(Kingdom::getStartingPoint)
-                                          .collect(Collectors.toList());
-
-    final int minDistance = 10;
-    //lets ignore maxDistance for now
-//    final int maxDistance = 25;
-
-    TileId startingPoint = null;
-    while (startingPoint == null) {
-      final int x = CommonUtils.randomNumber(0, worldService.getMaxWorldWidth());
-      final int y = CommonUtils.randomNumber(0, worldService.getMaxWorldHeight());
-
-      //3a. check if all existing points are at least minDistance away
-      boolean foundTileTooClose = false;
-      for (final TileId kingdomStartingPoint: startingPoints) {
-        final double distance = Math.hypot(x - kingdomStartingPoint.getX(), y - kingdomStartingPoint.getY());
-        if(distance < minDistance) {
-          foundTileTooClose = true;
-          break;
-        }
-      }
-
-      if(foundTileTooClose) {
-        continue;
-      }
-      startingPoint = new TileId(x, y);
-    }
-
-    return startingPoint;
+    return new TileId(nextPoint.x, nextPoint.y);
   }
 
 }
