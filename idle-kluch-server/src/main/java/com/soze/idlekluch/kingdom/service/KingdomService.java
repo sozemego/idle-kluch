@@ -12,6 +12,12 @@ import java.util.Optional;
 public interface KingdomService {
 
   /**
+   * Distance in tiles between kingdoms. When new kingdom is created, it will be at least
+   * this many tiles away from any buildings belonging to other kingdoms.
+   */
+  int MINIMUM_DISTANCE_BETWEEN_KINGDOMS = 10;
+
+  /**
    * Adds a kingdom.
    * Returns the starting point of the kingdom as a {@link TileId}.
    * @throws EntityAlreadyExistsException if a kingdom with given name already exists.

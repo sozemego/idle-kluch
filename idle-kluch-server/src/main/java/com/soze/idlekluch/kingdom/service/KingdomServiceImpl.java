@@ -34,12 +34,6 @@ public class KingdomServiceImpl implements KingdomService {
 
   private static final Logger LOG = LoggerFactory.getLogger(KingdomServiceImpl.class);
 
-  /**
-   * Distance in tiles between kingdoms. When new kingdom is created, it will be at least
-   * this many tiles away from any buildings belonging to other kingdoms.
-   */
-  private static final int MINIMUM_DISTANCE_BETWEEN_KINGDOMS = 10;
-
   private final KingdomRepository kingdomRepository;
   private final UserRepository userRepository;
   private final WorldService worldService;
@@ -124,7 +118,7 @@ public class KingdomServiceImpl implements KingdomService {
 
   /**
    * Finds a starting point for the kingdom.
-   * This method takes all constructable entities and finds a point at least {@link KingdomServiceImpl#MINIMUM_DISTANCE_BETWEEN_KINGDOMS}
+   * This method takes all constructable entities and finds a point at least {@link KingdomService#MINIMUM_DISTANCE_BETWEEN_KINGDOMS}
    * tiles away.
    */
   private TileId findStartingPoint() {
@@ -140,6 +134,14 @@ public class KingdomServiceImpl implements KingdomService {
                                    return new Point((int) x / WorldService.TILE_SIZE, (int) y / WorldService.TILE_SIZE);
                                  })
                                  .collect(Collectors.toList());
+
+    //3. We also need to get all kingdom starting points. A player may have zero buildings,
+    //   we still need to make sure the minimum distance is respected.
+    kingdomRepository.getAllKingdoms()
+      .forEach(kingdom -> {
+        final TileId startingPoint = kingdom.getStartingPoint();
+        points.add(new Point(startingPoint.getX(), startingPoint.getY()));
+      });
 
     final PoissonDiscSampler sampler = new PoissonDiscSampler(points, MINIMUM_DISTANCE_BETWEEN_KINGDOMS);
     final Point nextPoint = sampler.nextPoint();
