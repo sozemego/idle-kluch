@@ -69,4 +69,14 @@ public class PhysicsComponent extends BaseComponent {
   public PhysicsComponent copy() {
     return new PhysicsComponent(getEntityId(), getX(), getY(), getWidth(), getHeight());
   }
+
+  @Override
+  public String toString() {
+    return "PhysicsComponent{" +
+             "x=" + x +
+             ", y=" + y +
+             ", width=" + width +
+             ", height=" + height +
+             '}';
+  }
 }

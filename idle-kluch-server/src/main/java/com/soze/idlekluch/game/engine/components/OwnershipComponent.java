@@ -42,4 +42,11 @@ public class OwnershipComponent extends BaseComponent {
   public OwnershipComponent copy() {
     return new OwnershipComponent(getEntityId(), getOwnerId());
   }
+
+  @Override
+  public String toString() {
+    return "OwnershipComponent{" +
+             "ownerId=" + ownerId +
+             '}';
+  }
 }

@@ -1,5 +1,8 @@
 package com.soze.idlekluch.game.engine.components;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
@@ -7,6 +10,21 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @MappedSuperclass
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.EXISTING_PROPERTY,
+  property = "componentType",
+  visible = true
+)
+@JsonSubTypes({
+  @JsonSubTypes.Type(value = BuildableComponent.class, name = "BUILDABLE"),
+  @JsonSubTypes.Type(value = GraphicsComponent.class, name = "GRAPHICS"),
+  @JsonSubTypes.Type(value = NameComponent.class, name = "NAME"),
+  @JsonSubTypes.Type(value = OwnershipComponent.class, name = "OWNERSHIP"),
+  @JsonSubTypes.Type(value = PhysicsComponent.class, name = "PHYSICS"),
+  @JsonSubTypes.Type(value = StaticOccupySpaceComponent.class, name = "STATIC_OCCUPY_SPACE")
+})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseComponent {
 
   @EmbeddedId
@@ -50,4 +68,11 @@ public abstract class BaseComponent {
     PHYSICS, GRAPHICS, OWNERSHIP, STATIC_OCCUPY_SPACE, NAME, BUILDABLE,
   }
 
+  @Override
+  public String toString() {
+    return "BaseComponent{" +
+             "entityId=" + entityId +
+             ", componentType=" + componentType +
+             '}';
+  }
 }

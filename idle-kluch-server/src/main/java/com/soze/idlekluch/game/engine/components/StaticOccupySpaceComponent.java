@@ -25,4 +25,9 @@ public class StaticOccupySpaceComponent extends BaseComponent {
   public StaticOccupySpaceComponent copy() {
     return new StaticOccupySpaceComponent(getEntityId());
   }
+
+  @Override
+  public String toString() {
+    return "StaticOccupySpaceComponent{}";
+  }
 }

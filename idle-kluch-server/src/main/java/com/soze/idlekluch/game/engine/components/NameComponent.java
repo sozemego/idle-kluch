@@ -40,4 +40,11 @@ public class NameComponent extends BaseComponent {
   public NameComponent copy() {
     return new NameComponent(getEntityId(), getName());
   }
+
+  @Override
+  public String toString() {
+    return "NameComponent{" +
+             "name='" + name + '\'' +
+             '}';
+  }
 }

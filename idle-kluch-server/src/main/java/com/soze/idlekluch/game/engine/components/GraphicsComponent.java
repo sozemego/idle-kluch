@@ -46,4 +46,11 @@ public class GraphicsComponent extends BaseComponent {
   public GraphicsComponent copy() {
     return new GraphicsComponent(getEntityId(), getAsset());
   }
+
+  @Override
+  public String toString() {
+    return "GraphicsComponent{" +
+             "asset='" + asset + '\'' +
+             '}';
+  }
 }

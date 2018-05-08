@@ -26,4 +26,9 @@ public class BuildableComponent extends BaseComponent {
   public BuildableComponent copy() {
     return new BuildableComponent(getEntityId());
   }
+
+  @Override
+  public String toString() {
+    return "BuildableComponent{}";
+  }
 }
