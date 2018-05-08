@@ -13,7 +13,7 @@ import {
   getKingdomStartingPoint as _getKingdomStartingPoint,
   getSelectedConstructableBuilding as _getSelectedConstructableBuilding,
 } from "../kingdom/selectors";
-import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE } from "./constants";
+import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
 import { OwnershipComponent } from "../ecs/components/OwnershipComponent";
 import { NameComponent } from "../ecs/components/NameComponent";
 import { BuildableComponent } from "../ecs/components/BuildableComponent";
@@ -135,7 +135,7 @@ const createGame = () => {
 
       cursors = game.input.keyboard.createCursorKeys();
 
-      game.world.resize(MAX_WIDTH * TILE_SIZE, MAX_HEIGHT * TILE_SIZE);
+      game.world.setBounds(-MAX_WIDTH * TILE_SIZE, -MAX_HEIGHT * TILE_SIZE, MAX_WIDTH * TILE_SIZE * 2, MAX_HEIGHT * TILE_SIZE * 2);
 
       centerCameraAt(game, getKingdomStartingPoint());
 
@@ -144,6 +144,12 @@ const createGame = () => {
         const y = pointer.y + game.camera.y;
         onCanvasClick(x, y);
       });
+
+      game.input.mouse.mouseWheelCallback = function(event) {
+        const zoomAmount = event.wheelDelta > 0 ? ZOOM_AMOUNT : -ZOOM_AMOUNT;
+        game.camera.scale.x += zoomAmount;
+        game.camera.scale.y += zoomAmount;
+      };
 
       game.stage.disableVisibilityChange = true;
 
