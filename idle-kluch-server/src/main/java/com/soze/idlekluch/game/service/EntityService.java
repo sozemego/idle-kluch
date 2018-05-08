@@ -4,6 +4,7 @@ import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.entity.Entity;
+import com.soze.klecs.node.Node;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,8 @@ public interface EntityService {
   Optional<Entity> getEntityTemplate(final EntityUUID templateId);
 
   List<Entity> getEntityTemplates();
+
+  List<Entity> getEntitiesByNode(final Node node);
 
   /**
    * Each component in the source is copied ({@link BaseComponent#copy}).

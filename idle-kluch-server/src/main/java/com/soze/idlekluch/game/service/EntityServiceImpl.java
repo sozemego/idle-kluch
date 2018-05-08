@@ -8,6 +8,7 @@ import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.AddedEntityEvent;
 import com.soze.klecs.engine.RemovedEntityEvent;
 import com.soze.klecs.entity.Entity;
+import com.soze.klecs.node.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,12 @@ public class EntityServiceImpl implements EntityService {
   @Override
   public List<Entity> getEntityTemplates() {
     return new ArrayList<>(entityTemplates.values());
+  }
+
+  @Override
+  public List<Entity> getEntitiesByNode(final Node node) {
+    Objects.requireNonNull(node);
+    return gameEngine.getEntitiesByNode(node);
   }
 
   @Override
