@@ -1,5 +1,7 @@
 package com.soze.idlekluch.utils;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -28,10 +30,6 @@ public class CommonUtils {
 
   /**
    * Generates a random number between min and max. Min is inclusive, max is inclusive.
-   *
-   * @param min min
-   * @param max max
-   * @return random number between min and max
    */
   public static int randomNumber(int min, int max) {
     if (max < min) {
@@ -39,6 +37,16 @@ public class CommonUtils {
     }
 
     return ThreadLocalRandom.current().nextInt(min, max + 1);
+  }
+
+  /**
+   * Generates a random number between min and max. Min is inclusive, max is exclusive.
+   */
+  public static double randomNumber(double min, double max) {
+    if (max < min) {
+      throw new IllegalArgumentException("Max cannot be less than min.");
+    }
+    return ThreadLocalRandom.current().nextDouble(min, max);
   }
 
   public static int parseInt(String str, int defaultValue) {
@@ -60,6 +68,17 @@ public class CommonUtils {
       }
     }
     return true;
+  }
+
+  /**
+   * Finds a random element from the list.
+   */
+  public static <T> Optional<T> getRandomElement(final List<T> list) {
+    final int index = randomNumber(0, list.size() - 1);
+    if(index >= list.size()) {
+      return Optional.empty();
+    }
+    return Optional.of(list.get(index));
   }
 
 }
