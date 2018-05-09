@@ -10,4 +10,9 @@ export class EntityFactory {
     return new Entity(id, this.componentContainer);
   };
 
+  destroy = () => {
+    this.engine = null;
+    this.componentContainer = null;
+  };
+
 }

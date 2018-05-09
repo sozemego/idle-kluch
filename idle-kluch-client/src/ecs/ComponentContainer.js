@@ -43,4 +43,9 @@ export class ComponentContainer {
     this.components[ entityId ] = this.components[ entityId ] || {};
     return this.components[ entityId ];
   };
+
+  destroy = () => {
+    this.components = {};
+    this.nodeCache = {};
+  };
 }

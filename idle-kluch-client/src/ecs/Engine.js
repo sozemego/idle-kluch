@@ -93,4 +93,19 @@ export class Engine {
     this.removeEntityQueue = [];
     entitiesToRemove.forEach(entity => this.removeEntity(entity));
   };
+
+  destroy = () => {
+    if (this.updating) {
+      throw new Error("Cannot destroy engine when it's updating!");
+    }
+    this.componentContainer.destroy();
+    this.componentContainer = null;
+    this.entityFactory.destroy();
+    this.systems = [];
+    this.entities = {};
+    this.addEntityQueue = {};
+    this.removeEntityQueue = [];
+    this.updating = false;
+  };
+
 }
