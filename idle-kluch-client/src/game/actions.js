@@ -1,11 +1,7 @@
 import { GameService as gameService } from "./GameService";
 import { makeActionCreator } from "../store/utils";
 import createGame from "./Game";
-import {
-  getConstructableBuildings,
-  getConstructableBuildingsData,
-  getSelectedConstructableBuilding,
-} from "../kingdom/selectors";
+import { getConstructableBuildingsData, getSelectedConstructableBuilding } from "../kingdom/selectors";
 import { setSelectedConstructableBuilding } from "../kingdom/actions";
 
 export const ADD_TILES = "ADD_TILES";
