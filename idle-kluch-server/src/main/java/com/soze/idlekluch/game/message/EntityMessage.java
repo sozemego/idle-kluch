@@ -29,8 +29,8 @@ public class EntityMessage extends OutgoingMessage {
   }
 
   @JsonGetter(value = "id")
-  public EntityUUID getId() {
-    return entityId;
+  public String getId() {
+    return entityId.toString();
   }
 
   public List<BaseComponent> getComponents() {
