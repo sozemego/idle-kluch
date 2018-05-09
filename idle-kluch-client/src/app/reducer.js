@@ -1,4 +1,4 @@
-import { createReducer } from "../store/utils";
+import { createReducer, makeSetter } from "../store/utils";
 import * as APP_ACTIONS from "./actions";
 import { NetworkService as networkService } from "../api/NetworkService";
 
@@ -38,10 +38,6 @@ const stopFetching = (state, action) => {
   return { ...state, fetchingActions: --fetchingActions };
 };
 
-const setErrorMessage = (state, action) => {
-  return { ...state, errorMessage: action.payload };
-};
-
 const setUsername = (state, action) => {
   action.payload
     ? localStorage.setItem("username", action.payload)
@@ -54,14 +50,6 @@ const setToken = (state, action) => {
     ? localStorage.setItem("jwt", action.payload)
     : localStorage.removeItem("jwt");
   return { ...state, user: { ...state.user, token: action.payload } };
-};
-
-const setUsernameError = (state, action) => {
-  return { ...state, usernameError: action.payload };
-};
-
-const setPasswordError = (state, action) => {
-  return { ...state, passwordError: action.payload };
 };
 
 const logout = (state, action) => {
@@ -79,11 +67,11 @@ const logout = (state, action) => {
 const app = createReducer(initialState, {
   [ APP_ACTIONS.FETCHING ]: fetching,
   [ APP_ACTIONS.STOP_FETCHING ]: stopFetching,
-  [ APP_ACTIONS.SET_ERROR_MESSAGE ]: setErrorMessage,
+  [ APP_ACTIONS.SET_ERROR_MESSAGE ]: makeSetter("errorMessage"),
   [ APP_ACTIONS.SET_USERNAME ]: setUsername,
   [ APP_ACTIONS.SET_TOKEN ]: setToken,
-  [ APP_ACTIONS.SET_USERNAME_ERROR ]: setUsernameError,
-  [ APP_ACTIONS.SET_PASSWORD_ERROR ]: setPasswordError,
+  [ APP_ACTIONS.SET_USERNAME_ERROR ]: makeSetter("usernameError"),
+  [ APP_ACTIONS.SET_PASSWORD_ERROR ]: makeSetter("passwordError"),
   [ APP_ACTIONS.LOGOUT ]: logout,
 });
 

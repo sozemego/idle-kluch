@@ -21,3 +21,12 @@ export const createReducer = (initialState, handlers) => {
     }
   };
 };
+
+/**
+ * Returns a function which will be able to set a given property
+ * in the state to a payload in the dispatched action.
+ * Simplifies creation of simple reducers which are essentially setters.
+ */
+export const makeSetter = (propertyName) => (state, action) => {
+  return { ...state, [ propertyName ]: action.payload };
+};
