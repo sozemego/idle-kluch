@@ -25,6 +25,12 @@ const setUsernameError = makeActionCreator(SET_USERNAME_ERROR, "payload");
 export const SET_PASSWORD_ERROR = "SET_PASSWORD_ERROR";
 const setPasswordError = makeActionCreator(SET_PASSWORD_ERROR, "payload");
 
+export const LOGOUT = "LOGOUT";
+export const logout = makeActionCreator(LOGOUT);
+
+export const LOGIN = "LOGIN";
+export const login = makeActionCreator(LOGIN);
+
 /**
  * Function used to initialize the application.
  */
@@ -40,9 +46,9 @@ export const init = () => {
 
 export const register = (username, password) => {
   return (dispatch, getState) => {
-    return dispatch(logout())
+    return dispatch(logoutThunk())
       .then(() => userService.registerUser(username, password))
-      .then(() => dispatch(login(username, password)))
+      .then(() => dispatch(loginThunk(username, password)))
       .catch(error => {
         if (error.field === "username") {
           return dispatch(setUsernameError(error.message));
@@ -56,7 +62,7 @@ export const register = (username, password) => {
   };
 };
 
-export const login = (username, password) => {
+export const loginThunk = (username, password) => {
   return (dispatch, getState) => {
     return userService
       .login(username, password)
@@ -72,12 +78,14 @@ export const login = (username, password) => {
   };
 };
 
-export const logout = () => {
+export const logoutThunk = () => {
   return (dispatch, getState) => {
-    dispatch(setToken(null));
     networkService.clearAuthorizationToken();
-    dispatch(setUsername("Anonymous"));
-    return dispatch(clearForms());
+    dispatch(logout());
+    // dispatch(setToken(null));
+    // dispatch(setUsername("Anonymous"));
+    // return dispatch(clearForms());
+    return Promise.resolve();
   };
 };
 
@@ -91,6 +99,6 @@ export const clearForms = () => {
 
 export const deleteUser = () => {
   return (dispatch, getState) => {
-    return userService.delete().then(() => dispatch(logout()));
+    return userService.delete().then(() => dispatch(logoutThunk()));
   };
 };

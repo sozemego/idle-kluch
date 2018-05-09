@@ -22,9 +22,9 @@ class HeaderAuthForm extends Component {
   };
 
   login = () => {
-    const { login } = this.props;
+    const { loginThunk } = this.props;
 
-    return login(this.state.username, this.state.password);
+    return loginThunk(this.state.username, this.state.password);
   };
 
   render() {

@@ -64,6 +64,15 @@ const setPasswordError = (state, action) => {
   return { ...state, passwordError: action.payload };
 };
 
+const logout = (state, action) => {
+  return {
+    ...state,
+    user: anonymousUser,
+    usernameError: "",
+    passwordError: "",
+  }
+};
+
 const app = createReducer(initialState, {
   [ APP_ACTIONS.FETCHING ]: fetching,
   [ APP_ACTIONS.STOP_FETCHING ]: stopFetching,
@@ -72,6 +81,7 @@ const app = createReducer(initialState, {
   [ APP_ACTIONS.SET_TOKEN ]: setToken,
   [ APP_ACTIONS.SET_USERNAME_ERROR ]: setUsernameError,
   [ APP_ACTIONS.SET_PASSWORD_ERROR ]: setPasswordError,
+  [ APP_ACTIONS.LOGOUT ]: logout,
 });
 
 export default app;

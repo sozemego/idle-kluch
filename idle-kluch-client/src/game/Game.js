@@ -2,6 +2,7 @@ import store from "../store/store";
 import Phaser from "phaser";
 import * as GAME_ACTIONS from "./actions";
 import { onCanvasClicked } from "./actions";
+import * as APP_ACTIONS from "../app/actions";
 import { createReducer } from "../store/utils";
 import * as KINGDOM_ACTIONS from "../kingdom/actions";
 import { Engine } from "../ecs/Engine";
@@ -111,10 +112,37 @@ const setConstructableBuilding = (state, action) => {
   return state;
 };
 
+const logout = (state, action) => {
+  const tiles = {};
+
+  Object.entries(tileSprites).forEach(([ tileId, sprite ]) => {
+    sprite.destroy(true, false);
+    delete tileSprites[ tileId ];
+  });
+
+  if (game) {
+    game.destroy();
+    game = null;
+  }
+
+  if (selectedBuildingSprite) {
+    selectedBuildingSprite.destroy(true, false);
+    selectedBuildingSprite = null;
+  }
+
+  if(engine) {
+    engine.destroy();
+    engine = null;
+  }
+
+  return {...state, tiles};
+};
+
 export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.ADD_TILES ]: addTiles,
   [ GAME_ACTIONS.ADD_ENTITY ]: addEntity,
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
+  [ APP_ACTIONS.LOGOUT ]: logout,
 });
 
 const createGame = () => {
