@@ -71,8 +71,11 @@ GameService.connect = function () {
 
 GameService.disconnect = function () {
   if (client) {
-    client.close();
+    return new Promise((resolve) => {
+      client.disconnect(resolve);
+    })
   }
+  return Promise.resolve();
 };
 
 GameService.constructBuilding = (buildingId, x, y) => {

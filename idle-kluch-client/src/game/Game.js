@@ -2,6 +2,7 @@ import store from "../store/store";
 import Phaser from "phaser";
 import * as GAME_ACTIONS from "./actions";
 import { onCanvasClicked } from "./actions";
+import { GameService as gameService } from "./GameService";
 import * as APP_ACTIONS from "../app/actions";
 import { createReducer } from "../store/utils";
 import * as KINGDOM_ACTIONS from "../kingdom/actions";
@@ -75,13 +76,13 @@ const addEntity = (state, { payload: entity }) => {
       if (component.componentType === COMPONENT_TYPES.OWNERSHIP) {
         return new OwnershipComponent(entity.id);
       }
-      if(component.componentType === COMPONENT_TYPES.NAME) {
+      if (component.componentType === COMPONENT_TYPES.NAME) {
         return new NameComponent(component.name);
       }
-      if(component.componentType === COMPONENT_TYPES.BUILDABLE) {
+      if (component.componentType === COMPONENT_TYPES.BUILDABLE) {
         return new BuildableComponent();
       }
-      if(component.componentType === COMPONENT_TYPES.STATIC_OCCUPY_SPACE) {
+      if (component.componentType === COMPONENT_TYPES.STATIC_OCCUPY_SPACE) {
         return new StaticOccupySpaceComponent();
       }
       throw new Error("INVALID COMPONENT TYPE");
@@ -120,6 +121,8 @@ const logout = (state, action) => {
     delete tileSprites[ tileId ];
   });
 
+  gameService.disconnect();
+
   if (game) {
     game.destroy();
     game = null;
@@ -130,12 +133,12 @@ const logout = (state, action) => {
     selectedBuildingSprite = null;
   }
 
-  if(engine) {
+  if (engine) {
     engine.destroy();
     engine = null;
   }
 
-  return {...state, tiles};
+  return { ...state, tiles };
 };
 
 export const gameReducer = createReducer(initialState, {
@@ -153,7 +156,7 @@ const createGame = () => {
 
     const preload = function () {
       console.log("preloading!");
-      Object.entries(IMAGES).forEach(([asset, filename]) => {
+      Object.entries(IMAGES).forEach(([ asset, filename ]) => {
         this.load.image(asset, filename);
       });
     };
@@ -173,7 +176,7 @@ const createGame = () => {
         onCanvasClick(x, y);
       });
 
-      game.input.mouse.mouseWheelCallback = function(event) {
+      game.input.mouse.mouseWheelCallback = function (event) {
         const zoomAmount = event.wheelDelta > 0 ? ZOOM_AMOUNT : -ZOOM_AMOUNT;
         game.camera.scale.x += zoomAmount;
         game.camera.scale.y += zoomAmount;

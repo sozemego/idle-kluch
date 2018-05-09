@@ -82,9 +82,6 @@ export const logoutThunk = () => {
   return (dispatch, getState) => {
     networkService.clearAuthorizationToken();
     dispatch(logout());
-    // dispatch(setToken(null));
-    // dispatch(setUsername("Anonymous"));
-    // return dispatch(clearForms());
     return Promise.resolve();
   };
 };
