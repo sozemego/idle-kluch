@@ -65,6 +65,9 @@ const setPasswordError = (state, action) => {
 };
 
 const logout = (state, action) => {
+  localStorage.removeItem("username");
+  localStorage.removeItem("jwt");
+
   return {
     ...state,
     user: anonymousUser,
