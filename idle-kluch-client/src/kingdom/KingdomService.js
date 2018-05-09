@@ -8,7 +8,6 @@ const getOwn = `${basePath}/own`;
 
 const buildingBase = "/building";
 const getConstructableBuildings = `${buildingBase}/all`;
-const buildingBuild = `${buildingBase}/build`;
 
 const kingdomNameRegexp = new RegExp("^[a-zA-Z0-9_-]+$");
 const maxKingdomNameLength = 32;

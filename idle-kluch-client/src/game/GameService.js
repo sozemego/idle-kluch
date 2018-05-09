@@ -1,4 +1,3 @@
-// import _ from 'lodash';
 import { networkConfig } from "../api/config";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
@@ -8,7 +7,6 @@ import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
 
 const getToken = () => getUser(store.getState()).token;
-const getUsername = () => getUser(store.getState()).name;
 
 const game = `/game-socket`;
 
@@ -30,7 +28,6 @@ GameService.connect = function () {
     const socket = new SockJS(
       `${protocol}://${base}:${port}${version}${game}?token=${getToken()}`,
     );
-    // socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
     client = Stomp.over(socket);
 
     const messageHandler = message => {
@@ -50,22 +47,6 @@ GameService.connect = function () {
 
       resolve();
     });
-    // socket = new WebSocket(`${wsProtocol}://${base}:${port}${version}/${game}`);
-    //
-    // socket.onopen = () => {
-    //   resolve();
-    // };
-    //
-    // socket.onclose = () => {
-    //
-    // };
-    //
-    // socket.onmessage = (message) => {
-    //   const parsed = JSON.parse(message.data);
-    //   if (parsed['type'] === 'WORLD_CHUNK') {
-    // 	store.dispatch(addTiles(parsed.tiles));
-    //   }
-    // };
   });
 };
 

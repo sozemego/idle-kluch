@@ -2,11 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import { connect } from "react-redux";
-import {
-  getConstructableBuildings,
-  getConstructableBuildingsList,
-  getSelectedConstructableBuilding,
-} from "../../kingdom/selectors";
+import { getConstructableBuildingsList, getSelectedConstructableBuilding } from "../../kingdom/selectors";
 
 import * as gameActions from "../actions";
 
