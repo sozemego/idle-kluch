@@ -18,8 +18,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(
@@ -62,6 +64,12 @@ public class WorldServiceImplIntTest {
 
     final List<Tile> newTiles = worldService.createWorldChunk(chunkCenter);
     assertEquals(new HashSet<>(expectedTiles), new HashSet<>(newTiles));
+
+    final Map<TileId, Tile> allTiles = worldRepository.getAllTiles();
+    for(final Tile tile: expectedTiles) {
+      assertTrue(allTiles.containsKey(tile.getTileId()));
+    }
+    assertEquals(allTiles.size(), newTiles.size());
   }
 
   @Test
@@ -79,12 +87,18 @@ public class WorldServiceImplIntTest {
     final List<Tile> newTiles = worldService.createWorldChunk(chunkCenter);
     assertEquals(new HashSet<>(expectedTiles), new HashSet<>(newTiles));
     final List<Tile> newTiles1 = worldService.createWorldChunk(chunkCenter);
-    assertEquals(new HashSet<>(), new HashSet<>(newTiles1));
+    assertEquals(0, newTiles1.size());
+
+    final Map<TileId, Tile> allTiles = worldRepository.getAllTiles();
+    for(final Tile tile: expectedTiles) {
+      assertTrue(allTiles.containsKey(tile.getTileId()));
+    }
+    assertEquals(allTiles.size(), newTiles.size());
   }
 
   @Test
   public void testCreateChunkVeryFarAwayFromAnotherChunk() {
-    worldService.createWorldChunk(new TileId(0, 0));
+    final List<Tile> firstTiles = worldService.createWorldChunk(new TileId(0, 0));
 
     final int centerX = 555;
     final int centerY = 2500;
@@ -98,11 +112,18 @@ public class WorldServiceImplIntTest {
 
     final List<Tile> newTiles = worldService.createWorldChunk(chunkCenter);
     assertEquals(new HashSet<>(expectedTiles), new HashSet<>(newTiles));
+
+    final Map<TileId, Tile> allTiles = worldRepository.getAllTiles();
+    for(final Tile tile: expectedTiles) {
+      assertTrue(allTiles.containsKey(tile.getTileId()));
+    }
+
+    assertEquals(allTiles.size(), newTiles.size() + firstTiles.size());
   }
 
   @Test
   public void testCreateChunkNextToExistingChunk() {
-    worldService.createWorldChunk(new TileId(0, 0));
+    final List<Tile> firstTiles = worldService.createWorldChunk(new TileId(0, 0));
 
     final int centerX = -1;
     final int centerY = 0;
@@ -114,6 +135,12 @@ public class WorldServiceImplIntTest {
 
     final List<Tile> newTiles = worldService.createWorldChunk(chunkCenter);
     assertEquals(new HashSet<>(expectedTiles), new HashSet<>(newTiles));
+
+    final Map<TileId, Tile> allTiles = worldRepository.getAllTiles();
+    for(final Tile tile: expectedTiles) {
+      assertTrue(allTiles.containsKey(tile.getTileId()));
+    }
+    assertEquals(allTiles.size(), newTiles.size() + firstTiles.size());
   }
 
 }
