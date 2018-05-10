@@ -21,7 +21,7 @@ public interface WorldRepository {
 
   public void addTile(final Tile tile);
 
-  public void addTiles(final List<Tile> tiles);
+  public List<Tile> addTiles(final List<Tile> tiles);
 
   void removeTiles(final List<Tile> tile);
 

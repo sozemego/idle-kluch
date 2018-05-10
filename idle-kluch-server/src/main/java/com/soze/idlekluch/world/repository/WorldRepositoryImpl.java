@@ -80,10 +80,11 @@ public class WorldRepositoryImpl implements WorldRepository {
 
   @Override
   @Transactional
-  public void addTiles(final List<Tile> tiles) {
+  public List<Tile> addTiles(final List<Tile> tiles) {
     Objects.requireNonNull(tiles);
     tiles.forEach(em::persist);
     tiles.forEach(tile -> this.tiles.put(tile.getTileId(), tile));
+    return tiles;
   }
 
   @Override

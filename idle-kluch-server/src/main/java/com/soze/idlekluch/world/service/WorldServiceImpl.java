@@ -46,19 +46,18 @@ public class WorldServiceImpl implements WorldService {
   }
 
   @Override
-  public void createWorldChunk(final TileId startingPoint) {
-    //TODO TEST THIS
+  public List<Tile> createWorldChunk(final TileId startingPoint) {
+    Objects.requireNonNull(startingPoint);
     LOG.info("Creating chunk at a point [{}]", startingPoint);
-    //1. a world chunk will be a 15x15 tile region
-    //   containing trees/mountains/resources etc.
 
-    //2. find tileIds which will be part of the chunk
+    //1. create tileIds which will be part of the chunk
     final List<TileId> chunkTiles = new ArrayList<>();
     for (int i = -7; i < 8; i++) {
       for (int j = -7; j < 8; j++) {
         chunkTiles.add(new TileId(startingPoint.getX() + i, startingPoint.getY() + j));
       }
     }
+
     LOG.info("Will generate chunk from [{}, {}] to [{}, {}]",
       startingPoint.getX() - 7, startingPoint.getY() - 7,
       startingPoint.getX() + 7, startingPoint.getY() + 7
@@ -74,9 +73,8 @@ public class WorldServiceImpl implements WorldService {
                                .map(Tile::new)
                                .collect(Collectors.toList());
 
-    worldRepository.addTiles(tiles);
-
-    //5. nothing more for now. forests/mountains/etc soon to come
+    //5. nothing more for now, just save. forests/mountains/etc soon to come
+    return worldRepository.addTiles(tiles);
   }
 
 }
