@@ -70,6 +70,7 @@ public class KingdomServiceImpl implements KingdomService {
 
     final TileId startingPoint = findStartingPoint();
     LOG.info("Starting point for kingdom [{}] is [{}]", form.getName(), startingPoint);
+    worldService.createWorldChunk(startingPoint);
 
     final Kingdom kingdom = new Kingdom();
     kingdom.setKingdomId(EntityUUID.randomId());
@@ -80,8 +81,6 @@ public class KingdomServiceImpl implements KingdomService {
     // lets assume the user did not delete his account while making this request
     final User user = userRepository.getUserByUsername(owner).get();
     kingdom.setOwner(user);
-
-    worldService.createWorldChunk(startingPoint);
 
     kingdomRepository.addKingdom(kingdom);
     LOG.info("User [{}] successfully created kingdom [{}]", owner, form.getName());
