@@ -49,4 +49,16 @@ public class Tile {
     this.tileId = tileId;
   }
 
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    final Tile tile = (Tile) o;
+    return Objects.equals(tileId, tile.tileId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(tileId);
+  }
 }
