@@ -56,9 +56,7 @@ public class WorldServiceImplIntTest {
     final List<Tile> expectedTiles = new ArrayList<>();
     for(int i = -7; i < 8; i++) {
       for(int j = -7; j < 8; j++) {
-        final Tile tile = new Tile();
-        tile.setTileId(new TileId(chunkCenter.getX() + i, chunkCenter.getY() + j));
-        expectedTiles.add(tile);
+        expectedTiles.add(new Tile(new TileId(chunkCenter.getX() + i, chunkCenter.getY() + j)));
       }
     }
 
@@ -74,9 +72,7 @@ public class WorldServiceImplIntTest {
     final List<Tile> expectedTiles = new ArrayList<>();
     for(int i = -7; i < 8; i++) {
       for(int j = -7; j < 8; j++) {
-        final Tile tile = new Tile();
-        tile.setTileId(new TileId(chunkCenter.getX() + i, chunkCenter.getY() + j));
-        expectedTiles.add(tile);
+        expectedTiles.add(new Tile(new TileId(chunkCenter.getX() + i, chunkCenter.getY() + j)));
       }
     }
 
@@ -96,9 +92,7 @@ public class WorldServiceImplIntTest {
     final List<Tile> expectedTiles = new ArrayList<>();
     for(int i = -7; i < 8; i++) {
       for(int j = -7; j < 8; j++) {
-        final Tile tile = new Tile();
-        tile.setTileId(new TileId(chunkCenter.getX() + i, chunkCenter.getY() + j));
-        expectedTiles.add(tile);
+        expectedTiles.add(new Tile(new TileId(chunkCenter.getX() + i, chunkCenter.getY() + j)));
       }
     }
 
@@ -115,9 +109,7 @@ public class WorldServiceImplIntTest {
     final TileId chunkCenter = new TileId(centerX, centerY);
     final List<Tile> expectedTiles = new ArrayList<>();
     for(int i = -7; i < 8; i++) {
-      final Tile tile = new Tile();
-      tile.setTileId(new TileId(-8, chunkCenter.getY() + i));
-      expectedTiles.add(tile);
+      expectedTiles.add(new Tile(new TileId(-8, chunkCenter.getY() + i)));
     }
 
     final List<Tile> newTiles = worldService.createWorldChunk(chunkCenter);
