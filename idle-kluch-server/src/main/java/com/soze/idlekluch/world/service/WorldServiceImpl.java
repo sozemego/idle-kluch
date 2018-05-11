@@ -3,10 +3,12 @@ package com.soze.idlekluch.world.service;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.entity.World;
+import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.idlekluch.world.repository.WorldRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -23,10 +25,13 @@ public class WorldServiceImpl implements WorldService {
   private static final Logger LOG = LoggerFactory.getLogger(WorldServiceImpl.class);
 
   private final WorldRepository worldRepository;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Autowired
-  public WorldServiceImpl(final WorldRepository worldRepository) {
+  public WorldServiceImpl(final WorldRepository worldRepository,
+                          final ApplicationEventPublisher eventPublisher) {
     this.worldRepository = Objects.requireNonNull(worldRepository);
+    this.eventPublisher = Objects.requireNonNull(eventPublisher);
   }
 
   @PostConstruct
@@ -72,6 +77,8 @@ public class WorldServiceImpl implements WorldService {
                                .stream()
                                .map(Tile::new)
                                .collect(Collectors.toList());
+
+    eventPublisher.publishEvent(new WorldChunkCreatedEvent(tiles));
 
     //5. nothing more for now, just save. forests/mountains/etc soon to come
     return worldRepository.addTiles(tiles);

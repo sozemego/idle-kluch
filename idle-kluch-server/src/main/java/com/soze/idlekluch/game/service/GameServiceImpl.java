@@ -9,11 +9,13 @@ import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
+import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -81,6 +83,15 @@ public class GameServiceImpl implements GameService {
     final String entityMessageJSon = JsonUtils.objectToJson(entityMessage);
 
     webSocketMessagingService.send(Routes.GAME + Routes.GAME_OUTBOUND, entityMessageJSon);
+  }
+
+  @EventListener
+  public void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent event) {
+    Objects.requireNonNull(event);
+    LOG.info("World chunk created, sending data to players!");
+
+    final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(event.getTiles());
+    webSocketMessagingService.send(Routes.GAME + Routes.GAME_OUTBOUND, worldChunkMessage);
   }
 
 }
