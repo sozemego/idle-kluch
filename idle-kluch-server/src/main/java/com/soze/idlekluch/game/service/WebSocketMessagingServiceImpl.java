@@ -16,10 +16,12 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
 
   private static final Logger LOG = LoggerFactory.getLogger(WebSocketMessagingServiceImpl.class);
 
+  private final GameConnectionRegistryService gameConnectionRegistryService;
   private final SimpMessagingTemplate messagingTemplate;
 
   @Autowired
-  public WebSocketMessagingServiceImpl(final SimpMessagingTemplate messagingTemplate) {
+  public WebSocketMessagingServiceImpl(GameConnectionRegistryService gameConnectionRegistryService, SimpMessagingTemplate messagingTemplate) {
+    this.gameConnectionRegistryService = Objects.requireNonNull(gameConnectionRegistryService);
     this.messagingTemplate = Objects.requireNonNull(messagingTemplate);
   }
 

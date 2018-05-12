@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
  * This class is responsible for logging incoming WebSocket messages.
  */
 @Service
-public class GameSocketIncomingLoggerInterceptor extends ChannelInterceptorAdapter {
+public class GameSocketLoggerInterceptor extends ChannelInterceptorAdapter {
 
-  private static final Logger LOG = LoggerFactory.getLogger(GameSocketIncomingLoggerInterceptor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(GameSocketLoggerInterceptor.class);
 
   @Override
   public Message<?> preSend(final Message<?> message, final MessageChannel channel) {
