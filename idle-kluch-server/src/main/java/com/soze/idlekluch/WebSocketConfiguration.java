@@ -26,7 +26,9 @@ public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrok
   private final GameSocketOutgoingLoggerInterceptor gameSocketOutgoingLoggerInterceptor;
 
   @Autowired
-  public WebSocketConfiguration(final GameSocketSessionInterceptor gameSocketSessionInterceptor, final GameSocketLoggerInterceptor gameSocketLoggerInterceptor, final GameSocketOutgoingLoggerInterceptor gameSocketOutgoingLoggerInterceptor) {
+  public WebSocketConfiguration(final GameSocketSessionInterceptor gameSocketSessionInterceptor,
+                                final GameSocketLoggerInterceptor gameSocketLoggerInterceptor,
+                                final GameSocketOutgoingLoggerInterceptor gameSocketOutgoingLoggerInterceptor) {
     this.gameSocketSessionInterceptor = Objects.requireNonNull(gameSocketSessionInterceptor);
     this.gameSocketLoggerInterceptor = Objects.requireNonNull(gameSocketLoggerInterceptor);
     this.gameSocketOutgoingLoggerInterceptor = Objects.requireNonNull(gameSocketOutgoingLoggerInterceptor);
