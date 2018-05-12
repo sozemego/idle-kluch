@@ -1,8 +1,7 @@
 package com.soze.idlekluch;
 
-import com.soze.idlekluch.game.websocket.GameSocketLoggerInterceptor;
+import com.soze.idlekluch.game.websocket.GameSocketIncomingLoggerInterceptor;
 import com.soze.idlekluch.game.websocket.GameSocketOutgoingLoggerInterceptor;
-import com.soze.idlekluch.game.websocket.GameSocketSessionInterceptor;
 import com.soze.idlekluch.routes.Routes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -21,24 +20,20 @@ import java.util.Objects;
 @Component
 public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrokerConfigurer {
 
-  private final GameSocketSessionInterceptor gameSocketSessionInterceptor;
-  private final GameSocketLoggerInterceptor gameSocketLoggerInterceptor;
+  private final GameSocketIncomingLoggerInterceptor gameSocketIncomingLoggerInterceptor;
   private final GameSocketOutgoingLoggerInterceptor gameSocketOutgoingLoggerInterceptor;
 
   @Autowired
-  public WebSocketConfiguration(final GameSocketSessionInterceptor gameSocketSessionInterceptor,
-                                final GameSocketLoggerInterceptor gameSocketLoggerInterceptor,
+  public WebSocketConfiguration(final GameSocketIncomingLoggerInterceptor gameSocketIncomingLoggerInterceptor,
                                 final GameSocketOutgoingLoggerInterceptor gameSocketOutgoingLoggerInterceptor) {
-    this.gameSocketSessionInterceptor = Objects.requireNonNull(gameSocketSessionInterceptor);
-    this.gameSocketLoggerInterceptor = Objects.requireNonNull(gameSocketLoggerInterceptor);
+    this.gameSocketIncomingLoggerInterceptor = Objects.requireNonNull(gameSocketIncomingLoggerInterceptor);
     this.gameSocketOutgoingLoggerInterceptor = Objects.requireNonNull(gameSocketOutgoingLoggerInterceptor);
   }
 
   @Override
   protected void customizeClientInboundChannel(final ChannelRegistration registration) {
     registration.interceptors(
-      gameSocketLoggerInterceptor,
-      gameSocketSessionInterceptor
+      gameSocketIncomingLoggerInterceptor
     );
   }
 
