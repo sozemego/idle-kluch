@@ -17,12 +17,11 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
 
   private static final Logger LOG = LoggerFactory.getLogger(WebSocketMessagingServiceImpl.class);
 
-  private final GameConnectionRegistryService gameConnectionRegistryService;
+//  private final GameConnectionRegistryService gameConnectionRegistryService;
   private final SimpMessagingTemplate messagingTemplate;
 
   @Autowired
-  public WebSocketMessagingServiceImpl(GameConnectionRegistryService gameConnectionRegistryService, SimpMessagingTemplate messagingTemplate) {
-    this.gameConnectionRegistryService = Objects.requireNonNull(gameConnectionRegistryService);
+  public WebSocketMessagingServiceImpl(final SimpMessagingTemplate messagingTemplate) {
     this.messagingTemplate = Objects.requireNonNull(messagingTemplate);
   }
 
@@ -33,7 +32,7 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
     Objects.requireNonNull(message);
 
     LOG.info("[WEB_SOCKET_MESSAGING] Sending a message to user [{}] at [{}]", username, destination);
-    messagingTemplate.convertAndSendToUser(username, "/game/outbound", convertMessage(message));
+    messagingTemplate.convertAndSendToUser(username, destination, convertMessage(message));
   }
 
   @Override
@@ -42,7 +41,7 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
     Objects.requireNonNull(message);
 
     LOG.info("[WEB_SOCKET_MESSAGING] Sending a message to all users at [{}]", destination);
-    messagingTemplate.convertAndSend("/game/outbound", convertMessage(message));
+    messagingTemplate.convertAndSend(destination, convertMessage(message));
   }
 
   @Override
