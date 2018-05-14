@@ -5,7 +5,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
 
 import javax.servlet.FilterChain;
@@ -69,12 +68,12 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
   }
 
   private String getQueryParamToken(final HttpServletRequest request) {
-    try {
-      return "Bearer " + ServletRequestUtils.getRequiredStringParameter(request, "token");
-    } catch (ServletRequestBindingException e) {
-      e.printStackTrace();
+    final String token = ServletRequestUtils.getStringParameter(request, "token", null);
+    if(token == null) {
       return null;
     }
+
+    return "Bearer " + token;
   }
 
 }
