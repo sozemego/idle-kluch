@@ -180,6 +180,18 @@ const createGame = () => {
         const zoomAmount = event.wheelDelta > 0 ? ZOOM_AMOUNT : -ZOOM_AMOUNT;
         game.camera.scale.x += zoomAmount;
         game.camera.scale.y += zoomAmount;
+        if(game.camera.scale.x <= 0.01) {
+          game.camera.scale.x = 0.01;
+        }
+        if(game.camera.scale.y <= 0.01) {
+          game.camera.scale.y = 0.01;
+        }
+        if(game.camera.scale.x >= 1) {
+          game.camera.scale.x = 1;
+        }
+        if(game.camera.scale.y >= 1) {
+          game.camera.scale.y = 1;
+        }
       };
 
       game.stage.disableVisibilityChange = true;
