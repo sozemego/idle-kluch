@@ -14,4 +14,6 @@ public interface GameService {
    */
   void handleBuildBuildingMessage(final String owner, final BuildBuildingForm form);
 
+  void handleDuplicateSession(final String sessionId);
+
 }

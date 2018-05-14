@@ -1,6 +1,7 @@
 package com.soze.idlekluch.game.service;
 
 import org.springframework.context.annotation.Profile;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +20,11 @@ public class WebSocketMessagingServiceTest implements WebSocketMessagingService 
 
   @Override
   public void send(final String destination, final Object message) {
+
+  }
+
+  @Override
+  public void sendToSession(final String sessionId, final String destination, final Object message, final MessageHeaders headers) {
 
   }
 

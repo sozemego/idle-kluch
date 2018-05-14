@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,16 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
 
     LOG.info("[WEB_SOCKET_MESSAGING] Sending a message to all users at [{}]", destination);
     messagingTemplate.convertAndSend("/game/outbound", convertMessage(message));
+  }
+
+  @Override
+  public void sendToSession(final String sessionId, final String destination, final Object message, final MessageHeaders headers) {
+    Objects.requireNonNull(sessionId);
+    Objects.requireNonNull(destination);
+    Objects.requireNonNull(message);
+    Objects.requireNonNull(headers);
+
+    messagingTemplate.convertAndSendToUser(sessionId, destination, convertMessage(message), headers);
   }
 
   private Object convertMessage(final Object message) {

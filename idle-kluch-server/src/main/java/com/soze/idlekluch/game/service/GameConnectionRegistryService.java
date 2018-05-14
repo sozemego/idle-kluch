@@ -15,4 +15,12 @@ public interface GameConnectionRegistryService {
    */
   void onDisconnect(final String sessionId);
 
+  /**
+   * If player with the same username logs in twice or more times, his subsequent sessionIds
+   * will be marked as duplicate. This method returns true if given sessionId is a duplicate.
+   * false otherwise.
+   * @return true if given sessionId was added to collection of duplicates, false otherwise
+   */
+  boolean isDuplicate(final String sessionId);
+
 }

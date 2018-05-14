@@ -15,7 +15,7 @@ public abstract class OutgoingMessage {
   }
 
   public enum OutgoingMessageType {
-    WORLD_CHUNK, CONSTRUCTED_BUILDING, ENTITY
+    WORLD_CHUNK, CONSTRUCTED_BUILDING, ENTITY, ALREADY_CONNECTED
   }
 
 }

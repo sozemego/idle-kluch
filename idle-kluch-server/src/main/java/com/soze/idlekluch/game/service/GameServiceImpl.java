@@ -1,6 +1,7 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.engine.EntityConverter;
+import com.soze.idlekluch.game.message.AlreadyConnectedMessage;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.message.EntityMessage;
 import com.soze.idlekluch.game.message.WorldChunkMessage;
@@ -16,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -66,8 +69,8 @@ public class GameServiceImpl implements GameService {
 
     final List<Entity> entities = gameEngine.getAllEntities();
     final List<EntityMessage> entityMessages = entities.stream()
-      .map(entityConverter::toMessage)
-      .collect(Collectors.toList());
+                                                 .map(entityConverter::toMessage)
+                                                 .collect(Collectors.toList());
 
     entityMessages.forEach(message -> {
       final String entityJson = JsonUtils.objectToJson(message);
@@ -83,6 +86,22 @@ public class GameServiceImpl implements GameService {
     final String entityMessageJSon = JsonUtils.objectToJson(entityMessage);
 
     webSocketMessagingService.send(Routes.GAME + Routes.GAME_OUTBOUND, entityMessageJSon);
+  }
+
+  @Override
+  public void handleDuplicateSession(final String sessionId) {
+    Objects.requireNonNull(sessionId);
+    SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor
+                                                 .create(SimpMessageType.MESSAGE);
+    headerAccessor.setSessionId(sessionId);
+    headerAccessor.setLeaveMutable(true);
+
+    webSocketMessagingService.sendToSession(
+      sessionId,
+      Routes.GAME + Routes.GAME_OUTBOUND,
+      new AlreadyConnectedMessage(),
+      headerAccessor.getMessageHeaders()
+    );
   }
 
   @EventListener
