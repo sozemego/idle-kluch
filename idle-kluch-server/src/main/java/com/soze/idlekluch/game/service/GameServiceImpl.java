@@ -12,6 +12,7 @@ import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.idlekluch.world.service.WorldService;
+import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +22,10 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.soze.idlekluch.world.utils.WorldUtils.getEntityTileId;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -84,6 +84,10 @@ public class GameServiceImpl implements GameService {
 
     final EntityMessage entityMessage = entityConverter.toMessage(building);
     final String entityMessageJSon = JsonUtils.objectToJson(entityMessage);
+
+    final Optional<TileId> tileId = WorldUtils.getEntityTileId(building);
+
+    worldService.createWorldChunk(tileId.get());
 
     webSocketMessagingService.send(Routes.GAME + Routes.GAME_OUTBOUND, entityMessageJSon);
   }

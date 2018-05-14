@@ -75,7 +75,6 @@ public class BuildingServiceImpl implements BuildingService {
       throw new UserDoesNotHaveKingdomException(owner);
     }
 
-    //TODO all that in the GameEngine / actually it can be here now
     //check world bounds
     //check for collisions with other buildings
     //check if player's kingdom has enough cash
