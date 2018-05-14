@@ -35,11 +35,13 @@ public class GameConnectionRegistryServiceImpl implements GameConnectionRegistry
     LOG.info("Session [{}] disconnected", sessionId);
 
     if(duplicateSessionIds.contains(sessionId)) {
-      LOG.info("[{}] sessionId was already connected, now is disconnected", sessionId);
+      LOG.info("[{}] sessionId was in duplicates, now is disconnected", sessionId);
       duplicateSessionIds.remove(sessionId);
     } else {
       final String username = sessionUserMap.remove(sessionId);
-      userSessionMap.remove(username);
+      if(username != null) {
+        userSessionMap.remove(username);
+      }
     }
   }
 
