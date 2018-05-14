@@ -191,8 +191,8 @@ const createGame = () => {
       centerCameraAt(game, getKingdomStartingPoint());
 
       game.input.onDown.add(pointer => {
-        const x = pointer.x + game.camera.x;
-        const y = pointer.y + game.camera.y;
+        const x = pointer.worldX * Math.pow(game.camera.scale.x, -1);
+        const y = pointer.worldY * Math.pow(game.camera.scale.y, -1);
         onCanvasClick(x, y);
       });
 
@@ -201,10 +201,10 @@ const createGame = () => {
         game.camera.scale.x += zoomAmount;
         game.camera.scale.y += zoomAmount;
         if(game.camera.scale.x <= 0.01) {
-          game.camera.scale.x = 0.01;
+          game.camera.scale.x = 0.02;
         }
         if(game.camera.scale.y <= 0.01) {
-          game.camera.scale.y = 0.01;
+          game.camera.scale.y = 0.02;
         }
         if(game.camera.scale.x >= 1) {
           game.camera.scale.x = 1;
@@ -224,7 +224,15 @@ const createGame = () => {
     };
 
     const update = () => {
-      const { x: mouseX, y: mouseY } = game.input;
+      // const { x: mouseX, y: mouseY } = game.input;
+      const mouseX = game.input.worldX * Math.pow(game.camera.scale.x, -1);
+      const mouseY = game.input.worldY * Math.pow(game.camera.scale.y, -1);
+
+      console.log(mouseX, mouseY);
+
+      //to get logical position, get camera/world bounds (after scaling)
+      //get percentage of width and height cursor is at
+      //divide, that's the position
 
       const { x, y } = game.camera;
       if (cursors.up.isDown) {
@@ -252,8 +260,8 @@ const createGame = () => {
       const selectedConstructableBuilding = getSelectedConstructableBuilding();
       if (selectedConstructableBuilding && selectedBuildingSprite && selectedBuildingSprite.alive) {
         const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
-        selectedBuildingSprite.x = mouseX + x;
-        selectedBuildingSprite.y = mouseY + y;
+        selectedBuildingSprite.x = mouseX;
+        selectedBuildingSprite.y = mouseY;
         selectedBuildingSprite.width = physicsComponent.width;
         selectedBuildingSprite.height = physicsComponent.height;
       }
