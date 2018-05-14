@@ -31,6 +31,7 @@ let game = null;
 let engine = null;
 
 let selectedBuildingSprite = null;
+let mouseOverCanvas = false;
 
 const tileSprites = {};
 
@@ -48,6 +49,14 @@ const addTiles = (state, { payload: tiles }) => {
       previousTiles[ key ] = tile;
       const sprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, "grass_1");
       sprite.inputEnabled = true;
+
+      sprite.events.onInputOver.add(() => {
+        sprite.tint = (200 << 16) | (200 << 8) | 200;
+      });
+
+      sprite.events.onInputOut.add(() => {
+        sprite.tint = 0xffffff;
+      });
 
       tileSprites[ key ] = sprite;
     }
@@ -148,6 +157,17 @@ export const gameReducer = createReducer(initialState, {
   [ APP_ACTIONS.LOGOUT ]: logout,
 });
 
+const mouseOver = (event) => {
+  mouseOverCanvas = true;
+};
+
+const mouseOut = (event) => {
+  mouseOverCanvas = false;
+  Object.values(tileSprites).forEach(tileSprite => {
+    tileSprite.tint = 0xffffff;
+  });
+}
+
 const createGame = () => {
   return new Promise(resolve => {
     let cursors = null;
@@ -196,6 +216,10 @@ const createGame = () => {
 
       game.stage.disableVisibilityChange = true;
 
+      game.canvas.addEventListener('mouseout', mouseOut);
+      game.canvas.addEventListener('mouseover', mouseOver);
+
+
       return resolve(game);
     };
 
@@ -216,13 +240,13 @@ const createGame = () => {
         game.camera.x = x + 5;
       }
 
-      //show which tile is hovered with mouse
-      Object.values(tileSprites).forEach(tileSprite => {
-        tileSprite.tint = 0xffffff;
-        if (tileSprite.input.pointerOver()) {
-          tileSprite.tint = (200 << 16) | (200 << 8) | 200;
-        }
-      });
+      // //show which tile is hovered with mouse
+      // Object.values(tileSprites).forEach(tileSprite => {
+      //   tileSprite.tint = 0xffffff;
+      //   if (mouseOverCanvas && tileSprite.input.pointerOver()) {
+      //     tileSprite.tint = (200 << 16) | (200 << 8) | 200;
+      //   }
+      // });
 
       //selected building highlight
       const selectedConstructableBuilding = getSelectedConstructableBuilding();
