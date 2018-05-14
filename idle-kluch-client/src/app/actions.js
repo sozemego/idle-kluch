@@ -31,6 +31,9 @@ export const logout = makeActionCreator(LOGOUT);
 export const LOGIN = "LOGIN";
 export const login = makeActionCreator(LOGIN);
 
+export const ALREADY_CONNECTED = "ALREADY_CONNECTED";
+export const alreadyConnected = makeActionCreator(ALREADY_CONNECTED);
+
 /**
  * Function used to initialize the application.
  */

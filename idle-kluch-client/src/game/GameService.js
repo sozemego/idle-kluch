@@ -5,6 +5,7 @@ import { addEntity, addTiles } from "./actions";
 import store from "../store/store";
 import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
+import { alreadyConnected } from "../app/actions";
 
 const getToken = () => getUser(store.getState()).token;
 
@@ -32,15 +33,20 @@ GameService.connect = function () {
 
     const messageHandler = message => {
       const parsed = parseJSON(message.body);
-      if (parsed[ "type" ] === "WORLD_CHUNK") {
+      const type = parsed["type"];
+      if (type === "WORLD_CHUNK") {
         store.dispatch(addTiles(parsed.tiles));
       }
-      if (parsed[ "type" ] === "ENTITY") {
+      if (type === "ENTITY") {
         store.dispatch(addEntity(parsed));
       }
+      if(type === "ALREADY_CONNECTED") {
+        store.dispatch(alreadyConnected(true));
+      }
+
     };
 
-    client.connect({ token: getToken() }, frame => {
+    client.connect({}, frame => {
       client.subscribe("/user/game/outbound", messageHandler);
       client.subscribe("/game/outbound", messageHandler);
       client.send("/game/inbound/init", {}, null);

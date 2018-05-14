@@ -7,9 +7,12 @@ import { getConstructableBuildingsList, getSelectedConstructableBuilding } from 
 import * as gameActions from "../actions";
 
 import styles from "./game-menu.css";
+import { Dialog } from "material-ui";
+import { isAlreadyConnected } from "../../app/selectors";
 
 class GameMenu extends Component {
-  getBuildingsList = () => {
+
+  getBuildingsItems = () => {
     const {
       constructableBuildings,
       selectConstructableBuilding,
@@ -23,7 +26,6 @@ class GameMenu extends Component {
     );
 
     return constructableBuildings.map(building => {
-
       return (
         <div key={building.id}
              id={building.id}
@@ -40,13 +42,42 @@ class GameMenu extends Component {
     });
   };
 
+  getBuildingsList = () => {
+    const {
+      getBuildingsItems,
+    } = this;
+
+    return [
+      <div key={"Buildings"}>Buildings</div>,
+      ...getBuildingsItems(),
+    ];
+  };
+
+  getAlreadyConnectedDialog = () => {
+    const {
+      alreadyConnected,
+    } = this.props;
+
+    if(!alreadyConnected) {
+      return null;
+    }
+
+    return (
+      <Dialog open={true}>
+        You are already connected to the game in another tab or browser. Please close this tab.
+        This message will later be expanded to account for users with your username logged in the same browser (another tab)
+        or another browser altogether.
+      </Dialog>
+    );
+  };
+
   render() {
-    const { getBuildingsList } = this;
+    const { getBuildingsList, getAlreadyConnectedDialog } = this;
 
     return (
       <div>
-        <div>Buildings</div>
         {getBuildingsList()}
+        {getAlreadyConnectedDialog()}
       </div>
     );
   }
@@ -61,6 +92,7 @@ const mapStateToProps = state => {
   return {
     constructableBuildings: getConstructableBuildingsList(state),
     selectedConstructableBuilding: getSelectedConstructableBuilding(state),
+    alreadyConnected: isAlreadyConnected(state),
   };
 };
 

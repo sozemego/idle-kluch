@@ -26,6 +26,7 @@ const initialState = {
   user: _getCurrentUser(),
   usernameError: "",
   passwordError: "",
+  alreadyConnected: false,
 };
 
 const fetching = (state, action) => {
@@ -61,7 +62,12 @@ const logout = (state, action) => {
     user: anonymousUser,
     usernameError: "",
     passwordError: "",
+    alreadyConnected: false,
   }
+};
+
+const alreadyConnected = (state, action) => {
+  return { ...state, alreadyConnected: true };
 };
 
 const app = createReducer(initialState, {
@@ -73,6 +79,7 @@ const app = createReducer(initialState, {
   [ APP_ACTIONS.SET_USERNAME_ERROR ]: makeSetter("usernameError"),
   [ APP_ACTIONS.SET_PASSWORD_ERROR ]: makeSetter("passwordError"),
   [ APP_ACTIONS.LOGOUT ]: logout,
+  [ APP_ACTIONS.ALREADY_CONNECTED ]: alreadyConnected,
 });
 
 export default app;
