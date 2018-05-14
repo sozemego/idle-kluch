@@ -41,6 +41,7 @@ GameService.connect = function () {
         store.dispatch(addEntity(parsed));
       }
       if(type === "ALREADY_CONNECTED") {
+        client.disconnect();
         store.dispatch(alreadyConnected(true));
       }
 
