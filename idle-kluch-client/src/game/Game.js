@@ -236,8 +236,8 @@ const createGame = () => {
       const selectedConstructableBuilding = getSelectedConstructableBuilding();
       if (selectedConstructableBuilding && selectedBuildingSprite && selectedBuildingSprite.alive) {
         const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
-        selectedBuildingSprite.x = mouseX;
-        selectedBuildingSprite.y = mouseY;
+        selectedBuildingSprite.x = mouseX - (physicsComponent.width / 2);
+        selectedBuildingSprite.y = mouseY - (physicsComponent.height / 2);
         selectedBuildingSprite.width = physicsComponent.width;
         selectedBuildingSprite.height = physicsComponent.height;
       }

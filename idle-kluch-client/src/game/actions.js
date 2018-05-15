@@ -3,6 +3,8 @@ import { makeActionCreator } from "../store/utils";
 import createGame from "./Game";
 import { getConstructableBuildingsData, getSelectedConstructableBuilding } from "../kingdom/selectors";
 import { setSelectedConstructableBuilding } from "../kingdom/actions";
+import { findComponent } from "../ecs/utils";
+import { COMPONENT_TYPES } from "./constants";
 
 export const ADD_TILES = "ADD_TILES";
 export const addTiles = makeActionCreator(ADD_TILES, "payload");
@@ -40,12 +42,12 @@ export const onCanvasClicked = (x, y) => {
     console.log("on canvas clicked!", x, y);
 
     //canvas was clicked, lets check what we can do
-    const selectedConstructableBuilding = getSelectedConstructableBuilding(
-      getState,
-    );
+    const selectedConstructableBuilding = getSelectedConstructableBuilding(getState);
     if (selectedConstructableBuilding) {
       //send network request to build
-
+      const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
+      x = x - (physicsComponent.width / 2);
+      y = y - (physicsComponent.height / 2);
       gameService.constructBuilding(selectedConstructableBuilding.id, x, y);
     }
     return Promise.resolve();
