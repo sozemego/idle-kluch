@@ -31,7 +31,6 @@ let game = null;
 let engine = null;
 
 let selectedBuildingSprite = null;
-let mouseOverCanvas = false;
 
 const tileSprites = {};
 
@@ -240,14 +239,6 @@ const createGame = () => {
       if (cursors.right.isDown) {
         game.camera.x = x + 5;
       }
-
-      // //show which tile is hovered with mouse
-      // Object.values(tileSprites).forEach(tileSprite => {
-      //   tileSprite.tint = 0xffffff;
-      //   if (mouseOverCanvas && tileSprite.input.pointerOver()) {
-      //     tileSprite.tint = (200 << 16) | (200 << 8) | 200;
-      //   }
-      // });
 
       //selected building highlight
       const selectedConstructableBuilding = getSelectedConstructableBuilding();
