@@ -180,8 +180,6 @@ const createGame = () => {
       Object.entries(IMAGES).forEach(([ asset, filename ]) => {
         this.load.image(asset, filename);
       });
-
-      game.load.shader('waves', 'shaders/waves.frag');
     };
 
     const create = function () {
