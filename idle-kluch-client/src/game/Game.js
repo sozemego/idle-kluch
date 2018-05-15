@@ -157,12 +157,7 @@ export const gameReducer = createReducer(initialState, {
   [ APP_ACTIONS.LOGOUT ]: logout,
 });
 
-const mouseOver = (event) => {
-  mouseOverCanvas = true;
-};
-
 const mouseOut = (event) => {
-  mouseOverCanvas = false;
   Object.values(tileSprites).forEach(tileSprite => {
     tileSprite.tint = 0xffffff;
   });
@@ -217,8 +212,6 @@ const createGame = () => {
       game.stage.disableVisibilityChange = true;
 
       game.canvas.addEventListener('mouseout', mouseOut);
-      game.canvas.addEventListener('mouseover', mouseOver);
-
 
       return resolve(game);
     };
