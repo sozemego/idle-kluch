@@ -21,7 +21,7 @@ import { NameComponent } from "../ecs/components/NameComponent";
 import { BuildableComponent } from "../ecs/components/BuildableComponent";
 import { StaticOccupySpaceComponent } from "../ecs/components/StaticOccupySpaceComponent";
 import { findComponent } from "../ecs/utils";
-import { centerCameraAt } from "./utils";
+import { attachSpawnAnimation, centerCameraAt, DIRECTIONS, UP } from "./utils";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
@@ -40,7 +40,7 @@ const initialState = {
 
 const addTiles = (state, { payload: tiles }) => {
   const previousTiles = { ...state.tiles };
-  tiles.forEach(tile => {
+  tiles.forEach((tile, index) => {
     const { x, y } = tile;
     const key = `${x}:${y}`;
     const previousTile = previousTiles[ key ];
@@ -48,6 +48,8 @@ const addTiles = (state, { payload: tiles }) => {
       previousTiles[ key ] = tile;
       const sprite = tileGroup.create(x * TILE_SIZE, y * TILE_SIZE, "grass_1");
       sprite.inputEnabled = true;
+
+      attachSpawnAnimation(game, sprite, DIRECTIONS.UP, index * 2);
 
       // sprite.events.onInputOver.add(() => {
       //   sprite.tint = (200 << 16) | (200 << 8) | 200;
@@ -70,6 +72,7 @@ const addEntity = (state, { payload: entity }) => {
       if (component.componentType === COMPONENT_TYPES.GRAPHICS) {
         const sprite = game.add.sprite(0, 0, component.asset);
         sprite.inputEnabled = true;
+        attachSpawnAnimation(game, sprite, UP);
         return new GraphicsComponent(sprite);
       }
       if (component.componentType === COMPONENT_TYPES.PHYSICS) {
@@ -121,9 +124,11 @@ const setConstructableBuilding = (state, action) => {
 };
 
 const logout = (state, action) => {
-  tileGroup.children.forEach((sprite) => {
-    sprite.destroy(true, false);
-  });
+  if(tileGroup) {
+    tileGroup.children.forEach((sprite) => {
+      sprite.destroy(true, false);
+    });
+  }
 
   gameService.disconnect();
 
@@ -143,6 +148,12 @@ const logout = (state, action) => {
   }
 
   return { ...state, tiles: {} };
+};
+
+const devAttachSpawnAnims = () => {
+  tileGroup.children.forEach((tile, index) => {
+    attachSpawnAnimation(game, tile, DIRECTIONS.UP, index * 2);
+  })
 };
 
 export const gameReducer = createReducer(initialState, {
@@ -169,12 +180,18 @@ const createGame = () => {
       Object.entries(IMAGES).forEach(([ asset, filename ]) => {
         this.load.image(asset, filename);
       });
+
+      game.load.shader('waves', 'shaders/waves.frag');
     };
 
     const create = function () {
       console.log("creating!");
 
       cursors = game.input.keyboard.createCursorKeys();
+
+      game.input.keyboard.addCallbacks(this, null, (key) => {
+        if(key['key'] === 'l') devAttachSpawnAnims();
+      }, null);
 
       game.world.setBounds(-MAX_WIDTH * TILE_SIZE, -MAX_HEIGHT * TILE_SIZE, MAX_WIDTH * TILE_SIZE * 2, MAX_HEIGHT * TILE_SIZE * 2);
 
@@ -203,6 +220,9 @@ const createGame = () => {
           game.camera.scale.y = 1;
         }
       };
+
+      game.camera.scale.x = 0.25;
+      game.camera.scale.y = 0.25;
 
       game.stage.disableVisibilityChange = true;
 
@@ -241,6 +261,37 @@ const createGame = () => {
         selectedBuildingSprite.width = physicsComponent.width;
         selectedBuildingSprite.height = physicsComponent.height;
       }
+
+      // tileGroup.children.forEach(tile => {
+      //   if(tile.idleAnimationData) {
+      //     const {
+      //       yOffset,
+      //       scale,
+      //       originalWidth,
+      //       originalHeight,
+      //     } = tile.idleAnimationData;
+      //
+      //     console.log(originalWidth);
+      //
+      //     const finished = yOffset < 0.01 && scale > 0.95;
+      //
+      //     if(finished) {
+      //       tile.anchor = new Phaser.Point(0, 0);
+      //       tile.width = tile.idleAnimationData.originalWidth;
+      //       tile.height = tile.idleAnimationData.originalHeight;
+      //       delete tile['idleAnimationData'];
+      //       return;
+      //     }
+      //
+      //     tile.anchor = new Phaser.Point(0, yOffset);
+      //     tile.idleAnimationData.yOffset = yOffset - 0.02;
+      //
+      //     tile.width = originalWidth * scale;
+      //     tile.height = originalHeight * scale;
+      //     tile.idleAnimationData.scale = scale + 0.01;
+      //
+      //   }
+      // })
 
       engine.update(game.time.physicsElapsed);
     };
