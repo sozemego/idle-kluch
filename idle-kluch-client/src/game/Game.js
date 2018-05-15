@@ -49,6 +49,7 @@ const addTiles = (state, { payload: tiles }) => {
       previousTiles[ key ] = tile;
       const sprite = tileGroup.create(x * TILE_SIZE, y * TILE_SIZE, "grass_1");
       sprite.inputEnabled = true;
+      sprite.autoCull = true;
 
       attachSpawnAnimation(game, sprite, DIRECTIONS.UP, index * 2);
 

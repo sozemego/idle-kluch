@@ -44,11 +44,11 @@ export const attachSpawnAnimation = (game, sprite, direction, delay) => {
   const originalY = sprite.y;
   const originalWidth = sprite.width;
   sprite.y = originalY + (Math.random() * sprite.height) * (direction === UP ? 1 : -1);
-  sprite.width = sprite.width / 2;
   sprite.alpha = 0;
 
   const widthPercentage = sprite.width / originalWidth;
-  if(direction === DOWN) {
+  if(direction === UP) {
+    sprite.width = sprite.width / 2;
     sprite.x = originalX + (originalWidth * (widthPercentage / 2));
   }
 
