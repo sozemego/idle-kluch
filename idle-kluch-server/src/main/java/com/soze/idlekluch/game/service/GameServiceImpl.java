@@ -87,7 +87,7 @@ public class GameServiceImpl implements GameService {
 
     final Optional<TileId> tileId = WorldUtils.getEntityTileId(building);
 
-    worldService.createWorldChunk(tileId.get());
+    worldService.createWorldChunk(tileId.get(), 5, 5);
 
     webSocketMessagingService.send(Routes.GAME + Routes.GAME_OUTBOUND, entityMessageJSon);
   }

@@ -51,21 +51,39 @@ public class WorldServiceImpl implements WorldService {
   }
 
   @Override
-  public List<Tile> createWorldChunk(final TileId startingPoint) {
-    Objects.requireNonNull(startingPoint);
-    LOG.info("Creating chunk at a point [{}]", startingPoint);
+  public List<Tile> createWorldChunk(final TileId center) {
+    return createWorldChunk(center, 15, 15);
+  }
+
+  @Override
+  public List<Tile> createWorldChunk(final TileId center, final int width, final int height) {
+    Objects.requireNonNull(center);
+    if(width < 1) {
+      throw new IllegalArgumentException("Chunk width cannot be less than 1");
+    }
+    if(height < 1) {
+      throw new IllegalArgumentException("Chunk height cannot be less than 1");
+    }
+
+    LOG.info("Creating chunk at a point [{}]", center);
 
     //1. create tileIds which will be part of the chunk
     final List<TileId> chunkTiles = new ArrayList<>();
-    for (int i = -7; i < 8; i++) {
-      for (int j = -7; j < 8; j++) {
-        chunkTiles.add(new TileId(startingPoint.getX() + i, startingPoint.getY() + j));
+    final int tilesToLeft = width / 2;
+    //One is added because tiles to right include the same column as center
+    final int tilesToRight = tilesToLeft + 1;
+    final int tilesBelow = height / 2;
+    //One is added becauses tiles above include the same row as center
+    final int tilesAbove = tilesBelow + 1;
+    for (int i = -tilesToLeft; i < tilesToRight; i++) {
+      for (int j = -tilesBelow; j < tilesAbove; j++) {
+        chunkTiles.add(new TileId(center.getX() + i, center.getY() + j));
       }
     }
 
     LOG.info("Will generate chunk from [{}, {}] to [{}, {}]",
-      startingPoint.getX() - 7, startingPoint.getY() - 7,
-      startingPoint.getX() + 7, startingPoint.getY() + 7
+        center.getX() - tilesToLeft, center.getY() - tilesAbove,
+        center.getX() + tilesToRight, center.getY() + tilesBelow
     );
 
     //3. remove those tileIds which already exist
@@ -74,9 +92,9 @@ public class WorldServiceImpl implements WorldService {
 
     //4. create Tile objects
     final List<Tile> tiles = chunkTiles
-                               .stream()
-                               .map(Tile::new)
-                               .collect(Collectors.toList());
+                                 .stream()
+                                 .map(Tile::new)
+                                 .collect(Collectors.toList());
 
     eventPublisher.publishEvent(new WorldChunkCreatedEvent(tiles));
 

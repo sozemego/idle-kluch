@@ -143,4 +143,33 @@ public class WorldServiceImplIntTest {
     assertEquals(allTiles.size(), newTiles.size() + firstTiles.size());
   }
 
+  @Test
+  public void testCreateOneTileChunk() {
+    final List<Tile> tiles = worldService.createWorldChunk(new TileId(0, 0), 1, 1);
+    assertEquals(1, tiles.size());
+  }
+
+  @Test
+  public void testCreateOneTileChunkSameSpot() {
+    worldService.createWorldChunk(new TileId(0, 0), 1, 1);
+    final List<Tile> tiles = worldService.createWorldChunk(new TileId(0, 0), 1, 1);
+    assertEquals(0, tiles.size());
+  }
+
+  @Test
+  public void testCreateLongRowChunk() {
+    final List<Tile> tiles = worldService.createWorldChunk(new TileId(0, 0), 25, 1);
+    assertEquals(25, tiles.size());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testCreateChunkInvalidWidth() {
+    worldService.createWorldChunk(new TileId(0, 0), -25, 1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testCreateChunkInvalidHeight() {
+    worldService.createWorldChunk(new TileId(0, 0), 25, 0);
+  }
+
 }
