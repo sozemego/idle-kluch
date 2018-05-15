@@ -17,6 +17,8 @@ public interface KingdomService {
    */
   int MINIMUM_DISTANCE_BETWEEN_KINGDOMS = 10;
 
+  long STARTING_IDLE_BUCKS = 500;
+
   /**
    * Adds a kingdom.
    * Returns the starting point of the kingdom as a {@link TileId}.

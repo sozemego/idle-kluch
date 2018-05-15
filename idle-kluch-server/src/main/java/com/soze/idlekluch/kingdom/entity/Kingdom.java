@@ -18,6 +18,9 @@ public class Kingdom {
   @Column(name = "name")
   private String name;
 
+  @Column(name = "idle_bucks")
+  private long idleBucks;
+
   @Column(name = "created_at")
   private OffsetDateTime createdAt;
 
@@ -58,6 +61,14 @@ public class Kingdom {
 
   public void setOwner(final User owner) {
     this.owner = owner;
+  }
+
+  public long getIdleBucks() {
+    return idleBucks;
+  }
+
+  public void setIdleBucks(final long idleBucks) {
+    this.idleBucks = idleBucks;
   }
 
   public OffsetDateTime getCreatedAt() {

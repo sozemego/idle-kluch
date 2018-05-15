@@ -77,6 +77,7 @@ public class KingdomServiceImpl implements KingdomService {
     kingdom.setName(form.getName());
     kingdom.setCreatedAt(OffsetDateTime.now());
     kingdom.setStartingPoint(startingPoint);
+    kingdom.setIdleBucks(KingdomService.STARTING_IDLE_BUCKS);
 
     // lets assume the user did not delete his account while making this request
     final User user = userRepository.getUserByUsername(owner).get();

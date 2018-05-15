@@ -90,7 +90,8 @@ public class KingdomController {
       kingdom.getName(),
       kingdom.getOwner().getUsername(),
       kingdom.getCreatedAt().toString(),
-      kingdom.getStartingPoint()
+      kingdom.getStartingPoint(),
+      kingdom.getIdleBucks()
     );
   }
 

@@ -46,6 +46,7 @@ CREATE TABLE kingdoms (
   created_at TIMESTAMP NOT NULL,
   name VARCHAR(32) NOT NULL,
   owner uuid NOT NULL,
+  idle_bucks BIGINT NOT NULL DEFAULT 0,
   starting_point_x INTEGER NOT NULL,
   starting_point_y INTEGER NOT NULL,
   CONSTRAINT FK_KINGDOM_USER FOREIGN KEY (owner) REFERENCES users(user_id)
