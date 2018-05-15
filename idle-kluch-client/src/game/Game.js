@@ -33,6 +33,7 @@ let engine = null;
 let selectedBuildingSprite = null;
 
 let tileGroup = null;
+let entitySprites = null;
 
 const initialState = {
   tiles: {},
@@ -70,9 +71,8 @@ const addEntity = (state, { payload: entity }) => {
   entity.components
     .map(component => {
       if (component.componentType === COMPONENT_TYPES.GRAPHICS) {
-        const sprite = game.add.sprite(0, 0, component.asset);
+        const sprite = entitySprites.create(0, 0, component.asset);
         sprite.inputEnabled = true;
-        attachSpawnAnimation(game, sprite, UP);
         return new GraphicsComponent(sprite);
       }
       if (component.componentType === COMPONENT_TYPES.PHYSICS) {
@@ -98,6 +98,13 @@ const addEntity = (state, { payload: entity }) => {
       throw new Error("INVALID COMPONENT TYPE");
     })
     .forEach(component => newEntity.addComponent(component));
+
+  const graphicsComponent = newEntity.getComponent(GraphicsComponent);
+  if(graphicsComponent !== null) {
+    const physicsComponent = newEntity.getComponent(PhysicsComponent);
+    graphicsComponent.setSpritePosition(physicsComponent.getX(), physicsComponent.getY());
+    attachSpawnAnimation(game, graphicsComponent.getSprite(), DIRECTIONS.DOWN);
+  }
 
   engine.addEntity(newEntity);
 
@@ -153,7 +160,10 @@ const logout = (state, action) => {
 const devAttachSpawnAnims = () => {
   tileGroup.children.forEach((tile, index) => {
     attachSpawnAnimation(game, tile, DIRECTIONS.UP, index * 2);
-  })
+  });
+  entitySprites.children.forEach((entitySprite, index) => {
+    attachSpawnAnimation(game, entitySprite, DIRECTIONS.DOWN, index * 2);
+  });
 };
 
 export const gameReducer = createReducer(initialState, {
@@ -227,6 +237,7 @@ const createGame = () => {
       game.canvas.addEventListener('mouseout', mouseOut);
 
       tileGroup = game.add.group();
+      entitySprites = game.add.group();
 
       return resolve(game);
     };

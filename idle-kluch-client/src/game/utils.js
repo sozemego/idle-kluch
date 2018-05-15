@@ -36,18 +36,21 @@ export const attachSpawnAnimation = (game, sprite, direction, delay) => {
   }
 
   tweeningSprites.push(sprite);
+  sprite.idleTweening = true;
 
   const tween = game.add.tween(sprite);
 
   const originalX = sprite.x;
   const originalY = sprite.y;
   const originalWidth = sprite.width;
-  sprite.y = originalY + (Math.random() * sprite.height);
+  sprite.y = originalY + (Math.random() * sprite.height) * (direction === UP ? 1 : -1);
   sprite.width = sprite.width / 2;
   sprite.alpha = 0;
 
   const widthPercentage = sprite.width / originalWidth;
-  sprite.x = originalX + (originalWidth * (widthPercentage / 2));
+  if(direction === DOWN) {
+    sprite.x = originalX + (originalWidth * (widthPercentage / 2));
+  }
 
   tween.to({
     y: originalY,
@@ -58,6 +61,7 @@ export const attachSpawnAnimation = (game, sprite, direction, delay) => {
 
   tween.onComplete.add(() => {
     const tweeningSpriteIndex = tweeningSprites.findIndex(tweeningSprite => tweeningSprite === sprite);
+    tweeningSprites[tweeningSpriteIndex].idleTweening = false;
     tweeningSprites.splice(tweeningSpriteIndex, 1);
   });
 

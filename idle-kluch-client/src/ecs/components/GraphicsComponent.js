@@ -9,4 +9,6 @@ export class GraphicsComponent {
     this.sprite.y = y;
   };
 
+  getSprite = () => this.sprite;
+
 }

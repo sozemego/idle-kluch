@@ -13,11 +13,14 @@ export class GraphicsSystem extends EntitySystem {
     const entities = this.getEngine().getEntitiesByNode(this.node);
     entities.forEach(entity => {
       const graphicsComponent = entity.getComponent(GraphicsComponent);
-      const physicsComponent = entity.getComponent(PhysicsComponent);
-      graphicsComponent.setSpritePosition(
-        physicsComponent.getX(),
-        physicsComponent.getY(),
-      );
+      const sprite = graphicsComponent.getSprite();
+      if(!sprite.idleTweening) {
+        const physicsComponent = entity.getComponent(PhysicsComponent);
+        graphicsComponent.setSpritePosition(
+          physicsComponent.getX(),
+          physicsComponent.getY(),
+        );
+      }
     });
   };
 }
