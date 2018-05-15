@@ -29,8 +29,13 @@ public final class WorldUtils {
 
     final float x = physicsComponent.getX();
     final float y = physicsComponent.getY();
+    final float width = physicsComponent.getWidth();
+    final float height = physicsComponent.getHeight();
 
-    return Optional.of(new TileId((int) x / WorldService.TILE_SIZE, (int) y / WorldService.TILE_SIZE));
+    final float centerX = (x + (width / 2));
+    final float centerY = (y + (height / 2));
+
+    return Optional.of(new TileId((int) Math.floor(centerX / WorldService.TILE_SIZE), (int) Math.floor(centerY / WorldService.TILE_SIZE)));
   }
 
 }

@@ -73,7 +73,7 @@ public class WorldServiceImpl implements WorldService {
     //One is added because tiles to right include the same column as center
     final int tilesToRight = tilesToLeft + 1;
     final int tilesBelow = height / 2;
-    //One is added becauses tiles above include the same row as center
+    //One is added because tiles above include the same row as center
     final int tilesAbove = tilesBelow + 1;
     for (int i = -tilesToLeft; i < tilesToRight; i++) {
       for (int j = -tilesBelow; j < tilesAbove; j++) {
