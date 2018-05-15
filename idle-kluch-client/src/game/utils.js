@@ -21,6 +21,8 @@ export const DIRECTIONS = {
   UP, DOWN,
 };
 
+const tweeningSprites = [];
+
 /**
  * Attaches data required for a spawn animation to this sprite.
  * @param game
@@ -28,6 +30,12 @@ export const DIRECTIONS = {
  * @param direction {string} - specifies whether the sprite should 'drop' from the bottom or go up
  */
 export const attachSpawnAnimation = (game, sprite, direction, delay) => {
+  const tweeningSpriteIndex = tweeningSprites.findIndex(tweeningSprite => tweeningSprite === sprite);
+  if(tweeningSpriteIndex > -1) {
+    return;
+  }
+
+  tweeningSprites.push(sprite);
 
   const tween = game.add.tween(sprite);
 
@@ -47,6 +55,11 @@ export const attachSpawnAnimation = (game, sprite, direction, delay) => {
     width: originalWidth,
     alpha: 1,
   }, 750, Phaser.Easing.Circular.Out);
+
+  tween.onComplete.add(() => {
+    const tweeningSpriteIndex = tweeningSprites.findIndex(tweeningSprite => tweeningSprite === sprite);
+    tweeningSprites.splice(tweeningSpriteIndex, 1);
+  });
 
   setTimeout(() => {
     tween.start();
