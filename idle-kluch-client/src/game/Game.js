@@ -32,7 +32,7 @@ let engine = null;
 
 let selectedBuildingSprite = null;
 
-const tileSprites = {};
+let tileGroup = null;
 
 const initialState = {
   tiles: {},
@@ -46,7 +46,7 @@ const addTiles = (state, { payload: tiles }) => {
     const previousTile = previousTiles[ key ];
     if (!previousTile) {
       previousTiles[ key ] = tile;
-      const sprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, "grass_1");
+      const sprite = tileGroup.create(x * TILE_SIZE, y * TILE_SIZE, "grass_1");
       sprite.inputEnabled = true;
 
       sprite.events.onInputOver.add(() => {
@@ -57,7 +57,6 @@ const addTiles = (state, { payload: tiles }) => {
         sprite.tint = 0xffffff;
       });
 
-      tileSprites[ key ] = sprite;
     }
   });
   return { ...state, tiles: previousTiles };
@@ -122,11 +121,8 @@ const setConstructableBuilding = (state, action) => {
 };
 
 const logout = (state, action) => {
-  const tiles = {};
-
-  Object.entries(tileSprites).forEach(([ tileId, sprite ]) => {
+  tileGroup.children.forEach((sprite) => {
     sprite.destroy(true, false);
-    delete tileSprites[ tileId ];
   });
 
   gameService.disconnect();
@@ -146,7 +142,7 @@ const logout = (state, action) => {
     engine = null;
   }
 
-  return { ...state, tiles };
+  return { ...state, tiles: {} };
 };
 
 export const gameReducer = createReducer(initialState, {
@@ -157,8 +153,8 @@ export const gameReducer = createReducer(initialState, {
 });
 
 const mouseOut = (event) => {
-  Object.values(tileSprites).forEach(tileSprite => {
-    tileSprite.tint = 0xffffff;
+  tileGroup.children.forEach((sprite) => {
+    sprite.tint = 0xffffff;
   });
 }
 
@@ -212,6 +208,8 @@ const createGame = () => {
 
       game.canvas.addEventListener('mouseout', mouseOut);
 
+      tileGroup = game.add.group();
+
       return resolve(game);
     };
 
@@ -219,12 +217,6 @@ const createGame = () => {
       // const { x: mouseX, y: mouseY } = game.input;
       const mouseX = game.input.worldX * Math.pow(game.camera.scale.x, -1);
       const mouseY = game.input.worldY * Math.pow(game.camera.scale.y, -1);
-
-      console.log(mouseX, mouseY);
-
-      //to get logical position, get camera/world bounds (after scaling)
-      //get percentage of width and height cursor is at
-      //divide, that's the position
 
       const { x, y } = game.camera;
       if (cursors.up.isDown) {
