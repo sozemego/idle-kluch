@@ -260,37 +260,6 @@ const createGame = () => {
         selectedBuildingSprite.height = physicsComponent.height;
       }
 
-      // tileGroup.children.forEach(tile => {
-      //   if(tile.idleAnimationData) {
-      //     const {
-      //       yOffset,
-      //       scale,
-      //       originalWidth,
-      //       originalHeight,
-      //     } = tile.idleAnimationData;
-      //
-      //     console.log(originalWidth);
-      //
-      //     const finished = yOffset < 0.01 && scale > 0.95;
-      //
-      //     if(finished) {
-      //       tile.anchor = new Phaser.Point(0, 0);
-      //       tile.width = tile.idleAnimationData.originalWidth;
-      //       tile.height = tile.idleAnimationData.originalHeight;
-      //       delete tile['idleAnimationData'];
-      //       return;
-      //     }
-      //
-      //     tile.anchor = new Phaser.Point(0, yOffset);
-      //     tile.idleAnimationData.yOffset = yOffset - 0.02;
-      //
-      //     tile.width = originalWidth * scale;
-      //     tile.height = originalHeight * scale;
-      //     tile.idleAnimationData.scale = scale + 0.01;
-      //
-      //   }
-      // })
-
       engine.update(game.time.physicsElapsed);
     };
 
