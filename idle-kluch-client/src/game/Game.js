@@ -233,6 +233,8 @@ const createGame = () => {
       game.camera.scale.x = 0.25;
       game.camera.scale.y = 0.25;
 
+      game.input.mouse.capture = true;
+
       game.stage.disableVisibilityChange = true;
 
       game.canvas.addEventListener('mouseout', mouseOut);
@@ -281,8 +283,8 @@ const createGame = () => {
     const config = {
       type: Phaser.CANVAS,
       parent: "game",
-      width: TILE_SIZE * 14,
-      height: TILE_SIZE * 6,
+      width: TILE_SIZE * 10,
+      height: TILE_SIZE * 5,
       scene: {
         preload,
         create,
