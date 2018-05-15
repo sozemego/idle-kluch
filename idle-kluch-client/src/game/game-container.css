@@ -1,5 +1,11 @@
 .container {
     display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.menu-game-row {
+    display: flex;
     flex-direction: row;
     width: 100%;
 }
@@ -7,6 +13,7 @@
 .menu {
     width: 15%;
     border-right: 1px solid black;
+    padding: 6px;
 }
 
 .game {

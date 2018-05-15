@@ -4,6 +4,7 @@ import * as gameActions from "./actions";
 
 import styles from "./game-container.css";
 import GameMenu from "./menu/GameMenu";
+import Toolbar from "./menu/Toolbar";
 
 class GameContainer extends Component {
   componentDidMount = () => {
@@ -13,10 +14,13 @@ class GameContainer extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <div className={styles.menu}>
-          <GameMenu/>
+        <Toolbar />
+        <div className={styles['menu-game-row']}>
+          <div className={styles.menu}>
+            <GameMenu/>
+          </div>
+          <div className={styles.game} id="game"/>
         </div>
-        <div className={styles.game} id="game"/>
       </div>
     );
   }

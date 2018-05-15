@@ -1,0 +1,21 @@
+.container {
+    height: 96px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: aliceblue;
+    padding: 4px;
+}
+
+.idle_bucks_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.idle_buck_img {
+    width: 32px;
+    height: 32px;
+}
+
+.idle_buck_amount {
+    padding-left: 4px;
+}

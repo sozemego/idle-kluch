@@ -74,12 +74,10 @@ class GameMenu extends Component {
   render() {
     const { getBuildingsList, getAlreadyConnectedDialog } = this;
 
-    return (
-      <div>
-        {getBuildingsList()}
-        {getAlreadyConnectedDialog()}
-      </div>
-    );
+    return [
+      ...getBuildingsList(),
+      getAlreadyConnectedDialog(),
+    ];
   }
 }
 
