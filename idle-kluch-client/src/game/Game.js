@@ -49,13 +49,13 @@ const addTiles = (state, { payload: tiles }) => {
       const sprite = tileGroup.create(x * TILE_SIZE, y * TILE_SIZE, "grass_1");
       sprite.inputEnabled = true;
 
-      sprite.events.onInputOver.add(() => {
-        sprite.tint = (200 << 16) | (200 << 8) | 200;
-      });
-
-      sprite.events.onInputOut.add(() => {
-        sprite.tint = 0xffffff;
-      });
+      // sprite.events.onInputOver.add(() => {
+      //   sprite.tint = (200 << 16) | (200 << 8) | 200;
+      // });
+      //
+      // sprite.events.onInputOut.add(() => {
+      //   sprite.tint = 0xffffff;
+      // });
 
     }
   });
@@ -153,9 +153,9 @@ export const gameReducer = createReducer(initialState, {
 });
 
 const mouseOut = (event) => {
-  tileGroup.children.forEach((sprite) => {
-    sprite.tint = 0xffffff;
-  });
+  // tileGroup.children.forEach((sprite) => {
+  //   sprite.tint = 0xffffff;
+  // });
 }
 
 const createGame = () => {
