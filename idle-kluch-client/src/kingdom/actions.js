@@ -28,6 +28,9 @@ export const setSelectedConstructableBuilding = makeActionCreator(
   "payload",
 );
 
+export const IDLE_BUCKS_CHANGED = "IDLE_BUCKS_CHANGED";
+export const idleBucksChanged = makeActionCreator(IDLE_BUCKS_CHANGED, "payload");
+
 /**
  * Loads kingdom for the logged in user.
  * @returns {function(*, *)}

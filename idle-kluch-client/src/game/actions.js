@@ -1,8 +1,8 @@
 import { GameService as gameService } from "./GameService";
 import { makeActionCreator } from "../store/utils";
 import createGame from "./Game";
-import { getConstructableBuildingsData, getSelectedConstructableBuilding } from "../kingdom/selectors";
-import { setSelectedConstructableBuilding } from "../kingdom/actions";
+import { getConstructableBuildingsData, getKingdom, getSelectedConstructableBuilding } from "../kingdom/selectors";
+import { idleBucksChanged, setSelectedConstructableBuilding } from "../kingdom/actions";
 import { findComponent } from "../ecs/utils";
 import { COMPONENT_TYPES } from "./constants";
 
@@ -44,11 +44,17 @@ export const onCanvasClicked = (x, y) => {
     //canvas was clicked, lets check what we can do
     const selectedConstructableBuilding = getSelectedConstructableBuilding(getState);
     if (selectedConstructableBuilding) {
+      const kingdom = getKingdom(getState);
+      const costComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.COST);
+      if(kingdom.idleBucks < costComponent.idleBucks) {
+        return Promise.resolve();
+      }
       //send network request to build
       const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
       x = x - (physicsComponent.width / 2);
       y = y - (physicsComponent.height / 2);
       gameService.constructBuilding(selectedConstructableBuilding.id, x, y);
+      dispatch(idleBucksChanged(-costComponent.idleBucks));
     }
     return Promise.resolve();
   };
