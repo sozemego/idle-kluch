@@ -1,0 +1,30 @@
+.building {
+    margin-left: 12px;
+    pointer: cursor;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.building-selected {
+    color: red;
+}
+
+.building_cost {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.building_cost_icon {
+    width: 12px;
+    height: 12px;
+}
+
+.building_cost::before {
+    content: "[";
+}
+
+.building_cost::after {
+    content: "]";
+}

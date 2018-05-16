@@ -17,9 +17,13 @@ export const getConstructableBuildingsList = state => {
 
   return buildings.map(building => {
     const nameComponent = findComponent(building, COMPONENT_TYPES.NAME);
+    const costComponent = findComponent(building, COMPONENT_TYPES.COST);
     return {
       id: building.id,
       name: nameComponent.name,
+      cost: {
+        idleBucks: costComponent.idleBucks,
+      }
     }
   })
 };
