@@ -21,7 +21,7 @@ import { NameComponent } from "../ecs/components/NameComponent";
 import { BuildableComponent } from "../ecs/components/BuildableComponent";
 import { StaticOccupySpaceComponent } from "../ecs/components/StaticOccupySpaceComponent";
 import { findComponent } from "../ecs/utils";
-import { attachSpawnAnimation, centerCameraAt, DIRECTIONS, UP } from "./utils";
+import { attachSpawnAnimation, centerCameraAt, DIRECTIONS } from "./utils";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
