@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS ownership_components CASCADE;
 DROP TABLE IF EXISTS static_occupy_space_components CASCADE;
 DROP TABLE IF EXISTS name_components CASCADE;
 DROP TABLE IF EXISTS buildable_components CASCADE;
+DROP TABLE IF EXISTS cost_components CASCADE;
 
 CREATE TABLE users (
   user_id uuid NOT NULL PRIMARY KEY,
