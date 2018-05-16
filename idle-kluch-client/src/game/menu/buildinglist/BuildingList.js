@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import classNames from "classnames";
 import _ from "lodash";
-import { getConstructableBuildingsList, getSelectedConstructableBuilding } from "../../../kingdom/selectors";
+import {
+  getConstructableBuildingsList,
+  getKingdom,
+  getSelectedConstructableBuilding,
+} from "../../../kingdom/selectors";
 import * as gameActions from "../../actions";
 
 
@@ -45,6 +50,7 @@ class BuildingList extends Component {
       constructableBuildings,
       selectConstructableBuilding,
       selectedConstructableBuilding,
+      kingdom,
     } = this.props;
 
     const selectedConstructableBuildingId = _.get(selectedConstructableBuilding, "id", null,);
@@ -53,14 +59,15 @@ class BuildingList extends Component {
       <div>
         <div>Buildings</div>
         {constructableBuildings.map(building => {
+          const canAfford = kingdom.idleBucks >= building.cost.idleBucks;
           return (
             <div key={building.id}
                  id={building.id}
-                 className={`${styles.building} ${
-                   selectedConstructableBuildingId === building.id
-                     ? styles[ "building-selected" ]
-                     : ""
-                   }`}
+                 className={classNames(
+                   styles.building,
+                   selectedConstructableBuildingId === building.id ? styles.building_selected : null,
+                   canAfford ? null : styles.building_cant_afford,
+                 )}
                  onClick={() => selectConstructableBuilding(building.id)}
             >
               {getBuildingRowContent(building)}
@@ -82,6 +89,7 @@ const mapStateToProps = (state) => {
   return {
     constructableBuildings: getConstructableBuildingsList(state),
     selectedConstructableBuilding: getSelectedConstructableBuilding(state),
+    kingdom: getKingdom(state),
   };
 };
 

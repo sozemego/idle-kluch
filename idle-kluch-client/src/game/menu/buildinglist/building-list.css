@@ -6,7 +6,7 @@
     justify-content: space-between;
 }
 
-.building-selected {
+.building_selected {
     color: red;
 }
 
@@ -27,4 +27,9 @@
 
 .building_cost::after {
     content: "]";
+}
+
+.building_cant_afford {
+    opacity: 0.5;
+    pointer-events: none;
 }
