@@ -1,6 +1,7 @@
 package com.soze.idlekluch.kingdom.service;
 
 import com.soze.idlekluch.game.engine.components.BuildableComponent;
+import com.soze.idlekluch.game.engine.components.CostComponent;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
@@ -10,6 +11,7 @@ import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
+import com.soze.idlekluch.kingdom.exception.CannotAffordBuildingException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
@@ -69,19 +71,32 @@ public class BuildingServiceImpl implements BuildingService {
 //    final User user = userOptional.get();
 
     //now get user's kingdom
-    final Optional<Kingdom> kingdom = kingdomService.getUsersKingdom(owner);
-    if (!kingdom.isPresent()) {
+    final Optional<Kingdom> kingdomOptional = kingdomService.getUsersKingdom(owner);
+    if (!kingdomOptional.isPresent()) {
       LOG.info("User [{}] does not have a kingdom", owner);
       throw new UserDoesNotHaveKingdomException(owner);
     }
 
+    final Kingdom kingdom = kingdomOptional.get();
+
     //check world bounds
     //check for collisions with other buildings
-    //check if player's kingdom has enough cash
 
     final Entity building = constructBuilding(form);
+    final CostComponent costComponent = building.getComponent(CostComponent.class);
+
+    //check if player's kingdom has enough cash
+    final long idleBucks = kingdom.getIdleBucks();
+    if(idleBucks < costComponent.getIdleBucks()) {
+      LOG.info("[{}] cannot afford building [{}]. Cost is [{}], money is [{}]", owner, form.getBuildingId(), costComponent.getIdleBucks(), idleBucks);
+      throw new CannotAffordBuildingException(form.getBuildingId(), idleBucks, costComponent.getIdleBucks());
+    }
+
+    kingdom.setIdleBucks(idleBucks - costComponent.getIdleBucks());
+    kingdomService.updateKingdom(kingdom);
+
     final OwnershipComponent ownershipComponent = new OwnershipComponent();
-    ownershipComponent.setOwnerId(kingdom.get().getKingdomId());
+    ownershipComponent.setOwnerId(kingdom.getKingdomId());
     ownershipComponent.setEntityId((EntityUUID) building.getId());
     building.addComponent(ownershipComponent);
 
@@ -139,6 +154,10 @@ public class BuildingServiceImpl implements BuildingService {
 //    buildingRepository.removeBuilding(buildingId);
   }
 
+  /**
+   * Creates an {@link Entity} which will be the building.
+   * Does not add or persist this entity.
+   */
   private Entity constructBuilding(final BuildBuildingForm form) {
     Objects.requireNonNull(form);
 

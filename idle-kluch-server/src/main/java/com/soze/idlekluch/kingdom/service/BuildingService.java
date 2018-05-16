@@ -2,6 +2,7 @@ package com.soze.idlekluch.kingdom.service;
 
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
+import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.entity.Entity;
 

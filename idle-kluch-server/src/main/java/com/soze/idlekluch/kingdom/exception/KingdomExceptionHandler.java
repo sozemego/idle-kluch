@@ -39,4 +39,13 @@ public class KingdomExceptionHandler extends ResponseEntityExceptionHandler {
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
+  @ExceptionHandler(CannotAffordBuildingException.class)
+  public ResponseEntity handleCannotAffordBuildingException(CannotAffordBuildingException exception) {
+    final ErrorResponse errorResponse = new ErrorResponse(400, "Cannot afford building");
+    errorResponse.addData("buildingId", exception.getBuildingId());
+    errorResponse.addData("cost", exception.getCost());
+    errorResponse.addData("playerBucks", exception.getPlayerBucks());
+    return ExceptionUtils.convertErrorResponse(errorResponse);
+  }
+
 }
