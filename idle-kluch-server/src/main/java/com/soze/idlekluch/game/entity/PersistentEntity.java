@@ -4,6 +4,10 @@ import com.soze.idlekluch.game.engine.components.*;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "entities")
@@ -40,6 +44,9 @@ public class PersistentEntity {
   @JoinColumn(name = "entity_id")
   private BuildableComponent buildableComponent;
 
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "entity_id")
+  private CostComponent costComponent;
 
   public PersistentEntity() {
 
@@ -108,4 +115,29 @@ public class PersistentEntity {
   public void setBuildableComponent(final BuildableComponent buildableComponent) {
     this.buildableComponent = buildableComponent;
   }
+
+  public CostComponent getCostComponent() {
+    return costComponent;
+  }
+
+  public void setCostComponent(final CostComponent costComponent) {
+    this.costComponent = costComponent;
+  }
+
+  @Transient
+  public List<BaseComponent> getAllComponents() {
+    return Arrays.asList(
+        getBuildableComponent(),
+        getCostComponent(),
+        getGraphicsComponent(),
+        getNameComponent(),
+        getOwnershipComponent(),
+        getPhysicsComponent(),
+        getStaticOccupySpaceComponent()
+    )
+               .stream()
+               .filter(Objects::nonNull)
+               .collect(Collectors.toList());
+  }
+
 }

@@ -22,6 +22,7 @@ import { BuildableComponent } from "../ecs/components/BuildableComponent";
 import { StaticOccupySpaceComponent } from "../ecs/components/StaticOccupySpaceComponent";
 import { findComponent } from "../ecs/utils";
 import { attachSpawnAnimation, centerCameraAt, DIRECTIONS } from "./utils";
+import { CostComponent } from "../ecs/components/CostComponent";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
@@ -71,12 +72,13 @@ const addEntity = (state, { payload: entity }) => {
 
   entity.components
     .map(component => {
-      if (component.componentType === COMPONENT_TYPES.GRAPHICS) {
+      const { componentType } = component;
+      if (componentType === COMPONENT_TYPES.GRAPHICS) {
         const sprite = entitySprites.create(0, 0, component.asset);
         sprite.inputEnabled = true;
         return new GraphicsComponent(sprite);
       }
-      if (component.componentType === COMPONENT_TYPES.PHYSICS) {
+      if (componentType === COMPONENT_TYPES.PHYSICS) {
         return new PhysicsComponent(
           component.x,
           component.y,
@@ -84,17 +86,20 @@ const addEntity = (state, { payload: entity }) => {
           component.height,
         );
       }
-      if (component.componentType === COMPONENT_TYPES.OWNERSHIP) {
+      if (componentType === COMPONENT_TYPES.OWNERSHIP) {
         return new OwnershipComponent(entity.id);
       }
-      if (component.componentType === COMPONENT_TYPES.NAME) {
+      if (componentType === COMPONENT_TYPES.NAME) {
         return new NameComponent(component.name);
       }
-      if (component.componentType === COMPONENT_TYPES.BUILDABLE) {
+      if (componentType === COMPONENT_TYPES.BUILDABLE) {
         return new BuildableComponent();
       }
-      if (component.componentType === COMPONENT_TYPES.STATIC_OCCUPY_SPACE) {
+      if (componentType === COMPONENT_TYPES.STATIC_OCCUPY_SPACE) {
         return new StaticOccupySpaceComponent();
+      }
+      if (componentType === COMPONENT_TYPES.COST) {
+        return new CostComponent(component.idleBucks);
       }
       throw new Error("INVALID COMPONENT TYPE");
     })

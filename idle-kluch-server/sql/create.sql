@@ -94,6 +94,12 @@ CREATE TABLE buildable_components (
   CONSTRAINT FK_BUILDABLE_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
 );
 
+CREATE TABLE cost_components (
+  entity_id uuid NOT NULL,
+  idle_bucks INTEGER NOT NULL,
+  CONSTRAINT FK_COST_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
+);
+
 -- here entity templates exist --
 INSERT INTO entities VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb', true),
@@ -129,3 +135,9 @@ INSERT INTO buildable_components VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb'),
   ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d')
 ;
+
+INSERT INTO cost_components VALUES
+  ('7a4df465-b4c3-4e9f-854a-248988220dfb', 100),
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 250)
+;
+

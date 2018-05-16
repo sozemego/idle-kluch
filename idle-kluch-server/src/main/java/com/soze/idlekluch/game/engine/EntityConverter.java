@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Converts database Entities to ECS Entities.
+ * Converts database Entities to ECS Entities and vice-versa.
  */
 @Service
 public class EntityConverter {
@@ -29,12 +29,9 @@ public class EntityConverter {
     Objects.requireNonNull(persistentEntity);
 
     final Entity entity = gameEngine.createEmptyEntity(persistentEntity.getEntityId());
-    entity.addComponent(persistentEntity.getGraphicsComponent());
-    entity.addComponent(persistentEntity.getPhysicsComponent());
-    entity.addComponent(persistentEntity.getOwnershipComponent());
-    entity.addComponent(persistentEntity.getNameComponent());
-    entity.addComponent(persistentEntity.getBuildableComponent());
-    entity.addComponent(persistentEntity.getStaticOccupySpaceComponent());
+    persistentEntity
+        .getAllComponents()
+        .forEach(entity::addComponent);
 
     return entity;
   }
@@ -50,6 +47,7 @@ public class EntityConverter {
     persistentEntity.setNameComponent(entity.getComponent(NameComponent.class));
     persistentEntity.setBuildableComponent(entity.getComponent(BuildableComponent.class));
     persistentEntity.setStaticOccupySpaceComponent(entity.getComponent(StaticOccupySpaceComponent.class));
+    persistentEntity.setCostComponent(entity.getComponent(CostComponent.class));
 
     return persistentEntity;
   }
