@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import _ from "lodash";
 import { connect } from "react-redux";
 import * as gameActions from "../actions";
-import styles from "./game-menu.css";
 import { Dialog } from "material-ui";
 import { isAlreadyConnected } from "../../app/selectors";
 import BuildingList from "./buildinglist/BuildingList";
