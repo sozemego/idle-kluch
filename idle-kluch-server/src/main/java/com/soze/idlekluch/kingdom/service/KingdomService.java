@@ -33,6 +33,8 @@ public interface KingdomService {
    */
   public void removeKingdom(final String owner);
 
+  void updateKingdom(final Kingdom kingdom);
+
   /**
    * Retrieves {@link Kingdom} by kingdom name.
    */

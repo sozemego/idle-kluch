@@ -105,6 +105,12 @@ public class KingdomServiceImpl implements KingdomService {
   }
 
   @Override
+  public void updateKingdom(final Kingdom kingdom) {
+    Objects.requireNonNull(kingdom);
+    kingdomRepository.updateKingdom(kingdom);
+  }
+
+  @Override
   public Optional<Kingdom> getKingdom(final String name) {
     Objects.requireNonNull(name);
     return kingdomRepository.getKingdom(name);
