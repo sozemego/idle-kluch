@@ -235,8 +235,8 @@ const createGame = () => {
         }
       };
 
-      game.camera.scale.x = 0.25;
-      game.camera.scale.y = 0.25;
+      // game.camera.scale.x = 0.25;
+      // game.camera.scale.y = 0.25;
 
       game.input.mouse.capture = true;
 
