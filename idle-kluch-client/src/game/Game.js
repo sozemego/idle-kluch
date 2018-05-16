@@ -42,6 +42,7 @@ const initialState = {
 
 const addTiles = (state, { payload: tiles }) => {
   const previousTiles = { ...state.tiles };
+  const newTileSprites = [];
   tiles.forEach((tile, index) => {
     const { x, y } = tile;
     const key = `${x}:${y}`;
@@ -51,19 +52,10 @@ const addTiles = (state, { payload: tiles }) => {
       const sprite = tileGroup.create(x * TILE_SIZE, y * TILE_SIZE, "grass_1");
       sprite.inputEnabled = true;
       sprite.autoCull = true;
-
-      attachSpawnAnimation(game, sprite, DIRECTIONS.UP, index * 2);
-
-      // sprite.events.onInputOver.add(() => {
-      //   sprite.tint = (200 << 16) | (200 << 8) | 200;
-      // });
-      //
-      // sprite.events.onInputOut.add(() => {
-      //   sprite.tint = 0xffffff;
-      // });
-
+      newTileSprites.push(sprite);
     }
   });
+  attachTileSpawnAnimation(newTileSprites);
   return { ...state, tiles: previousTiles };
 };
 
@@ -163,14 +155,19 @@ const logout = (state, action) => {
   return { ...state, tiles: {} };
 };
 
-const devAttachSpawnAnims = () => {
-  tileGroup.children.forEach((tile, index) => {
-    attachSpawnAnimation(game, tile, DIRECTIONS.UP, index * 2);
+const attachTileSpawnAnimation = (tileSprites) => {
+  [...tileSprites]
+    .sort((a, b) => b.y - a.y) //so tiles that are lower are spawned first
+    .forEach((tile, index) => {
+      attachSpawnAnimation(game, tile, DIRECTIONS.UP, index * 2);
+    });
+}
+
+const attachEntitySpawnAnimation = (entitySprites, delay) => {
+  entitySprites.forEach((entitySprite, index) => {
+    attachSpawnAnimation(game, entitySprite, DIRECTIONS.DOWN, (index * 2) + delay);
   });
-  entitySprites.children.forEach((entitySprite, index) => {
-    attachSpawnAnimation(game, entitySprite, DIRECTIONS.DOWN, index * 2);
-  });
-};
+}
 
 export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.ADD_TILES ]: addTiles,
@@ -204,7 +201,10 @@ const createGame = () => {
       cursors = game.input.keyboard.createCursorKeys();
 
       game.input.keyboard.addCallbacks(this, null, (key) => {
-        if(key['key'] === 'l') devAttachSpawnAnims();
+        if(key['key'] === 'l') {
+          attachTileSpawnAnimation(tileGroup.children);
+          attachEntitySpawnAnimation(entitySprites.children, tileGroup.children.length * 2);
+        }
       }, null);
 
       game.world.setBounds(-MAX_WIDTH * TILE_SIZE, -MAX_HEIGHT * TILE_SIZE, MAX_WIDTH * TILE_SIZE * 2, MAX_HEIGHT * TILE_SIZE * 2);
