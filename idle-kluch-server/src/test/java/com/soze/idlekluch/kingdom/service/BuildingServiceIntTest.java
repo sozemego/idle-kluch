@@ -163,9 +163,9 @@ public class BuildingServiceIntTest extends IntAuthTest {
         }
       });
       threads.add(thread);
-      thread.start();
     }
 
+    threads.forEach(Thread::start);
     threads.forEach(t -> {
       try {
         t.join();
@@ -183,6 +183,13 @@ public class BuildingServiceIntTest extends IntAuthTest {
 
     assertEquals(0, kingdomService.getUsersKingdom(username).get().getIdleBucks());
     assertEquals(50, kingdomBuildings.size());
+  }
+
+  @Test
+  public void testCannotPlaceTwoBuildingsAtTheSameSpot() {
+
+
+
   }
 
 
