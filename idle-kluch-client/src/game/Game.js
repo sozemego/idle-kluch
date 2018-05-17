@@ -14,6 +14,7 @@ import { GraphicsSystem } from "../ecs/systems/GraphicsSystem";
 import {
   getKingdomStartingPoint as _getKingdomStartingPoint,
   getSelectedConstructableBuilding as _getSelectedConstructableBuilding,
+  checkCanAffordSelectedBuilding as _checkCanAffordSelectedBuilding,
 } from "../kingdom/selectors";
 import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
 import { OwnershipComponent } from "../ecs/components/OwnershipComponent";
@@ -27,6 +28,7 @@ import { CostComponent } from "../ecs/components/CostComponent";
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 const getKingdomStartingPoint = () => _getKingdomStartingPoint(store.getState());
+const checkCanAffordSelectedBuilding = () => _checkCanAffordSelectedBuilding(store.getState());
 
 let game = null;
 let engine = null;
@@ -277,6 +279,9 @@ const createGame = () => {
         selectedBuildingSprite.y = mouseY - (physicsComponent.height / 2);
         selectedBuildingSprite.width = physicsComponent.width;
         selectedBuildingSprite.height = physicsComponent.height;
+
+        const canAffordSelectedBuilding = checkCanAffordSelectedBuilding();
+        selectedBuildingSprite.alpha = canAffordSelectedBuilding ? 1 : 0.25;
       }
 
       engine.update(game.time.physicsElapsed);

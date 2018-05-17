@@ -29,3 +29,17 @@ export const getConstructableBuildingsList = state => {
 };
 
 export const getSelectedConstructableBuilding = state => root(state).selectedConstructableBuilding;
+
+export const checkCanAffordSelectedBuilding = state => {
+  const kingdom = getKingdom(state);
+  const { idleBucks } = kingdom;
+
+  const selectedBuilding = getSelectedConstructableBuilding(state);
+  if(!selectedBuilding) {
+    return false;
+  }
+
+  const costComponent = findComponent(selectedBuilding, COMPONENT_TYPES.COST);
+
+  return idleBucks >= costComponent.idleBucks;
+}
