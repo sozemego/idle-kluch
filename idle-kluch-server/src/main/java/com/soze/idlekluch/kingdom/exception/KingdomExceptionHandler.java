@@ -48,4 +48,10 @@ public class KingdomExceptionHandler extends ResponseEntityExceptionHandler {
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
+  @ExceptionHandler(SpaceAlreadyOccupiedException.class)
+  public ResponseEntity handleSpaceAlreadyOccupiedException(SpaceAlreadyOccupiedException exception) {
+    final ErrorResponse errorResponse = new ErrorResponse(400, "Space already occupied");
+    return ExceptionUtils.convertErrorResponse(errorResponse);
+  }
+
 }

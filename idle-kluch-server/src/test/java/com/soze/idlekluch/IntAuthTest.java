@@ -1,6 +1,7 @@
 package com.soze.idlekluch;
 
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
+import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.service.KingdomService;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.service.UserService;
@@ -40,7 +41,13 @@ public class IntAuthTest {
    * @param kingdomName
    */
   protected void createKingdom(final String username, final String kingdomName) {
-    kingdomService.addKingdom(username, new RegisterKingdomForm(kingdomName));
+    createKingdom(username, kingdomName, KingdomService.STARTING_IDLE_BUCKS);
   }
 
+  protected void createKingdom(final String username, final String kingdomName, final long idleBucks) {
+    kingdomService.addKingdom(username, new RegisterKingdomForm(kingdomName));
+    final Kingdom kingdom = kingdomService.getKingdom(kingdomName).get();
+    kingdom.setIdleBucks(idleBucks);
+    kingdomService.updateKingdom(kingdom);
+  }
 }

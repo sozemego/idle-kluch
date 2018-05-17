@@ -1,5 +1,6 @@
 package com.soze.idlekluch.kingdom.service;
 
+import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.BuildableComponent;
 import com.soze.idlekluch.game.engine.components.CostComponent;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
@@ -12,6 +13,7 @@ import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
 import com.soze.idlekluch.kingdom.exception.CannotAffordBuildingException;
+import com.soze.idlekluch.kingdom.exception.SpaceAlreadyOccupiedException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
@@ -79,13 +81,28 @@ public class BuildingServiceImpl implements BuildingService {
 
     final Kingdom kingdom = kingdomOptional.get();
 
-    //check world bounds
-    //check for collisions with other buildings
+    //TODO check world bounds
 
     final Entity building = constructBuilding(form);
-    final CostComponent costComponent = building.getComponent(CostComponent.class);
+
+    //check for collisions with other buildings
+    final Optional<Entity> collidedWith = gameEngine.getEntitiesByNode(Nodes.OCCUPY_SPACE)
+                                                .stream()
+                                                .filter(entity -> {
+                                                  final PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
+                                                  return EntityUtils.doesCollide(building.getComponent(PhysicsComponent.class), physicsComponent);
+                                                })
+                                                .findFirst();
+
+    if(collidedWith.isPresent()) {
+      LOG.info("Cannot build building [{}], another building is on its place", form.getBuildingId());
+      System.out.println(building.getComponent(PhysicsComponent.class));
+      System.out.println(collidedWith.get().getComponent(PhysicsComponent.class));
+      throw new SpaceAlreadyOccupiedException();
+    }
 
     //check if player's kingdom has enough cash
+    final CostComponent costComponent = building.getComponent(CostComponent.class);
     final long idleBucks = kingdom.getIdleBucks();
     if(idleBucks < costComponent.getIdleBucks()) {
       LOG.info("[{}] cannot afford building [{}]. Cost is [{}], money is [{}]", owner, form.getBuildingId(), costComponent.getIdleBucks(), idleBucks);
