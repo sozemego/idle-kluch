@@ -96,8 +96,6 @@ public class BuildingServiceImpl implements BuildingService {
 
     if(collidedWith.isPresent()) {
       LOG.info("Cannot build building [{}], another building is on its place", form.getBuildingId());
-      System.out.println(building.getComponent(PhysicsComponent.class));
-      System.out.println(collidedWith.get().getComponent(PhysicsComponent.class));
       throw new SpaceAlreadyOccupiedException();
     }
 

@@ -48,7 +48,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
 
   private static final List<Point> AVAILABLE_BUILDING_POSITIONS = new ArrayList<>();
   private static final int SEPARATION = 500;
-  private int currentBuildingPosition = 0;
+  private static int CURRENT_BUILDING_POSITION = 0;
 
   {
     for(int i = 0; i < 2500; i++) {
@@ -68,6 +68,9 @@ public class BuildingServiceIntTest extends IntAuthTest {
   @BeforeClass
   public static void beforeClass() {
     DatabaseReset.resetDatabase();
+    for (int i = 0; i < 2500; i++) {
+      AVAILABLE_BUILDING_POSITIONS.add(new Point(i * SEPARATION, i * SEPARATION));
+    }
   }
 
   @Test(expected = AuthUserDoesNotExistException.class)
@@ -215,7 +218,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
   }
 
   private synchronized Point nextBuildingPosition() {
-    return AVAILABLE_BUILDING_POSITIONS.get(currentBuildingPosition++);
+    return AVAILABLE_BUILDING_POSITIONS.get(CURRENT_BUILDING_POSITION++);
   }
 
 }
