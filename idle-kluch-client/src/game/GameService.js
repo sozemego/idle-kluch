@@ -1,6 +1,7 @@
 import { networkConfig } from "../api/config";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
+import uuid from 'uuid/v4';
 import { addEntity, addTiles } from "./actions";
 import store from "../store/store";
 import { getUser } from "../app/selectors";
@@ -70,7 +71,7 @@ GameService.constructBuilding = (buildingId, x, y) => {
   client.send(
     buildingBuild,
     {},
-    JSON.stringify({ buildingId, x, y, type: "BUILD_BUILDING" }),
+    JSON.stringify({ messageId: uuid(), buildingId, x, y, type: "BUILD_BUILDING" }),
   );
 };
 

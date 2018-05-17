@@ -29,6 +29,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -75,14 +76,14 @@ public class BuildingServiceIntTest extends IntAuthTest {
 
   @Test(expected = AuthUserDoesNotExistException.class)
   public void testBuildBuildingUserDoesNotExist() throws Exception {
-    buildingService.buildBuilding("dontexist", new BuildBuildingForm("1", 15, 15));
+    buildingService.buildBuilding("dontexist", new BuildBuildingForm(UUID.randomUUID().toString(), "1", 15, 15));
   }
 
   @Test(expected = UserDoesNotHaveKingdomException.class)
   public void testBuildingBuildingNoKingdom() throws Exception {
     final String username = CommonUtils.generateRandomString(15);
     register(username);
-    final BuildBuildingForm form = new BuildBuildingForm("1", 15, 15);
+    final BuildBuildingForm form = new BuildBuildingForm(UUID.randomUUID().toString(), "1", 15, 15);
     buildingService.buildBuilding(username, form);
   }
 
@@ -95,7 +96,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
 
     final Point buildingPosition = nextBuildingPosition();
     final BuildBuildingForm form = new BuildBuildingForm(
-        SMALL_WAREHOUSE_ID, buildingPosition.x, buildingPosition.y
+        UUID.randomUUID().toString(), SMALL_WAREHOUSE_ID, buildingPosition.x, buildingPosition.y
     );
 
     final List<Entity> buildings = buildingService.getOwnBuildings(username);
@@ -113,7 +114,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
     createKingdom(username, CommonUtils.generateRandomString(15));
 
     final BuildBuildingForm form = new BuildBuildingForm(
-        "AGEBAGE@!$%$$", 15, 15
+        UUID.randomUUID().toString(),"AGEBAGE@!$%$$", 15, 15
     );
 
     buildingService.buildBuilding(username, form);
@@ -126,7 +127,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
     createKingdom(username, CommonUtils.generateRandomString(15));
 
     final BuildBuildingForm form = new BuildBuildingForm(
-        EntityUUID.randomId().toString(), 15, 15
+        UUID.randomUUID().toString(), EntityUUID.randomId().toString(), 15, 15
     );
 
     buildingService.buildBuilding(username, form);
@@ -143,7 +144,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
     kingdomService.updateKingdom(kingdom);
 
     final BuildBuildingForm form = new BuildBuildingForm(
-        SMALL_WAREHOUSE_ID, 15, 15
+        UUID.randomUUID().toString(), SMALL_WAREHOUSE_ID, 15, 15
     );
 
     buildingService.buildBuilding(username, form);
@@ -169,7 +170,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
           try {
             final Point point = nextBuildingPosition();
             final BuildBuildingForm form = new BuildBuildingForm(
-                SMALL_WAREHOUSE_ID, point.x, point.y
+                UUID.randomUUID().toString(), SMALL_WAREHOUSE_ID, point.x, point.y
             );
 
             buildingService.buildBuilding(username, form);
@@ -210,7 +211,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
 
     final Point buildingPosition = nextBuildingPosition();
     final BuildBuildingForm form = new BuildBuildingForm(
-        SMALL_WAREHOUSE_ID, buildingPosition.x, buildingPosition.y
+        UUID.randomUUID().toString(), SMALL_WAREHOUSE_ID, buildingPosition.x, buildingPosition.y
     );
 
     buildingService.buildBuilding(username, form);
