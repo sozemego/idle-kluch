@@ -5,6 +5,7 @@ import { getConstructableBuildingsData, getKingdom, getSelectedConstructableBuil
 import { idleBucksChanged, setSelectedConstructableBuilding } from "../kingdom/actions";
 import { findComponent } from "../ecs/utils";
 import { COMPONENT_TYPES } from "./constants";
+import { default as undoActions } from "./UndoActions";
 
 export const ADD_TILES = "ADD_TILES";
 export const addTiles = makeActionCreator(ADD_TILES, "payload");
@@ -53,7 +54,12 @@ export const onCanvasClicked = (x, y) => {
       const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
       x = x - (physicsComponent.width / 2);
       y = y - (physicsComponent.height / 2);
-      gameService.constructBuilding(selectedConstructableBuilding.id, x, y);
+      const messageId = gameService.constructBuilding(selectedConstructableBuilding.id, x, y);
+
+      undoActions.addAction(messageId, () => {
+        dispatch(idleBucksChanged(costComponent.idleBucks));
+      });
+
       dispatch(idleBucksChanged(-costComponent.idleBucks));
     }
     return Promise.resolve();

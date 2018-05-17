@@ -7,6 +7,7 @@ import store from "../store/store";
 import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
 import { alreadyConnected } from "../app/actions";
+import { default as undoActions } from "./UndoActions";
 
 const getToken = () => getUser(store.getState()).token;
 
@@ -45,6 +46,10 @@ GameService.connect = function () {
         client.disconnect();
         store.dispatch(alreadyConnected(true));
       }
+      if(type === "MESSAGE_REVERT") {
+        const undoAction = undoActions.getAction(parsed.messageId);
+        undoAction();
+      }
 
     };
 
@@ -68,11 +73,13 @@ GameService.disconnect = function () {
 };
 
 GameService.constructBuilding = (buildingId, x, y) => {
+  const messageId = uuid();
   client.send(
     buildingBuild,
     {},
-    JSON.stringify({ messageId: uuid(), buildingId, x, y, type: "BUILD_BUILDING" }),
+    JSON.stringify({ messageId, buildingId, x, y, type: "BUILD_BUILDING" }),
   );
+  return messageId;
 };
 
 // const isOpen = () => {
