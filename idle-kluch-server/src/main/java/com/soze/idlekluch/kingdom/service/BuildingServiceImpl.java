@@ -96,7 +96,7 @@ public class BuildingServiceImpl implements BuildingService {
 
     if(collidedWith.isPresent()) {
       LOG.info("Cannot build building [{}], another building is on its place", form.getBuildingId());
-      throw new SpaceAlreadyOccupiedException();
+      throw new SpaceAlreadyOccupiedException(form.getMessageId());
     }
 
     //check if player's kingdom has enough cash

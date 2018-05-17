@@ -1,13 +1,18 @@
 package com.soze.idlekluch.game.controller;
 
 import com.soze.idlekluch.game.message.BuildBuildingForm;
+import com.soze.idlekluch.game.message.MessageRevert;
 import com.soze.idlekluch.game.service.GameConnectionRegistryService;
 import com.soze.idlekluch.game.service.GameService;
+import com.soze.idlekluch.kingdom.exception.SpaceAlreadyOccupiedException;
 import com.soze.idlekluch.routes.Routes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
@@ -46,6 +51,12 @@ public class GameSocketController {
                                          final BuildBuildingForm message) throws Exception {
 
     gameService.handleBuildBuildingMessage(principal.getName(), message);
+  }
+
+  @MessageExceptionHandler(SpaceAlreadyOccupiedException.class)
+  @SendToUser(Routes.GAME + Routes.GAME_OUTBOUND)
+  public MessageRevert handleSpaceAlreadyOccupiedException(final SpaceAlreadyOccupiedException exception) {
+    return new MessageRevert(exception.getMessageId().toString());
   }
 
 }
