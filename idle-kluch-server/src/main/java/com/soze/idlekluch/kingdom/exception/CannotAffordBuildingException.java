@@ -1,14 +1,21 @@
 package com.soze.idlekluch.kingdom.exception;
 
-import java.util.Objects;
+import com.soze.idlekluch.game.exception.GameException;
 
-public class CannotAffordBuildingException extends RuntimeException {
+import java.util.Objects;
+import java.util.UUID;
+
+public class CannotAffordBuildingException extends GameException {
 
   private final String buildingId;
   private final long playerBucks;
   private final long cost;
 
-  public CannotAffordBuildingException(final String buildingId, final long playerBucks, final long cost) {
+  public CannotAffordBuildingException(final UUID messageId,
+                                       final String buildingId,
+                                       final long playerBucks,
+                                       final long cost) {
+    super(messageId);
     this.buildingId = Objects.requireNonNull(buildingId);
     this.playerBucks = playerBucks;
     this.cost = cost;
@@ -25,4 +32,5 @@ public class CannotAffordBuildingException extends RuntimeException {
   public long getCost() {
     return cost;
   }
+
 }
