@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.controller;
 
+import com.soze.idlekluch.game.exception.GameException;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.message.MessageRevert;
 import com.soze.idlekluch.game.service.GameConnectionRegistryService;
@@ -53,9 +54,9 @@ public class GameSocketController {
     gameService.handleBuildBuildingMessage(principal.getName(), message);
   }
 
-  @MessageExceptionHandler(SpaceAlreadyOccupiedException.class)
+  @MessageExceptionHandler(GameException.class)
   @SendToUser(Routes.GAME + Routes.GAME_OUTBOUND)
-  public MessageRevert handleSpaceAlreadyOccupiedException(final SpaceAlreadyOccupiedException exception) {
+  public MessageRevert handleGameException(final GameException exception) {
     return new MessageRevert(exception.getMessageId().toString());
   }
 
