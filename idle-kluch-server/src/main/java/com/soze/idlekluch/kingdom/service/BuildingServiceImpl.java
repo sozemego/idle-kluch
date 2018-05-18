@@ -104,7 +104,7 @@ public class BuildingServiceImpl implements BuildingService {
     final long idleBucks = kingdom.getIdleBucks();
     if(idleBucks < costComponent.getIdleBucks()) {
       LOG.info("[{}] cannot afford building [{}]. Cost is [{}], money is [{}]", owner, form.getBuildingId(), costComponent.getIdleBucks(), idleBucks);
-      throw new CannotAffordBuildingException(form.getBuildingId(), idleBucks, costComponent.getIdleBucks());
+      throw new CannotAffordBuildingException(form.getMessageId(), form.getBuildingId(), idleBucks, costComponent.getIdleBucks());
     }
 
     kingdom.setIdleBucks(idleBucks - costComponent.getIdleBucks());
@@ -179,7 +179,7 @@ public class BuildingServiceImpl implements BuildingService {
     final Optional<Entity> templateOptional = entityService.getEntityTemplate(EntityUUID.fromString(form.getBuildingId()));
 
     if(!templateOptional.isPresent()) {
-      throw new BuildingDoesNotExistException(form.getBuildingId());
+      throw new BuildingDoesNotExistException(form.getMessageId(), form.getBuildingId());
     }
 
     final Entity buildingTemplate = templateOptional.get();
