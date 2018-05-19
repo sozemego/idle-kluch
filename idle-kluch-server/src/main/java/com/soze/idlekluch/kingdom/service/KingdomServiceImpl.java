@@ -88,7 +88,6 @@ public class KingdomServiceImpl implements KingdomService {
   }
 
   @Override
-  @Transactional
   public void removeKingdom(final String owner) {
     Objects.requireNonNull(owner);
     LOG.info("User [{}] is trying to remove their kingdom", owner);
