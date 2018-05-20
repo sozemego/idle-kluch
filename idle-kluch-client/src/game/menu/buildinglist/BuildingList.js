@@ -16,6 +16,20 @@ import idleBuckImg from "../idle_buck_1.png";
 
 class BuildingList extends Component {
 
+  componentWillMount = () => {
+    document.addEventListener("keyup", this.onKeyUp);
+  };
+
+  componentWillUnmount = () => {
+    document.removeEventListener("keyup", this.onKeyUp);
+  };
+
+  onKeyUp = (event) => {
+    if(event.keyCode === 27) {
+      this.props.selectConstructableBuilding(null);
+    }
+  }
+
   getBuildingCost = (building) => {
     const {cost} = building;
     if(!cost) {
