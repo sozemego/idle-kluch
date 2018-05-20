@@ -8,6 +8,7 @@ import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
 import { alreadyConnected } from "../app/actions";
 import { default as undoActions } from "./UndoActions";
+import { setConstructableBuildings } from "../kingdom/actions";
 
 const getToken = () => getUser(store.getState()).token;
 
@@ -33,6 +34,9 @@ GameService.connect = function () {
     );
     client = Stomp.over(socket);
 
+    //disable debug messages
+    client.debug = () => {};
+
     const messageHandler = message => {
       const parsed = parseJSON(message.body);
       const type = parsed["type"];
@@ -51,6 +55,9 @@ GameService.connect = function () {
         undoAction();
       }
 
+      if(type === "BUILDING_LIST") {
+        store.dispatch(setConstructableBuildings(parsed.buildingDefinitions));
+      }
     };
 
     client.connect({}, frame => {

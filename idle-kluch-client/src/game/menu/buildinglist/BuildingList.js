@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classNames from "classnames";
@@ -35,10 +35,12 @@ class BuildingList extends Component {
       getBuildingCost,
     } = this;
 
-    return [
-      <span>{building.name}</span>,
-      getBuildingCost(building),
-    ];
+    return (
+      <Fragment>
+        <span>{building.name}</span>
+        {getBuildingCost(building)}
+      </Fragment>
+    );
   };
 
   render() {

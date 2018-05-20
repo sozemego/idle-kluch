@@ -33,7 +33,6 @@ export const idleBucksChanged = makeActionCreator(IDLE_BUCKS_CHANGED, "payload")
 
 /**
  * Loads kingdom for the logged in user.
- * @returns {function(*, *)}
  */
 export const loadKingdom = () => {
   return (dispatch, getState) => {
@@ -42,7 +41,6 @@ export const loadKingdom = () => {
       .then(kingdom => {
         dispatch(setKingdom(kingdom));
         dispatch(setShowCreateKingdomForm(false));
-        return dispatch(getConstructableBuildings());
       })
       .catch(error => {
         if (error.error === "Kingdom not found") {
@@ -72,13 +70,5 @@ export const deleteKingdom = () => {
     return kingdomService
       .deleteKingdom()
       .then(() => dispatch(setKingdom(null)));
-  };
-};
-
-export const getConstructableBuildings = () => {
-  return (dispatch, getState) => {
-    return kingdomService
-      .getConstructableBuildings()
-      .then(buildings => dispatch(setConstructableBuildings(buildings)));
   };
 };

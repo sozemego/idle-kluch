@@ -1,10 +1,7 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.engine.EntityConverter;
-import com.soze.idlekluch.game.message.AlreadyConnectedMessage;
-import com.soze.idlekluch.game.message.BuildBuildingForm;
-import com.soze.idlekluch.game.message.EntityMessage;
-import com.soze.idlekluch.game.message.WorldChunkMessage;
+import com.soze.idlekluch.game.message.*;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.JsonUtils;
@@ -76,6 +73,14 @@ public class GameServiceImpl implements GameService {
       final String entityJson = JsonUtils.objectToJson(message);
       webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, entityJson);
     });
+
+    final List<Entity> buildingDefinitions = buildingService.getAllConstructableBuildings();
+    final List<EntityMessage> convertedBuildingDefinitions = buildingDefinitions
+                                           .stream()
+                                           .map(entityConverter::toMessage)
+                                           .collect(Collectors.toList());
+
+    webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, new BuildingListMessage(convertedBuildingDefinitions));
   }
 
   @Override

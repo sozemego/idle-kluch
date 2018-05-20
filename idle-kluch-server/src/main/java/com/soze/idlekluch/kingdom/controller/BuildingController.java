@@ -29,15 +29,16 @@ public class BuildingController {
 
   @GetMapping(path = Routes.BUILDING_GET_ALL)
   public ResponseEntity getAllBuildings() {
-    //temporary endpoint
-    //later a list of buildings will be filtered according to tech and player
-    final List<Entity> buildingDefinitions = buildingService.getAllConstructableBuildings();
-    final List<EntityMessage> entities = buildingDefinitions
-                                           .stream()
-                                           .map(entityConverter::toMessage)
-                                           .collect(Collectors.toList());
-
-    return ResponseEntity.ok(entities);
+    return ResponseEntity.status(400).build();
+//    temporary endpoint
+//    later a list of buildings will be filtered according to tech and player
+//    final List<Entity> buildingDefinitions = buildingService.getAllConstructableBuildings();
+//    final List<EntityMessage> entities = buildingDefinitions
+//                                           .stream()
+//                                           .map(entityConverter::toMessage)
+//                                           .collect(Collectors.toList());
+//
+//    return ResponseEntity.ok(entities);
   }
 
 }

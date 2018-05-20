@@ -6,9 +6,6 @@ const deleteKingdom = `${basePath}/delete`;
 const getOwn = `${basePath}/own`;
 // const get = `${basePath}/single`;
 
-const buildingBase = "/building";
-const getConstructableBuildings = `${buildingBase}/all`;
-
 const kingdomNameRegexp = new RegExp("^[a-zA-Z0-9_-]+$");
 const maxKingdomNameLength = 32;
 
@@ -29,10 +26,6 @@ KingdomService.registerKingdom = name => {
 
 KingdomService.deleteKingdom = () => {
   return networkService.delete(deleteKingdom);
-};
-
-KingdomService.getConstructableBuildings = () => {
-  return networkService.get(getConstructableBuildings);
 };
 
 const validateKingdomName = kingdomName => {
