@@ -38,7 +38,7 @@ public interface Routes {
 
   String GAME = "/game";
   String GAME_INBOUND = "/inbound";
-  String GAME_OUTBOUND = "/outbound";
+  String GAME_OUTBOUND = GAME + "/outbound";
 
   String GAME_INIT_MESSAGE = GAME_INBOUND + "/init";
   String BUILD_BUILDING_MESSAGE = GAME_INBOUND + "/build";

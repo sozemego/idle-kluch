@@ -55,7 +55,7 @@ public class GameSocketController {
   }
 
   @MessageExceptionHandler(GameException.class)
-  @SendToUser(Routes.GAME + Routes.GAME_OUTBOUND)
+  @SendToUser(Routes.GAME_OUTBOUND)
   public MessageRevert handleGameException(final GameException exception) {
     return new MessageRevert(exception.getMessageId().toString());
   }

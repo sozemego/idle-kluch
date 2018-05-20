@@ -62,7 +62,7 @@ public class GameServiceImpl implements GameService {
     final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
     final String worldChunkJson = JsonUtils.objectToJson(worldChunkMessage);
 
-    webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, worldChunkJson);
+    webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, worldChunkJson);
 
     final List<Entity> entities = gameEngine.getAllEntities();
     final List<EntityMessage> entityMessages = entities.stream()
@@ -71,7 +71,7 @@ public class GameServiceImpl implements GameService {
 
     entityMessages.forEach(message -> {
       final String entityJson = JsonUtils.objectToJson(message);
-      webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, entityJson);
+      webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, entityJson);
     });
 
     final List<Entity> buildingDefinitions = buildingService.getAllConstructableBuildings();
@@ -80,7 +80,7 @@ public class GameServiceImpl implements GameService {
                                            .map(entityConverter::toMessage)
                                            .collect(Collectors.toList());
 
-    webSocketMessagingService.sendToUser(username, Routes.GAME + Routes.GAME_OUTBOUND, new BuildingListMessage(convertedBuildingDefinitions));
+    webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, new BuildingListMessage(convertedBuildingDefinitions));
   }
 
   @Override
@@ -94,7 +94,7 @@ public class GameServiceImpl implements GameService {
 
     worldService.createWorldChunk(tileId.get(), 5, 5);
 
-    webSocketMessagingService.send(Routes.GAME + Routes.GAME_OUTBOUND, entityMessageJSon);
+    webSocketMessagingService.send(Routes.GAME_OUTBOUND, entityMessageJSon);
   }
 
   @Override
@@ -107,7 +107,7 @@ public class GameServiceImpl implements GameService {
 
     webSocketMessagingService.sendToSession(
       sessionId,
-      Routes.GAME + Routes.GAME_OUTBOUND,
+      Routes.GAME_OUTBOUND,
       new AlreadyConnectedMessage(),
       headerAccessor.getMessageHeaders()
     );
@@ -119,7 +119,7 @@ public class GameServiceImpl implements GameService {
     LOG.info("World chunk created, sending data to players!");
 
     final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(event.getTiles());
-    webSocketMessagingService.send(Routes.GAME + Routes.GAME_OUTBOUND, worldChunkMessage);
+    webSocketMessagingService.send(Routes.GAME_OUTBOUND, worldChunkMessage);
   }
 
 }
