@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import * as gameActions from "../actions";
@@ -29,10 +29,12 @@ class GameMenu extends Component {
   render() {
     const { getAlreadyConnectedDialog } = this;
 
-    return [
-      <BuildingList />,
-      getAlreadyConnectedDialog(),
-    ];
+    return (
+      <Fragment>
+        <BuildingList/>
+        {getAlreadyConnectedDialog()}
+      </Fragment>
+    );
   }
 }
 
