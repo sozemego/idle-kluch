@@ -37,8 +37,6 @@ class GameMenu extends Component {
 }
 
 GameMenu.propTypes = {
-  constructableBuildings: PropTypes.array.isRequired,
-  selectConstructableBuilding: PropTypes.func.isRequired,
   alreadyConnected: PropTypes.bool.isRequired,
 };
 
