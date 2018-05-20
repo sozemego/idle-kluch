@@ -18,17 +18,25 @@ class BuildingList extends Component {
 
   componentWillMount = () => {
     document.addEventListener("keyup", this.onKeyUp);
+    document.addEventListener("mouseup", this.onMouseUp);
   };
 
   componentWillUnmount = () => {
     document.removeEventListener("keyup", this.onKeyUp);
+    document.removeEventListener("mouseup", this.onMouseUp);
   };
 
   onKeyUp = (event) => {
     if(event.keyCode === 27) {
       this.props.selectConstructableBuilding(null);
     }
-  }
+  };
+
+  onMouseUp = (event) => {
+    if(event.button === 2) {
+      this.props.selectConstructableBuilding(null);
+    }
+  };
 
   getBuildingCost = (building) => {
     const {cost} = building;
