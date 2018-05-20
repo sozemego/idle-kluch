@@ -1,5 +1,6 @@
 import store from "../store/store";
 import Phaser from "phaser";
+import Node from "../ecs/Node";
 import * as GAME_ACTIONS from "./actions";
 import { onCanvasClicked } from "./actions";
 import { GameService as gameService } from "./GameService";
@@ -21,7 +22,7 @@ import { OwnershipComponent } from "../ecs/components/OwnershipComponent";
 import { NameComponent } from "../ecs/components/NameComponent";
 import { BuildableComponent } from "../ecs/components/BuildableComponent";
 import { StaticOccupySpaceComponent } from "../ecs/components/StaticOccupySpaceComponent";
-import { findComponent } from "../ecs/utils";
+import { checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
 import { attachSpawnAnimation, centerCameraAt, DIRECTIONS } from "./utils";
 import { CostComponent } from "../ecs/components/CostComponent";
 
@@ -37,6 +38,8 @@ let selectedBuildingSprite = null;
 
 let tileGroup = null;
 let entitySprites = null;
+
+let selectedConstructableBuildingCollides = false;
 
 const initialState = {
   tiles: {},
@@ -249,7 +252,10 @@ const createGame = () => {
       tileGroup = game.add.group();
       entitySprites = game.add.group();
 
-      return resolve(game);
+      return resolve({
+        game,
+        engine,
+      });
     };
 
     const update = () => {
@@ -276,12 +282,27 @@ const createGame = () => {
       if (selectedConstructableBuilding && selectedBuildingSprite && selectedBuildingSprite.alive) {
         const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
         selectedBuildingSprite.x = mouseX - (physicsComponent.width / 2);
+        physicsComponent.x = selectedBuildingSprite.x;
+        physicsComponent.y = selectedBuildingSprite.y;
         selectedBuildingSprite.y = mouseY - (physicsComponent.height / 2);
         selectedBuildingSprite.width = physicsComponent.width;
         selectedBuildingSprite.height = physicsComponent.height;
 
         const canAffordSelectedBuilding = checkCanAffordSelectedBuilding();
         selectedBuildingSprite.alpha = canAffordSelectedBuilding ? 1 : 0.25;
+
+        const selectedConstructableBuildingBounds = new Phaser.Rectangle(
+          physicsComponent.x, physicsComponent.y,
+          physicsComponent.width, physicsComponent.height
+        );
+
+        selectedConstructableBuildingCollides = checkRectangleIntersectsCollidableEntities(engine, selectedConstructableBuildingBounds);
+        if(selectedConstructableBuildingCollides) {
+          selectedBuildingSprite.tint = 0xff0000;
+        } else {
+          selectedBuildingSprite.tint = 0xffffff;
+        }
+
       }
 
       engine.update(game.time.physicsElapsed);

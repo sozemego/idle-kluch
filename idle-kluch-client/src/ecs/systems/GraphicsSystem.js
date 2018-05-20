@@ -1,7 +1,7 @@
 import { EntitySystem } from "../EntitySystem";
 import { GraphicsComponent } from "../components/GraphicsComponent";
 import { PhysicsComponent } from "../components/PhysicsComponent";
-import { Node } from "../Node";
+import Node from "../Node";
 
 export class GraphicsSystem extends EntitySystem {
   constructor(engine) {

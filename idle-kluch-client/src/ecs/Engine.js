@@ -46,6 +46,10 @@ export class Engine {
     }
   };
 
+  getEntity = entityId => {
+    return this.entities[entityId] || null;
+  };
+
   removeEntity = entityId => {
     if (!this.entities[ entityId ]) {
       throw new Error(entityId + " entity not added");
