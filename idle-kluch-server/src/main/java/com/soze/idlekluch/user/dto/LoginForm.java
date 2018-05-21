@@ -5,13 +5,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
+/**
+ * Contains username and password. Remember to call the reset() method after use.
+ */
 public class LoginForm {
 
   private String username;
   private char[] password;
 
   @JsonCreator
-  public LoginForm(@JsonProperty("username") String username, @JsonProperty("password") char[] password) {
+  public LoginForm(
+    @JsonProperty("username") final String username,
+    @JsonProperty("password") final char[] password
+  ) {
     this.username = Objects.requireNonNull(username);
     this.password = Objects.requireNonNull(password);
   }
