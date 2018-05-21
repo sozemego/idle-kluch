@@ -37,4 +37,10 @@ public class LoginForm {
     this.password = null;
   }
 
+  @Override
+  public String toString() {
+    return "LoginForm{" +
+             "username='" + username + '\'' +
+             '}';
+  }
 }
