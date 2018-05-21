@@ -2,10 +2,7 @@ package com.soze.idlekluch.user.aop;
 
 import com.soze.idlekluch.user.dto.LoginForm;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -24,7 +21,7 @@ public class AuthAspect {
     LOG.info("User [{}] successfully logged in", loginForm.getUsername());
   }
 
-  @After("loginCall() && args(loginForm)")
+  @AfterThrowing("loginCall() && args(loginForm)")
   public void resetFormAfterLogin(final JoinPoint joinPoint, final LoginForm loginForm) {
     LOG.info("User [{}] unsuccessfully tried to login", loginForm.getUsername());
     loginForm.reset();
