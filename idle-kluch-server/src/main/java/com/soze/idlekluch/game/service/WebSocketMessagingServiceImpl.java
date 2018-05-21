@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.service;
 
+import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
   }
 
   @Override
+  @Profiled
   public void sendToUser(final String username, final String destination, Object message) {
     Objects.requireNonNull(username);
     Objects.requireNonNull(destination);
@@ -36,6 +38,7 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
   }
 
   @Override
+  @Profiled
   public void send(final String destination, Object message) {
     Objects.requireNonNull(destination);
     Objects.requireNonNull(message);
@@ -45,6 +48,7 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
   }
 
   @Override
+  @Profiled
   public void sendToSession(final String sessionId, final String destination, final Object message, final MessageHeaders headers) {
     Objects.requireNonNull(sessionId);
     Objects.requireNonNull(destination);

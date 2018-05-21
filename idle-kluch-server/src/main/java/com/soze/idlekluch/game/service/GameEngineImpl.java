@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.service;
 
+import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.Engine;
@@ -64,6 +65,7 @@ public class GameEngineImpl implements GameEngine {
   }
 
   @Override
+  @Profiled
   public List<Entity> getEntitiesByNode(final Node node) {
     Objects.requireNonNull(node);
     return engine.getEntitiesByNode(node);

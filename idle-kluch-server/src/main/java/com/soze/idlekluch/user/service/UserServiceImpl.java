@@ -1,5 +1,6 @@
 package com.soze.idlekluch.user.service;
 
+import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
@@ -50,6 +51,8 @@ public class UserServiceImpl implements UserService {
     return userRepository.getUserByUsername(username);
   }
 
+  @Override
+  @Profiled
   public void addUser(RegisterUserForm userForm) {
     Objects.requireNonNull(userForm);
 
@@ -122,6 +125,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Profiled
   public boolean isAvailableForRegistration(String username) {
     try {
       validateUsername(username);

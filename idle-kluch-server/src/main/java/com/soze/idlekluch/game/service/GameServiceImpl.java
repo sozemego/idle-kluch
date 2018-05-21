@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.service;
 
+import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.message.*;
 import com.soze.idlekluch.kingdom.service.BuildingService;
@@ -54,6 +55,7 @@ public class GameServiceImpl implements GameService {
    * 2. Send all entities to the joining player
    */
   @Override
+  @Profiled
   public void handleInitMessage(final String username) {
     LOG.info("Init message from [{}]", username);
 
@@ -84,6 +86,7 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
+  @Profiled
   public void handleBuildBuildingMessage(final String username, final BuildBuildingForm form) {
     final Entity building = buildingService.buildBuilding(username, form);
 
@@ -98,6 +101,7 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
+  @Profiled
   public void handleDuplicateSession(final String sessionId) {
     Objects.requireNonNull(sessionId);
     SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor
@@ -114,6 +118,7 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
+  @Profiled
   public void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent event) {
     Objects.requireNonNull(event);
     LOG.info("World chunk created, sending data to players!");

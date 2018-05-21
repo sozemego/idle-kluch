@@ -1,5 +1,6 @@
 package com.soze.idlekluch.kingdom.service;
 
+import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.exception.EntityAlreadyExistsException;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
@@ -52,6 +53,7 @@ public class KingdomServiceImpl implements KingdomService {
   }
 
   @Override
+  @Profiled
   public void addKingdom(final String owner, final RegisterKingdomForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);

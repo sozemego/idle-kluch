@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.user.dto.ChangePasswordForm;
 import com.soze.idlekluch.user.dto.Jwt;
 import com.soze.idlekluch.user.dto.LoginForm;
@@ -44,6 +45,7 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
+  @Profiled
   public Jwt login(LoginForm loginForm) {
     validateLogin(loginForm);
 
@@ -113,6 +115,7 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
+  @Profiled
   public void passwordChange(String username, ChangePasswordForm changePasswordForm) {
     validatePasswordChange(username, changePasswordForm);
 
