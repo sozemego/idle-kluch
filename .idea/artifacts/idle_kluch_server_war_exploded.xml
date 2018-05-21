@@ -8,7 +8,6 @@
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.springframework:spring-context:5.0.4.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.0.4.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.0.4.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-core:5.0.4.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.0.4.RELEASE" />
@@ -21,6 +20,9 @@
           <element id="library" level="project" name="Maven: org.springframework.security:spring-security-core:5.0.3.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.security:spring-security-config:5.0.3.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.security:spring-security-web:5.0.3.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.0.3.RELEASE" />
+          <element id="library" level="project" name="Maven: org.aspectj:aspectjrt:1.9.1" />
+          <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.9.1" />
           <element id="library" level="project" name="Maven: com.auth0:java-jwt:3.2.0" />
           <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.10" />
           <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk15on:1.55" />
@@ -30,7 +32,6 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-tx:5.0.4.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.data:spring-data-jpa:2.0.5.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.data:spring-data-commons:2.0.5.RELEASE" />
-          <element id="library" level="project" name="Maven: org.aspectj:aspectjrt:1.8.12" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.2" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.2" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.2" />
