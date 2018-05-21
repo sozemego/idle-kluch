@@ -25,4 +25,10 @@ public class RegisterKingdomForm implements Serializable {
     return name;
   }
 
+  @Override
+  public String toString() {
+    return "RegisterKingdomForm{" +
+             "name='" + name + '\'' +
+             '}';
+  }
 }
