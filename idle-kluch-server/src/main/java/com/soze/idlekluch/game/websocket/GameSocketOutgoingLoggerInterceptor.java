@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class GameSocketOutgoingLoggerInterceptor extends ChannelInterceptorAdapter {
 
-  private static final Logger LOG = LoggerFactory.getLogger(GameSocketLoggerInterceptor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(GameSocketOutgoingLoggerInterceptor.class);
 
   @Override
   public Message<?> preSend(final Message<?> message, final MessageChannel channel) {
     final SimpMessageHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, SimpMessageHeaderAccessor.class);
 
-    LOG.info("Outgoing command [{}]", accessor.getMessageType());
+    LOG.debug("Outgoing command [{}]", accessor.getMessageType());
 
     return message;
   }

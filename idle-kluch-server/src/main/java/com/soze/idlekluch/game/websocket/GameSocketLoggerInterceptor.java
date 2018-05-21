@@ -22,14 +22,14 @@ public class GameSocketLoggerInterceptor extends ChannelInterceptorAdapter {
   public Message<?> preSend(final Message<?> message, final MessageChannel channel) {
     final StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
-    LOG.info("Session [{}]. Command [{}]", accessor.getSessionId(), accessor.getCommand());
+    LOG.debug("Session [{}]. Command [{}]", accessor.getSessionId(), accessor.getCommand());
 
     if(accessor.getCommand() == StompCommand.SUBSCRIBE) {
-      LOG.info("Session [{}] is subscribing to [{}]", accessor.getSessionId(), accessor.getDestination());
+      LOG.debug("Session [{}] is subscribing to [{}]", accessor.getSessionId(), accessor.getDestination());
     }
 
     if(accessor.getCommand() == StompCommand.SEND) {
-      LOG.info("Session [{}] is sending to [{}]", accessor.getSessionId(), accessor.getDestination());
+      LOG.debug("Session [{}] is sending to [{}]", accessor.getSessionId(), accessor.getDestination());
     }
 
     return message;
