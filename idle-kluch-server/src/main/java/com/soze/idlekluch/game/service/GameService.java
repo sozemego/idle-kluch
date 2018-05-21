@@ -1,6 +1,8 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.message.BuildBuildingForm;
+import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
+import org.springframework.context.event.EventListener;
 
 public interface GameService {
 
@@ -15,5 +17,8 @@ public interface GameService {
   void handleBuildBuildingMessage(final String owner, final BuildBuildingForm form);
 
   void handleDuplicateSession(final String sessionId);
+
+  @EventListener
+  void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent event);
 
 }

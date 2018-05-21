@@ -113,7 +113,7 @@ public class GameServiceImpl implements GameService {
     );
   }
 
-  @EventListener
+  @Override
   public void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent event) {
     Objects.requireNonNull(event);
     LOG.info("World chunk created, sending data to players!");
