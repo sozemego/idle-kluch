@@ -30,12 +30,13 @@ public class ProfilingAspect {
 
     final Object returnValue = pjp.proceed();
 
-    final long totalTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
+    final double totalTime = (System.nanoTime() - startTime) / 1e9;
+
     LOG.info(
       PROFILING_MARKER,
       "Method call [{}] took [{}] ms. Args [{}]",
       pjp.getSignature().getName(),
-      totalTime,
+      String.format("%.6f", totalTime),
       pjp.getArgs()
     );
 

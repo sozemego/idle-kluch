@@ -121,8 +121,14 @@ public class GameServiceImpl implements GameService {
   @Profiled
   public void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent event) {
     Objects.requireNonNull(event);
-    LOG.info("World chunk created, sending data to players!");
 
+    final List<Tile> tiles = event.getTiles();
+    if(tiles.isEmpty()) {
+      LOG.info("World chunk created without any tiles, ignoring.");
+      return;
+    }
+
+    LOG.info("World chunk created, sending data to players!");
     final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(event.getTiles());
     webSocketMessagingService.send(Routes.GAME_OUTBOUND, worldChunkMessage);
   }
