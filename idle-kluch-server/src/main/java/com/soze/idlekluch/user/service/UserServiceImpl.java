@@ -1,5 +1,6 @@
 package com.soze.idlekluch.user.service;
 
+import com.soze.idlekluch.aop.annotations.Authorized;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.entity.User;
@@ -108,6 +109,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Authorized
   public void changeUserPassword(String username, String hash) {
     Objects.requireNonNull(username);
     Objects.requireNonNull(hash);

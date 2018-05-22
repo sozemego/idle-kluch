@@ -1,5 +1,6 @@
 package com.soze.idlekluch.kingdom.service;
 
+import com.soze.idlekluch.aop.annotations.Authorized;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.exception.EntityAlreadyExistsException;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
@@ -54,11 +55,11 @@ public class KingdomServiceImpl implements KingdomService {
 
   @Override
   @Profiled
+  @Authorized
   public void addKingdom(final String owner, final RegisterKingdomForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
 
-    LOG.info("User [{}] is attempting to create kingdom [{}]", owner, form.getName());
     final Optional<Kingdom> kingdomOptional = kingdomRepository.getKingdom(form.getName());
     if(kingdomOptional.isPresent()) {
       LOG.info("Kingdom with name [{}] already exists", form.getName());
@@ -92,9 +93,9 @@ public class KingdomServiceImpl implements KingdomService {
 
   @Override
   @Transactional
+  @Authorized
   public void removeKingdom(final String owner) {
     Objects.requireNonNull(owner);
-    LOG.info("User [{}] is trying to remove their kingdom", owner);
     final Optional<Kingdom> kingdomOptional = kingdomRepository.getUsersKingdom(owner);
 
     if(kingdomOptional.isPresent()) {
@@ -108,6 +109,7 @@ public class KingdomServiceImpl implements KingdomService {
   }
 
   @Override
+  @Authorized
   public void updateKingdom(final Kingdom kingdom) {
     Objects.requireNonNull(kingdom);
     kingdomRepository.updateKingdom(kingdom);

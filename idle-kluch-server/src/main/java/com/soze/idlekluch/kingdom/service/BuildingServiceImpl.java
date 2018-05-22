@@ -1,5 +1,6 @@
 package com.soze.idlekluch.kingdom.service;
 
+import com.soze.idlekluch.aop.annotations.Authorized;
 import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.BuildableComponent;
 import com.soze.idlekluch.game.engine.components.CostComponent;
@@ -57,11 +58,10 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   @Override
+  @Authorized
   public Entity buildBuilding(final String owner, final BuildBuildingForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
-
-    LOG.info("User [{}] is trying to place a building [{}]", owner, form);
 
     //check if owner exists, just in case
     final Optional<User> userOptional = userService.getUserByUsername(owner);
@@ -123,6 +123,7 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   @Override
+  @Authorized
   public List<Entity> getOwnBuildings(final String owner) {
     Objects.requireNonNull(owner);
 
@@ -163,6 +164,7 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   @Override
+  @Authorized
   public void destroyBuilding(final EntityUUID buildingId) {
     Objects.requireNonNull(buildingId);
     throw new IllegalStateException("NOT IMPLEMENTED YET DESTROY BUILDING");

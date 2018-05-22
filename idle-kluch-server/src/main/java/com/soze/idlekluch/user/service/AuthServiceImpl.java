@@ -37,8 +37,6 @@ public class AuthServiceImpl implements AuthService {
   @Autowired
   private PasswordHash passwordHash;
 
-
-
   @PostConstruct
   public void setup() {
     algorithm = Algorithm.HMAC256(keyProvider.getSecret());

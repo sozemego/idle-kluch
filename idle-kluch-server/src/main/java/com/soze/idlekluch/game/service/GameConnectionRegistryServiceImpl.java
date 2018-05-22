@@ -1,6 +1,7 @@
 package com.soze.idlekluch.game.service;
 
 
+import com.soze.idlekluch.aop.annotations.Authorized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,8 @@ public class GameConnectionRegistryServiceImpl implements GameConnectionRegistry
   private final Set<String> duplicateSessionIds = Collections.synchronizedSet(new HashSet<>());
 
   @Override
+  @Authorized
   public void onConnect(String sessionId, String username) {
-    LOG.info("Session [{}], user [{}] connected", sessionId, username);
-
     if(userSessionMap.containsKey(username)) {
       LOG.info("[{}] already connected!", username);
       duplicateSessionIds.add(sessionId);
@@ -31,9 +31,8 @@ public class GameConnectionRegistryServiceImpl implements GameConnectionRegistry
   }
 
   @Override
+  @Authorized
   public void onDisconnect(String sessionId) {
-    LOG.info("Session [{}] disconnected", sessionId);
-
     if(duplicateSessionIds.contains(sessionId)) {
       LOG.info("[{}] sessionId was in duplicates, now is disconnected", sessionId);
       duplicateSessionIds.remove(sessionId);

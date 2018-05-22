@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.service;
 
+import com.soze.idlekluch.aop.annotations.Authorized;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.message.*;
@@ -56,11 +57,10 @@ public class GameServiceImpl implements GameService {
    */
   @Override
   @Profiled
+  @Authorized
   public void handleInitMessage(final String username) {
-    LOG.info("Init message from [{}]", username);
 
     final Map<TileId, Tile> allTiles = worldService.getAllTiles();
-
     final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
     final String worldChunkJson = JsonUtils.objectToJson(worldChunkMessage);
 
@@ -87,6 +87,7 @@ public class GameServiceImpl implements GameService {
 
   @Override
   @Profiled
+  @Authorized
   public void handleBuildBuildingMessage(final String username, final BuildBuildingForm form) {
     final Entity building = buildingService.buildBuilding(username, form);
 

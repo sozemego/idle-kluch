@@ -37,7 +37,6 @@ public class WorldServiceImpl implements WorldService {
 
   @PostConstruct
   public void setup() {
-    LOG.info("Initializing world");
     final Optional<World> worldOptional = worldRepository.getCurrentWorld();
     if(!worldOptional.isPresent()) {
       LOG.info("World is not initialized, creating new one.");
