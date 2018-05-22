@@ -54,23 +54,23 @@ public class RateLimitInterceptor extends HandlerInterceptorAdapter {
       return true;
     }
 
-    RateLimited resourceAnnotation = isResourceAnnotationPresent ? method.getDeclaringClass().getAnnotation(RateLimited.class) : null;
-    RateLimited methodAnnotation = isMethodAnnotationPresent ? method.getAnnotation(RateLimited.class) : null;
+    final RateLimited resourceAnnotation = isResourceAnnotationPresent ? method.getDeclaringClass().getAnnotation(RateLimited.class) : null;
+    final RateLimited methodAnnotation = isMethodAnnotationPresent ? method.getAnnotation(RateLimited.class) : null;
 
     //1. get the annotation to use
     //method values override type values
-    RateLimited annotation = methodAnnotation != null ? methodAnnotation : resourceAnnotation;
+    final RateLimited annotation = methodAnnotation != null ? methodAnnotation : resourceAnnotation;
 
     //2. create a value object for the resource
-    LimitedResource limitedResource = new LimitedResource(
+    final LimitedResource limitedResource = new LimitedResource(
       method,
       request.getMethod(),
       request.getServletPath()
     );
 
     //3. find the user name or IP if anonymous
-    Principal principal = SecurityContextHolder.getContext().getAuthentication();
-    String user = principal != null ? principal.getName() : request.getRemoteAddr();
+    final Principal principal = SecurityContextHolder.getContext().getAuthentication();
+    final String user = principal != null ? principal.getName() : request.getRemoteAddr();
 
     //3. apply rate limiting filter for this method and user
     rateLimitService.applyFilter(getRateLimit(annotation), user, limitedResource);
