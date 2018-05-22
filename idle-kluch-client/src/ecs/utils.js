@@ -3,7 +3,6 @@ import Phaser from "phaser";
 import Node from "./Node";
 import { StaticOccupySpaceComponent } from "./components/StaticOccupySpaceComponent";
 import { PhysicsComponent } from "./components/PhysicsComponent";
-import { COMPONENT_TYPES } from "../game/constants";
 
 /**
  * Tries to find a component in an entity json.

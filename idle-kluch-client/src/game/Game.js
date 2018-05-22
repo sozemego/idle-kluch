@@ -1,6 +1,5 @@
 import store from "../store/store";
 import Phaser from "phaser";
-import Node from "../ecs/Node";
 import * as GAME_ACTIONS from "./actions";
 import { onCanvasClicked } from "./actions";
 import { GameService as gameService } from "./GameService";
