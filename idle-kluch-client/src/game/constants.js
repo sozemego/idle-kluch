@@ -27,7 +27,7 @@ export const MAX_WIDTH = 2500;
  */
 export const MAX_HEIGHT = 2500;
 
-export const ZOOM_AMOUNT = 0.025;
+export const ZOOM_AMOUNT = 0.125;
 
 export const IMAGES = {
   "grass_1": "grass_1.png",

@@ -224,21 +224,18 @@ const createGame = () => {
 
       game.input.mouse.mouseWheelCallback = function (event) {
         const zoomAmount = event.wheelDelta > 0 ? ZOOM_AMOUNT : -ZOOM_AMOUNT;
-        game.world.scale.x += zoomAmount;
-        game.world.scale.y += zoomAmount;
 
-        if(game.world.scale.x <= 0.01) {
-          game.world.scale.x = 0.02;
-        }
-        if(game.world.scale.y <= 0.01) {
-          game.world.scale.y = 0.02;
-        }
-        if(game.world.scale.x >= 1) {
-          game.world.scale.x = 1;
-        }
-        if(game.world.scale.y >= 1) {
-          game.world.scale.y = 1;
-        }
+        const scaleTween = game.add.tween(game.world.scale);
+
+        const targetX = Phaser.Math.clamp(game.world.scale.x + zoomAmount, 0.02, 1);
+        const targetY = Phaser.Math.clamp(game.world.scale.y + zoomAmount, 0.02, 1);
+
+        scaleTween.to({
+          x: targetX,
+          y: targetY
+        }, 100, Phaser.Easing.Circular.Out);
+        scaleTween.start();
+
       };
 
       // game.camera.scale.x = 0.25;
