@@ -21,7 +21,7 @@ public class ProfilingAspect {
   private static final Marker PROFILING_MARKER = MarkerFactory.getMarker("PROFILING");
 
 
-  @Pointcut("execution(* *(..)) && @annotation(com.soze.idlekluch.aop.annotations.Profiled)")
+  @Pointcut("execution(* *(..)) && @annotation(com.soze.idlekluch.aop.annotations.Profiled))")
   public void profiledMethodExecution() {}
 
   @Around("profiledMethodExecution()")
@@ -34,7 +34,7 @@ public class ProfilingAspect {
 
     LOG.info(
       PROFILING_MARKER,
-      "[{}] [{} ms]. [{}]",
+      "[{}] [{} ms] [{}]",
       pjp.getSignature().toShortString(),
       String.format("%.6f", totalTime),
       pjp.getArgs()
