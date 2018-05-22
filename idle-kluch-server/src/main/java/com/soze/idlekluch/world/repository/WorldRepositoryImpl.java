@@ -36,10 +36,8 @@ public class WorldRepositoryImpl implements WorldRepository {
 
   @PostConstruct
   public void setup() {
-    LOG.info("Loading all tiles");
-    final List<Tile> tileList = getTileList();
-    LOG.info("Retrieved [{}] tiles from DB", tileList.size());
-    tileList.forEach(tile -> tiles.put(tile.getTileId(), tile));
+    getTileList()
+      .forEach(tile -> tiles.put(tile.getTileId(), tile));
   }
 
   @Override

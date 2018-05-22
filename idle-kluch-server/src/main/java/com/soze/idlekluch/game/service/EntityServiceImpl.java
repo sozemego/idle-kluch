@@ -46,7 +46,6 @@ public class EntityServiceImpl implements EntityService {
 
   @PostConstruct
   public void setup() {
-    LOG.info("Initializing [{}]", EntityServiceImpl.class);
     loadEntityTemplates();
     loadExistingEntitiesFromDB();
   }
@@ -97,7 +96,7 @@ public class EntityServiceImpl implements EntityService {
       });
   }
 
-  @EventListener
+  @Override
   public void handleAddedEntity(final AddedEntityEvent addedEntityEvent) {
     final Entity entity = addedEntityEvent.getEntity();
     LOG.info("Added event for entity ID:[{}]", entity.getId());
@@ -106,20 +105,18 @@ public class EntityServiceImpl implements EntityService {
     if(!persistentEntityOptional.isPresent()) {
       final PersistentEntity persistentEntity = entityConverter.convertEntityToPersistent(entity);
       entityRepository.addEntity(persistentEntity);
-      LOG.info("Added entity ID:[{}]", entity.getId());
+      LOG.info("Added entity ID: [{}]", entity.getId());
     }
   }
 
-  @EventListener
+  @Override
   public void handleRemovedEntity(final RemovedEntityEvent removedEntityEvent) {
     final Entity entity = removedEntityEvent.getEntity();
-    LOG.info("Removed event for entity ID:[{}]", entity.getId());
+    LOG.info("Removed event for entity ID: [{}]", entity.getId());
     entityRepository.deleteEntity((EntityUUID) entity.getId());
   }
 
   private void loadEntityTemplates() {
-    LOG.info("Loading entity templates");
-
     final List<PersistentEntity> templates = entityRepository.getAllEntityTemplates();
     LOG.info("Found [{}] entity templates", templates.size());
     templates.forEach(template -> entityTemplates.put(template.getEntityId(), entityConverter.convertPersistentToEntity(template)));

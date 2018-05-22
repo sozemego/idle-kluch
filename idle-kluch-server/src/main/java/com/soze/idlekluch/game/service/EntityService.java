@@ -3,8 +3,11 @@ package com.soze.idlekluch.game.service;
 import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.klecs.engine.AddedEntityEvent;
+import com.soze.klecs.engine.RemovedEntityEvent;
 import com.soze.klecs.entity.Entity;
 import com.soze.klecs.node.Node;
+import org.springframework.context.event.EventListener;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +35,11 @@ public interface EntityService {
    * Each component is assigned the id of target.
    */
   void copyEntity(final Entity source, final Entity target);
+
+  @EventListener
+  void handleAddedEntity(final AddedEntityEvent addedEntityEvent);
+
+  @EventListener
+  void handleRemovedEntity(final RemovedEntityEvent removedEntityEvent);
 
 }
