@@ -11,6 +11,10 @@ public class EntityUtils {
     throw new IllegalStateException("Cannot instantiate EntityUtils");
   }
 
+  /**
+   * Returns true if the bounds of one entity intersect with bounds of another.
+   * The bounds are rectangles.
+   */
   public static boolean doesCollide(final PhysicsComponent physicsComponent1, final PhysicsComponent physicsComponent2) {
     Objects.requireNonNull(physicsComponent1);
     Objects.requireNonNull(physicsComponent2);
