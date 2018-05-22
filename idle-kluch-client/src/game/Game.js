@@ -216,9 +216,11 @@ const createGame = () => {
       centerCameraAt(game, getKingdomStartingPoint());
 
       game.input.onDown.add(pointer => {
-        const x = pointer.worldX * Math.pow(game.camera.scale.x, -1);
-        const y = pointer.worldY * Math.pow(game.camera.scale.y, -1);
-        onCanvasClick(x, y);
+        if(pointer.button === 0) {
+          const x = pointer.worldX * Math.pow(game.camera.scale.x, -1);
+          const y = pointer.worldY * Math.pow(game.camera.scale.y, -1);
+          onCanvasClick(x, y);
+        }
       });
 
       game.input.mouse.mouseWheelCallback = function (event) {
