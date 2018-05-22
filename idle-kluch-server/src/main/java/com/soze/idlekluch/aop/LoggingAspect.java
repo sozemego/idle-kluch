@@ -55,4 +55,12 @@ public class LoggingAspect {
     );
   }
 
+  @Pointcut("execution(* *(..)) && @annotation(org.springframework.web.bind.annotation.ExceptionHandler))")
+  public void globalExceptionHandlerExecuted() {}
+
+  @Before(value = "globalExceptionHandlerExecuted() && args(ex)", argNames = "ex")
+  public void logGlobalExceptionHandler(final Exception ex) throws Throwable {
+    LOG.info("Exception thrown", ex);
+  }
+
 }
