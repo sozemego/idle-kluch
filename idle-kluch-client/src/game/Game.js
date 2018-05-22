@@ -261,21 +261,19 @@ const createGame = () => {
       const mouseX = game.input.worldX * Math.pow(game.camera.scale.x, -1);
       const mouseY = game.input.worldY * Math.pow(game.camera.scale.y, -1);
 
+      const scale = game.world.scale.x;
+
       if (cursors.up.isDown) {
-        // game.camera.y = y - 5;
-        game.world.pivot.y -= 5;
+        game.world.pivot.y -= 5 * Math.pow(scale, -1);
       }
       if (cursors.down.isDown) {
-        // game.camera.y = y + 5;
-        game.world.pivot.y += 5;
+        game.world.pivot.y += 5 * Math.pow(scale, -1);
       }
       if (cursors.left.isDown) {
-        // game.camera.x = x - 5;
-        game.world.pivot.x -= 5;
+        game.world.pivot.x -= 5 * Math.pow(scale, -1);
       }
       if (cursors.right.isDown) {
-        // game.camera.x = x + 5;
-        game.world.pivot.x += 5;
+        game.world.pivot.x += 5 * Math.pow(scale, -1);
       }
 
       //selected building highlight
