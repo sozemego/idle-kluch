@@ -1,5 +1,6 @@
 package com.soze.idlekluch.world.service;
 
+import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.entity.World;
@@ -56,6 +57,7 @@ public class WorldServiceImpl implements WorldService {
   }
 
   @Override
+  @Profiled
   public List<Tile> createWorldChunk(final TileId center, final int width, final int height) {
     Objects.requireNonNull(center);
     if(width < 1) {
