@@ -224,19 +224,20 @@ const createGame = () => {
 
       game.input.mouse.mouseWheelCallback = function (event) {
         const zoomAmount = event.wheelDelta > 0 ? ZOOM_AMOUNT : -ZOOM_AMOUNT;
-        game.camera.scale.x += zoomAmount;
-        game.camera.scale.y += zoomAmount;
-        if(game.camera.scale.x <= 0.01) {
-          game.camera.scale.x = 0.02;
+        game.world.scale.x += zoomAmount;
+        game.world.scale.y += zoomAmount;
+
+        if(game.world.scale.x <= 0.01) {
+          game.world.scale.x = 0.02;
         }
-        if(game.camera.scale.y <= 0.01) {
-          game.camera.scale.y = 0.02;
+        if(game.world.scale.y <= 0.01) {
+          game.world.scale.y = 0.02;
         }
-        if(game.camera.scale.x >= 1) {
-          game.camera.scale.x = 1;
+        if(game.world.scale.x >= 1) {
+          game.world.scale.x = 1;
         }
-        if(game.camera.scale.y >= 1) {
-          game.camera.scale.y = 1;
+        if(game.world.scale.y >= 1) {
+          game.world.scale.y = 1;
         }
       };
 
@@ -263,18 +264,21 @@ const createGame = () => {
       const mouseX = game.input.worldX * Math.pow(game.camera.scale.x, -1);
       const mouseY = game.input.worldY * Math.pow(game.camera.scale.y, -1);
 
-      const { x, y } = game.camera;
       if (cursors.up.isDown) {
-        game.camera.y = y - 5;
+        // game.camera.y = y - 5;
+        game.world.pivot.y -= 5;
       }
       if (cursors.down.isDown) {
-        game.camera.y = y + 5;
+        // game.camera.y = y + 5;
+        game.world.pivot.y += 5;
       }
       if (cursors.left.isDown) {
-        game.camera.x = x - 5;
+        // game.camera.x = x - 5;
+        game.world.pivot.x -= 5;
       }
       if (cursors.right.isDown) {
-        game.camera.x = x + 5;
+        // game.camera.x = x + 5;
+        game.world.pivot.x += 5;
       }
 
       //selected building highlight
