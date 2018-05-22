@@ -66,7 +66,6 @@ public class BuildingServiceImpl implements BuildingService {
     //check if owner exists, just in case
     final Optional<User> userOptional = userService.getUserByUsername(owner);
     if (!userOptional.isPresent()) {
-      LOG.info("User [{}] does not exist, cannot place building [{}]", owner, form);
       throw new AuthUserDoesNotExistException(owner);
     }
 
@@ -75,7 +74,6 @@ public class BuildingServiceImpl implements BuildingService {
     //now get user's kingdom
     final Optional<Kingdom> kingdomOptional = kingdomService.getUsersKingdom(owner);
     if (!kingdomOptional.isPresent()) {
-      LOG.info("User [{}] does not have a kingdom", owner);
       throw new UserDoesNotHaveKingdomException(owner);
     }
 
@@ -95,7 +93,6 @@ public class BuildingServiceImpl implements BuildingService {
                                                 .findFirst();
 
     if(collidedWith.isPresent()) {
-      LOG.info("Cannot build building [{}], another building is on its place", form.getBuildingId());
       throw new SpaceAlreadyOccupiedException(form.getMessageId());
     }
 
@@ -103,7 +100,6 @@ public class BuildingServiceImpl implements BuildingService {
     final CostComponent costComponent = building.getComponent(CostComponent.class);
     final long idleBucks = kingdom.getIdleBucks();
     if(idleBucks < costComponent.getIdleBucks()) {
-      LOG.info("[{}] cannot afford building [{}]. Cost is [{}], money is [{}]", owner, form.getBuildingId(), costComponent.getIdleBucks(), idleBucks);
       throw new CannotAffordBuildingException(form.getMessageId(), form.getBuildingId(), idleBucks, costComponent.getIdleBucks());
     }
 
@@ -129,7 +125,6 @@ public class BuildingServiceImpl implements BuildingService {
 
     final Optional<Kingdom> kingdom = kingdomService.getUsersKingdom(owner);
     if (!kingdom.isPresent()) {
-      LOG.info("User [{}] does not have a kingdom", owner);
       throw new UserDoesNotHaveKingdomException(owner);
     }
 

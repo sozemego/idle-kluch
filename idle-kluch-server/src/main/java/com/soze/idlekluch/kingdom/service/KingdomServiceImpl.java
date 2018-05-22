@@ -62,13 +62,11 @@ public class KingdomServiceImpl implements KingdomService {
 
     final Optional<Kingdom> kingdomOptional = kingdomRepository.getKingdom(form.getName());
     if(kingdomOptional.isPresent()) {
-      LOG.info("Kingdom with name [{}] already exists", form.getName());
       throw new EntityAlreadyExistsException("Kingdom already exists", Kingdom.class);
     }
 
     final Optional<Kingdom> userKingdomOptional = kingdomRepository.getUsersKingdom(owner);
     if(userKingdomOptional.isPresent()) {
-      LOG.info("User [{}] already has a kingdom", owner);
       throw new UserAlreadyHasKingdomException(owner, form.getName());
     }
 
@@ -102,7 +100,6 @@ public class KingdomServiceImpl implements KingdomService {
       LOG.info("Found kingdom of user [{}], removing", owner);
       kingdomRepository.removeKingdom(kingdomOptional.get());
     } else {
-      LOG.info("User [{}] does not have a kingdom", owner);
       throw new UserDoesNotHaveKingdomException(owner);
     }
 

@@ -41,7 +41,6 @@ public class KingdomController {
                                       final BindingResult bindingResult) {
 
     for (final FieldError error: bindingResult.getFieldErrors()) {
-      LOG.info("Kingdom creation by user [{}] rejected because [{}]", error.getDefaultMessage());
       throw new InvalidRegisterKingdomException(error.getField(), error.getDefaultMessage());
     }
 

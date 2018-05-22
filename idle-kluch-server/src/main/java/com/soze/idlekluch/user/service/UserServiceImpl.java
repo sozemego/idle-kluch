@@ -63,17 +63,14 @@ public class UserServiceImpl implements UserService {
 
     char[] password = userForm.getPassword();
     if (password.length == 0) {
-      LOG.info("Username [{}] input an empty password.", username);
       throw new UserRegistrationException("password", "Password cannot be empty.");
     }
 
     if (password.length > MAX_PASSWORD_LENGTH) {
-      LOG.info("Username [{}] input too long password.", username);
       throw new UserRegistrationException("password", "Password cannot be longer than " + MAX_PASSWORD_LENGTH);
     }
 
     if (userRepository.usernameExists(username)) {
-      LOG.info("Username [{}] already exists!", username);
       throw new UserRegistrationException("username", username + " already exists.");
     }
 
@@ -97,12 +94,10 @@ public class UserServiceImpl implements UserService {
     Objects.requireNonNull(username);
 
     if (!USERNAME_VALIDATOR.matcher(username).matches()) {
-      LOG.info("[{}] is not a valid username!", username);
       throw new UserRegistrationException("username", "Username can only contain letters, numbers, '-' and '_'");
     }
 
     if (username.length() > MAX_USERNAME_LENGTH) {
-      LOG.info("Username [{}] was too long!", username);
       throw new UserRegistrationException("username", "Username cannot be longer than " + MAX_USERNAME_LENGTH);
     }
 

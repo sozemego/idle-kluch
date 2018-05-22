@@ -1,5 +1,6 @@
 package com.soze.idlekluch.kingdom.repository;
 
+import com.soze.idlekluch.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.utils.jpa.QueryUtils;
 import org.springframework.stereotype.Repository;
@@ -50,13 +51,22 @@ public class KingdomRepositoryImpl implements KingdomRepository {
   @Override
   @Transactional
   public void removeKingdom(final Kingdom kingdom) {
-    em.remove(kingdom);
+    Objects.requireNonNull(kingdom);
+    try {
+      em.remove(kingdom);
+    } catch (IllegalArgumentException e) {
+      throw new EntityDoesNotExistException(kingdom.getName() + " does not exist", Kingdom.class);
+    }
   }
 
   @Override
   @Transactional
   public void updateKingdom(final Kingdom kingdom) {
     Objects.requireNonNull(kingdom);
-    em.merge(kingdom);
+    try {
+      em.merge(kingdom);
+    } catch (IllegalArgumentException e) {
+      throw new EntityDoesNotExistException(kingdom.getName() + " does not exist", Kingdom.class);
+    }
   }
 }
