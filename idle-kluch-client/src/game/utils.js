@@ -73,3 +73,5 @@ export const attachSpawnAnimation = (game, sprite, direction, delay) => {
 export const killSprite = _.method('kill', true);
 export const destroySprite = _.method('destroy', [true, false]);
 export const destroyTileGroup = _.method('children.forEach', destroySprite);
+
+export const getWheelDelta = (event) => event.wheelDelta || -event.deltaY;

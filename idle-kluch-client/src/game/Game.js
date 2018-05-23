@@ -22,7 +22,7 @@ import { NameComponent } from "../ecs/components/NameComponent";
 import { BuildableComponent } from "../ecs/components/BuildableComponent";
 import { StaticOccupySpaceComponent } from "../ecs/components/StaticOccupySpaceComponent";
 import { checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
-import { attachSpawnAnimation, centerCameraAt, destroyTileGroup, DIRECTIONS, killSprite } from "./utils";
+import { attachSpawnAnimation, centerCameraAt, destroyTileGroup, DIRECTIONS, getWheelDelta, killSprite } from "./utils";
 import { CostComponent } from "../ecs/components/CostComponent";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
@@ -229,7 +229,7 @@ const createGame = () => {
       });
 
       game.input.mouse.mouseWheelCallback = function (event) {
-        const zoomAmount = event.wheelDelta > 0 ? ZOOM_AMOUNT : -ZOOM_AMOUNT;
+        const zoomAmount = getWheelDelta(event) > 0 ? ZOOM_AMOUNT : -ZOOM_AMOUNT;
 
         const scaleTween = game.add.tween(game.world.scale);
 
