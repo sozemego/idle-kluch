@@ -57,7 +57,7 @@ public class WorldServiceImpl implements WorldService {
 
   @Override
   @Profiled
-  public List<Tile> createWorldChunk(final TileId center, final int width, final int height) {
+  public synchronized List<Tile> createWorldChunk(final TileId center, final int width, final int height) {
     Objects.requireNonNull(center);
     if(width < 1) {
       throw new IllegalArgumentException("Chunk width cannot be less than 1");
