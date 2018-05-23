@@ -54,6 +54,8 @@ const addTiles = (state, { payload: tiles }) => {
     if (!previousTile) {
       previousTiles[ key ] = tile;
       const sprite = tileGroup.create(x * TILE_SIZE, y * TILE_SIZE, "grass_1");
+      sprite.width = TILE_SIZE;
+      sprite.height = TILE_SIZE;
       sprite.inputEnabled = true;
       sprite.autoCull = true;
       newTileSprites.push(sprite);
