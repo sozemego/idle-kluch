@@ -36,10 +36,10 @@ public final class WorldUtils {
     final float centerX = (x + (width / 2));
     final float centerY = (y + (height / 2));
 
-    return Optional.of(new TileId((int) Math.floor(centerX / WorldService.TILE_SIZE), (int) Math.floor(centerY / WorldService.TILE_SIZE)));
+    return Optional.of(translateCoordinates(centerX, centerY));
   }
 
-  public static TileId translateCoordinates(final int x, final int y) {
+  public static TileId translateCoordinates(final float x, final float y) {
     return new TileId((int) Math.floor(x / WorldService.TILE_SIZE), (int) Math.floor(y / WorldService.TILE_SIZE));
   }
 
