@@ -10,6 +10,11 @@ public class InvalidUUIDException extends RuntimeException {
     this.id = Objects.requireNonNull(id);
   }
 
+  @Override
+  public String getMessage() {
+    return id + " is not a valid UUID";
+  }
+
   public String getId() {
     return id;
   }
