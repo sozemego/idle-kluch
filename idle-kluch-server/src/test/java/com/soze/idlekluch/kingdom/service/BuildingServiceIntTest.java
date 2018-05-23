@@ -200,7 +200,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
       }
     });
 
-    //after all threads have run, there should be only 500 buildings/entities for this kingdom
+    //after all threads have run, there should be only 50 buildings/entities for this kingdom
     final List<PersistentEntity> kingdomBuildings = buildingService
                                                         .getAllConstructedBuildings()
                                                         .stream()
