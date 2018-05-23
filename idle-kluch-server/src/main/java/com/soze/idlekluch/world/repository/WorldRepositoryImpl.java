@@ -93,8 +93,8 @@ public class WorldRepositoryImpl implements WorldRepository {
       final Tile foundTile = em.find(Tile.class, tile.getTileId());
       if (foundTile != null) {
         em.remove(foundTile);
-        this.tiles.remove(tile.getTileId());
       }
+      this.tiles.remove(tile.getTileId());
     });
   }
 
