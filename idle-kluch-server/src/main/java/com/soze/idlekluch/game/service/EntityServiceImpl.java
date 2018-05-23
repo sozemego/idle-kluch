@@ -100,9 +100,10 @@ public class EntityServiceImpl implements EntityService {
   public void handleAddedEntity(final AddedEntityEvent addedEntityEvent) {
     final Entity entity = addedEntityEvent.getEntity();
     LOG.info("Added event for entity ID:[{}]", entity.getId());
-    final Optional<PersistentEntity> persistentEntityOptional = getEntity((EntityUUID) entity.getId());
-    LOG.info("Entity [{}] is already present [{}]", entity.getId(), persistentEntityOptional.isPresent());
-    if(!persistentEntityOptional.isPresent()) {
+    //TODO getting it from engine might be a lot faster here
+    final Optional<Entity> entityOptional = gameEngine.getEntity((EntityUUID) entity.getId());
+    LOG.info("Entity [{}] is already present [{}]", entity.getId(), entityOptional.isPresent());
+    if(!entityOptional.isPresent()) {
       final PersistentEntity persistentEntity = entityConverter.convertEntityToPersistent(entity);
       entityRepository.addEntity(persistentEntity);
       LOG.info("Added entity ID: [{}]", entity.getId());
