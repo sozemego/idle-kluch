@@ -62,7 +62,15 @@ public class LoggingAspect {
 
   @Before(value = "globalExceptionHandlerExecuted() && args(ex)", argNames = "ex")
   public void logGlobalExceptionHandler(final Exception ex) throws Throwable {
-    LOG.info("Exception thrown", ex);
+    LOG.info("Exception thrown and handled by GlobalExceptionHandler", ex);
+  }
+
+  @Pointcut("execution(* *(..)) && @annotation(org.springframework.messaging.handler.annotation.MessageExceptionHandler)")
+  public void messageExceptionHandlerExecuted() {}
+
+  @Before(value = "messageExceptionHandlerExecuted() && args(ex)", argNames = "ex")
+  public void logMessageExceptionHandler(final Exception ex) throws Throwable {
+    LOG.info("Exception thrown and handled by MessageExceptionHandler", ex);
   }
 
 }
