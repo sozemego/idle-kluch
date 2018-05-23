@@ -32,6 +32,13 @@ public class EntityRepositoryImpl implements EntityRepository {
   }
 
   @Override
+  public boolean entityExists(final EntityUUID id) {
+    final Query query = em.createQuery("SELECT COUNT(pe.entityId) FROM PersistentEntity pe WHERE pe.entityId = :id");
+    query.setParameter("id", id);
+    return ((long) query.getSingleResult()) > 0;
+  }
+
+  @Override
   @Transactional
   public void deleteEntity(final EntityUUID id) {
     Objects.requireNonNull(id);

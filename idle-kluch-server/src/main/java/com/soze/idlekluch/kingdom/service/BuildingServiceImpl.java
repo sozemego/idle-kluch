@@ -1,6 +1,7 @@
 package com.soze.idlekluch.kingdom.service;
 
 import com.soze.idlekluch.aop.annotations.Authorized;
+import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.BuildableComponent;
 import com.soze.idlekluch.game.engine.components.CostComponent;
@@ -11,14 +12,17 @@ import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
+import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
 import com.soze.idlekluch.kingdom.exception.CannotAffordBuildingException;
 import com.soze.idlekluch.kingdom.exception.SpaceAlreadyOccupiedException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
+import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.service.UserService;
+import com.soze.idlekluch.utils.CommonUtils;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.service.WorldService;
@@ -27,12 +31,20 @@ import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,6 +78,7 @@ public class BuildingServiceImpl implements BuildingService {
 
   @Override
   @Authorized
+  @Profiled
   public Entity buildBuilding(final String owner, final BuildBuildingForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
