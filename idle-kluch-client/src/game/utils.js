@@ -3,6 +3,7 @@
  * Mostly Phaser specific stuff.
  */
 import Phaser from "phaser";
+import _ from 'lodash';
 
 import { TILE_SIZE } from "./constants";
 
@@ -68,3 +69,7 @@ export const attachSpawnAnimation = (game, sprite, direction, delay) => {
     tween.start();
   }, delay);
 };
+
+export const killSprite = _.method('kill', true);
+export const destroySprite = _.method('destroy', [true, false]);
+export const destroyTileGroup = _.method('children.forEach', destroySprite);

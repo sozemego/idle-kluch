@@ -22,7 +22,7 @@ import { NameComponent } from "../ecs/components/NameComponent";
 import { BuildableComponent } from "../ecs/components/BuildableComponent";
 import { StaticOccupySpaceComponent } from "../ecs/components/StaticOccupySpaceComponent";
 import { checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
-import { attachSpawnAnimation, centerCameraAt, DIRECTIONS } from "./utils";
+import { attachSpawnAnimation, centerCameraAt, destroyTileGroup, DIRECTIONS, killSprite } from "./utils";
 import { CostComponent } from "../ecs/components/CostComponent";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
@@ -117,8 +117,12 @@ const addEntity = (state, { payload: entity }) => {
 
 const setConstructableBuilding = (state, action) => {
   const { payload: building } = action;
-  if (!building && selectedBuildingSprite) {
-    selectedBuildingSprite.kill(true);
+
+  if (!building) {
+    killSprite(selectedBuildingSprite);
+    // if (selectedBuildingSprite) {
+    //   selectedBuildingSprite.kill(true);
+    // }
     return state;
   }
 
@@ -135,11 +139,7 @@ const setConstructableBuilding = (state, action) => {
 };
 
 const logout = (state, action) => {
-  if(tileGroup) {
-    tileGroup.children.forEach((sprite) => {
-      sprite.destroy(true, false);
-    });
-  }
+  destroyTileGroup(tileGroup);
 
   gameService.disconnect();
 
