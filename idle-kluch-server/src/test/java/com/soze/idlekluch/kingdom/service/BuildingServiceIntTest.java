@@ -83,7 +83,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
   public void testBuildingBuildingNoKingdom() throws Exception {
     final String username = CommonUtils.generateRandomString(15);
     register(username);
-    final BuildBuildingForm form = new BuildBuildingForm(UUID.randomUUID().toString(), "1", 15, 15);
+    final BuildBuildingForm form = new BuildBuildingForm(UUID.randomUUID().toString(), SMALL_WAREHOUSE_ID, 15, 15);
     buildingService.buildBuilding(username, form);
   }
 

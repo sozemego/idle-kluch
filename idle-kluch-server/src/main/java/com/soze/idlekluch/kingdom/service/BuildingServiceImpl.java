@@ -86,7 +86,6 @@ public class BuildingServiceImpl implements BuildingService {
       //check if player's kingdom has enough cash
       final CostComponent costComponent = building.getComponent(CostComponent.class);
       final long idleBucks = kingdom.getIdleBucks();
-      System.out.println(idleBucks);
       if(idleBucks < costComponent.getIdleBucks()) {
         throw new CannotAffordBuildingException(form.getMessageId(), form.getBuildingId(), idleBucks, costComponent.getIdleBucks());
       }
