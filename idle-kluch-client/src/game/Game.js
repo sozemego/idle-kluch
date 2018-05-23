@@ -11,19 +11,19 @@ import { GraphicsComponent } from "../ecs/components/GraphicsComponent";
 import { PhysicsComponent } from "../ecs/components/PhysicsComponent";
 import { PhysicsSystem } from "../ecs/systems/PhysicsSystem";
 import { GraphicsSystem } from "../ecs/systems/GraphicsSystem";
+import { OwnershipComponent } from "../ecs/components/OwnershipComponent";
+import { NameComponent } from "../ecs/components/NameComponent";
+import { BuildableComponent } from "../ecs/components/BuildableComponent";
+import { StaticOccupySpaceComponent } from "../ecs/components/StaticOccupySpaceComponent";
+import { CostComponent } from "../ecs/components/CostComponent";
 import {
   getKingdomStartingPoint as _getKingdomStartingPoint,
   getSelectedConstructableBuilding as _getSelectedConstructableBuilding,
   checkCanAffordSelectedBuilding as _checkCanAffordSelectedBuilding,
 } from "../kingdom/selectors";
 import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
-import { OwnershipComponent } from "../ecs/components/OwnershipComponent";
-import { NameComponent } from "../ecs/components/NameComponent";
-import { BuildableComponent } from "../ecs/components/BuildableComponent";
-import { StaticOccupySpaceComponent } from "../ecs/components/StaticOccupySpaceComponent";
 import { checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
 import { attachSpawnAnimation, centerCameraAt, destroyTileGroup, DIRECTIONS, getWheelDelta, killSprite } from "./utils";
-import { CostComponent } from "../ecs/components/CostComponent";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
