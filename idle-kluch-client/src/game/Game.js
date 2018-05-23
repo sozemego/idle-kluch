@@ -215,6 +215,9 @@ const createGame = () => {
 
       game.world.setBounds(-MAX_WIDTH * TILE_SIZE, -MAX_HEIGHT * TILE_SIZE, MAX_WIDTH * TILE_SIZE * 2, MAX_HEIGHT * TILE_SIZE * 2);
 
+      game.camera.x = (game.width * -0.5);
+      game.camera.y = (game.height * -0.5);
+
       centerCameraAt(game, getKingdomStartingPoint());
 
       game.input.onDown.add(pointer => {
@@ -232,7 +235,6 @@ const createGame = () => {
 
         const targetX = Phaser.Math.clamp(game.world.scale.x + zoomAmount, 0.02, 1);
         const targetY = Phaser.Math.clamp(game.world.scale.y + zoomAmount, 0.02, 1);
-
         scaleTween.to({
           x: targetX,
           y: targetY
