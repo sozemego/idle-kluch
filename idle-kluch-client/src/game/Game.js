@@ -219,8 +219,8 @@ const createGame = () => {
 
       game.input.onDown.add(pointer => {
         if(pointer.button === 0) {
-          const x = pointer.worldX * Math.pow(game.camera.scale.x, -1);
-          const y = pointer.worldY * Math.pow(game.camera.scale.y, -1);
+          const x = pointer.worldX * Math.pow(game.camera.scale.x, -1) + game.world.pivot.x;
+          const y = pointer.worldY * Math.pow(game.camera.scale.y, -1) + game.world.pivot.y;
           onCanvasClick(x, y);
         }
       });
@@ -283,10 +283,10 @@ const createGame = () => {
       const selectedConstructableBuilding = getSelectedConstructableBuilding();
       if (selectedConstructableBuilding && selectedBuildingSprite && selectedBuildingSprite.alive) {
         const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
-        selectedBuildingSprite.x = mouseX - (physicsComponent.width / 2);
+        selectedBuildingSprite.x = mouseX - (physicsComponent.width / 2) + game.world.pivot.x;
+        selectedBuildingSprite.y = mouseY - (physicsComponent.height / 2) + game.world.pivot.y;
         physicsComponent.x = selectedBuildingSprite.x;
         physicsComponent.y = selectedBuildingSprite.y;
-        selectedBuildingSprite.y = mouseY - (physicsComponent.height / 2);
         selectedBuildingSprite.width = physicsComponent.width;
         selectedBuildingSprite.height = physicsComponent.height;
 
