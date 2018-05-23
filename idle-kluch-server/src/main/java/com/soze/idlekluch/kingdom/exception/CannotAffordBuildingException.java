@@ -15,7 +15,7 @@ public class CannotAffordBuildingException extends GameException {
                                        final String buildingId,
                                        final long playerBucks,
                                        final long cost) {
-    super(messageId);
+    super(messageId, "Player has " + playerBucks + ", building costs " + cost);
     this.buildingId = Objects.requireNonNull(buildingId);
     this.playerBucks = playerBucks;
     this.cost = cost;

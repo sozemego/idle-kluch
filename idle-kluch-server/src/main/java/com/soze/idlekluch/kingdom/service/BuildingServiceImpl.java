@@ -92,7 +92,7 @@ public class BuildingServiceImpl implements BuildingService {
     //check if the tile this building would be placed on exists
     final TileId tileId = WorldUtils.translateCoordinates(form.getX(), form.getY());
     if(!worldService.tileExists(tileId)) {
-      throw new SpaceAlreadyOccupiedException(form.getMessageId());
+      throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by void, cannot place outside of tiles");
     }
 
     final Entity building = constructBuilding(form);
@@ -131,7 +131,7 @@ public class BuildingServiceImpl implements BuildingService {
                                                 .findFirst();
 
     if(collidedWith.isPresent()) {
-      throw new SpaceAlreadyOccupiedException(form.getMessageId());
+      throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by entityId: " + collidedWith.get().getId());
     }
 
     final OwnershipComponent ownershipComponent = new OwnershipComponent();

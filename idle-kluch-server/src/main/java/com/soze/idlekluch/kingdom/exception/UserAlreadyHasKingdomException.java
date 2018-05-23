@@ -20,4 +20,9 @@ public class UserAlreadyHasKingdomException extends RuntimeException {
   public String getKingdomName() {
     return kingdomName;
   }
+
+  @Override
+  public String getMessage() {
+    return username + " already has kingdom named " + kingdomName;
+  }
 }

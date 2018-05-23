@@ -4,8 +4,18 @@ import java.util.Objects;
 
 public class AuthUserDoesNotExistException extends RuntimeException {
 
-  public AuthUserDoesNotExistException(String message) {
-    super(Objects.requireNonNull(message));
+  private final String username;
+
+  public AuthUserDoesNotExistException(String username) {
+    this.username = Objects.requireNonNull(username);
   }
 
+  public String getUsername() {
+    return username;
+  }
+
+  @Override
+  public String getMessage() {
+    return "User " + username + " does not exist";
+  }
 }

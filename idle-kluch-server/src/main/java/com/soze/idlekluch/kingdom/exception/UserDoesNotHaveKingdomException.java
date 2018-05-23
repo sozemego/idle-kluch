@@ -14,4 +14,8 @@ public class UserDoesNotHaveKingdomException extends RuntimeException {
     return username;
   }
 
+  @Override
+  public String getMessage() {
+    return username + " does not have a kingdom";
+  }
 }

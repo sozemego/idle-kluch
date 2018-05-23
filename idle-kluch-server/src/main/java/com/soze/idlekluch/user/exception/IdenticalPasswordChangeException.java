@@ -6,5 +6,8 @@ public class IdenticalPasswordChangeException extends RuntimeException {
 
   }
 
-
+  @Override
+  public String getMessage() {
+    return "";
+  }
 }

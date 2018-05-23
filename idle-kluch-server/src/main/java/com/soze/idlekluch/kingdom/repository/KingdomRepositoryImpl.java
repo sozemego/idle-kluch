@@ -55,7 +55,7 @@ public class KingdomRepositoryImpl implements KingdomRepository {
     try {
       em.remove(kingdom);
     } catch (IllegalArgumentException e) {
-      throw new EntityDoesNotExistException(kingdom.getName() + " does not exist", Kingdom.class);
+      throw new EntityDoesNotExistException("Kingdom " + kingdom.getName() + " does not exist", Kingdom.class);
     }
   }
 
@@ -66,7 +66,7 @@ public class KingdomRepositoryImpl implements KingdomRepository {
     try {
       em.merge(kingdom);
     } catch (IllegalArgumentException e) {
-      throw new EntityDoesNotExistException(kingdom.getName() + " does not exist", Kingdom.class);
+      throw new EntityDoesNotExistException("Kingdom " + kingdom.getName() + " does not exist", Kingdom.class);
     }
   }
 }

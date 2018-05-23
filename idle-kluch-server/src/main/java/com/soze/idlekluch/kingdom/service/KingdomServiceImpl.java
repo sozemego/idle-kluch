@@ -62,7 +62,7 @@ public class KingdomServiceImpl implements KingdomService {
 
     final Optional<Kingdom> kingdomOptional = kingdomRepository.getKingdom(form.getName());
     if(kingdomOptional.isPresent()) {
-      throw new EntityAlreadyExistsException("Kingdom already exists", Kingdom.class);
+      throw new EntityAlreadyExistsException("Kingdom already exists: " + form.getName(), Kingdom.class);
     }
 
     final Optional<Kingdom> userKingdomOptional = kingdomRepository.getUsersKingdom(owner);

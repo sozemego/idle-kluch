@@ -6,8 +6,8 @@ import java.util.UUID;
 
 public class SpaceAlreadyOccupiedException extends GameException {
 
-  public SpaceAlreadyOccupiedException(final UUID messageId) {
-    super(messageId);
+  public SpaceAlreadyOccupiedException(final UUID messageId, final String message) {
+    super(messageId, message);
   }
 
 }

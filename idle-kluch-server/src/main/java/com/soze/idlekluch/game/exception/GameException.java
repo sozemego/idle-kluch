@@ -15,7 +15,8 @@ public class GameException extends RuntimeException {
 
   private final UUID messageId;
 
-  public GameException(final UUID messageId) {
+  public GameException(final UUID messageId, final String message) {
+    super(message);
     this.messageId = Objects.requireNonNull(messageId);
   }
 

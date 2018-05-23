@@ -13,4 +13,9 @@ public class InvalidPasswordException extends RuntimeException {
   public String getUsername() {
     return username;
   }
+
+  @Override
+  public String getMessage() {
+    return username + " input an invalid password";
+  }
 }

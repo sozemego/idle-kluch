@@ -69,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
   private void validateLogin(LoginForm form) {
     Objects.requireNonNull(form);
     final User user = getUserByUsername(form.getUsername()).<AuthUserDoesNotExistException>orElseThrow(() -> {
-      throw new AuthUserDoesNotExistException("Username " + form.getUsername());
+      throw new AuthUserDoesNotExistException(form.getUsername());
     });
 
     final boolean passwordMatches = passwordHash.matches(form.getPassword(), user.getPasswordHash());

@@ -80,7 +80,7 @@ public class UserRepositoryImpl implements UserRepository {
   public void deleteUser(String username) {
     User user = getUserByUsername(username).orElseThrow(() -> {
       //TODO move this to UserService
-      return new AuthUserDoesNotExistException("Trying to delete non-existent user.");
+      return new AuthUserDoesNotExistException(username);
     });
 
     user.setDeleted(true);

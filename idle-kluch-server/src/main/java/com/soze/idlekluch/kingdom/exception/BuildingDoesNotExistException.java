@@ -10,7 +10,7 @@ public class BuildingDoesNotExistException extends GameException {
   private final String buildingId;
 
   public BuildingDoesNotExistException(final UUID messageId, final String buildingId) {
-    super(messageId);
+    super(messageId, "Building with id: " + buildingId + " does not exist");
     this.buildingId = Objects.requireNonNull(buildingId);
   }
 
