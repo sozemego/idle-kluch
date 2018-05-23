@@ -5,6 +5,7 @@ import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.klecs.entity.Entity;
 
+import java.awt.*;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,6 +37,10 @@ public final class WorldUtils {
     final float centerY = (y + (height / 2));
 
     return Optional.of(new TileId((int) Math.floor(centerX / WorldService.TILE_SIZE), (int) Math.floor(centerY / WorldService.TILE_SIZE)));
+  }
+
+  public static TileId translateCoordinates(final int x, final int y) {
+    return new TileId((int) Math.floor(x / WorldService.TILE_SIZE), (int) Math.floor(y / WorldService.TILE_SIZE));
   }
 
 }

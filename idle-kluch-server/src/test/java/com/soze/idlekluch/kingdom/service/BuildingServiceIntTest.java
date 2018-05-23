@@ -15,7 +15,11 @@ import com.soze.idlekluch.utils.CommonUtils;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.utils.jpa.InvalidUUIDException;
 import com.soze.idlekluch.utils.sql.DatabaseReset;
+import com.soze.idlekluch.world.entity.TileId;
+import com.soze.idlekluch.world.service.WorldService;
+import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.entity.Entity;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -66,10 +70,13 @@ public class BuildingServiceIntTest extends IntAuthTest {
   @Autowired
   private KingdomService kingdomService;
 
+  @Autowired
+  private WorldService worldService;
+
   @BeforeClass
   public static void beforeClass() {
     DatabaseReset.resetDatabase();
-    for (int i = 0; i < 2500; i++) {
+    for (int i = 0; i < 250; i++) {
       AVAILABLE_BUILDING_POSITIONS.add(new Point(i * SEPARATION, i * SEPARATION));
     }
   }
@@ -98,6 +105,8 @@ public class BuildingServiceIntTest extends IntAuthTest {
     final BuildBuildingForm form = new BuildBuildingForm(
         UUID.randomUUID().toString(), SMALL_WAREHOUSE_ID, buildingPosition.x, buildingPosition.y
     );
+
+    worldService.createWorldChunk(WorldUtils.translateCoordinates(buildingPosition.x, buildingPosition.y));
 
     final List<Entity> buildings = buildingService.getOwnBuildings(username);
     final long kingdomIdleBucksBefore = kingdom.getIdleBucks();
@@ -168,6 +177,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
         for(int j = 0; j < 20; j++) {
           try {
             final Point point = nextBuildingPosition();
+            worldService.createWorldChunk(WorldUtils.translateCoordinates(point.x, point.y));
             final BuildBuildingForm form = new BuildBuildingForm(
                 UUID.randomUUID().toString(), SMALL_WAREHOUSE_ID, point.x, point.y
             );

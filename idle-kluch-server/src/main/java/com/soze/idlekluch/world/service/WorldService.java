@@ -31,4 +31,9 @@ public interface WorldService {
    */
   List<Tile> createWorldChunk(final TileId center, final int width, final int height);
 
+  /**
+   * Checks if a tile with given id exists.
+   */
+  boolean tileExists(final TileId tileId);
+
 }

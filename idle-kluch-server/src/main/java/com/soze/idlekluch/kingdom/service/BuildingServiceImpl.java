@@ -20,16 +20,19 @@ import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.service.UserService;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.idlekluch.world.entity.TileId;
+import com.soze.idlekluch.world.service.WorldService;
+import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +45,7 @@ public class BuildingServiceImpl implements BuildingService {
 
   private final GameEngine gameEngine;
   private final EntityService entityService;
+  private final WorldService worldService;
 
   private final Set<EntityUUID> buildings = ConcurrentHashMap.newKeySet();
 
@@ -51,11 +55,13 @@ public class BuildingServiceImpl implements BuildingService {
   public BuildingServiceImpl(final UserService userService,
                              final KingdomService kingdomService,
                              final GameEngine gameEngine,
-                             final EntityService entityService) {
+                             final EntityService entityService,
+                             final WorldService worldService) {
     this.userService = Objects.requireNonNull(userService);
     this.kingdomService = Objects.requireNonNull(kingdomService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.entityService = Objects.requireNonNull(entityService);
+    this.worldService = Objects.requireNonNull(worldService);
   }
 
   @Override
@@ -68,6 +74,12 @@ public class BuildingServiceImpl implements BuildingService {
     final Optional<User> userOptional = userService.getUserByUsername(owner);
     if (!userOptional.isPresent()) {
       throw new AuthUserDoesNotExistException(owner);
+    }
+
+    //check if the tile this building would be placed on exists
+    final TileId tileId = WorldUtils.translateCoordinates(form.getX(), form.getY());
+    if(!worldService.tileExists(tileId)) {
+      throw new SpaceAlreadyOccupiedException(form.getMessageId());
     }
 
     final Entity building = constructBuilding(form);
@@ -117,7 +129,7 @@ public class BuildingServiceImpl implements BuildingService {
     gameEngine.addEntity(building);
 
     buildings.add((EntityUUID) building.getId());
-
+    LOG.info("[{}] constructed building [{}] at [{}]", owner, form.getBuildingId(), new Point(form.getX(), form.getY()));
     return building;
   }
 

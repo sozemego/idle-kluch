@@ -102,4 +102,9 @@ public class WorldServiceImpl implements WorldService {
     return worldRepository.addTiles(tiles);
   }
 
+  @Override
+  public boolean tileExists(final TileId tileId) {
+    return worldRepository.getTile(tileId).isPresent();
+  }
+
 }
