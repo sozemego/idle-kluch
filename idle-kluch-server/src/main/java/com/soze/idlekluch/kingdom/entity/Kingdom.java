@@ -86,4 +86,13 @@ public class Kingdom {
   public void setStartingPoint(final TileId startingPoint) {
     this.startingPoint = startingPoint;
   }
+
+  @Override
+  public String toString() {
+    return "Kingdom{" +
+             "name='" + name + '\'' +
+             ", idleBucks=" + idleBucks +
+             ", owner=" + owner +
+             '}';
+  }
 }
