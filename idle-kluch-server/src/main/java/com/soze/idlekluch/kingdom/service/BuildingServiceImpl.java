@@ -26,11 +26,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,6 +44,8 @@ public class BuildingServiceImpl implements BuildingService {
   private final EntityService entityService;
 
   private final Set<EntityUUID> buildings = ConcurrentHashMap.newKeySet();
+
+  private final Map<String, Object> locks = new ConcurrentHashMap<>();
 
   @Autowired
   public BuildingServiceImpl(final UserService userService,
@@ -69,19 +70,32 @@ public class BuildingServiceImpl implements BuildingService {
       throw new AuthUserDoesNotExistException(owner);
     }
 
-//    final User user = userOptional.get();
+    final Entity building = constructBuilding(form);
+    Kingdom kingdom = null;
+    //the locks are on a per-user basis, since one user can only have one kingdom
+    synchronized (getLock(owner)) {
 
-    //now get user's kingdom
-    final Optional<Kingdom> kingdomOptional = kingdomService.getUsersKingdom(owner);
-    if (!kingdomOptional.isPresent()) {
-      throw new UserDoesNotHaveKingdomException(owner);
+      //now get user's kingdom
+      final Optional<Kingdom> kingdomOptional = kingdomService.getUsersKingdom(owner);
+      if (!kingdomOptional.isPresent()) {
+        throw new UserDoesNotHaveKingdomException(owner);
+      }
+
+      kingdom = kingdomOptional.get();
+
+      //check if player's kingdom has enough cash
+      final CostComponent costComponent = building.getComponent(CostComponent.class);
+      final long idleBucks = kingdom.getIdleBucks();
+      System.out.println(idleBucks);
+      if(idleBucks < costComponent.getIdleBucks()) {
+        throw new CannotAffordBuildingException(form.getMessageId(), form.getBuildingId(), idleBucks, costComponent.getIdleBucks());
+      }
+
+      kingdom.setIdleBucks(idleBucks - costComponent.getIdleBucks());
+      kingdomService.updateKingdom(kingdom);
     }
 
-    final Kingdom kingdom = kingdomOptional.get();
-
     //TODO check world bounds
-
-    final Entity building = constructBuilding(form);
 
     //check for collisions with other buildings
     final Optional<Entity> collidedWith = gameEngine.getEntitiesByNode(Nodes.OCCUPY_SPACE)
@@ -95,16 +109,6 @@ public class BuildingServiceImpl implements BuildingService {
     if(collidedWith.isPresent()) {
       throw new SpaceAlreadyOccupiedException(form.getMessageId());
     }
-
-    //check if player's kingdom has enough cash
-    final CostComponent costComponent = building.getComponent(CostComponent.class);
-    final long idleBucks = kingdom.getIdleBucks();
-    if(idleBucks < costComponent.getIdleBucks()) {
-      throw new CannotAffordBuildingException(form.getMessageId(), form.getBuildingId(), idleBucks, costComponent.getIdleBucks());
-    }
-
-    kingdom.setIdleBucks(idleBucks - costComponent.getIdleBucks());
-    kingdomService.updateKingdom(kingdom);
 
     final OwnershipComponent ownershipComponent = new OwnershipComponent();
     ownershipComponent.setOwnerId(kingdom.getKingdomId());
@@ -188,6 +192,11 @@ public class BuildingServiceImpl implements BuildingService {
     physicsComponent.setY(form.getY());
 
     return building;
+  }
+
+  private Object getLock(final String name) {
+    //TODO clear those locks from time to time
+    return locks.computeIfAbsent(name, k -> new Object());
   }
 
 }

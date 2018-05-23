@@ -151,7 +151,6 @@ public class BuildingServiceIntTest extends IntAuthTest {
   }
 
   @Test
-  @Ignore
   public void testBuildManyBuildingsAtOnceCannotCheatCost() {
     final String username = CommonUtils.generateRandomString(12);
     register(username);
@@ -159,7 +158,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
     createKingdom(username, kingdomName);
 
     final Kingdom kingdom = kingdomService.getUsersKingdom(username).get();
-    kingdom.setIdleBucks(100 * 50); //100 is a cost of a small warehouse so this kingdom should afford 500 of them
+    kingdom.setIdleBucks(100 * 50); //100 is a cost of a small warehouse so this kingdom should afford 50 of them
     kingdomService.updateKingdom(kingdom);
 
     final List<Thread> threads = new ArrayList<>();
