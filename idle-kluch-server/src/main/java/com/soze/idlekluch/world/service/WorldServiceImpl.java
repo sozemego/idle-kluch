@@ -88,7 +88,6 @@ public class WorldServiceImpl implements WorldService {
     );
 
     //3. remove those tileIds which already exist
-    LOG.info("Removing tiles from chunk which already exist.");
     chunkTiles.removeIf(tileId -> worldRepository.getTile(tileId).isPresent());
 
     //4. create Tile objects
