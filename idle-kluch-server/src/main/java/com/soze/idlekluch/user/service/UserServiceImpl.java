@@ -61,21 +61,12 @@ public class UserServiceImpl implements UserService {
     LOG.info("Attempting to create user with username [{}]", username);
     validateUsername(username);
 
-    char[] password = userForm.getPassword();
-    if (password.length == 0) {
-      throw new UserRegistrationException("password", "Password cannot be empty.");
-    }
-
-    if (password.length > MAX_PASSWORD_LENGTH) {
-      throw new UserRegistrationException("password", "Password cannot be longer than " + MAX_PASSWORD_LENGTH);
-    }
-
     if (userRepository.usernameExists(username)) {
       throw new UserRegistrationException("username", username + " already exists.");
     }
 
-    LOG.info("[{}] is free, registering user. ", username);
-
+    char[] password = userForm.getPassword();
+    validatePassword(password);
     String hashedPassword = passwordHash.hashWithSalt(password);
     userForm.reset();
 
@@ -100,7 +91,16 @@ public class UserServiceImpl implements UserService {
     if (username.length() > MAX_USERNAME_LENGTH) {
       throw new UserRegistrationException("username", "Username cannot be longer than " + MAX_USERNAME_LENGTH);
     }
+  }
 
+  private void validatePassword(final char[] password) {
+    if (password.length == 0) {
+      throw new UserRegistrationException("password", "Password cannot be empty.");
+    }
+
+    if (password.length > MAX_PASSWORD_LENGTH) {
+      throw new UserRegistrationException("password", "Password cannot be longer than " + MAX_PASSWORD_LENGTH);
+    }
   }
 
   @Override
@@ -117,7 +117,6 @@ public class UserServiceImpl implements UserService {
   @Override
   public void deleteUser(String username) {
     Objects.requireNonNull(username);
-
     userRepository.deleteUser(username);
   }
 
