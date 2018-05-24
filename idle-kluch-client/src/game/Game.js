@@ -200,6 +200,50 @@ const mouseOut = (event) => {
   // });
 }
 
+const updateSelectedConstructableBuilding = () => {
+  //selected building highlight
+  const selectedConstructableBuilding = getSelectedConstructableBuilding();
+  if (selectedConstructableBuilding && selectedBuildingSprite && selectedBuildingSprite.alive) {
+    const mouseX = game.input.worldX * Math.pow(game.camera.scale.x, -1);
+    const mouseY = game.input.worldY * Math.pow(game.camera.scale.y, -1);
+
+    const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
+    selectedBuildingSprite.x = mouseX - (physicsComponent.width / 2) + game.world.pivot.x;
+    selectedBuildingSprite.y = mouseY - (physicsComponent.height / 2) + game.world.pivot.y;
+    physicsComponent.x = selectedBuildingSprite.x;
+    physicsComponent.y = selectedBuildingSprite.y;
+    selectedBuildingSprite.width = physicsComponent.width;
+    selectedBuildingSprite.height = physicsComponent.height;
+
+    const canAffordSelectedBuilding = checkCanAffordSelectedBuilding();
+    selectedBuildingSprite.alpha = canAffordSelectedBuilding ? 1 : 0.25;
+
+    const selectedConstructableBuildingBounds = new Phaser.Rectangle(
+      physicsComponent.x, physicsComponent.y,
+      physicsComponent.width, physicsComponent.height
+    );
+
+    //check if the building collides with another entity
+    isBuildingConstructable = !checkRectangleIntersectsCollidableEntities(engine, selectedConstructableBuildingBounds);
+
+    //if not, check if it's out of bounds
+    if (isBuildingConstructable) {
+      const tileKey = translateCoordinatesToTile(physicsComponent.x, physicsComponent.y);
+      const tiles = getTiles();
+      if(!tiles[tileKey]) {
+        isBuildingConstructable = false;
+      }
+    }
+
+    if(!isBuildingConstructable) {
+      selectedBuildingSprite.tint = 0xff0000;
+    } else {
+      selectedBuildingSprite.tint = 0xffffff;
+    }
+
+  }
+}
+
 const createGame = () => {
   return new Promise(resolve => {
     let cursors = null;
@@ -274,10 +318,6 @@ const createGame = () => {
     };
 
     const update = () => {
-      // const { x: mouseX, y: mouseY } = game.input;
-      const mouseX = game.input.worldX * Math.pow(game.camera.scale.x, -1);
-      const mouseY = game.input.worldY * Math.pow(game.camera.scale.y, -1);
-
       const scale = game.world.scale.x;
 
       if (cursors.up.isDown) {
@@ -293,44 +333,7 @@ const createGame = () => {
         game.world.pivot.x += 5 * Math.pow(scale, -1);
       }
 
-      //selected building highlight
-      const selectedConstructableBuilding = getSelectedConstructableBuilding();
-      if (selectedConstructableBuilding && selectedBuildingSprite && selectedBuildingSprite.alive) {
-        const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
-        selectedBuildingSprite.x = mouseX - (physicsComponent.width / 2) + game.world.pivot.x;
-        selectedBuildingSprite.y = mouseY - (physicsComponent.height / 2) + game.world.pivot.y;
-        physicsComponent.x = selectedBuildingSprite.x;
-        physicsComponent.y = selectedBuildingSprite.y;
-        selectedBuildingSprite.width = physicsComponent.width;
-        selectedBuildingSprite.height = physicsComponent.height;
-
-        const canAffordSelectedBuilding = checkCanAffordSelectedBuilding();
-        selectedBuildingSprite.alpha = canAffordSelectedBuilding ? 1 : 0.25;
-
-        const selectedConstructableBuildingBounds = new Phaser.Rectangle(
-          physicsComponent.x, physicsComponent.y,
-          physicsComponent.width, physicsComponent.height
-        );
-
-        //check if the building collides with another entity
-        isBuildingConstructable = !checkRectangleIntersectsCollidableEntities(engine, selectedConstructableBuildingBounds);
-
-        //if not, check if it's out of bounds
-        if (isBuildingConstructable) {
-          const tileKey = translateCoordinatesToTile(physicsComponent.x, physicsComponent.y);
-          const tiles = getTiles();
-          if(!tiles[tileKey]) {
-            isBuildingConstructable = false;
-          }
-        }
-
-        if(!isBuildingConstructable) {
-          selectedBuildingSprite.tint = 0xff0000;
-        } else {
-          selectedBuildingSprite.tint = 0xffffff;
-        }
-
-      }
+      updateSelectedConstructableBuilding();
 
       engine.update(game.time.physicsElapsed);
     };
