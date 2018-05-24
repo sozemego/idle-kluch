@@ -75,3 +75,5 @@ export const destroySprite = _.method('destroy', [true, false]);
 export const destroyTileGroup = _.method('children.forEach', destroySprite);
 
 export const getWheelDelta = (event) => event.wheelDelta || -event.deltaY;
+
+export const translateCoordinatesToTile = (x, y) => `${Math.floor(x / TILE_SIZE)}:${Math.floor(y / TILE_SIZE)}`;

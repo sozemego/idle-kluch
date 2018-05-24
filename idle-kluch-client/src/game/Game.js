@@ -21,11 +21,23 @@ import {
   getSelectedConstructableBuilding as _getSelectedConstructableBuilding,
   checkCanAffordSelectedBuilding as _checkCanAffordSelectedBuilding,
 } from "../kingdom/selectors";
+import {
+  getTiles as _getTiles,
+} from "./selectors";
 import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
 import { checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
-import { attachSpawnAnimation, centerCameraAt, destroyTileGroup, DIRECTIONS, getWheelDelta, killSprite } from "./utils";
+import {
+  attachSpawnAnimation,
+  centerCameraAt,
+  destroyTileGroup,
+  DIRECTIONS,
+  getWheelDelta,
+  killSprite,
+  translateCoordinatesToTile,
+} from "./utils";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
+const getTiles = () => _getTiles(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 const getKingdomStartingPoint = () => _getKingdomStartingPoint(store.getState());
 const checkCanAffordSelectedBuilding = () => _checkCanAffordSelectedBuilding(store.getState());
@@ -38,7 +50,7 @@ let selectedBuildingSprite = null;
 let tileGroup = null;
 let entitySprites = null;
 
-let selectedConstructableBuildingCollides = false;
+let isBuildingConstructable = false;
 
 const initialState = {
   tiles: {},
@@ -300,8 +312,19 @@ const createGame = () => {
           physicsComponent.width, physicsComponent.height
         );
 
-        selectedConstructableBuildingCollides = checkRectangleIntersectsCollidableEntities(engine, selectedConstructableBuildingBounds);
-        if(selectedConstructableBuildingCollides) {
+        //check if the building collides with another entity
+        isBuildingConstructable = !checkRectangleIntersectsCollidableEntities(engine, selectedConstructableBuildingBounds);
+
+        //if not, check if it's out of bounds
+        if (isBuildingConstructable) {
+          const tileKey = translateCoordinatesToTile(physicsComponent.x, physicsComponent.y);
+          const tiles = getTiles();
+          if(!tiles[tileKey]) {
+            isBuildingConstructable = false;
+          }
+        }
+
+        if(!isBuildingConstructable) {
           selectedBuildingSprite.tint = 0xff0000;
         } else {
           selectedBuildingSprite.tint = 0xffffff;
