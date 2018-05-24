@@ -8,6 +8,7 @@ import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
+import com.soze.idlekluch.kingdom.exception.InvalidRegisterKingdomException;
 import com.soze.idlekluch.kingdom.exception.UserAlreadyHasKingdomException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.kingdom.repository.KingdomRepository;
@@ -24,18 +25,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.FieldError;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.awt.*;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class KingdomServiceImpl implements KingdomService {
 
   private static final Logger LOG = LoggerFactory.getLogger(KingdomServiceImpl.class);
+  private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
 
   private final KingdomRepository kingdomRepository;
   private final UserRepository userRepository;
@@ -59,6 +66,12 @@ public class KingdomServiceImpl implements KingdomService {
   public void addKingdom(final String owner, final RegisterKingdomForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
+
+    final Set<ConstraintViolation<RegisterKingdomForm>> violations = VALIDATOR.validate(form);
+
+    for (final ConstraintViolation<RegisterKingdomForm> violation: violations) {
+      throw new InvalidRegisterKingdomException(violation.getPropertyPath().toString(), violation.getMessage());
+    }
 
     final Optional<Kingdom> kingdomOptional = kingdomRepository.getKingdom(form.getName());
     if(kingdomOptional.isPresent()) {

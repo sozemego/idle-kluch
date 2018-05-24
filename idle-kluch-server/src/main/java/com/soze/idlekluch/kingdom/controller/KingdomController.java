@@ -37,12 +37,7 @@ public class KingdomController {
 
   @PostMapping(path = Routes.KINGDOM_CREATE)
   public ResponseEntity createKingdom(final Principal principal,
-                                      @Valid @RequestBody final RegisterKingdomForm form,
-                                      final BindingResult bindingResult) {
-
-    for (final FieldError error: bindingResult.getFieldErrors()) {
-      throw new InvalidRegisterKingdomException(error.getField(), error.getDefaultMessage());
-    }
+                                      @RequestBody final RegisterKingdomForm form) {
 
     final String username = principal.getName();
     this.kingdomService.addKingdom(username, form);
