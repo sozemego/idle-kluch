@@ -50,12 +50,14 @@ export const onCanvasClicked = (x, y) => {
     //canvas was clicked, lets check what we can do
     const selectedConstructableBuilding = getSelectedConstructableBuilding(getState);
     if (selectedConstructableBuilding) {
+      //check player money
       const kingdom = getKingdom(getState);
       const costComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.COST);
       if(kingdom.idleBucks < costComponent.idleBucks) {
         return Promise.resolve();
       }
 
+      //check if doesn't collide with any other entities
       const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
       const bounds = new Phaser.Rectangle(physicsComponent.x, physicsComponent.y, physicsComponent.width, physicsComponent.height);
       const selectedConstructableBuildingCollides = checkRectangleIntersectsCollidableEntities(gameContainer.engine, bounds);
