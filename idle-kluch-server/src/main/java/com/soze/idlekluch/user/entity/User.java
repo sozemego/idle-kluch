@@ -83,7 +83,6 @@ public class User {
     return "User{" +
       "userId=" + userId +
       ", username='" + username + '\'' +
-      ", passwordHash='" + passwordHash + '\'' +
       ", createdAt=" + createdAt +
       '}';
   }
