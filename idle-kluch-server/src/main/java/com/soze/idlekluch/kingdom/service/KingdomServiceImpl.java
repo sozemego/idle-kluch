@@ -37,6 +37,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class KingdomServiceImpl implements KingdomService {
@@ -73,15 +74,17 @@ public class KingdomServiceImpl implements KingdomService {
       throw new InvalidRegisterKingdomException(violation.getPropertyPath().toString(), violation.getMessage());
     }
 
-    final Optional<Kingdom> kingdomOptional = kingdomRepository.getKingdom(form.getName());
-    if(kingdomOptional.isPresent()) {
-      throw new EntityAlreadyExistsException("Kingdom already exists: " + form.getName(), Kingdom.class);
-    }
+    kingdomRepository
+      .getKingdom(form.getName())
+      .ifPresent((k) -> {
+        throw new EntityAlreadyExistsException("Kingdom already exists: " + form.getName(), Kingdom.class);
+      });
 
-    final Optional<Kingdom> userKingdomOptional = kingdomRepository.getUsersKingdom(owner);
-    if(userKingdomOptional.isPresent()) {
-      throw new UserAlreadyHasKingdomException(owner, form.getName());
-    }
+    kingdomRepository
+      .getUsersKingdom(owner)
+      .ifPresent((k) -> {
+        throw new UserAlreadyHasKingdomException(owner, form.getName());
+      });
 
     final TileId startingPoint = findStartingPoint();
     LOG.info("Starting point for kingdom [{}] is [{}]", form.getName(), startingPoint);
@@ -143,29 +146,31 @@ public class KingdomServiceImpl implements KingdomService {
    * tiles away.
    */
   private TileId findStartingPoint() {
-    //1. Load all buildings
-    final List<Entity> buildings = entityService.getEntitiesByNode(Nodes.BUILDING);
-    //2. Get all their positions and translate them to coordinates of tiles
-    final List<Point> points = buildings
-                                 .stream()
-                                 .map(WorldUtils::getEntityTileId)
-                                 .filter(Optional::isPresent)
-                                 .map(Optional::get)
+    final List<Point> points = Stream.concat(getAllBuildingTiles(), getAllKingdomStartingTiles())
                                  .map(tileId -> new Point(tileId.getX(), tileId.getY()))
                                  .collect(Collectors.toList());
 
-    //3. We also need to get all kingdom starting points. A player may have zero buildings,
-    //   we still need to make sure the minimum distance is respected.
-    kingdomRepository.getAllKingdoms()
-      .forEach(kingdom -> {
-        final TileId startingPoint = kingdom.getStartingPoint();
-        points.add(new Point(startingPoint.getX(), startingPoint.getY()));
-      });
-
     final PoissonDiscSampler sampler = new PoissonDiscSampler(points, MINIMUM_DISTANCE_BETWEEN_KINGDOMS);
-    final Point nextPoint = sampler.nextPoint();
+    return TileId.from(sampler.nextPoint());
+  }
 
-    return new TileId(nextPoint.x, nextPoint.y);
+  /**
+   * Returns a stream of TileId for all constructed buildings.
+   */
+  private Stream<TileId> getAllBuildingTiles() {
+    return entityService
+             .getEntitiesByNode(Nodes.BUILDING)
+             .stream()
+             .map(WorldUtils::getEntityTileId)
+             .filter(Optional::isPresent)
+             .map(Optional::get);
+  }
+
+  private Stream<TileId> getAllKingdomStartingTiles() {
+    return kingdomRepository
+             .getAllKingdoms()
+             .stream()
+             .map(Kingdom::getStartingPoint);
   }
 
 }

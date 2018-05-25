@@ -2,6 +2,7 @@ package com.soze.idlekluch.world.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.awt.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -41,6 +42,10 @@ public class TileId implements Serializable {
 
   public static TileId from(final int x, final int y) {
     return new TileId(x, y);
+  }
+
+  public static TileId from(final Point point) {
+    return new TileId(point.x, point.y);
   }
 
   @Override
