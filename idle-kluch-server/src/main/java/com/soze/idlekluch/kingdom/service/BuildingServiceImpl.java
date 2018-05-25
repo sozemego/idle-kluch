@@ -71,49 +71,14 @@ public class BuildingServiceImpl implements BuildingService {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
 
-    //check if owner exists, just in case
-    userService.getUserByUsername(owner).<AuthUserDoesNotExistException>orElseThrow(() -> {
-      throw new AuthUserDoesNotExistException(owner);
-    });
-
-    //check if the tile this building would be placed on exists
-    final TileId tileId = WorldUtils.translateCoordinates(form.getX(), form.getY());
-    if(!worldService.tileExists(tileId)) {
-      throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by void, cannot place outside of tiles");
-    }
+    validateUser(owner);
+    validateKingdom(owner);
+    validateTileExists(form);
+    validateCost(owner, form);
+    validateCollision(form);
 
     final Entity building = constructBuilding(form);
-    Kingdom kingdom = null;
-    //the locks are on a per-user basis, since one user can only have one kingdom
-    synchronized (getLock(owner)) {
-
-      //now get user's kingdom
-      kingdom = kingdomService
-                  .getUsersKingdom(owner)
-                  .<UserDoesNotHaveKingdomException>orElseThrow(() -> {
-                    throw new UserDoesNotHaveKingdomException(owner);
-                  });
-
-      //check if player's kingdom has enough cash
-      final CostComponent costComponent = building.getComponent(CostComponent.class);
-      final long idleBucks = kingdom.getIdleBucks();
-      if(idleBucks < costComponent.getIdleBucks()) {
-        throw new CannotAffordBuildingException(form.getMessageId(), form.getBuildingId(), idleBucks, costComponent.getIdleBucks());
-      }
-
-      kingdom.setIdleBucks(idleBucks - costComponent.getIdleBucks());
-      kingdomService.updateKingdom(kingdom);
-    }
-
-    //check for collisions with other buildings
-    gameEngine
-      .getEntitiesByNode(Nodes.OCCUPY_SPACE)
-      .stream()
-      .filter(entity -> EntityUtils.doesCollide(building, entity))
-      .findFirst()
-      .ifPresent(entity -> {
-        throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by entityId: " + entity.getId());
-      });
+    final Kingdom kingdom = kingdomService.getUsersKingdom(owner).get();
 
     final OwnershipComponent ownershipComponent = new OwnershipComponent();
     ownershipComponent.setOwnerId(kingdom.getKingdomId());
@@ -125,6 +90,20 @@ public class BuildingServiceImpl implements BuildingService {
     buildings.add((EntityUUID) building.getId());
     LOG.info("[{}] constructed building [{}] at [{}]", owner, form.getBuildingId(), new Point(form.getX(), form.getY()));
     return building;
+  }
+
+  private void validateCollision(final BuildBuildingForm form) {
+    final Point buildingPosition = new Point(form.getX(), form.getY());
+
+    //check for collisions with other buildings
+    gameEngine
+      .getEntitiesByNode(Nodes.OCCUPY_SPACE)
+      .stream()
+      .filter(entity -> EntityUtils.intersects(entity, buildingPosition))
+      .findFirst()
+      .ifPresent(entity -> {
+        throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by entityId: " + entity.getId());
+      });
   }
 
   @Override
@@ -198,9 +177,63 @@ public class BuildingServiceImpl implements BuildingService {
     return building;
   }
 
+  private int getBuildingCost(final BuildBuildingForm form) {
+    final Entity buildingTemplate = entityService
+                                      .getEntityTemplate(EntityUUID.fromString(form.getBuildingId()))
+                                      .<BuildingDoesNotExistException>orElseThrow(() -> {
+                                        throw new BuildingDoesNotExistException(form.getMessageId(), form.getBuildingId());
+                                      });
+
+    return buildingTemplate.getComponent(CostComponent.class).getIdleBucks();
+  }
+
   private Object getLock(final String name) {
     //TODO clear those locks from time to time
     return locks.computeIfAbsent(name, k -> new Object());
+  }
+
+  private void validateTileExists(final BuildBuildingForm form) {
+    final TileId tileId = WorldUtils.translateCoordinates(form.getX(), form.getY());
+    if(!worldService.tileExists(tileId)) {
+      throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by void, cannot place outside of tiles");
+    }
+  }
+
+  private void validateUser(final String owner) {
+    userService
+      .getUserByUsername(owner)
+      .<AuthUserDoesNotExistException>orElseThrow(() -> {
+        throw new AuthUserDoesNotExistException(owner);
+      });
+  }
+
+  private void validateKingdom(final String owner) {
+    kingdomService
+      .getUsersKingdom(owner)
+      .<UserDoesNotHaveKingdomException>orElseThrow(() -> {
+        throw new UserDoesNotHaveKingdomException(owner);
+      });
+  }
+
+  private void validateCost(final String owner, final BuildBuildingForm form) {
+    //the locks are on a per-user basis, since one user can only have one kingdom
+    synchronized (getLock(owner)) {
+
+      final Kingdom kingdom = kingdomService
+                  .getUsersKingdom(owner)
+                  .<UserDoesNotHaveKingdomException>orElseThrow(() -> {
+                    throw new UserDoesNotHaveKingdomException(owner);
+                  });
+
+      final int cost = getBuildingCost(form);
+      final long idleBucks = kingdom.getIdleBucks();
+      if(idleBucks < cost) {
+        throw new CannotAffordBuildingException(form.getMessageId(), form.getBuildingId(), idleBucks, cost);
+      }
+
+      kingdom.setIdleBucks(idleBucks - cost);
+      kingdomService.updateKingdom(kingdom);
+    }
   }
 
 }

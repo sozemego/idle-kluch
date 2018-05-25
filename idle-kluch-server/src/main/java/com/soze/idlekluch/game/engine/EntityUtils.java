@@ -51,5 +51,21 @@ public class EntityUtils {
     return false;
   }
 
+  /**
+   * Checks if given point is within bounds of the entity.
+   * The bounds are a rectangle.
+   */
+  public static boolean intersects(final Entity entity, final Point point) {
+    final PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
+
+    final Rectangle rectangle = new Rectangle(
+      (int) physicsComponent.getX(),
+      (int) physicsComponent.getY(),
+      (int) physicsComponent.getWidth(),
+      (int) physicsComponent.getHeight()
+    );
+
+    return rectangle.intersects(new Rectangle(point.x, point.y, 1, 1));
+  }
 
 }
