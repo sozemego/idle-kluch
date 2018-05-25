@@ -68,23 +68,8 @@ public class KingdomServiceImpl implements KingdomService {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
 
-    final Set<ConstraintViolation<RegisterKingdomForm>> violations = VALIDATOR.validate(form);
-
-    for (final ConstraintViolation<RegisterKingdomForm> violation: violations) {
-      throw new InvalidRegisterKingdomException(violation.getPropertyPath().toString(), violation.getMessage());
-    }
-
-    kingdomRepository
-      .getKingdom(form.getName())
-      .ifPresent((k) -> {
-        throw new EntityAlreadyExistsException("Kingdom already exists: " + form.getName(), Kingdom.class);
-      });
-
-    kingdomRepository
-      .getUsersKingdom(owner)
-      .ifPresent((k) -> {
-        throw new UserAlreadyHasKingdomException(owner, form.getName());
-      });
+    validateKingdomForm(form);
+    validateKingdom(owner, form);
 
     final TileId startingPoint = findStartingPoint();
     LOG.info("Starting point for kingdom [{}] is [{}]", form.getName(), startingPoint);
@@ -105,20 +90,42 @@ public class KingdomServiceImpl implements KingdomService {
     LOG.info("User [{}] successfully created kingdom [{}]", owner, form.getName());
   }
 
+  private void validateKingdomForm(final RegisterKingdomForm form) {
+    final Set<ConstraintViolation<RegisterKingdomForm>> violations = VALIDATOR.validate(form);
+
+    for (final ConstraintViolation<RegisterKingdomForm> violation: violations) {
+      throw new InvalidRegisterKingdomException(violation.getPropertyPath().toString(), violation.getMessage());
+    }
+  }
+
+  private void validateKingdom(final String owner, final RegisterKingdomForm form) {
+    kingdomRepository
+      .getKingdom(form.getName())
+      .ifPresent((k) -> {
+        throw new EntityAlreadyExistsException("Kingdom already exists: " + form.getName(), Kingdom.class);
+      });
+
+    kingdomRepository
+      .getUsersKingdom(owner)
+      .ifPresent((k) -> {
+        throw new UserAlreadyHasKingdomException(owner, form.getName());
+      });
+  }
+
   @Override
   @Transactional
   @Authorized
   public void removeKingdom(final String owner) {
     Objects.requireNonNull(owner);
-    final Optional<Kingdom> kingdomOptional = kingdomRepository.getUsersKingdom(owner);
 
-    if(kingdomOptional.isPresent()) {
-      LOG.info("Found kingdom of user [{}], removing", owner);
-      kingdomRepository.removeKingdom(kingdomOptional.get());
-    } else {
-      throw new UserDoesNotHaveKingdomException(owner);
-    }
+    final Kingdom kingdom = kingdomRepository
+                              .getUsersKingdom(owner)
+                              .<UserDoesNotHaveKingdomException>orElseThrow(() -> {
+                                throw new UserDoesNotHaveKingdomException(owner);
+                              });
 
+    LOG.info("Found kingdom of user [{}], removing", owner);
+    kingdomRepository.removeKingdom(kingdom);
   }
 
   @Override
