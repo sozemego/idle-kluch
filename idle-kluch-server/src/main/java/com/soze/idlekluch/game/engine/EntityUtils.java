@@ -1,6 +1,7 @@
 package com.soze.idlekluch.game.engine;
 
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.klecs.entity.Entity;
 
 import java.awt.*;
 import java.util.Objects;
@@ -34,6 +35,20 @@ public class EntityUtils {
     );
 
     return rectangle1.intersects(rectangle2);
+  }
+
+  public static boolean doesCollide(final Entity entity1, final Entity entity2) {
+    Objects.requireNonNull(entity1);
+    Objects.requireNonNull(entity2);
+
+    final PhysicsComponent physicsComponent1 = entity1.getComponent(PhysicsComponent.class);
+    final PhysicsComponent physicsComponent2 = entity2.getComponent(PhysicsComponent.class);
+
+    if(physicsComponent1 != null && physicsComponent2 != null) {
+      return doesCollide(physicsComponent1, physicsComponent2);
+    }
+
+    return false;
   }
 
 

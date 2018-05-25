@@ -12,17 +12,13 @@ import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
-import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
 import com.soze.idlekluch.kingdom.exception.CannotAffordBuildingException;
 import com.soze.idlekluch.kingdom.exception.SpaceAlreadyOccupiedException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
-import com.soze.idlekluch.user.dto.RegisterUserForm;
-import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.service.UserService;
-import com.soze.idlekluch.utils.CommonUtils;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.service.WorldService;
@@ -31,20 +27,12 @@ import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -84,10 +72,9 @@ public class BuildingServiceImpl implements BuildingService {
     Objects.requireNonNull(form);
 
     //check if owner exists, just in case
-    final Optional<User> userOptional = userService.getUserByUsername(owner);
-    if (!userOptional.isPresent()) {
+    userService.getUserByUsername(owner).<AuthUserDoesNotExistException>orElseThrow(() -> {
       throw new AuthUserDoesNotExistException(owner);
-    }
+    });
 
     //check if the tile this building would be placed on exists
     final TileId tileId = WorldUtils.translateCoordinates(form.getX(), form.getY());
@@ -101,12 +88,10 @@ public class BuildingServiceImpl implements BuildingService {
     synchronized (getLock(owner)) {
 
       //now get user's kingdom
-      final Optional<Kingdom> kingdomOptional = kingdomService.getUsersKingdom(owner);
-      if (!kingdomOptional.isPresent()) {
-        throw new UserDoesNotHaveKingdomException(owner);
-      }
-
-      kingdom = kingdomOptional.get();
+      kingdom = kingdomService.getUsersKingdom(owner)
+                  .<UserDoesNotHaveKingdomException>orElseThrow(() -> {
+                    throw new UserDoesNotHaveKingdomException(owner);
+                  });
 
       //check if player's kingdom has enough cash
       final CostComponent costComponent = building.getComponent(CostComponent.class);
@@ -119,20 +104,14 @@ public class BuildingServiceImpl implements BuildingService {
       kingdomService.updateKingdom(kingdom);
     }
 
-    //TODO check world bounds
-
     //check for collisions with other buildings
-    final Optional<Entity> collidedWith = gameEngine.getEntitiesByNode(Nodes.OCCUPY_SPACE)
-                                                .stream()
-                                                .filter(entity -> {
-                                                  final PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
-                                                  return EntityUtils.doesCollide(building.getComponent(PhysicsComponent.class), physicsComponent);
-                                                })
-                                                .findFirst();
-
-    if(collidedWith.isPresent()) {
-      throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by entityId: " + collidedWith.get().getId());
-    }
+    gameEngine.getEntitiesByNode(Nodes.OCCUPY_SPACE)
+      .stream()
+      .filter(entity -> EntityUtils.doesCollide(building, entity))
+      .findFirst()
+      .ifPresent(entity -> {
+        throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by entityId: " + entity.getId());
+      });
 
     final OwnershipComponent ownershipComponent = new OwnershipComponent();
     ownershipComponent.setOwnerId(kingdom.getKingdomId());
