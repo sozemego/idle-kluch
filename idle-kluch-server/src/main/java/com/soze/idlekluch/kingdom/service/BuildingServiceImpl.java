@@ -88,7 +88,8 @@ public class BuildingServiceImpl implements BuildingService {
     synchronized (getLock(owner)) {
 
       //now get user's kingdom
-      kingdom = kingdomService.getUsersKingdom(owner)
+      kingdom = kingdomService
+                  .getUsersKingdom(owner)
                   .<UserDoesNotHaveKingdomException>orElseThrow(() -> {
                     throw new UserDoesNotHaveKingdomException(owner);
                   });
@@ -105,7 +106,8 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     //check for collisions with other buildings
-    gameEngine.getEntitiesByNode(Nodes.OCCUPY_SPACE)
+    gameEngine
+      .getEntitiesByNode(Nodes.OCCUPY_SPACE)
       .stream()
       .filter(entity -> EntityUtils.doesCollide(building, entity))
       .findFirst()
@@ -130,21 +132,21 @@ public class BuildingServiceImpl implements BuildingService {
   public List<Entity> getOwnBuildings(final String owner) {
     Objects.requireNonNull(owner);
 
-    final Optional<Kingdom> kingdom = kingdomService.getUsersKingdom(owner);
-    if (!kingdom.isPresent()) {
-      throw new UserDoesNotHaveKingdomException(owner);
-    }
+    final EntityUUID kingdomId = kingdomService
+                                   .getUsersKingdom(owner)
+                                   .<UserDoesNotHaveKingdomException>orElseThrow(() -> {
+                                     throw new UserDoesNotHaveKingdomException(owner);
+                                   })
+                                   .getKingdomId();
 
-    final EntityUUID kingdomId = kingdom.get().getKingdomId();
-
-    return gameEngine.getEntitiesByNode(Nodes.OWNERSHIP)
+    return gameEngine
+             .getEntitiesByNode(Nodes.OWNERSHIP)
              .stream()
              .filter(entity -> {
                final OwnershipComponent ownershipComponent = entity.getComponent(OwnershipComponent.class);
                return kingdomId.equals(ownershipComponent.getOwnerId());
              })
              .collect(Collectors.toList());
-
   }
 
   @Override
@@ -180,13 +182,12 @@ public class BuildingServiceImpl implements BuildingService {
   private Entity constructBuilding(final BuildBuildingForm form) {
     Objects.requireNonNull(form);
 
-    final Optional<Entity> templateOptional = entityService.getEntityTemplate(EntityUUID.fromString(form.getBuildingId()));
+    final Entity buildingTemplate = entityService
+                                      .getEntityTemplate(EntityUUID.fromString(form.getBuildingId()))
+                                      .<BuildingDoesNotExistException>orElseThrow(() -> {
+                                        throw new BuildingDoesNotExistException(form.getMessageId(), form.getBuildingId());
+                                      });
 
-    if(!templateOptional.isPresent()) {
-      throw new BuildingDoesNotExistException(form.getMessageId(), form.getBuildingId());
-    }
-
-    final Entity buildingTemplate = templateOptional.get();
     final Entity building = gameEngine.createEmptyEntity();
     entityService.copyEntity(buildingTemplate, building);
 
