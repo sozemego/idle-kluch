@@ -51,6 +51,7 @@ public class WorldServiceImpl implements WorldService {
   }
 
   @Override
+  @Profiled
   public List<Tile> createWorldChunk(final TileId center) {
     return createWorldChunk(center, 15, 15);
   }
