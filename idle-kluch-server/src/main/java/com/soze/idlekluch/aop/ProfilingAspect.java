@@ -34,7 +34,7 @@ public class ProfilingAspect {
 
     LOG.info(
       PROFILING_MARKER,
-      "[{}] [{} ms] [{}]",
+      "[{}] [{} s] [{}]",
       pjp.getSignature().toShortString(),
       String.format("%.6f", totalTime),
       pjp.getArgs()
