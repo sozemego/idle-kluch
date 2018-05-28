@@ -72,7 +72,7 @@ export const registerKingdom = kingdomName => {
 export const deleteKingdom = () => {
   return (dispatch, getState) => {
 
-    if(isDeletingKingdom(getState)) {
+    if (isDeletingKingdom(getState)) {
       return Promise.resolve();
     }
 
@@ -81,9 +81,10 @@ export const deleteKingdom = () => {
     return kingdomService
       .deleteKingdom()
       .then(() => {
-        dispatch(setKingdom(null));
-        dispatch(setDeletingKingdom(false));
+        window.location.reload();
       })
-      .catch(err => dispatch(setDeletingKingdom(false)));
+      .catch(err => {
+        window.location.reload();
+      });
   };
 };

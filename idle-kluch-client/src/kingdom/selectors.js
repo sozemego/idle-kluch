@@ -34,6 +34,9 @@ export const getSelectedConstructableBuilding = state => root(state).selectedCon
 
 export const checkCanAffordSelectedBuilding = state => {
   const kingdom = getKingdom(state);
+  if(!kingdom) {
+    return false;
+  }
   const { idleBucks } = kingdom;
 
   const selectedBuilding = getSelectedConstructableBuilding(state);
