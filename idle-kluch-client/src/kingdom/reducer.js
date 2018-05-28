@@ -9,6 +9,7 @@ const initialState = {
   kingdom: null,
   constructableBuildings: [],
   selectedConstructableBuilding: null,
+  deletingKingdom: false,
 };
 
 const idleBucksChanged = (state, action) => {
@@ -24,6 +25,7 @@ const kingdom = createReducer(_.cloneDeep(initialState), {
   [ KINGDOM_ACTIONS.SET_CONSTRUCTABLE_BUILDINGS ]: makeSetter("constructableBuildings"),
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: makeSetter("selectedConstructableBuilding"),
   [ KINGDOM_ACTIONS.IDLE_BUCKS_CHANGED ]: idleBucksChanged,
+  [ KINGDOM_ACTIONS.SET_DELETING_KINGDOM ]: makeSetter("deletingKingdom"),
   [ APP_ACTIONS.LOGOUT ]: () => _.cloneDeep(initialState),
 });
 

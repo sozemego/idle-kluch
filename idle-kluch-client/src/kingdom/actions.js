@@ -1,5 +1,6 @@
 import { makeActionCreator } from "../store/utils";
 import { KingdomService as kingdomService } from "./KingdomService";
+import { isDeletingKingdom } from "./selectors";
 
 export const SET_KINGDOM = "SET_KINGDOM";
 export const setKingdom = makeActionCreator(SET_KINGDOM, "payload");
@@ -30,6 +31,9 @@ export const setSelectedConstructableBuilding = makeActionCreator(
 
 export const IDLE_BUCKS_CHANGED = "IDLE_BUCKS_CHANGED";
 export const idleBucksChanged = makeActionCreator(IDLE_BUCKS_CHANGED, "payload");
+
+export const SET_DELETING_KINGDOM = "SET_DELETING_KINGDOM";
+export const setDeletingKingdom = makeActionCreator(SET_DELETING_KINGDOM, "payload");
 
 /**
  * Loads kingdom for the logged in user.
@@ -67,8 +71,19 @@ export const registerKingdom = kingdomName => {
 
 export const deleteKingdom = () => {
   return (dispatch, getState) => {
+
+    if(isDeletingKingdom(getState)) {
+      return Promise.resolve();
+    }
+
+    dispatch(setDeletingKingdom(true));
+
     return kingdomService
       .deleteKingdom()
-      .then(() => dispatch(setKingdom(null)));
+      .then(() => {
+        dispatch(setKingdom(null));
+        dispatch(setDeletingKingdom(false));
+      })
+      .catch(err => dispatch(setDeletingKingdom(false)));
   };
 };

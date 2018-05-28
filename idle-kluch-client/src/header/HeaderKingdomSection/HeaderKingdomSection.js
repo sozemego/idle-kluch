@@ -6,7 +6,7 @@ import * as kingdomActions from "../../kingdom/actions";
 
 import avatar from "../avatar_temp.png";
 import styles from "./header-kingdom-section.css";
-import { getKingdom, hasKingdom } from "../../kingdom/selectors";
+import { getKingdom, hasKingdom, isDeletingKingdom } from "../../kingdom/selectors";
 import { Menu, MenuItem, Popover } from "material-ui";
 
 class HeaderKingdomSection extends Component {
@@ -27,7 +27,7 @@ class HeaderKingdomSection extends Component {
   };
 
   render() {
-    const { hasKingdom, kingdom, deleteKingdom } = this.props;
+    const { hasKingdom, kingdom, deleteKingdom, deletingKingdom } = this.props;
 
     if (!hasKingdom) {
       return null;
@@ -56,6 +56,7 @@ class HeaderKingdomSection extends Component {
           <MenuItem
             value="Delete kingdom"
             primaryText={"Delete kingdom"}
+            style={deletingKingdom ? { opacity: 0.5 }: {} }
             onClick={() => {
               this.setState({ kingdomMenuOpen: false });
               deleteKingdom();
@@ -70,6 +71,7 @@ class HeaderKingdomSection extends Component {
 HeaderKingdomSection.propTypes = {
   hasKingdom: PropTypes.bool.isRequired,
   kingdom: PropTypes.object,
+  deletingKingdom: PropTypes.bool.isRequired,
 };
 
 HeaderKingdomSection.defaultProps = {
@@ -80,6 +82,7 @@ const mapStateToProps = state => {
   return {
     hasKingdom: hasKingdom(state),
     kingdom: getKingdom(state),
+    deletingKingdom: isDeletingKingdom(state),
   };
 };
 

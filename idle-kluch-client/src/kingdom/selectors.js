@@ -10,6 +10,8 @@ export const hasKingdom = state => !!getKingdom(state);
 export const shouldShowCreateKingdomForm = state => root(state).showCreateKingdomForm;
 export const getKingdomNameRegistrationError = state => root(state).kingdomNameRegistrationError;
 
+export const isDeletingKingdom = state => root(state).deletingKingdom;
+
 export const getConstructableBuildingsData = state => root(state).constructableBuildings;
 
 export const getConstructableBuildingsList = state => {
