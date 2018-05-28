@@ -23,6 +23,7 @@ import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.idlekluch.world.utils.WorldUtils;
+import com.soze.klecs.engine.RemovedEntityEvent;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,6 +153,12 @@ public class BuildingServiceImpl implements BuildingService {
     Objects.requireNonNull(buildingId);
     throw new IllegalStateException("NOT IMPLEMENTED YET DESTROY BUILDING");
 //    buildingRepository.removeBuilding(buildingId);
+  }
+
+  @Override
+  public void handleRemovedEntity(final RemovedEntityEvent removedEntityEvent) {
+    Objects.requireNonNull(removedEntityEvent);
+    buildings.remove(removedEntityEvent.getEntity().getId());
   }
 
   /**

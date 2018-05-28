@@ -4,7 +4,9 @@ import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.klecs.engine.RemovedEntityEvent;
 import com.soze.klecs.entity.Entity;
+import org.springframework.context.event.EventListener;
 
 import java.util.List;
 
@@ -28,5 +30,8 @@ public interface BuildingService {
    * Attempts to delete a building with given buildingId.
    */
   void destroyBuilding(final EntityUUID buildingId);
+
+  @EventListener
+  void handleRemovedEntity(final RemovedEntityEvent removedEntityEvent);
 
 }
