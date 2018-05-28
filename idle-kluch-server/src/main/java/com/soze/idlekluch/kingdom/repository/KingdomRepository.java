@@ -23,11 +23,10 @@ public interface KingdomRepository {
   Optional<Kingdom> getUsersKingdom(final String username);
 
   /**
-   * Deletes the kingdom.
-   * @param kingdom
+   * Deletes kingdom with given name.
    * @throws EntityDoesNotExistException if kingdom does not exist
    */
-  void removeKingdom(final Kingdom kingdom);
+  void removeKingdom(final String name);
 
   /**
    * Updates a given kingdom.

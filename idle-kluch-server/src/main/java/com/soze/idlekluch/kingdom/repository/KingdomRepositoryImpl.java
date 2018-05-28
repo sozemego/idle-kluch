@@ -50,8 +50,14 @@ public class KingdomRepositoryImpl implements KingdomRepository {
 
   @Override
   @Transactional
-  public void removeKingdom(final Kingdom kingdom) {
-    Objects.requireNonNull(kingdom);
+  public void removeKingdom(final String name) {
+    Objects.requireNonNull(name);
+
+    final Kingdom kingdom = getKingdom(name)
+                              .<EntityDoesNotExistException>orElseThrow(() -> {
+                                return new EntityDoesNotExistException("Kingdom " + name + " does not exist", Kingdom.class);
+                              });
+
     try {
       em.remove(kingdom);
     } catch (IllegalArgumentException e) {

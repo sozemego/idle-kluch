@@ -32,10 +32,9 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.awt.*;
 import java.time.OffsetDateTime;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,6 +48,8 @@ public class KingdomServiceImpl implements KingdomService {
   private final UserRepository userRepository;
   private final WorldService worldService;
   private final EntityService entityService;
+
+  private final Map<String, Object> locks = new ConcurrentHashMap<>();
 
   @Autowired
   public KingdomServiceImpl(final KingdomRepository kingdomRepository,
@@ -113,19 +114,20 @@ public class KingdomServiceImpl implements KingdomService {
   }
 
   @Override
-  @Transactional
   @Authorized
   public void removeKingdom(final String owner) {
     Objects.requireNonNull(owner);
 
-    final Kingdom kingdom = kingdomRepository
-                              .getUsersKingdom(owner)
-                              .<UserDoesNotHaveKingdomException>orElseThrow(() -> {
-                                throw new UserDoesNotHaveKingdomException(owner);
-                              });
+    synchronized (getLock(owner)) {
+      final Kingdom kingdom = kingdomRepository
+                                .getUsersKingdom(owner)
+                                .<UserDoesNotHaveKingdomException>orElseThrow(() -> {
+                                  throw new UserDoesNotHaveKingdomException(owner);
+                                });
 
-    LOG.info("Found kingdom of user [{}], removing", owner);
-    kingdomRepository.removeKingdom(kingdom);
+      LOG.info("Found kingdom of user [{}], removing", owner);
+      kingdomRepository.removeKingdom(kingdom.getName());
+    }
   }
 
   @Override
@@ -178,6 +180,10 @@ public class KingdomServiceImpl implements KingdomService {
              .getAllKingdoms()
              .stream()
              .map(Kingdom::getStartingPoint);
+  }
+
+  public Object getLock(final String name) {
+    return locks.computeIfAbsent(name, k -> new Object());
   }
 
 }
