@@ -45,6 +45,7 @@ public class IntAuthTest {
   }
 
   protected void createKingdom(final String username, final String kingdomName, final long idleBucks) {
+    register(username);
     kingdomService.addKingdom(username, new RegisterKingdomForm(kingdomName));
     final Kingdom kingdom = kingdomService.getKingdom(kingdomName).get();
     kingdom.setIdleBucks(idleBucks);
