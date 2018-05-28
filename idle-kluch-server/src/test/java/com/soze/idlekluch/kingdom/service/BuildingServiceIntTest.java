@@ -97,7 +97,6 @@ public class BuildingServiceIntTest extends IntAuthTest {
   @Test
   public void testBuildBuilding() throws Exception {
     final String username = CommonUtils.generateRandomString(15);
-    register(username);
     createKingdom(username, CommonUtils.generateRandomString(15));
     final Kingdom kingdom = kingdomService.getUsersKingdom(username).get();
 
@@ -119,7 +118,6 @@ public class BuildingServiceIntTest extends IntAuthTest {
   @Test(expected = InvalidUUIDException.class)
   public void testBuildBuildingInvalidUUID() throws Exception {
     final String username = CommonUtils.generateRandomString(15);
-    register(username);
     createKingdom(username, CommonUtils.generateRandomString(15));
 
     final BuildBuildingForm form = new BuildBuildingForm(
@@ -132,7 +130,6 @@ public class BuildingServiceIntTest extends IntAuthTest {
   @Test(expected = BuildingDoesNotExistException.class)
   public void testBuildBuildingDoesNotExist() throws Exception {
     final String username = CommonUtils.generateRandomString(15);
-    register(username);
     createKingdom(username, CommonUtils.generateRandomString(15));
 
     final BuildBuildingForm form = new BuildBuildingForm(
@@ -145,7 +142,6 @@ public class BuildingServiceIntTest extends IntAuthTest {
   @Test(expected = CannotAffordBuildingException.class)
   public void testBuildBuildingCannotAfford() {
     final String username = "poorguy" + CommonUtils.generateRandomString(12);
-    register(username);
     final String kingdomName = "poorkingdom" + CommonUtils.generateRandomString(12);
     createKingdom(username, kingdomName);
     final Kingdom kingdom = kingdomService.getUsersKingdom(username).get();
@@ -162,7 +158,6 @@ public class BuildingServiceIntTest extends IntAuthTest {
   @Test
   public void testBuildManyBuildingsAtOnceCannotCheatCost() {
     final String username = CommonUtils.generateRandomString(12);
-    register(username);
     final String kingdomName = CommonUtils.generateRandomString(12);
     createKingdom(username, kingdomName);
 
@@ -214,7 +209,6 @@ public class BuildingServiceIntTest extends IntAuthTest {
   @Test(expected = SpaceAlreadyOccupiedException.class)
   public void testCannotPlaceTwoBuildingsAtTheSameSpot() {
     final String username = CommonUtils.generateRandomString(12);
-    register(username);
     final String kingdomName = CommonUtils.generateRandomString(12);
     createKingdom(username, kingdomName, 2500);
 
