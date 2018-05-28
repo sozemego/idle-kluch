@@ -32,4 +32,6 @@ public interface GameEngine {
 
   Optional<Entity> getEntity(final EntityUUID entityId);
 
+  void deleteEntity(final EntityUUID entityId);
+
 }

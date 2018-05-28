@@ -3,11 +3,11 @@ package com.soze.idlekluch.kingdom.service;
 import com.soze.idlekluch.aop.annotations.Authorized;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.exception.EntityAlreadyExistsException;
-import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
+import com.soze.idlekluch.kingdom.events.KingdomRemovedEvent;
 import com.soze.idlekluch.kingdom.exception.InvalidRegisterKingdomException;
 import com.soze.idlekluch.kingdom.exception.UserAlreadyHasKingdomException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
@@ -19,13 +19,11 @@ import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.idlekluch.world.utils.WorldUtils;
-import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.FieldError;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -48,6 +46,7 @@ public class KingdomServiceImpl implements KingdomService {
   private final UserRepository userRepository;
   private final WorldService worldService;
   private final EntityService entityService;
+  private final ApplicationEventPublisher eventPublisher;
 
   private final Map<String, Object> locks = new ConcurrentHashMap<>();
 
@@ -55,11 +54,13 @@ public class KingdomServiceImpl implements KingdomService {
   public KingdomServiceImpl(final KingdomRepository kingdomRepository,
                             final UserRepository userRepository,
                             final WorldService worldService,
-                            final EntityService entityService) {
+                            final EntityService entityService,
+                            final ApplicationEventPublisher eventPublisher) {
     this.kingdomRepository = Objects.requireNonNull(kingdomRepository);
     this.userRepository = Objects.requireNonNull(userRepository);
     this.worldService = Objects.requireNonNull(worldService);
     this.entityService = Objects.requireNonNull(entityService);
+    this.eventPublisher = Objects.requireNonNull(eventPublisher);
   }
 
   @Override
@@ -125,6 +126,7 @@ public class KingdomServiceImpl implements KingdomService {
                                   throw new UserDoesNotHaveKingdomException(owner);
                                 });
 
+      eventPublisher.publishEvent(new KingdomRemovedEvent(kingdom.getKingdomId()));
       LOG.info("Found kingdom of user [{}], removing", owner);
       kingdomRepository.removeKingdom(kingdom.getName());
     }

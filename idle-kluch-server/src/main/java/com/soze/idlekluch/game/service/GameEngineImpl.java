@@ -77,4 +77,10 @@ public class GameEngineImpl implements GameEngine {
     return engine.getEntityById(entityId);
   }
 
+  @Override
+  public void deleteEntity(final EntityUUID entityId) {
+    Objects.requireNonNull(entityId);
+    engine.removeEntity(entityId);
+  }
+
 }

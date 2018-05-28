@@ -2,6 +2,7 @@ package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.game.entity.PersistentEntity;
+import com.soze.idlekluch.kingdom.events.KingdomRemovedEvent;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.AddedEntityEvent;
 import com.soze.klecs.engine.RemovedEntityEvent;
@@ -41,5 +42,8 @@ public interface EntityService {
 
   @EventListener
   void handleRemovedEntity(final RemovedEntityEvent removedEntityEvent);
+
+  @EventListener
+  void handleKingdomRemovedEvent(final KingdomRemovedEvent kingdomRemovedEvent);
 
 }

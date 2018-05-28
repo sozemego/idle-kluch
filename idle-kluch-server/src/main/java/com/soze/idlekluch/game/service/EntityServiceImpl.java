@@ -2,8 +2,11 @@ package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.engine.components.BaseComponent;
+import com.soze.idlekluch.game.engine.components.OwnershipComponent;
+import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.repository.EntityRepository;
+import com.soze.idlekluch.kingdom.events.KingdomRemovedEvent;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.AddedEntityEvent;
 import com.soze.klecs.engine.RemovedEntityEvent;
@@ -114,6 +117,23 @@ public class EntityServiceImpl implements EntityService {
     final Entity entity = removedEntityEvent.getEntity();
     LOG.info("Removed event for entity ID: [{}]", entity.getId());
     entityRepository.deleteEntity((EntityUUID) entity.getId());
+  }
+
+  @Override
+  public void handleKingdomRemovedEvent(final KingdomRemovedEvent kingdomRemovedEvent) {
+    Objects.requireNonNull(kingdomRemovedEvent);
+    final EntityUUID kingdomId = kingdomRemovedEvent.getKingdomId();
+
+    final List<Entity> entities = gameEngine
+                                    .getEntitiesByNode(Nodes.OWNERSHIP)
+                                    .stream()
+                                    .filter(entity -> {
+                                      final OwnershipComponent ownershipComponent = entity.getComponent(OwnershipComponent.class);
+                                      return kingdomId.equals(ownershipComponent.getOwnerId());
+                                    })
+                                    .collect(Collectors.toList());
+
+    entities.forEach(entity -> gameEngine.deleteEntity((EntityUUID) entity.getId()));
   }
 
   private void loadEntityTemplates() {
