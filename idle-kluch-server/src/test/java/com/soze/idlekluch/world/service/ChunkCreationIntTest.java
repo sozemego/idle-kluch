@@ -3,6 +3,8 @@ package com.soze.idlekluch.world.service;
 import com.soze.idlekluch.RootConfig;
 import com.soze.idlekluch.utils.sql.DatabaseReset;
 import com.soze.idlekluch.world.entity.TileId;
+import com.soze.idlekluch.world.repository.WorldRepository;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,9 +32,17 @@ public class ChunkCreationIntTest {
   @Autowired
   private WorldService worldService;
 
+  @Autowired
+  private WorldRepository worldRepository;
+
   @BeforeClass
   public static void beforeClass() {
     DatabaseReset.resetDatabase();
+  }
+
+  @Before
+  public void setup() {
+    worldRepository.removeTiles(new ArrayList<>(worldService.getAllTiles().values()));
   }
 
   @Test
