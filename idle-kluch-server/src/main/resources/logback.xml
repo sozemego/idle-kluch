@@ -11,13 +11,6 @@
             <onMismatch>DENY</onMismatch>
             <onMatch>ACCEPT</onMatch>
         </filter>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                <marker>AUTHORIZED</marker>
-            </evaluator>
-            <onMismatch>NEUTRAL</onMismatch>
-            <onMatch>DENY</onMatch>
-        </filter>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>DEBUG</level>
         </filter>
@@ -66,6 +59,35 @@
         </rollingPolicy>
     </appender>
 
+    <appender name="FILE-MESSAGE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/message.log</file>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>MESSAGE</marker>
+            </evaluator>
+            <onMismatch>DENY</onMismatch>
+            <onMatch>ACCEPT</onMatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] - %msg%n
+            </Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>log/past/message.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
@@ -80,6 +102,13 @@
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>AUTHORIZED</marker>
+            </evaluator>
+            <onMismatch>NEUTRAL</onMismatch>
+            <onMatch>DENY</onMatch>
+        </filter>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>MESSAGE</marker>
             </evaluator>
             <onMismatch>NEUTRAL</onMismatch>
             <onMatch>DENY</onMatch>
@@ -107,6 +136,13 @@
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>AUTHORIZED</marker>
+            </evaluator>
+            <onMismatch>NEUTRAL</onMismatch>
+            <onMatch>DENY</onMatch>
+        </filter>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>MESSAGE</marker>
             </evaluator>
             <onMismatch>NEUTRAL</onMismatch>
             <onMatch>DENY</onMatch>
@@ -144,6 +180,13 @@
         </filter>
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>MESSAGE</marker>
+            </evaluator>
+            <onMismatch>NEUTRAL</onMismatch>
+            <onMatch>DENY</onMatch>
+        </filter>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>AUTHORIZED</marker>
             </evaluator>
             <onMismatch>NEUTRAL</onMismatch>
@@ -172,6 +215,7 @@
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE-PROFILING"/>
         <appender-ref ref="FILE-AUTHORIZED"/>
+        <appender-ref ref="FILE-MESSAGE"/>
     </root>
 
     <logger name="org.springframework" level="INFO"/>

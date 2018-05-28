@@ -18,4 +18,11 @@ public class BuildingListMessage extends OutgoingMessage {
   public List<EntityMessage> getBuildingDefinitions() {
     return buildingDefinitions;
   }
+
+  @Override
+  public String toString() {
+    return "BuildingListMessage{" +
+             "buildingDefinitions=" + buildingDefinitions +
+             '}';
+  }
 }

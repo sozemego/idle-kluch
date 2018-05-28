@@ -4,6 +4,8 @@ import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.MessageHeaders;
@@ -16,9 +18,6 @@ import java.util.Objects;
 @Profile("!integration-test")
 public class WebSocketMessagingServiceImpl implements WebSocketMessagingService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(WebSocketMessagingServiceImpl.class);
-
-//  private final GameConnectionRegistryService gameConnectionRegistryService;
   private final SimpMessagingTemplate messagingTemplate;
 
   @Autowired
@@ -33,7 +32,6 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
     Objects.requireNonNull(destination);
     Objects.requireNonNull(message);
 
-    LOG.info("Sending a message to user [{}] at [{}]", username, destination);
     messagingTemplate.convertAndSendToUser(username, destination, convertMessage(message));
   }
 
@@ -43,7 +41,6 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
     Objects.requireNonNull(destination);
     Objects.requireNonNull(message);
 
-    LOG.info("Sending a message to all users at [{}]", destination);
     messagingTemplate.convertAndSend(destination, convertMessage(message));
   }
 
