@@ -6,7 +6,9 @@ import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.InvalidRegisterKingdomException;
 import com.soze.idlekluch.kingdom.exception.UserAlreadyHasKingdomException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
+import com.soze.idlekluch.user.event.UserRemovedEvent;
 import com.soze.idlekluch.world.entity.TileId;
+import org.springframework.context.event.EventListener;
 
 import java.util.Optional;
 
@@ -47,5 +49,8 @@ public interface KingdomService {
    * Retrieves {@link Kingdom} by username.
    */
   Optional<Kingdom> getUsersKingdom(final String username);
+
+  @EventListener
+  void handleUserRemovedEvent(final UserRemovedEvent userRemovedEvent);
 
 }

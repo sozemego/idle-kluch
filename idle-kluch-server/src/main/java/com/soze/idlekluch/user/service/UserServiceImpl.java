@@ -4,6 +4,7 @@ import com.soze.idlekluch.aop.annotations.Authorized;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.entity.User;
+import com.soze.idlekluch.user.event.UserRemovedEvent;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.exception.UserRegistrationException;
 import com.soze.idlekluch.user.password.PasswordHash;
@@ -12,6 +13,7 @@ import com.soze.idlekluch.utils.jpa.EntityUUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -32,11 +34,16 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final PasswordHash passwordHash;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Autowired
-  public UserServiceImpl(final UserRepository userRepository, final PasswordHash passwordHash) {
+  public UserServiceImpl(final UserRepository userRepository,
+                         final PasswordHash passwordHash,
+                         final ApplicationEventPublisher eventPublisher) {
+
     this.userRepository = Objects.requireNonNull(userRepository);
     this.passwordHash = Objects.requireNonNull(passwordHash);
+    this.eventPublisher = Objects.requireNonNull(eventPublisher);
   }
 
   @Deprecated
@@ -115,8 +122,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void deleteUser(String username) {
+  public void deleteUser(final String username) {
     Objects.requireNonNull(username);
+    eventPublisher.publishEvent(new UserRemovedEvent(username));
     userRepository.deleteUser(username);
   }
 

@@ -2,6 +2,8 @@ package com.soze.idlekluch.user.service;
 
 import com.soze.idlekluch.IntAuthTest;
 import com.soze.idlekluch.RootConfig;
+import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
+import com.soze.idlekluch.kingdom.service.KingdomService;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.UserRegistrationException;
@@ -30,6 +32,9 @@ public class UserServiceImplIntTest {
 
   @Autowired
   private UserService userService;
+
+  @Autowired
+  private KingdomService kingdomService;
 
   @BeforeClass
   public static void setup() {
@@ -140,10 +145,26 @@ public class UserServiceImplIntTest {
     );
   }
 
+  @Test
+  public void testDeleteUser() {
+    final String username = CommonUtils.generateRandomString(12);
+    userService.addUser(new RegisterUserForm(username, CommonUtils.generateRandomString(12).toCharArray()));
+    assertTrue(userService.getUserByUsername(username).isPresent());
+    userService.deleteUser(username);
+    assertFalse(userService.getUserByUsername(username).isPresent());
+  }
 
-
-
-
-
+  @Test
+  public void testDeleteUserShouldRemoveKingdom() {
+    final String username = CommonUtils.generateRandomString(12);
+    userService.addUser(new RegisterUserForm(username, CommonUtils.generateRandomString(12).toCharArray()));
+    final String kingdomName = CommonUtils.generateRandomString(12);
+    kingdomService.addKingdom(username, new RegisterKingdomForm(kingdomName));
+    assertTrue(userService.getUserByUsername(username).isPresent());
+    assertTrue(kingdomService.getUsersKingdom(username).isPresent());
+    userService.deleteUser(username);
+    assertFalse(userService.getUserByUsername(username).isPresent());
+    assertFalse(kingdomService.getUsersKingdom(username).isPresent());
+  }
 
 }

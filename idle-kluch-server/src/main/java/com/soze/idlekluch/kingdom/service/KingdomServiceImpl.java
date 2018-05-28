@@ -13,6 +13,7 @@ import com.soze.idlekluch.kingdom.exception.UserAlreadyHasKingdomException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.kingdom.repository.KingdomRepository;
 import com.soze.idlekluch.user.entity.User;
+import com.soze.idlekluch.user.event.UserRemovedEvent;
 import com.soze.idlekluch.user.repository.UserRepository;
 import com.soze.idlekluch.utils.PoissonDiscSampler;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
@@ -149,6 +150,13 @@ public class KingdomServiceImpl implements KingdomService {
   public Optional<Kingdom> getUsersKingdom(final String username) {
     Objects.requireNonNull(username);
     return kingdomRepository.getUsersKingdom(username);
+  }
+
+  @Override
+  public void handleUserRemovedEvent(final UserRemovedEvent userRemovedEvent) {
+    Objects.requireNonNull(userRemovedEvent);
+    final String username = userRemovedEvent.getUsername();
+    getUsersKingdom(username).ifPresent(k -> removeKingdom(username));
   }
 
   /**
