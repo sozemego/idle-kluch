@@ -12,6 +12,7 @@ import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.idlekluch.world.utils.WorldUtils;
+import com.soze.klecs.engine.RemovedEntityEvent;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,6 +133,14 @@ public class GameServiceImpl implements GameService {
     LOG.info("World chunk created, sending data to players!");
     final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(event.getTiles());
     webSocketMessagingService.send(Routes.GAME_OUTBOUND, worldChunkMessage);
+  }
+
+  @Override
+  public void handleRemovedEntityEvent(final RemovedEntityEvent removedEntityEvent) {
+    Objects.requireNonNull(removedEntityEvent);
+
+    final RemoveEntityMessage removeEntityMessage = new RemoveEntityMessage(removedEntityEvent.getEntity().getId().toString());
+    webSocketMessagingService.send(Routes.GAME_OUTBOUND, removeEntityMessage);
   }
 
 }

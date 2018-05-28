@@ -3,6 +3,7 @@ package com.soze.idlekluch.game.service;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
+import com.soze.klecs.engine.RemovedEntityEvent;
 import org.springframework.context.event.EventListener;
 
 public interface GameService {
@@ -21,5 +22,8 @@ public interface GameService {
 
   @EventListener
   void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent event);
+
+  @EventListener
+  void handleRemovedEntityEvent(final RemovedEntityEvent removedEntityEvent);
 
 }

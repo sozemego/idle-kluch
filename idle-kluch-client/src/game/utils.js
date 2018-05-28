@@ -70,6 +70,24 @@ export const attachSpawnAnimation = (game, sprite, direction, delay) => {
   }, delay);
 };
 
+export const attachDespawnAnimation = (game, sprite, delay = 0) => {
+  const tween = game.add.tween(sprite);
+  tween.to({
+    x: sprite.x + (sprite.width / 2),
+    width: 0,
+    height: 0,
+    alpha: 0,
+  }, 750, Phaser.Easing.Circular.Out);
+
+  setTimeout(() => {
+    tween.start();
+  }, delay);
+
+  tween.onComplete.add(() => {
+    killSprite(sprite);
+  });
+};
+
 export const killSprite = _.method('kill', true);
 export const destroySprite = _.method('destroy', [true, false]);
 export const destroyTileGroup = _.method('children.forEach', destroySprite);

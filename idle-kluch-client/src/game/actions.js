@@ -17,6 +17,9 @@ export const addBuildings = makeActionCreator(ADD_BUILDINGS, "payload");
 export const ADD_ENTITY = "ADD_ENTITY";
 export const addEntity = makeActionCreator(ADD_ENTITY, "payload");
 
+export const REMOVE_ENTITY = "REMOVE_ENTITY";
+export const removeEntity = makeActionCreator(REMOVE_ENTITY, "payload");
+
 let gameContainer = null;
 
 export const connect = () => {

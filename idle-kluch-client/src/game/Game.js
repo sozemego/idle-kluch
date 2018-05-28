@@ -27,6 +27,7 @@ import {
 import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
 import { checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
 import {
+  attachDespawnAnimation,
   attachSpawnAnimation,
   centerCameraAt,
   destroyTileGroup,
@@ -127,6 +128,22 @@ const addEntity = (state, { payload: entity }) => {
   return { ...state };
 };
 
+const removeEntity = (state, action) => {
+  const { payload: entityId } = action;
+
+  const entity = engine.getEntity(entityId);
+
+  const graphicsComponent = entity.getComponent(GraphicsComponent);
+  if(graphicsComponent) {
+    const sprite = graphicsComponent.getSprite();
+    attachDespawnAnimation(game, sprite, 250);
+  }
+
+  engine.removeEntity(entityId);
+
+  return state;
+};
+
 const setConstructableBuilding = (state, action) => {
   const { payload: building } = action;
 
@@ -190,6 +207,7 @@ const attachEntitySpawnAnimation = (entitySprites, delay) => {
 export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.ADD_TILES ]: addTiles,
   [ GAME_ACTIONS.ADD_ENTITY ]: addEntity,
+  [ GAME_ACTIONS.REMOVE_ENTITY ]: removeEntity,
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });

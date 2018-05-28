@@ -2,7 +2,7 @@ import { networkConfig } from "../api/config";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 import uuid from 'uuid/v4';
-import { addEntity, addTiles } from "./actions";
+import { addEntity, addTiles, removeEntity } from "./actions";
 import store from "../store/store";
 import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
@@ -53,6 +53,10 @@ GameService.connect = function () {
       if(type === "MESSAGE_REVERT") {
         const undoAction = undoActions.getAction(parsed.messageId);
         undoAction();
+      }
+
+      if(type === "REMOVE_ENTITY") {
+        store.dispatch(removeEntity(parsed.entityId));
       }
 
       if(type === "BUILDING_LIST") {
