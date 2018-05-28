@@ -120,10 +120,7 @@ public class KingdomServiceRemoveKingdomIntTest extends IntAuthTest {
       thread.join();
     }
 
-    System.out.println(exceptions.size());
-    System.out.println(threads.size());
     assertEquals(((5 * 20) * 2) - 2, exceptions.size());
-
   }
 
 
