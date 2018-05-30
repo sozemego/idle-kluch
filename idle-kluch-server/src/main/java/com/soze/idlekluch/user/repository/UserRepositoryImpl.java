@@ -78,10 +78,7 @@ public class UserRepositoryImpl implements UserRepository {
   @Override
   @Transactional
   public void deleteUser(String username) {
-    User user = getUserByUsername(username).orElseThrow(() -> {
-      //TODO move this to UserService
-      return new AuthUserDoesNotExistException(username);
-    });
+    User user = getUserByUsername(username).get();
 
     user.setDeleted(true);
     updateUser(user);

@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.soze.idlekluch.aop.annotations.Authorized;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.user.dto.ChangePasswordForm;
 import com.soze.idlekluch.user.dto.Jwt;
@@ -44,6 +45,7 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   @Profiled
+  @Authorized
   public Jwt login(LoginForm loginForm) {
     validateLogin(loginForm);
 
@@ -56,6 +58,7 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
+  @Authorized
   public Jwt getToken(final String username) {
     return new Jwt(
         JWT.create()
@@ -68,9 +71,8 @@ public class AuthServiceImpl implements AuthService {
   //TODO refactor this, move somewhere else?
   private void validateLogin(LoginForm form) {
     Objects.requireNonNull(form);
-    final User user = getUserByUsername(form.getUsername()).<AuthUserDoesNotExistException>orElseThrow(() -> {
-      throw new AuthUserDoesNotExistException(form.getUsername());
-    });
+
+    final User user = getUserByUsername(form.getUsername()).get();
 
     final boolean passwordMatches = passwordHash.matches(form.getPassword(), user.getPasswordHash());
     if (!passwordMatches) {
@@ -114,6 +116,7 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   @Profiled
+  @Authorized
   public void passwordChange(String username, ChangePasswordForm changePasswordForm) {
     validatePasswordChange(username, changePasswordForm);
 
@@ -125,10 +128,7 @@ public class AuthServiceImpl implements AuthService {
     Objects.requireNonNull(username);
     Objects.requireNonNull(form);
 
-    User user = getUserByUsername(username).<AuthUserDoesNotExistException>orElseThrow(() -> {
-      form.reset();
-      throw new AuthUserDoesNotExistException(username);
-    });
+    final User user = getUserByUsername(username).get();
 
     if (Arrays.equals(form.getNewPassword(), form.getOldPassword())) {
       form.reset();

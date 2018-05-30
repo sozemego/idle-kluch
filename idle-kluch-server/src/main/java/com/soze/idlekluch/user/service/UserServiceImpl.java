@@ -116,16 +116,17 @@ public class UserServiceImpl implements UserService {
     Objects.requireNonNull(username);
     Objects.requireNonNull(hash);
 
-    User user = getUserByUsername(username).orElseThrow(() -> new AuthUserDoesNotExistException(username));
+    final User user = getUserByUsername(username).get();
     user.setPasswordHash(hash);
     userRepository.updateUser(user);
   }
 
   @Override
+  @Authorized
   public void deleteUser(final String username) {
     Objects.requireNonNull(username);
-    eventPublisher.publishEvent(new UserRemovedEvent(username));
     userRepository.deleteUser(username);
+    eventPublisher.publishEvent(new UserRemovedEvent(username));
   }
 
   @Override

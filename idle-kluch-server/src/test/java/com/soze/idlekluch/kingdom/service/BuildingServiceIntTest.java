@@ -11,6 +11,7 @@ import com.soze.idlekluch.kingdom.exception.CannotAffordBuildingException;
 import com.soze.idlekluch.kingdom.exception.SpaceAlreadyOccupiedException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
+import com.soze.idlekluch.user.exception.NotAuthenticatedException;
 import com.soze.idlekluch.utils.CommonUtils;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.utils.jpa.InvalidUUIDException;
@@ -81,7 +82,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
     }
   }
 
-  @Test(expected = AuthUserDoesNotExistException.class)
+  @Test(expected = NotAuthenticatedException.class)
   public void testBuildBuildingUserDoesNotExist() throws Exception {
     buildingService.buildBuilding("dontexist", new BuildBuildingForm(UUID.randomUUID().toString(), "1", 15, 15));
   }

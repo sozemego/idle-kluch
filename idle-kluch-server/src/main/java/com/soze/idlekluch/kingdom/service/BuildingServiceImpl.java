@@ -72,7 +72,6 @@ public class BuildingServiceImpl implements BuildingService {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
 
-    validateUser(owner);
     validateKingdom(owner);
     validateTileExists(form);
     validateCost(owner, form);
@@ -204,14 +203,6 @@ public class BuildingServiceImpl implements BuildingService {
     if(!worldService.tileExists(tileId)) {
       throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by void, cannot place outside of tiles");
     }
-  }
-
-  private void validateUser(final String owner) {
-    userService
-      .getUserByUsername(owner)
-      .<AuthUserDoesNotExistException>orElseThrow(() -> {
-        throw new AuthUserDoesNotExistException(owner);
-      });
   }
 
   private void validateKingdom(final String owner) {

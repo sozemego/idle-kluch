@@ -34,4 +34,11 @@ public class UserExceptionHandler extends ResponseEntityExceptionHandler {
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
+  @ExceptionHandler(NotAuthenticatedException.class)
+  public ResponseEntity<Object> handleNotAuthorizedException(final NotAuthenticatedException exception) {
+    Map<String, Object> data = new HashMap<>();
+    ErrorResponse errorResponse = new ErrorResponse(401, exception.getMessage(), data);
+    return ExceptionUtils.convertErrorResponse(errorResponse);
+  }
+
 }
