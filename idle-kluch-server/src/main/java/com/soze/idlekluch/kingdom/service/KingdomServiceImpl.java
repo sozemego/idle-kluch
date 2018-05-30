@@ -65,7 +65,7 @@ public class KingdomServiceImpl implements KingdomService {
   @Override
   @Profiled
   @AuthLog
-  public void addKingdom(final String owner, @ValidForm final RegisterKingdomForm form) {
+  public void addKingdom(final String owner, final RegisterKingdomForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
 
