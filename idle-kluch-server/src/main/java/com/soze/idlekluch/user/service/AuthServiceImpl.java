@@ -26,26 +26,26 @@ public class AuthServiceImpl implements AuthService {
 
   private static final String ISSUER = "idle_kluch";
   private static final String USER_NAME_CLAIM = "username";
-  private Algorithm algorithm;
 
-  @Autowired
-  private JwtKeyProvider keyProvider;
+  private final JwtKeyProvider keyProvider;
+  private final UserService userService;
+  private final PasswordHash passwordHash;
 
-  @Autowired
-  private UserService userService;
+  private final Algorithm algorithm;
 
-  @Autowired
-  private PasswordHash passwordHash;
-
-  @PostConstruct
-  public void setup() {
-    algorithm = Algorithm.HMAC256(keyProvider.getSecret());
+  public AuthServiceImpl(final JwtKeyProvider keyProvider,
+                         final UserService userService,
+                         final PasswordHash passwordHash) {
+    this.keyProvider = Objects.requireNonNull(keyProvider);
+    this.userService = Objects.requireNonNull(userService);
+    this.passwordHash = Objects.requireNonNull(passwordHash);
+    this.algorithm = Algorithm.HMAC256(keyProvider.getSecret());
   }
 
   @Override
   @Profiled
   @AuthLog
-  public Jwt login(LoginForm loginForm) {
+  public Jwt login(final LoginForm loginForm) {
     validateLogin(loginForm);
 
     return new Jwt(
@@ -68,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
   }
 
   //TODO refactor this, move somewhere else?
-  private void validateLogin(LoginForm form) {
+  private void validateLogin(final LoginForm form) {
     Objects.requireNonNull(form);
 
     final User user = getUserByUsername(form.getUsername()).get();
@@ -80,12 +80,12 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public void logout(String token) {
+  public void logout(final String token) {
 
   }
 
   @Override
-  public boolean validateToken(String token) {
+  public boolean validateToken(final String token) {
     Objects.requireNonNull(token);
 
     try {
@@ -98,12 +98,12 @@ public class AuthServiceImpl implements AuthService {
     return true;
   }
 
-  private DecodedJWT decodeToken(String token) {
+  private DecodedJWT decodeToken(final String token) {
     return JWT.require(algorithm).build().verify(token);
   }
 
   @Override
-  public String getUsernameClaim(String token) {
+  public String getUsernameClaim(final String token) {
     DecodedJWT decodedJWT = decodeToken(token);
     Claim claim = decodedJWT.getClaim(USER_NAME_CLAIM);
     if (claim.isNull()) {
@@ -116,14 +116,14 @@ public class AuthServiceImpl implements AuthService {
   @Override
   @Profiled
   @AuthLog
-  public void passwordChange(String username, ChangePasswordForm changePasswordForm) {
+  public void passwordChange(final String username, final ChangePasswordForm changePasswordForm) {
     validatePasswordChange(username, changePasswordForm);
 
     userService.changeUserPassword(username, passwordHash.hashWithSalt(changePasswordForm.getNewPassword()));
     changePasswordForm.reset();
   }
 
-  private void validatePasswordChange(String username, ChangePasswordForm form) {
+  private void validatePasswordChange(final String username, final ChangePasswordForm form) {
     Objects.requireNonNull(username);
     Objects.requireNonNull(form);
 
@@ -141,7 +141,7 @@ public class AuthServiceImpl implements AuthService {
     }
   }
 
-  private Optional<User> getUserByUsername(String username) {
+  private Optional<User> getUserByUsername(final String username) {
     return userService.getUserByUsername(username);
   }
 

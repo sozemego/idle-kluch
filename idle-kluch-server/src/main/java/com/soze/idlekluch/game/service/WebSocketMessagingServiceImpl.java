@@ -37,7 +37,7 @@ public class WebSocketMessagingServiceImpl implements WebSocketMessagingService 
 
   @Override
   @Profiled
-  public void send(final String destination, Object message) {
+  public void send(final String destination, final Object message) {
     Objects.requireNonNull(destination);
     Objects.requireNonNull(message);
 

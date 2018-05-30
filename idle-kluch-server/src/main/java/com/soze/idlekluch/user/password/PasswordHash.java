@@ -12,11 +12,11 @@ public class PasswordHash {
    * @param password password to hash
    * @return salted hash
    */
-  public String hashWithSalt(char[] password) {
+  public String hashWithSalt(final char[] password) {
     return BCrypt.hashpw(String.copyValueOf(password), BCrypt.gensalt(10));
   }
 
-  public boolean matches(char[] password, String hash) {
+  public boolean matches(final char[] password, final String hash) {
     return BCrypt.checkpw(String.copyValueOf(password), hash);
   }
 

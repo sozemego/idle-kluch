@@ -39,11 +39,11 @@ public class RateLimitServiceImpl implements RateLimitService {
     final TimeUnit timeUnit = rateLimit.getTimeUnit();
     final int timeUnits = rateLimit.getTimeUnits();
 
-    List<Long> userTimestamps = new LinkedList<>(userRequests.get(user));
+    final List<Long> userTimestamps = new LinkedList<>(userRequests.get(user));
 
 
     //1. remove all previous requests older than timeUnit * timeUnits
-    //to do that, we need to find the timestamp before which we will remove previous requests
+    //   to do that, we need to find the timestamp before which we will remove previous requests
     final long now = Instant.now().toEpochMilli();
     userTimestamps.add(now);
     final long rateLimitWindow = TimeUnit.MILLISECONDS.convert(timeUnits, timeUnit);
@@ -51,7 +51,7 @@ public class RateLimitServiceImpl implements RateLimitService {
 
     userTimestamps.removeIf(timestamp -> timestamp < removeBefore);
 
-    //2. get count of requests remaining
+    //2. get count of requests that were left
     final int requests = userTimestamps.size();
 
     //3. if everything is ok, don't throw exception
@@ -59,8 +59,8 @@ public class RateLimitServiceImpl implements RateLimitService {
     //4. if over limit, throw exception
     if (requests > limit) {
       //4a. calculate when next request will be allowed to be fired
-      //you can only be over limit by 1
-      //this is why we get the request at index 0
+      //    you can only be over limit by 1
+      //    this is why we get the request at index 0
       final long timeNextRequestVanishes = userTimestamps.get(0) + rateLimitWindow - now;
 
       throw new RateLimitException(limitedResource, rateLimit, timeNextRequestVanishes / 1000);
@@ -68,6 +68,6 @@ public class RateLimitServiceImpl implements RateLimitService {
 
     //5. add this request to the history
     userRequests.replaceValues(user, userTimestamps);
-
   }
+
 }

@@ -27,9 +27,9 @@ public class DatabaseReset {
   public static void resetDatabase() {
 
     try {
-      List<String> file = Files.lines(Paths.get("sql/create.sql"))
+      final List<String> file = Files.lines(Paths.get("sql/create.sql"))
         .collect(Collectors.toList());
-      String fileContent = file.stream().reduce("", (prev, cur) -> prev += cur + '\n');
+      final String fileContent = file.stream().reduce("", (prev, cur) -> prev += cur + '\n');
       executeSql(fileContent);
     } catch (IOException e) {
       e.printStackTrace();
@@ -55,7 +55,7 @@ public class DatabaseReset {
       );
 
 
-      PreparedStatement statement = connection.prepareStatement(sql);
+      final PreparedStatement statement = connection.prepareStatement(sql);
       statement.execute();
       System.out.println("CLEARED AND RESTORED THE DB.");
 

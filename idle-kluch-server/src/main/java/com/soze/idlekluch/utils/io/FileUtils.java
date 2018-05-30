@@ -8,6 +8,7 @@ import java.util.Objects;
 public class FileUtils {
 
   public static String readInputStream(final InputStream inputStream) {
+    Objects.requireNonNull(inputStream);
     final StringBuilder stringBuilder = new StringBuilder();
 
     try (final BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -27,6 +28,7 @@ public class FileUtils {
   }
 
   public static String readClassPathResource(final ClassPathResource classPathResource) {
+    Objects.requireNonNull(classPathResource);
     try {
       return readInputStream(classPathResource.getInputStream());
     } catch (IOException e) {

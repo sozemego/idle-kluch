@@ -51,11 +51,11 @@ public class UserServiceImpl implements com.soze.idlekluch.user.service.UserServ
     return userRepository.getAllUsers();
   }
 
-  public Optional<User> getUserById(EntityUUID userId) {
+  public Optional<User> getUserById(final EntityUUID userId) {
     return userRepository.getUserById(userId);
   }
 
-  public Optional<User> getUserByUsername(String username) {
+  public Optional<User> getUserByUsername(final String username) {
     return userRepository.getUserByUsername(username);
   }
 
@@ -67,10 +67,10 @@ public class UserServiceImpl implements com.soze.idlekluch.user.service.UserServ
 
   @Override
   @Profiled
-  public void addUser(RegisterUserForm userForm) {
+  public void addUser(final RegisterUserForm userForm) {
     Objects.requireNonNull(userForm);
 
-    String username = userForm.getUsername();
+    final String username = userForm.getUsername();
     LOG.info("Attempting to create user with username [{}]", username);
     validateUsername(username);
 
@@ -78,12 +78,12 @@ public class UserServiceImpl implements com.soze.idlekluch.user.service.UserServ
       throw new UserRegistrationException("username", username + " already exists.");
     }
 
-    char[] password = userForm.getPassword();
+    final char[] password = userForm.getPassword();
     validatePassword(password);
-    String hashedPassword = passwordHash.hashWithSalt(password);
+    final String hashedPassword = passwordHash.hashWithSalt(password);
     userForm.reset();
 
-    User user = new User();
+    final User user = new User();
     user.setUsername(userForm.getUsername());
     user.setPasswordHash(hashedPassword);
     user.setUserId(EntityUUID.randomId());
@@ -94,7 +94,7 @@ public class UserServiceImpl implements com.soze.idlekluch.user.service.UserServ
     LOG.info("Registered user [{}]", username);
   }
 
-  private void validateUsername(String username) {
+  private void validateUsername(final String username) {
     Objects.requireNonNull(username);
 
     if (!USERNAME_VALIDATOR.matcher(username).matches()) {
@@ -118,7 +118,7 @@ public class UserServiceImpl implements com.soze.idlekluch.user.service.UserServ
 
   @Override
   @AuthLog
-  public void changeUserPassword(String username, String hash) {
+  public void changeUserPassword(final String username, final String hash) {
     Objects.requireNonNull(username);
     Objects.requireNonNull(hash);
 
@@ -137,7 +137,8 @@ public class UserServiceImpl implements com.soze.idlekluch.user.service.UserServ
 
   @Override
   @Profiled
-  public boolean isAvailableForRegistration(String username) {
+  public boolean isAvailableForRegistration(final String username) {
+    Objects.requireNonNull(username);
     try {
       validateUsername(username);
     } catch (UserRegistrationException e) {
@@ -147,7 +148,7 @@ public class UserServiceImpl implements com.soze.idlekluch.user.service.UserServ
   }
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
     return null;
   }
 }

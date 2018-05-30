@@ -1,9 +1,11 @@
 package com.soze.idlekluch.kingdom.controller;
 
+import com.soze.idlekluch.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.kingdom.dto.KingdomDto;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.InvalidRegisterKingdomException;
+import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.kingdom.service.KingdomService;
 import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.ExceptionUtils;
@@ -46,31 +48,25 @@ public class KingdomController {
 
   @GetMapping(path = Routes.KINGDOM_OWN)
   public ResponseEntity getOwnKingdom(final Principal principal) {
-    final Optional<Kingdom> kingdomOptional = kingdomService.getUsersKingdom(principal.getName());
+    final Kingdom kingdom = kingdomService
+                              .getUsersKingdom(principal.getName())
+                              .orElseThrow(() -> new UserDoesNotHaveKingdomException(principal.getName()));
 
-    if(!kingdomOptional.isPresent()) {
-      final ErrorResponse errorResponse = new ErrorResponse(404, "Kingdom not found");
-      return ExceptionUtils.convertErrorResponse(errorResponse);
-    }
-
-    final KingdomDto dto = convertKingdomDto(kingdomOptional.get());
+    final KingdomDto dto = convertKingdomDto(kingdom);
     return ResponseEntity.ok(dto);
   }
 
   @GetMapping(path = Routes.KINGDOM_GET + "/{name}")
   public ResponseEntity getKingdom(@PathVariable("name") final String name) {
-    final Optional<Kingdom> kingdomOptional = kingdomService.getKingdom(name);
 
-    if(kingdomOptional.isPresent()) {
-      LOG.info("Found kingdom with name [{}], returning", name);
-      final Kingdom kingdom = kingdomOptional.get();
-      final KingdomDto dto = convertKingdomDto(kingdom);
-      return ResponseEntity.ok(dto);
-    }
+    final Kingdom kingdom = kingdomService
+                              .getKingdom(name)
+                              .orElseThrow(() -> new EntityDoesNotExistException("Kingdom named " + name + " does not exist.", Kingdom.class));
 
-    LOG.info("Did not find kingdom with name [{}]", name);
-    final ErrorResponse errorResponse = new ErrorResponse(404, "Kingdom not found");
-    return ExceptionUtils.convertErrorResponse(errorResponse);
+    LOG.info("Found kingdom with name [{}], returning", name);
+
+    final KingdomDto dto = convertKingdomDto(kingdom);
+    return ResponseEntity.ok(dto);
   }
 
   @DeleteMapping(path = Routes.KINGDOM_DELETE)

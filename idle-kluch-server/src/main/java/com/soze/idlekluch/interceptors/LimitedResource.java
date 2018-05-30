@@ -6,8 +6,17 @@ import java.util.Objects;
 
 public class LimitedResource {
 
+  /**
+   * Method on the @Controller that is limited
+   */
   private final Object resource;
+  /**
+   * HTTP Verb (GET, POST etc.)
+   */
   private final String method;
+  /**
+   * URL of the request (/api/0.1/something)
+   */
   private final String path;
 
   public LimitedResource(final Object resource, final String method, final String path) {

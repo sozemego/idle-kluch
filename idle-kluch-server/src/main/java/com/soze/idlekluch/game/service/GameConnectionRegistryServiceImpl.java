@@ -20,7 +20,10 @@ public class GameConnectionRegistryServiceImpl implements GameConnectionRegistry
 
   @Override
   @AuthLog
-  public void onConnect(String sessionId, String username) {
+  public void onConnect(final String sessionId, final String username) {
+    Objects.requireNonNull(sessionId);
+    Objects.requireNonNull(username);
+
     if(userSessionMap.containsKey(username)) {
       LOG.info("[{}] already connected!", username);
       duplicateSessionIds.add(sessionId);
@@ -32,7 +35,9 @@ public class GameConnectionRegistryServiceImpl implements GameConnectionRegistry
 
   @Override
   @AuthLog
-  public void onDisconnect(String sessionId) {
+  public void onDisconnect(final String sessionId) {
+    Objects.requireNonNull(sessionId);
+
     if(duplicateSessionIds.contains(sessionId)) {
       LOG.info("[{}] sessionId was in duplicates, now is disconnected", sessionId);
       duplicateSessionIds.remove(sessionId);

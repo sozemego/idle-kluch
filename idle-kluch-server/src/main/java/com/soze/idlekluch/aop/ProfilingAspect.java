@@ -15,9 +15,7 @@ import org.springframework.stereotype.Component;
 public class ProfilingAspect {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProfilingAspect.class);
-
   private static final Marker PROFILING_MARKER = MarkerFactory.getMarker("PROFILING");
-
 
   @Pointcut("execution(* *(..)) && @annotation(com.soze.idlekluch.aop.annotations.Profiled))")
   public void profiledMethodExecution() {}

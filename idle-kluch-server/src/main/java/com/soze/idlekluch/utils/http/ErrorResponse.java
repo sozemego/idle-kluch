@@ -9,18 +9,18 @@ import java.util.Objects;
 
 public class ErrorResponse {
 
-  private int statusCode;
-  private String error;
-  private Map<String, Object> data;
+  private final int statusCode;
+  private final String error;
+  private final Map<String, Object> data;
 
   public ErrorResponse(int statusCode, String error) {
     this(statusCode, error, new HashMap<>());
   }
 
   @JsonCreator
-  public ErrorResponse(@JsonProperty("statusCode") int statusCode,
-                       @JsonProperty("error") String error,
-                       @JsonProperty("data") Map<String, Object> data) {
+  public ErrorResponse(@JsonProperty("statusCode") final int statusCode,
+                       @JsonProperty("error") final String error,
+                       @JsonProperty("data") final Map<String, Object> data) {
     this.statusCode = statusCode;
     this.error = Objects.requireNonNull(error);
     this.data = Objects.requireNonNull(data);
@@ -30,16 +30,8 @@ public class ErrorResponse {
     return statusCode;
   }
 
-  public void setStatusCode(int statusCode) {
-    this.statusCode = statusCode;
-  }
-
   public String getError() {
     return error;
-  }
-
-  public void setError(String error) {
-    this.error = error;
   }
 
   public Map<String, Object> getData() {
@@ -51,7 +43,9 @@ public class ErrorResponse {
     data.put(key, value);
   }
 
-  public void addData(String key, Object value) {
+  public void addData(final String key, final Object value) {
+    Objects.requireNonNull(key);
+    Objects.requireNonNull(value);
     this.data.put(key, value);
   }
 }

@@ -23,21 +23,16 @@ import java.util.Objects;
 public class GameSocketController {
 
   private final GameService gameService;
-
   private final GameConnectionRegistryService gameConnectionRegistryService;
 
   @Autowired
-  public GameSocketController(final GameService gameService,
-                              final GameConnectionRegistryService gameConnectionRegistryService) {
+  public GameSocketController(final GameService gameService, final GameConnectionRegistryService gameConnectionRegistryService) {
     this.gameService = Objects.requireNonNull(gameService);
     this.gameConnectionRegistryService = Objects.requireNonNull(gameConnectionRegistryService);
   }
 
   @MessageMapping(Routes.GAME_INIT_MESSAGE)
-  public void handleInitMessage(final Principal principal,
-                                final Message message,
-                                final SimpMessageHeaderAccessor headerAccessor) throws Exception {
-
+  public void handleInitMessage(final Principal principal, final SimpMessageHeaderAccessor headerAccessor) {
     final String sessionId = headerAccessor.getSessionId();
     if (gameConnectionRegistryService.isDuplicate(sessionId)) {
       gameService.handleDuplicateSession(sessionId);
@@ -48,9 +43,7 @@ public class GameSocketController {
   }
 
   @MessageMapping(Routes.BUILD_BUILDING_MESSAGE)
-  public void handleBuildBuildingMessage(final Principal principal,
-                                         final BuildBuildingForm message) throws Exception {
-
+  public void handleBuildBuildingMessage(final Principal principal, final BuildBuildingForm message) {
     gameService.handleBuildBuildingMessage(principal.getName(), message);
   }
 

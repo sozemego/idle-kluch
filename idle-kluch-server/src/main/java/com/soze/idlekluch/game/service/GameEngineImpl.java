@@ -54,7 +54,7 @@ public class GameEngineImpl implements GameEngine {
   }
 
   @Override
-  public void addEntity(Entity entity) {
+  public void addEntity(final Entity entity) {
     Objects.requireNonNull(entity);
     engine.addEntity(entity);
   }

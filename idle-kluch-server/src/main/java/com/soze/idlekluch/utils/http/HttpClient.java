@@ -14,7 +14,6 @@ import java.util.function.Supplier;
 /**
  * A simple wrapper around a http client.
  * Used mostly for testing.
- * TODO extract an interface for the client, so that it can be mocked in places which need it
  */
 public class HttpClient {
 

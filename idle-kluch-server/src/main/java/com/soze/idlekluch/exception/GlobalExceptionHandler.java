@@ -17,30 +17,30 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(RateLimitException.class)
   public ResponseEntity<Object> handleRateLimitException(final RateLimitException exception) {
-    Map<String, Object> data = new HashMap<>();
+    final Map<String, Object> data = new HashMap<>();
     data.put("resource", exception.getLimitedResource());
     data.put("limit", exception.getRateLimit());
     data.put("next", exception.getNextRequest());
-    ErrorResponse errorResponse = new ErrorResponse(429, "Rate limit exceeded", data);
+    final ErrorResponse errorResponse = new ErrorResponse(429, "Rate limit exceeded", data);
 
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
   @ExceptionHandler(EntityAlreadyExistsException.class)
   public ResponseEntity<Object> handleEntityAlreadyExistsException(final EntityAlreadyExistsException exception) {
-    Map<String, Object> data = new HashMap<>();
+    final Map<String, Object> data = new HashMap<>();
     data.put("entity", exception.getClazz().getSimpleName());
 
-    ErrorResponse errorResponse = new ErrorResponse(400, "Entity already exists", data);
+    final ErrorResponse errorResponse = new ErrorResponse(400, "Entity already exists", data);
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
   @ExceptionHandler(EntityDoesNotExistException.class)
   public ResponseEntity<Object> handleEntityDoesNotExistException(final EntityDoesNotExistException exception) {
-    Map<String, Object> data = new HashMap<>();
+    final Map<String, Object> data = new HashMap<>();
     data.put("entity", exception.getClazz().getSimpleName());
 
-    ErrorResponse errorResponse = new ErrorResponse(400, "Entity does not exist", data);
+    final ErrorResponse errorResponse = new ErrorResponse(400, "Entity does not exist", data);
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 

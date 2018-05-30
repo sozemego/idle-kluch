@@ -36,7 +36,9 @@ public class RateLimitInterceptor extends HandlerInterceptorAdapter {
   }
 
   @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+  public boolean preHandle(final HttpServletRequest request,
+                           final HttpServletResponse response,
+                           final Object handler) throws Exception {
     if (!rateLimitEnabled) {
       return true;
     }
@@ -78,7 +80,7 @@ public class RateLimitInterceptor extends HandlerInterceptorAdapter {
     return true;
   }
 
-  private RateLimit getRateLimit(RateLimited rateLimited) {
+  private RateLimit getRateLimit(final RateLimited rateLimited) {
     return new RateLimit(
       rateLimited.limit(),
       rateLimited.timeUnit(),

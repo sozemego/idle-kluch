@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 public class LoggingAspect {
 
   private static final Logger LOG = LoggerFactory.getLogger(LoggingAspect.class);
-
   private static final Marker AUTHORIZED_MARKER = MarkerFactory.getMarker("AUTHORIZED");
 
   @Pointcut("execution(* *(..)) && @annotation(com.soze.idlekluch.aop.annotations.AuthLog))")

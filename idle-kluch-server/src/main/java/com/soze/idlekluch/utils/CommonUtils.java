@@ -16,7 +16,7 @@ public class CommonUtils {
       throw new IllegalArgumentException("Length cannot be negative.");
     }
 
-    StringBuilder sb = new StringBuilder(length);
+    final StringBuilder sb = new StringBuilder(length);
     for (int i = 0; i < length; i++) {
       sb.append(generateRandomCharacterAlphanumeric());
     }
@@ -31,7 +31,7 @@ public class CommonUtils {
   /**
    * Generates a random number between min and max. Min is inclusive, max is inclusive.
    */
-  public static int randomNumber(int min, int max) {
+  public static int randomNumber(final int min, final int max) {
     if (max < min) {
       throw new IllegalArgumentException("Max cannot be less than min.");
     }
@@ -42,14 +42,14 @@ public class CommonUtils {
   /**
    * Generates a random number between min and max. Min is inclusive, max is exclusive.
    */
-  public static double randomNumber(double min, double max) {
+  public static double randomNumber(final double min, final double max) {
     if (max < min) {
       throw new IllegalArgumentException("Max cannot be less than min.");
     }
     return ThreadLocalRandom.current().nextDouble(min, max);
   }
 
-  public static int parseInt(String str, int defaultValue) {
+  public static int parseInt(final String str, final int defaultValue) {
     return isInteger(str) ? Integer.parseInt(str) : defaultValue;
   }
 
@@ -60,8 +60,8 @@ public class CommonUtils {
    * @param str input string
    * @return true if given string can be parsed into an integer. False otherwise
    */
-  public static boolean isInteger(String str) {
-    char[] chars = str.toCharArray();
+  public static boolean isInteger(final String str) {
+    final char[] chars = str.toCharArray();
     for (int i = 0; i < chars.length; i++) {
       if (!Character.isDigit(chars[i])) {
         return false;

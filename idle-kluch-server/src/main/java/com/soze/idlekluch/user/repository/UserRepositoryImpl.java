@@ -22,15 +22,15 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public List<User> getAllUsers() {
-    Query query = em.createQuery("SELECT u FROM User u");
+    final Query query = em.createQuery("SELECT u FROM User u");
     return query.getResultList();
   }
 
   @Override
-  public Optional<User> getUserById(EntityUUID userId) {
+  public Optional<User> getUserById(final EntityUUID userId) {
     Objects.requireNonNull(userId);
 
-    Query query = em.createQuery("SELECT u FROM User u WHERE UPPER(u.userId) = :userId AND u.deleted = false");
+    final Query query = em.createQuery("SELECT u FROM User u WHERE UPPER(u.userId) = :userId AND u.deleted = false");
     query.setParameter("userId", userId);
 
     try {
@@ -41,10 +41,10 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public Optional<User> getUserByUsername(String username) {
+  public Optional<User> getUserByUsername(final String username) {
     Objects.requireNonNull(username);
 
-    Query query = em.createQuery("SELECT u FROM User u WHERE UPPER(u.username) = :username AND u.deleted = false");
+    final Query query = em.createQuery("SELECT u FROM User u WHERE UPPER(u.username) = :username AND u.deleted = false");
     query.setParameter("username", username.toUpperCase());
 
     try {
@@ -55,29 +55,32 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public boolean usernameExists(String username) {
+  public boolean usernameExists(final String username) {
     Objects.requireNonNull(username);
 
-    Query query = em.createQuery("SELECT u FROM User u where UPPER(u.username) = :username");
+    final Query query = em.createQuery("SELECT u FROM User u where UPPER(u.username) = :username");
     query.setParameter("username", username.toUpperCase());
     return !query.setMaxResults(1).getResultList().isEmpty();
   }
 
   @Override
   @Transactional
-  public void addUser(User user) {
+  public void addUser(final User user) {
+    Objects.requireNonNull(user);
     em.persist(user);
   }
 
   @Override
   @Transactional
-  public void updateUser(User user) {
+  public void updateUser(final User user) {
+    Objects.requireNonNull(user);
     em.merge(user);
   }
 
   @Override
   @Transactional
-  public void deleteUser(String username) {
+  public void deleteUser(final String username) {
+    Objects.requireNonNull(username);
     User user = getUserByUsername(username).get();
 
     user.setDeleted(true);
