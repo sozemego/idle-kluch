@@ -28,9 +28,6 @@ import java.util.regex.Pattern;
 public class UserServiceImpl implements com.soze.idlekluch.user.service.UserService {
 
   private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
-  private static final Pattern USERNAME_VALIDATOR = Pattern.compile("[a-zA-Z0-9_-]+");
-  private static final int MAX_USERNAME_LENGTH = 38;
-  private static final int MAX_PASSWORD_LENGTH = 128;
 
   private final UserRepository userRepository;
   private final PasswordHash passwordHash;
@@ -72,14 +69,12 @@ public class UserServiceImpl implements com.soze.idlekluch.user.service.UserServ
 
     final String username = userForm.getUsername();
     LOG.info("Attempting to create user with username [{}]", username);
-    validateUsername(username);
 
     if (userRepository.usernameExists(username)) {
       throw new UserRegistrationException("username", username + " already exists.");
     }
 
     final char[] password = userForm.getPassword();
-    validatePassword(password);
     final String hashedPassword = passwordHash.hashWithSalt(password);
     userForm.reset();
 
@@ -92,28 +87,6 @@ public class UserServiceImpl implements com.soze.idlekluch.user.service.UserServ
     userRepository.addUser(user);
 
     LOG.info("Registered user [{}]", username);
-  }
-
-  private void validateUsername(final String username) {
-    Objects.requireNonNull(username);
-
-    if (!USERNAME_VALIDATOR.matcher(username).matches()) {
-      throw new UserRegistrationException("username", "Username can only contain letters, numbers, '-' and '_'");
-    }
-
-    if (username.length() > MAX_USERNAME_LENGTH) {
-      throw new UserRegistrationException("username", "Username cannot be longer than " + MAX_USERNAME_LENGTH);
-    }
-  }
-
-  private void validatePassword(final char[] password) {
-    if (password.length == 0) {
-      throw new UserRegistrationException("password", "Password cannot be empty.");
-    }
-
-    if (password.length > MAX_PASSWORD_LENGTH) {
-      throw new UserRegistrationException("password", "Password cannot be longer than " + MAX_PASSWORD_LENGTH);
-    }
   }
 
   @Override
@@ -139,11 +112,7 @@ public class UserServiceImpl implements com.soze.idlekluch.user.service.UserServ
   @Profiled
   public boolean isAvailableForRegistration(final String username) {
     Objects.requireNonNull(username);
-    try {
-      validateUsername(username);
-    } catch (UserRegistrationException e) {
-      return false;
-    }
+
     return !userRepository.usernameExists(username);
   }
 

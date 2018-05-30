@@ -3,6 +3,7 @@ package com.soze.idlekluch.kingdom.service;
 import com.soze.idlekluch.IntAuthTest;
 import com.soze.idlekluch.RootConfig;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
+import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.utils.CommonUtils;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
@@ -50,6 +51,9 @@ public class KingdomServiceRemoveKingdomIntTest extends IntAuthTest {
   @Autowired
   private WorldService worldService;
 
+  @Autowired
+  private GameEngine gameEngine;
+
   @BeforeClass
   public static void beforeClass() {
     DatabaseReset.resetDatabase();
@@ -57,6 +61,7 @@ public class KingdomServiceRemoveKingdomIntTest extends IntAuthTest {
 
   @Before
   public void setup() {
+    gameEngine.reset();
     DatabaseReset.resetDatabase();
   }
 

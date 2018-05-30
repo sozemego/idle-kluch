@@ -1,5 +1,6 @@
 package com.soze.idlekluch.user.service;
 
+import com.soze.idlekluch.aop.annotations.ValidForm;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
@@ -24,7 +25,7 @@ public interface UserService extends UserDetailsService {
    * @param username
    * @return
    */
-  User getUserOrThrow(final String username);
+  User getUserOrThrow(String username);
 
   /**
    * Attempts to register a new user.
@@ -34,7 +35,7 @@ public interface UserService extends UserDetailsService {
    *
    * @throws UserRegistrationException if there is a problem with the registration
    */
-  void addUser(RegisterUserForm userForm);
+  void addUser(@ValidForm RegisterUserForm userForm);
 
   void changeUserPassword(String username, String hash);
 

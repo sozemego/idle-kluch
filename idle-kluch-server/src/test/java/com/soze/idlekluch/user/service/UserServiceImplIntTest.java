@@ -2,6 +2,7 @@ package com.soze.idlekluch.user.service;
 
 import com.soze.idlekluch.IntAuthTest;
 import com.soze.idlekluch.RootConfig;
+import com.soze.idlekluch.exception.InvalidFormException;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.service.KingdomService;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
@@ -63,27 +64,27 @@ public class UserServiceImplIntTest {
     assertFalse(userService.getUserByUsername("SOME_USER").isPresent());
   }
 
-  @Test(expected = UserRegistrationException.class)
+  @Test(expected = InvalidFormException.class)
   public void testCreateUsernameWithWhiteSpaceInside() {
     userService.addUser(new RegisterUserForm("some whitespace", "password".toCharArray()));
   }
 
-  @Test(expected = UserRegistrationException.class)
+  @Test(expected = InvalidFormException.class)
   public void testCreateUserWithWhiteSpaceAtTheEnd() {
     userService.addUser(new RegisterUserForm("some_whitespace ", "password".toCharArray()));
   }
 
-  @Test(expected = UserRegistrationException.class)
+  @Test(expected = InvalidFormException.class)
   public void testCreateUserWithWhiteSpaceAtTheBeginning() {
     userService.addUser(new RegisterUserForm(" some_whitespace", "password".toCharArray()));
   }
 
-  @Test(expected = UserRegistrationException.class)
+  @Test(expected = InvalidFormException.class)
   public void testCreateUserWithWhiteSpaceOnly() {
     userService.addUser(new RegisterUserForm("           ", "password".toCharArray()));
   }
 
-  @Test(expected = UserRegistrationException.class)
+  @Test(expected = InvalidFormException.class)
   public void testCreateUserWithIllegalCharacters() {
     userService.addUser(new RegisterUserForm("[]@#$", "password".toCharArray()));
   }
@@ -110,7 +111,7 @@ public class UserServiceImplIntTest {
     userService.addUser(new RegisterUserForm("cooL_Super_Name_another", "password".toCharArray()));
   }
 
-  @Test(expected = UserRegistrationException.class)
+  @Test(expected = InvalidFormException.class)
   public void testRegisterUserNameTooLong() {
     userService.addUser(new RegisterUserForm(CommonUtils.generateRandomString(500), "password".toCharArray()));
   }
@@ -129,15 +130,15 @@ public class UserServiceImplIntTest {
 
   @Test
   public void testInvalidUsernameAvailable() {
-    assertFalse(userService.isAvailableForRegistration(CommonUtils.generateRandomString(500)));
+    assertTrue(userService.isAvailableForRegistration(CommonUtils.generateRandomString(500)));
   }
 
-  @Test(expected = UserRegistrationException.class)
+  @Test(expected = InvalidFormException.class)
   public void createUserEmptyPassword() {
     userService.addUser(new RegisterUserForm(CommonUtils.generateRandomString(12), "".toCharArray()));
   }
 
-  @Test(expected = UserRegistrationException.class)
+  @Test(expected = InvalidFormException.class)
   public void createUserPasswordTooLong() {
     userService.addUser(new RegisterUserForm(
       CommonUtils.generateRandomString(12),

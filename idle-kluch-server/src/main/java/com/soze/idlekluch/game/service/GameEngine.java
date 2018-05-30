@@ -34,4 +34,9 @@ public interface GameEngine {
 
   void deleteEntity(final EntityUUID entityId);
 
+  /**
+   * Removes all entities.
+   */
+  void reset();
+
 }

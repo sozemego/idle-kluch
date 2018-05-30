@@ -83,4 +83,11 @@ public class GameEngineImpl implements GameEngine {
     engine.removeEntity(entityId);
   }
 
+  @Override
+  public void reset() {
+    engine
+      .getAllEntities()
+      .forEach(entity -> engine.removeEntity(entity.getId()));
+  }
+
 }
