@@ -52,6 +52,7 @@ public class GameServiceImpl implements GameService {
    * Responsibilities right now:
    * 1. Send all tile data to the joining player
    * 2. Send all entities to the joining player
+   * 3. Send a list of all constructable buildings to the joining player
    */
   @Override
   @Profiled
