@@ -129,16 +129,21 @@ public class AuthServiceImpl implements AuthService {
 
     final User user = getUserByUsername(username).get();
 
-    if (Arrays.equals(form.getNewPassword(), form.getOldPassword())) {
+    try {
+
+      if (Arrays.equals(form.getNewPassword(), form.getOldPassword())) {
+        throw new IdenticalPasswordChangeException();
+      }
+
+      boolean passwordMatches = passwordHash.matches(form.getOldPassword(), user.getPasswordHash());
+      if (!passwordMatches) {
+        throw new InvalidPasswordException(username);
+      }
+
+    } finally {
       form.reset();
-      throw new IdenticalPasswordChangeException();
     }
 
-    boolean passwordMatches = passwordHash.matches(form.getOldPassword(), user.getPasswordHash());
-    if (!passwordMatches) {
-      form.reset();
-      throw new InvalidPasswordException(username);
-    }
   }
 
   private Optional<User> getUserByUsername(final String username) {

@@ -1,5 +1,6 @@
 package com.soze.idlekluch.user.service;
 
+import com.soze.idlekluch.aop.annotations.ValidForm;
 import com.soze.idlekluch.user.dto.ChangePasswordForm;
 import com.soze.idlekluch.user.dto.Jwt;
 import com.soze.idlekluch.user.dto.LoginForm;
@@ -46,6 +47,6 @@ public interface AuthService {
    * @throws NullPointerException     if changePasswordForm is null
    * @throws InvalidPasswordException if old password given does not match current password
    */
-  void passwordChange(final String username, final ChangePasswordForm changePasswordForm);
+  void passwordChange(final String username, @ValidForm final ChangePasswordForm changePasswordForm);
 
 }
