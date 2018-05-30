@@ -25,13 +25,6 @@ public class KingdomExceptionHandler extends ResponseEntityExceptionHandler {
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
-  @ExceptionHandler(InvalidRegisterKingdomException.class)
-  public ResponseEntity handleInvalidRegisterKingdomException(final InvalidRegisterKingdomException e) {
-    final ErrorResponse errorResponse = new ErrorResponse(400, e.getMessage());
-    errorResponse.addData("field", e.getField());
-    return ExceptionUtils.convertErrorResponse(errorResponse);
-  }
-
   @ExceptionHandler(BuildingDoesNotExistException.class)
   public ResponseEntity handleBuildingDoesNotExistException(BuildingDoesNotExistException exception) {
     final ErrorResponse errorResponse = new ErrorResponse(400, "Building does exist " + exception.getBuildingId());

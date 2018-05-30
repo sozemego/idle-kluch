@@ -2,19 +2,18 @@ package com.soze.idlekluch.kingdom.service;
 
 import com.soze.idlekluch.aop.annotations.AuthLog;
 import com.soze.idlekluch.aop.annotations.Profiled;
+import com.soze.idlekluch.aop.annotations.ValidForm;
 import com.soze.idlekluch.exception.EntityAlreadyExistsException;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.events.KingdomRemovedEvent;
-import com.soze.idlekluch.kingdom.exception.InvalidRegisterKingdomException;
 import com.soze.idlekluch.kingdom.exception.UserAlreadyHasKingdomException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.kingdom.repository.KingdomRepository;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.event.UserRemovedEvent;
-import com.soze.idlekluch.user.repository.UserRepository;
 import com.soze.idlekluch.user.service.UserService;
 import com.soze.idlekluch.utils.PoissonDiscSampler;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
@@ -27,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.awt.*;
@@ -42,7 +40,6 @@ import java.util.stream.Stream;
 public class KingdomServiceImpl implements KingdomService {
 
   private static final Logger LOG = LoggerFactory.getLogger(KingdomServiceImpl.class);
-  private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
 
   private final KingdomRepository kingdomRepository;
   private final UserService userService;
@@ -68,12 +65,11 @@ public class KingdomServiceImpl implements KingdomService {
   @Override
   @Profiled
   @AuthLog
-  public void addKingdom(final String owner, final RegisterKingdomForm form) {
+  public void addKingdom(final String owner, @ValidForm final RegisterKingdomForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
 
-    validateKingdomForm(form);
-    validateKingdom(owner, form);
+    validateKingdom(owner, form.getName());
 
     final TileId startingPoint = findStartingPoint();
     LOG.info("Starting point for kingdom [{}] is [{}]", form.getName(), startingPoint);
@@ -93,25 +89,17 @@ public class KingdomServiceImpl implements KingdomService {
     LOG.info("User [{}] successfully created kingdom [{}]", owner, form.getName());
   }
 
-  private void validateKingdomForm(final RegisterKingdomForm form) {
-    final Set<ConstraintViolation<RegisterKingdomForm>> violations = VALIDATOR.validate(form);
-
-    for (final ConstraintViolation<RegisterKingdomForm> violation: violations) {
-      throw new InvalidRegisterKingdomException(violation.getPropertyPath().toString(), violation.getMessage());
-    }
-  }
-
-  private void validateKingdom(final String owner, final RegisterKingdomForm form) {
+  private void validateKingdom(final String owner, final String kingdomName) {
     kingdomRepository
-      .getKingdom(form.getName())
+      .getKingdom(kingdomName)
       .ifPresent((k) -> {
-        throw new EntityAlreadyExistsException("Kingdom already exists: " + form.getName(), Kingdom.class);
+        throw new EntityAlreadyExistsException("Kingdom already exists: " + kingdomName, Kingdom.class);
       });
 
     kingdomRepository
       .getUsersKingdom(owner)
       .ifPresent((k) -> {
-        throw new UserAlreadyHasKingdomException(owner, form.getName());
+        throw new UserAlreadyHasKingdomException(owner, kingdomName);
       });
   }
 

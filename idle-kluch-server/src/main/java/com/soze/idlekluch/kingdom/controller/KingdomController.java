@@ -4,26 +4,19 @@ import com.soze.idlekluch.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.kingdom.dto.KingdomDto;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
-import com.soze.idlekluch.kingdom.exception.InvalidRegisterKingdomException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.kingdom.service.KingdomService;
 import com.soze.idlekluch.routes.Routes;
-import com.soze.idlekluch.utils.ExceptionUtils;
-import com.soze.idlekluch.utils.http.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Objects;
-import java.util.Optional;
 
 @Controller
 public class KingdomController {

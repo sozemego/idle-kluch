@@ -172,10 +172,10 @@ public class KingdomServiceRemoveKingdomIntTest extends IntAuthTest {
     createKingdom(username, kingdomName, 5000);
 
     final Point buildingPosition1 = new Point(0, 0);
-    final Point buildingPosition2 = new Point(100, 100);
-    final Point buildingPosition3 = new Point(200, 200);
-    final Point buildingPosition4 = new Point(300, 300);
-    final Point buildingPosition5 = new Point(400, 400);
+    final Point buildingPosition2 = new Point(200, 100);
+    final Point buildingPosition3 = new Point(400, 200);
+    final Point buildingPosition4 = new Point(600, 300);
+    final Point buildingPosition5 = new Point(800, 400);
 
     worldService.createWorldChunk(WorldUtils.translateCoordinates(buildingPosition1.x, buildingPosition1.y));
     worldService.createWorldChunk(WorldUtils.translateCoordinates(buildingPosition2.x, buildingPosition2.y));

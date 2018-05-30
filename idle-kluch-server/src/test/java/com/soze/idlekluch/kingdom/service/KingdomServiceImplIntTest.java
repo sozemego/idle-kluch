@@ -3,9 +3,9 @@ package com.soze.idlekluch.kingdom.service;
 import com.soze.idlekluch.IntAuthTest;
 import com.soze.idlekluch.RootConfig;
 import com.soze.idlekluch.exception.EntityAlreadyExistsException;
+import com.soze.idlekluch.exception.InvalidFormException;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
-import com.soze.idlekluch.kingdom.exception.InvalidRegisterKingdomException;
 import com.soze.idlekluch.kingdom.exception.UserAlreadyHasKingdomException;
 import com.soze.idlekluch.utils.CommonUtils;
 import com.soze.idlekluch.utils.sql.DatabaseReset;
@@ -68,7 +68,7 @@ public class KingdomServiceImplIntTest extends IntAuthTest {
     assertTrue(kingdom.getCreatedAt() != null);
   }
 
-  @Test(expected = InvalidRegisterKingdomException.class)
+  @Test(expected = InvalidFormException.class)
   public void testIllegalKingdomName() {
     final String username = CommonUtils.generateRandomString(12);
     register(username);
@@ -77,7 +77,7 @@ public class KingdomServiceImplIntTest extends IntAuthTest {
     kingdomService.addKingdom(username, new RegisterKingdomForm(kingdomName));
   }
 
-  @Test(expected = InvalidRegisterKingdomException.class)
+  @Test(expected = InvalidFormException.class)
   public void testKingdomNameTooLong() {
     final String username = CommonUtils.generateRandomString(12);
     register(username);

@@ -44,4 +44,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
+  @ExceptionHandler(InvalidFormException.class)
+  public ResponseEntity<Object> handleInvalidFormException(final InvalidFormException exception) {
+    final Map<String, Object> data = new HashMap<>();
+    data.put("property", exception.getPropertyPath());
+
+    final ErrorResponse errorResponse = new ErrorResponse(400, exception.getMessage(), data);
+    return ExceptionUtils.convertErrorResponse(errorResponse);
+  }
+
 }
