@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements com.soze.idlekluch.user.service.UserService {
 
   private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
   private static final Pattern USERNAME_VALIDATOR = Pattern.compile("[a-zA-Z0-9_-]+");

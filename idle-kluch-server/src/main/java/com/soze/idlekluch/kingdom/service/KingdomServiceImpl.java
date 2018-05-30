@@ -15,6 +15,7 @@ import com.soze.idlekluch.kingdom.repository.KingdomRepository;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.event.UserRemovedEvent;
 import com.soze.idlekluch.user.repository.UserRepository;
+import com.soze.idlekluch.user.service.UserService;
 import com.soze.idlekluch.utils.PoissonDiscSampler;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.TileId;
@@ -44,7 +45,7 @@ public class KingdomServiceImpl implements KingdomService {
   private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
 
   private final KingdomRepository kingdomRepository;
-  private final UserRepository userRepository;
+  private final UserService userService;
   private final WorldService worldService;
   private final EntityService entityService;
   private final ApplicationEventPublisher eventPublisher;
@@ -53,12 +54,12 @@ public class KingdomServiceImpl implements KingdomService {
 
   @Autowired
   public KingdomServiceImpl(final KingdomRepository kingdomRepository,
-                            final UserRepository userRepository,
+                            final UserService userService,
                             final WorldService worldService,
                             final EntityService entityService,
                             final ApplicationEventPublisher eventPublisher) {
     this.kingdomRepository = Objects.requireNonNull(kingdomRepository);
-    this.userRepository = Objects.requireNonNull(userRepository);
+    this.userService = Objects.requireNonNull(userService);
     this.worldService = Objects.requireNonNull(worldService);
     this.entityService = Objects.requireNonNull(entityService);
     this.eventPublisher = Objects.requireNonNull(eventPublisher);
@@ -85,8 +86,7 @@ public class KingdomServiceImpl implements KingdomService {
     kingdom.setStartingPoint(startingPoint);
     kingdom.setIdleBucks(KingdomService.STARTING_IDLE_BUCKS);
 
-    // lets assume the user did not delete his account while making this request
-    final User user = userRepository.getUserByUsername(owner).get();
+    final User user = userService.getUserOrThrow(owner);
     kingdom.setOwner(user);
 
     kingdomRepository.addKingdom(kingdom);
