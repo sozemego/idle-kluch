@@ -7,7 +7,6 @@ import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.utils.CommonUtils;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.utils.sql.DatabaseReset;
-import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.entity.Entity;

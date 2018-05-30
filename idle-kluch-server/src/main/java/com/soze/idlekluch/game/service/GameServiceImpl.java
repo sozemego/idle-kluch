@@ -1,6 +1,6 @@
 package com.soze.idlekluch.game.service;
 
-import com.soze.idlekluch.aop.annotations.Authorized;
+import com.soze.idlekluch.aop.annotations.AuthLog;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.message.*;
@@ -17,15 +17,12 @@ import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.soze.idlekluch.world.utils.WorldUtils.getEntityTileId;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -58,7 +55,7 @@ public class GameServiceImpl implements GameService {
    */
   @Override
   @Profiled
-  @Authorized
+  @AuthLog
   public void handleInitMessage(final String username) {
 
     final Map<TileId, Tile> allTiles = worldService.getAllTiles();
@@ -88,7 +85,7 @@ public class GameServiceImpl implements GameService {
 
   @Override
   @Profiled
-  @Authorized
+  @AuthLog
   public void handleBuildBuildingMessage(final String username, final BuildBuildingForm form) {
     final Entity building = buildingService.buildBuilding(username, form);
 

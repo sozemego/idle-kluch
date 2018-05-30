@@ -19,7 +19,7 @@ public class LoggingAspect {
 
   private static final Marker AUTHORIZED_MARKER = MarkerFactory.getMarker("AUTHORIZED");
 
-  @Pointcut("execution(* *(..)) && @annotation(com.soze.idlekluch.aop.annotations.Authorized))")
+  @Pointcut("execution(* *(..)) && @annotation(com.soze.idlekluch.aop.annotations.AuthLog))")
   public void authorizedMethodExecution() {}
 
   @Before("authorizedMethodExecution()")

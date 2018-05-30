@@ -2,6 +2,7 @@ package com.soze.idlekluch.user.service;
 
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.entity.User;
+import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.exception.UserRegistrationException;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,13 @@ public interface UserService extends UserDetailsService {
   Optional<User> getUserById(EntityUUID userId);
 
   Optional<User> getUserByUsername(String username);
+
+  /**
+   * Will either return the user or throw {@link AuthUserDoesNotExistException}
+   * @param username
+   * @return
+   */
+  User getUserOrThrow(final String username);
 
   /**
    * Attempts to register a new user.

@@ -1,6 +1,6 @@
 package com.soze.idlekluch.kingdom.service;
 
-import com.soze.idlekluch.aop.annotations.Authorized;
+import com.soze.idlekluch.aop.annotations.AuthLog;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.BuildableComponent;
@@ -17,7 +17,6 @@ import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
 import com.soze.idlekluch.kingdom.exception.CannotAffordBuildingException;
 import com.soze.idlekluch.kingdom.exception.SpaceAlreadyOccupiedException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
-import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.service.UserService;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.TileId;
@@ -66,7 +65,7 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   @Override
-  @Authorized
+  @AuthLog
   @Profiled
   public Entity buildBuilding(final String owner, final BuildBuildingForm form) {
     Objects.requireNonNull(owner);
@@ -107,7 +106,7 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   @Override
-  @Authorized
+  @AuthLog
   public List<Entity> getOwnBuildings(final String owner) {
     Objects.requireNonNull(owner);
 
@@ -147,7 +146,7 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   @Override
-  @Authorized
+  @AuthLog
   public void destroyBuilding(final EntityUUID buildingId) {
     Objects.requireNonNull(buildingId);
     throw new IllegalStateException("NOT IMPLEMENTED YET DESTROY BUILDING");

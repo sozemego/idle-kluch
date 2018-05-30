@@ -35,6 +35,10 @@ public class IntAuthTest {
     }
   }
 
+  private void setCurrentUser(final String username) {
+
+  }
+
   /**
    * Creates a kingdom for given user.
    * @param username

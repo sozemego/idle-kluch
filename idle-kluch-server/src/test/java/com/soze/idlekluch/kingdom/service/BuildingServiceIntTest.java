@@ -82,7 +82,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
     }
   }
 
-  @Test(expected = NotAuthenticatedException.class)
+  @Test(expected = UserDoesNotHaveKingdomException.class)
   public void testBuildBuildingUserDoesNotExist() throws Exception {
     buildingService.buildBuilding("dontexist", new BuildBuildingForm(UUID.randomUUID().toString(), "1", 15, 15));
   }

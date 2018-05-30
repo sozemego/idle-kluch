@@ -1,6 +1,6 @@
 package com.soze.idlekluch.user.service;
 
-import com.soze.idlekluch.aop.annotations.Authorized;
+import com.soze.idlekluch.aop.annotations.AuthLog;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.entity.User;
@@ -60,6 +60,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public User getUserOrThrow(final String username) {
+    return getUserByUsername(username)
+             .orElseThrow(() -> new AuthUserDoesNotExistException(username));
+  }
+
+  @Override
   @Profiled
   public void addUser(RegisterUserForm userForm) {
     Objects.requireNonNull(userForm);
@@ -111,7 +117,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  @Authorized
+  @AuthLog
   public void changeUserPassword(String username, String hash) {
     Objects.requireNonNull(username);
     Objects.requireNonNull(hash);
@@ -122,7 +128,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  @Authorized
+  @AuthLog
   public void deleteUser(final String username) {
     Objects.requireNonNull(username);
     userRepository.deleteUser(username);

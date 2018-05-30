@@ -1,6 +1,6 @@
 package com.soze.idlekluch.kingdom.service;
 
-import com.soze.idlekluch.aop.annotations.Authorized;
+import com.soze.idlekluch.aop.annotations.AuthLog;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.exception.EntityAlreadyExistsException;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
@@ -66,7 +66,7 @@ public class KingdomServiceImpl implements KingdomService {
 
   @Override
   @Profiled
-  @Authorized
+  @AuthLog
   public void addKingdom(final String owner, final RegisterKingdomForm form) {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
@@ -116,7 +116,7 @@ public class KingdomServiceImpl implements KingdomService {
   }
 
   @Override
-  @Authorized
+  @AuthLog
   public void removeKingdom(final String owner) {
     Objects.requireNonNull(owner);
 
@@ -134,7 +134,7 @@ public class KingdomServiceImpl implements KingdomService {
   }
 
   @Override
-  @Authorized
+  @AuthLog
   public void updateKingdom(final Kingdom kingdom) {
     Objects.requireNonNull(kingdom);
     kingdomRepository.updateKingdom(kingdom);
