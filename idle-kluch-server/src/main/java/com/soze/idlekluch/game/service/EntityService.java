@@ -19,31 +19,31 @@ import java.util.Optional;
  */
 public interface EntityService {
 
-  void addEntity(final PersistentEntity entity);
+  void addEntity(PersistentEntity entity);
 
-  Optional<PersistentEntity> getEntity(final EntityUUID id);
+  Optional<PersistentEntity> getEntity(EntityUUID id);
 
-  void deleteEntity(final EntityUUID id);
+  void deleteEntity(EntityUUID id);
 
-  Optional<Entity> getEntityTemplate(final EntityUUID templateId);
+  Optional<Entity> getEntityTemplate(EntityUUID templateId);
 
   List<Entity> getEntityTemplates();
 
-  List<Entity> getEntitiesByNode(final Node node);
+  List<Entity> getEntitiesByNode(Node node);
 
   /**
    * Each component in the source is copied ({@link BaseComponent#copy}).
    * Each component is assigned the id of target.
    */
-  void copyEntity(final Entity source, final Entity target);
+  void copyEntity(Entity source, Entity target);
 
   @EventListener
-  void handleAddedEntity(final AddedEntityEvent addedEntityEvent);
+  void handleAddedEntity(AddedEntityEvent addedEntityEvent);
 
   @EventListener
-  void handleRemovedEntity(final RemovedEntityEvent removedEntityEvent);
+  void handleRemovedEntity(RemovedEntityEvent removedEntityEvent);
 
   @EventListener
-  void handleKingdomRemovedEvent(final KingdomRemovedEvent kingdomRemovedEvent);
+  void handleKingdomRemovedEvent(KingdomRemovedEvent kingdomRemovedEvent);
 
 }

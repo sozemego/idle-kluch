@@ -4,10 +4,10 @@ import org.springframework.messaging.MessageHeaders;
 
 public interface WebSocketMessagingService {
 
-  void sendToUser(final String username, final String destination, final Object message);
+  void sendToUser(String username, String destination, Object message);
 
-  void send(final String destination, final Object message);
+  void send(String destination, Object message);
 
-  void sendToSession(final String sessionId, final String destination, final Object message, final MessageHeaders headers);
+  void sendToSession(String sessionId, String destination, Object message, MessageHeaders headers);
 
 }

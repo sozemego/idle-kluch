@@ -21,7 +21,7 @@ public interface WorldService {
    * only new ones will be created.
    * @return List of newly created tiles
    */
-  List<Tile> createWorldChunk(final TileId center);
+  List<Tile> createWorldChunk(TileId center);
 
   /**
    * Creates a chunk around center tile.
@@ -29,11 +29,11 @@ public interface WorldService {
    * is an even number, the actual width and height will be the next odd number (so width or height + 1).
    * @return List of newly created tiles
    */
-  List<Tile> createWorldChunk(final TileId center, final int width, final int height);
+  List<Tile> createWorldChunk(TileId center, int width, int height);
 
   /**
    * Checks if a tile with given id exists.
    */
-  boolean tileExists(final TileId tileId);
+  boolean tileExists(TileId tileId);
 
 }

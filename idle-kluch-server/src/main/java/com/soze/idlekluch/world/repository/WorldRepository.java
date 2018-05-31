@@ -13,22 +13,22 @@ public interface WorldRepository {
 
   Optional<World> getCurrentWorld();
 
-  void saveWorld(final World world);
+  void saveWorld(World world);
 
   Map<TileId, Tile> getAllTiles();
 
-  Optional<Tile> getTile(final TileId tileId);
+  Optional<Tile> getTile(TileId tileId);
 
-  public void addTile(final Tile tile);
+  public void addTile(Tile tile);
 
-  public List<Tile> addTiles(final List<Tile> tiles);
+  public List<Tile> addTiles(List<Tile> tiles);
 
-  void removeTiles(final List<Tile> tile);
+  void removeTiles(List<Tile> tile);
 
   List<Resource> getAllAvailableResources();
 
-  void addResource(final Resource resource);
+  void addResource(Resource resource);
 
-  Optional<Resource> getResource(final String name);
+  Optional<Resource> getResource(String name);
 
 }

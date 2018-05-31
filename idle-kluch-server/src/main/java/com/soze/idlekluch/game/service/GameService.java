@@ -11,19 +11,19 @@ public interface GameService {
   /**
    * Called when a new player joins the game.
    */
-  void handleInitMessage(final String username);
+  void handleInitMessage(String username);
 
   /**
    * Attempts to place a building for a given player.
    */
-  void handleBuildBuildingMessage(final String owner, final BuildBuildingForm form);
+  void handleBuildBuildingMessage(String owner, BuildBuildingForm form);
 
-  void handleDuplicateSession(final String sessionId);
-
-  @EventListener
-  void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent event);
+  void handleDuplicateSession(String sessionId);
 
   @EventListener
-  void handleRemovedEntityEvent(final RemovedEntityEvent removedEntityEvent);
+  void handleWorldChunkCreatedEvent(WorldChunkCreatedEvent event);
+
+  @EventListener
+  void handleRemovedEntityEvent(RemovedEntityEvent removedEntityEvent);
 
 }

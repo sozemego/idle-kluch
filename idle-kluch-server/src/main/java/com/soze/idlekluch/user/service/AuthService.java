@@ -18,27 +18,27 @@ public interface AuthService {
    * @throws AuthUserDoesNotExistException if user with username specified in loginForm does not exist
    * @throws InvalidPasswordException      if password given by user is invalid
    */
-  Jwt login(final LoginForm loginForm);
+  Jwt login(LoginForm loginForm);
 
-  Jwt getToken(final String username);
+  Jwt getToken(String username);
 
   /**
    * Given a token, logs out the user. For now, the method will only
    * log that user logged out. Client-side, cookie will be removed.
    */
-  void logout(final String token);
+  void logout(String token);
 
   /**
    * Validates a given JWT. Returns true if it's valid, false otherwise.
    * This method does not check any claims, just checks whether the token
    * was tampered with.
    */
-  boolean validateToken(final String token);
+  boolean validateToken(String token);
 
   /**
    * Returns username claim from a given token.
    */
-  String getUsernameClaim(final String token);
+  String getUsernameClaim(String token);
 
   /**
    * Attempts to change user's password.
@@ -47,6 +47,6 @@ public interface AuthService {
    * @throws NullPointerException     if changePasswordForm is null
    * @throws InvalidPasswordException if old password given does not match current password
    */
-  void passwordChange(final String username, @ValidForm final ChangePasswordForm changePasswordForm);
+  void passwordChange(String username, @ValidForm ChangePasswordForm changePasswordForm);
 
 }

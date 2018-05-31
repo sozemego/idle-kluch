@@ -14,25 +14,25 @@ public interface KingdomRepository {
    * @param kingdom
    * @throws EntityAlreadyExistsException if a kingdom with given name already exists.
    */
-  void addKingdom(final Kingdom kingdom);
+  void addKingdom(Kingdom kingdom);
 
-  Optional<Kingdom> getKingdom(final String name);
+  Optional<Kingdom> getKingdom(String name);
 
   List<Kingdom> getAllKingdoms();
 
-  Optional<Kingdom> getUsersKingdom(final String username);
+  Optional<Kingdom> getUsersKingdom(String username);
 
   /**
    * Deletes kingdom with given name.
    * @throws EntityDoesNotExistException if kingdom does not exist
    */
-  void removeKingdom(final String name);
+  void removeKingdom(String name);
 
   /**
    * Updates a given kingdom.
    * @param kingdom
    * @throws EntityDoesNotExistException if kingdom does not exist
    */
-  void updateKingdom(final Kingdom kingdom);
+  void updateKingdom(Kingdom kingdom);
 
 }

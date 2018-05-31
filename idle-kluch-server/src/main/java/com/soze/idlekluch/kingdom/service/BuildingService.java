@@ -15,9 +15,9 @@ public interface BuildingService {
   /**
    * Attempts to place a building for a given player.
    */
-  Entity buildBuilding(final String owner, final BuildBuildingForm form);
+  Entity buildBuilding(String owner, BuildBuildingForm form);
 
-  List<Entity> getOwnBuildings(final String owner);
+  List<Entity> getOwnBuildings(String owner);
 
   List<Entity> getAllConstructableBuildings();
 
@@ -29,9 +29,9 @@ public interface BuildingService {
   /**
    * Attempts to delete a building with given buildingId.
    */
-  void destroyBuilding(final EntityUUID buildingId);
+  void destroyBuilding(EntityUUID buildingId);
 
   @EventListener
-  void handleRemovedEntity(final RemovedEntityEvent removedEntityEvent);
+  void handleRemovedEntity(RemovedEntityEvent removedEntityEvent);
 
 }

@@ -19,20 +19,20 @@ public interface GameEngine {
 
   Entity createEmptyEntity();
 
-  Entity createEmptyEntity(final EntityUUID entityId);
+  Entity createEmptyEntity(EntityUUID entityId);
 
   /**
    * Adds an entity to the engine.
    */
-  void addEntity(final Entity entity);
+  void addEntity(Entity entity);
 
   List<Entity> getAllEntities();
 
-  List<Entity> getEntitiesByNode(final Node node);
+  List<Entity> getEntitiesByNode(Node node);
 
-  Optional<Entity> getEntity(final EntityUUID entityId);
+  Optional<Entity> getEntity(EntityUUID entityId);
 
-  void deleteEntity(final EntityUUID entityId);
+  void deleteEntity(EntityUUID entityId);
 
   /**
    * Removes all entities.

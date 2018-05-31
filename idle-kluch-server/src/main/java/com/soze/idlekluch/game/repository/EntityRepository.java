@@ -8,13 +8,13 @@ import java.util.Optional;
 
 public interface EntityRepository {
 
-  void addEntity(final PersistentEntity entity);
+  void addEntity(PersistentEntity entity);
 
-  Optional<PersistentEntity> getEntity(final EntityUUID id);
+  Optional<PersistentEntity> getEntity(EntityUUID id);
 
-  boolean entityExists(final EntityUUID id);
+  boolean entityExists(EntityUUID id);
 
-  void deleteEntity(final EntityUUID id);
+  void deleteEntity(EntityUUID id);
 
   List<PersistentEntity> getAllEntities();
 

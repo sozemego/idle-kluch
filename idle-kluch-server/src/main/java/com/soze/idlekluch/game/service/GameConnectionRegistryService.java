@@ -8,12 +8,12 @@ public interface GameConnectionRegistryService {
   /**
    * Called when a player connects through STOMP.
    */
-  void onConnect(final String sessionId, final String username);
+  void onConnect(String sessionId, String username);
 
   /**
    * Called when a player disconnects (STOMP).
    */
-  void onDisconnect(final String sessionId);
+  void onDisconnect(String sessionId);
 
   /**
    * If player with the same username logs in twice or more times, his subsequent sessionIds
@@ -21,6 +21,6 @@ public interface GameConnectionRegistryService {
    * false otherwise.
    * @return true if given sessionId was added to collection of duplicates, false otherwise
    */
-  boolean isDuplicate(final String sessionId);
+  boolean isDuplicate(String sessionId);
 
 }

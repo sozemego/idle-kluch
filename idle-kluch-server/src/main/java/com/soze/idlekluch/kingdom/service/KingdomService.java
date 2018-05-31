@@ -31,27 +31,27 @@ public interface KingdomService {
    * @throws InvalidFormException if there are errors in the form.
    *                                          {@link RegisterKingdomForm} contains the constraints
    */
-  void addKingdom(final String owner, @ValidForm final RegisterKingdomForm form);
+  void addKingdom(String owner, @ValidForm RegisterKingdomForm form);
 
   /**
    * Deletes the kingdom.
    * @throws UserDoesNotHaveKingdomException if kingdom does not exist
    */
-  void removeKingdom(final String owner);
+  void removeKingdom(String owner);
 
-  void updateKingdom(final Kingdom kingdom);
+  void updateKingdom(Kingdom kingdom);
 
   /**
    * Retrieves {@link Kingdom} by kingdom name.
    */
-  Optional<Kingdom> getKingdom(final String name);
+  Optional<Kingdom> getKingdom(String name);
 
   /**
    * Retrieves {@link Kingdom} by username.
    */
-  Optional<Kingdom> getUsersKingdom(final String username);
+  Optional<Kingdom> getUsersKingdom(String username);
 
   @EventListener
-  void handleUserRemovedEvent(final UserRemovedEvent userRemovedEvent);
+  void handleUserRemovedEvent(UserRemovedEvent userRemovedEvent);
 
 }
