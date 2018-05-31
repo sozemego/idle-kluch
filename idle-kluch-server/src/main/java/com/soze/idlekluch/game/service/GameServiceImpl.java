@@ -61,26 +61,19 @@ public class GameServiceImpl implements GameService {
 
     final Map<TileId, Tile> allTiles = worldService.getAllTiles();
     final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
-    final String worldChunkJson = JsonUtils.objectToJson(worldChunkMessage);
+    webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, worldChunkMessage);
 
-    webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, worldChunkJson);
-
-    final List<Entity> entities = gameEngine.getAllEntities();
-    final List<EntityMessage> entityMessages = entities.stream()
-                                                 .map(entityConverter::toMessage)
-                                                 .collect(Collectors.toList());
-
-    entityMessages.forEach(message -> {
-      final String entityJson = JsonUtils.objectToJson(message);
-      webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, entityJson);
-    });
+    gameEngine
+      .getAllEntities()
+      .stream()
+      .map(entityConverter::toMessage)
+      .forEach(message -> webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, message));
 
     final List<Entity> buildingDefinitions = buildingService.getAllConstructableBuildings();
     final List<EntityMessage> convertedBuildingDefinitions = buildingDefinitions
-                                           .stream()
-                                           .map(entityConverter::toMessage)
-                                           .collect(Collectors.toList());
-
+                                                               .stream()
+                                                               .map(entityConverter::toMessage)
+                                                               .collect(Collectors.toList());
     webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, new BuildingListMessage(convertedBuildingDefinitions));
   }
 
@@ -90,14 +83,11 @@ public class GameServiceImpl implements GameService {
   public void handleBuildBuildingMessage(final String username, final BuildBuildingForm form) {
     final Entity building = buildingService.buildBuilding(username, form);
 
-    final EntityMessage entityMessage = entityConverter.toMessage(building);
-    final String entityMessageJSon = JsonUtils.objectToJson(entityMessage);
-
     final Optional<TileId> tileId = WorldUtils.getEntityTileId(building);
-
     worldService.createWorldChunk(tileId.get(), 5, 5);
 
-    webSocketMessagingService.send(Routes.GAME_OUTBOUND, entityMessageJSon);
+    final EntityMessage entityMessage = entityConverter.toMessage(building);
+    webSocketMessagingService.send(Routes.GAME_OUTBOUND, entityMessage);
   }
 
   @Override
@@ -129,8 +119,7 @@ public class GameServiceImpl implements GameService {
     }
 
     LOG.info("World chunk created, sending data to players!");
-    final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(event.getTiles());
-    webSocketMessagingService.send(Routes.GAME_OUTBOUND, worldChunkMessage);
+    webSocketMessagingService.send(Routes.GAME_OUTBOUND, new WorldChunkMessage(tiles));
   }
 
   @Override
