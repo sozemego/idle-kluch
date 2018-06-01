@@ -109,8 +109,6 @@ public class GameServiceImpl implements GameService {
   @Override
   @Profiled
   public void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent event) {
-    Objects.requireNonNull(event);
-
     final List<Tile> tiles = event.getTiles();
     if(tiles.isEmpty()) {
       LOG.info("World chunk created without any tiles, ignoring.");
@@ -123,8 +121,6 @@ public class GameServiceImpl implements GameService {
 
   @Override
   public void handleRemovedEntityEvent(final RemovedEntityEvent removedEntityEvent) {
-    Objects.requireNonNull(removedEntityEvent);
-
     final RemoveEntityMessage removeEntityMessage = new RemoveEntityMessage(removedEntityEvent.getEntity().getId().toString());
     webSocketMessagingService.send(Routes.GAME_OUTBOUND, removeEntityMessage);
   }

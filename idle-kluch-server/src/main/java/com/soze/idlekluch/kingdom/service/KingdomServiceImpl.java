@@ -142,7 +142,6 @@ public class KingdomServiceImpl implements KingdomService {
 
   @Override
   public void handleUserRemovedEvent(final UserRemovedEvent userRemovedEvent) {
-    Objects.requireNonNull(userRemovedEvent);
     final String username = userRemovedEvent.getUsername();
     getUsersKingdom(username).ifPresent(k -> removeKingdom(username));
   }

@@ -121,7 +121,6 @@ public class EntityServiceImpl implements EntityService {
 
   @Override
   public void handleKingdomRemovedEvent(final KingdomRemovedEvent kingdomRemovedEvent) {
-    Objects.requireNonNull(kingdomRemovedEvent);
     final EntityUUID kingdomId = kingdomRemovedEvent.getKingdomId();
 
     final List<Entity> entities = gameEngine
