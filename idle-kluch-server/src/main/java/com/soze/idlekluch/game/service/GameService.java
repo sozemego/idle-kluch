@@ -1,7 +1,5 @@
 package com.soze.idlekluch.game.service;
 
-import com.soze.idlekluch.aop.annotations.Profiled;
-import com.soze.idlekluch.game.event.GameUpdatedEvent;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.klecs.engine.RemovedEntityEvent;
@@ -26,8 +24,5 @@ public interface GameService {
 
   @EventListener
   void handleRemovedEntityEvent(RemovedEntityEvent removedEntityEvent);
-
-  @EventListener
-  void handleGameUpdatedEvent(GameUpdatedEvent gameUpdatedEvent);
 
 }

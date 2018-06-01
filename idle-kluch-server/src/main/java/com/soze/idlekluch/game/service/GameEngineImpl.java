@@ -3,7 +3,6 @@ package com.soze.idlekluch.game.service;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.game.engine.EngineRunner;
 import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
-import com.soze.idlekluch.game.event.GameUpdatedEvent;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.*;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,7 +26,6 @@ public class GameEngineImpl implements GameEngine {
   private final ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
   private final ApplicationEventPublisher publisher;
-  private final GameUpdatedEvent gameUpdatedEvent = new GameUpdatedEvent();
 
   private final Engine engine;
   private final EngineRunner engineRunner;
@@ -45,8 +42,6 @@ public class GameEngineImpl implements GameEngine {
   @PostConstruct
   public void setup() {
     engine.addEntityEventListener(publisher::publishEvent);
-
-    this.engineRunner.afterUpdateCallback(this::notifyGameUpdated);
 
     executor.execute(this.engineRunner);
     this.engineRunner.start();
@@ -123,10 +118,6 @@ public class GameEngineImpl implements GameEngine {
     engine
       .getAllEntities()
       .forEach(entity -> engine.removeEntity(entity.getId()));
-  }
-
-  private void notifyGameUpdated() {
-    publisher.publishEvent(gameUpdatedEvent);
   }
 
 }

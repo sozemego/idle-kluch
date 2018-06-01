@@ -15,8 +15,6 @@ public class EngineRunner implements Runnable {
   private boolean stopFlag = false;
   private boolean engineRunning = false;
 
-  private Runnable afterUpdate = () -> {};
-
   public EngineRunner(final Engine engine, final float delta) {
     this.engine = Objects.requireNonNull(engine);
     this.delta = delta;
@@ -35,10 +33,6 @@ public class EngineRunner implements Runnable {
    */
   public void dispose() {
     stopFlag = true;
-  }
-
-  public void afterUpdateCallback(final Runnable callback) {
-    this.afterUpdate = callback != null ? callback : () -> {};
   }
 
   public void setDelta(final float delta) {
@@ -69,7 +63,6 @@ public class EngineRunner implements Runnable {
   private long runOnce(final float delta) {
     final long startTime = System.currentTimeMillis();
     engine.update(delta);
-    afterUpdate.run();
     return System.currentTimeMillis() - startTime;
   }
 
