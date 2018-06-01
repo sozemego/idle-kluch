@@ -22,7 +22,7 @@ public interface KingdomService {
    */
   int MINIMUM_DISTANCE_BETWEEN_KINGDOMS = 10;
 
-  long STARTING_IDLE_BUCKS = 500;
+  long STARTING_IDLE_BUCKS = 600;
 
   /**
    * Adds a kingdom.
