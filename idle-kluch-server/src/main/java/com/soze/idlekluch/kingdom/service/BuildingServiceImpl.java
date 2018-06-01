@@ -13,6 +13,7 @@ import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
+import com.soze.idlekluch.kingdom.events.KingdomAddedEvent;
 import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
 import com.soze.idlekluch.kingdom.exception.CannotAffordBuildingException;
 import com.soze.idlekluch.kingdom.exception.SpaceAlreadyOccupiedException;
@@ -39,8 +40,8 @@ import java.util.stream.Collectors;
 public class BuildingServiceImpl implements BuildingService {
 
   private static final Logger LOG = LoggerFactory.getLogger(BuildingServiceImpl.class);
+  private static final String FIRST_BUILDING_ID = "7a4df465-b4c3-4e9f-854a-248988220dfb";
 
-  private final UserService userService;
   private final KingdomService kingdomService;
 
   private final GameEngine gameEngine;
@@ -52,12 +53,10 @@ public class BuildingServiceImpl implements BuildingService {
   private final Map<String, Object> locks = new ConcurrentHashMap<>();
 
   @Autowired
-  public BuildingServiceImpl(final UserService userService,
-                             final KingdomService kingdomService,
+  public BuildingServiceImpl(final KingdomService kingdomService,
                              final GameEngine gameEngine,
                              final EntityService entityService,
                              final WorldService worldService) {
-    this.userService = Objects.requireNonNull(userService);
     this.kingdomService = Objects.requireNonNull(kingdomService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.entityService = Objects.requireNonNull(entityService);
@@ -155,8 +154,23 @@ public class BuildingServiceImpl implements BuildingService {
 
   @Override
   public void handleRemovedEntity(final RemovedEntityEvent removedEntityEvent) {
-    Objects.requireNonNull(removedEntityEvent);
     buildings.remove(removedEntityEvent.getEntity().getId());
+  }
+
+  @Override
+  public void handleKingdomAddedEvent(final KingdomAddedEvent kingdomAddedEvent) {
+    final Kingdom kingdom = kingdomService.getKingdom(kingdomAddedEvent.getKingdomId()).get();
+    final TileId kingdomStartingPoint = kingdom.getStartingPoint();
+    final Point startingBuildingPosition = WorldUtils.getTileCenter(kingdomStartingPoint);
+
+    buildBuilding(
+      kingdom.getOwner().getUsername(),
+      new BuildBuildingForm(
+        EntityUUID.randomId().toString(),
+        FIRST_BUILDING_ID,
+        startingBuildingPosition.x,
+        startingBuildingPosition.y
+      ));
   }
 
   /**

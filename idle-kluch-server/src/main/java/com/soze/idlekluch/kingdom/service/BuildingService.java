@@ -3,6 +3,7 @@ package com.soze.idlekluch.kingdom.service;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
+import com.soze.idlekluch.kingdom.events.KingdomAddedEvent;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.RemovedEntityEvent;
 import com.soze.klecs.entity.Entity;
@@ -33,5 +34,11 @@ public interface BuildingService {
 
   @EventListener
   void handleRemovedEntity(RemovedEntityEvent removedEntityEvent);
+
+  /**
+   * When a kingdom is created, we want to create the first building for this kingdom.
+   */
+  @EventListener
+  void handleKingdomAddedEvent(KingdomAddedEvent kingdomAddedEvent);
 
 }

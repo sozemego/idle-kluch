@@ -8,6 +8,7 @@ import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
+import com.soze.idlekluch.kingdom.events.KingdomAddedEvent;
 import com.soze.idlekluch.kingdom.events.KingdomRemovedEvent;
 import com.soze.idlekluch.kingdom.exception.UserAlreadyHasKingdomException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
@@ -86,6 +87,7 @@ public class KingdomServiceImpl implements KingdomService {
     kingdom.setOwner(user);
 
     kingdomRepository.addKingdom(kingdom);
+    eventPublisher.publishEvent(new KingdomAddedEvent(kingdom.getKingdomId()));
     LOG.info("User [{}] successfully created kingdom [{}]", owner, form.getName());
   }
 
@@ -144,6 +146,12 @@ public class KingdomServiceImpl implements KingdomService {
   public void handleUserRemovedEvent(final UserRemovedEvent userRemovedEvent) {
     final String username = userRemovedEvent.getUsername();
     getUsersKingdom(username).ifPresent(k -> removeKingdom(username));
+  }
+
+  @Override
+  public Optional<Kingdom> getKingdom(final EntityUUID kingdomId) {
+    Objects.requireNonNull(kingdomId);
+    return kingdomRepository.getKingdom(kingdomId);
   }
 
   /**

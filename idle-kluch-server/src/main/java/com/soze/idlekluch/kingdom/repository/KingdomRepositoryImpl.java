@@ -2,6 +2,7 @@ package com.soze.idlekluch.kingdom.repository;
 
 import com.soze.idlekluch.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
+import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.utils.jpa.QueryUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,12 @@ public class KingdomRepositoryImpl implements KingdomRepository {
     query.setParameter("name", name.toUpperCase());
 
     return QueryUtils.getOptional(query, Kingdom.class);
+  }
+
+  @Override
+  public Optional<Kingdom> getKingdom(final EntityUUID kingdomId) {
+    Objects.requireNonNull(kingdomId);
+    return Optional.ofNullable(em.find(Kingdom.class, kingdomId));
   }
 
   @Override

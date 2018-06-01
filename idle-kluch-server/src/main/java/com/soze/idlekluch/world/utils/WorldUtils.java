@@ -9,6 +9,8 @@ import java.awt.*;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.soze.idlekluch.world.service.WorldService.*;
+
 public final class WorldUtils {
 
   private WorldUtils() {
@@ -40,7 +42,11 @@ public final class WorldUtils {
   }
 
   public static TileId translateCoordinates(final float x, final float y) {
-    return new TileId((int) Math.floor(x / WorldService.TILE_SIZE), (int) Math.floor(y / WorldService.TILE_SIZE));
+    return new TileId((int) Math.floor(x / TILE_SIZE), (int) Math.floor(y / TILE_SIZE));
+  }
+
+  public static Point getTileCenter(final TileId tileId) {
+    return new Point((tileId.getX() * TILE_SIZE) + (TILE_SIZE / 2), (tileId.getY() * TILE_SIZE) + (TILE_SIZE / 2));
   }
 
 }
