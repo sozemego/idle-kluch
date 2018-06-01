@@ -53,6 +53,8 @@ let entitySprites = null;
 
 let isBuildingConstructable = false;
 
+let updateTimeLeft = 0;
+
 const initialState = {
   tiles: {},
 };
@@ -190,24 +192,30 @@ const logout = (state, action) => {
   return { ...state, tiles: {} };
 };
 
+const engineUpdate = (state, action) => {
+  updateTimeLeft += 1;
+  return state;
+};
+
 const attachTileSpawnAnimation = (tileSprites) => {
   [...tileSprites]
     .sort((a, b) => b.y - a.y) //so tiles that are lower are spawned first
     .forEach((tile, index) => {
       attachSpawnAnimation(game, tile, DIRECTIONS.UP, index * 2);
     });
-}
+};
 
 const attachEntitySpawnAnimation = (entitySprites, delay) => {
   entitySprites.forEach((entitySprite, index) => {
     attachSpawnAnimation(game, entitySprite, DIRECTIONS.DOWN, (index * 2) + delay);
   });
-}
+};
 
 export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.ADD_TILES ]: addTiles,
   [ GAME_ACTIONS.ADD_ENTITY ]: addEntity,
   [ GAME_ACTIONS.REMOVE_ENTITY ]: removeEntity,
+  [ GAME_ACTIONS.ENGINE_UPDATE ]: engineUpdate,
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });
@@ -353,7 +361,11 @@ const createGame = () => {
 
       updateSelectedConstructableBuilding();
 
-      engine.update(game.time.physicsElapsed);
+      const delta = game.time.physicsElapsed;
+      if(updateTimeLeft >= delta) {
+        engine.update(delta);
+        updateTimeLeft -= delta;
+      }
     };
 
     const render = () => {
