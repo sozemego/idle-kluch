@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -30,12 +31,17 @@ public class GameEngineImpl implements GameEngine {
   private final Engine engine;
   private final EngineRunner engineRunner;
 
+  private final boolean isIntegrationTest;
+
   @Autowired
-  public GameEngineImpl(final ApplicationEventPublisher publisher) {
+  public GameEngineImpl(final ApplicationEventPublisher publisher,
+                        final Environment environment) {
     this.engine = new Engine(EntityUUID::randomId);
     this.engine.addSystem(new PhysicsSystem(this.engine));
+
     this.publisher = Objects.requireNonNull(publisher);
 
+    this.isIntegrationTest = environment.acceptsProfiles("integration-test");
     this.engineRunner = new EngineRunner(engine, 1f);
   }
 
@@ -43,8 +49,10 @@ public class GameEngineImpl implements GameEngine {
   public void setup() {
     engine.addEntityEventListener(publisher::publishEvent);
 
-    executor.execute(this.engineRunner);
-    this.engineRunner.start();
+    if(!isIntegrationTest) {
+      executor.execute(this.engineRunner);
+      this.engineRunner.start();
+    }
   }
 
   @PreDestroy
