@@ -47,7 +47,7 @@ export const loadKingdom = () => {
         dispatch(setShowCreateKingdomForm(false));
       })
       .catch(error => {
-        if (error.error === "Kingdom not found") {
+        if (error.error === "User does not have a kingdom") {
           return dispatch(setShowCreateKingdomForm(true));
         }
         throw error;
