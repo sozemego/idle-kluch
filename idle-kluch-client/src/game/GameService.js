@@ -2,7 +2,7 @@ import { networkConfig } from "../api/config";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 import uuid from 'uuid/v4';
-import { addEntity, addTiles, engineUpdate, removeEntity } from "./actions";
+import { addEntity, addTiles, removeEntity } from "./actions";
 import store from "../store/store";
 import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
@@ -63,9 +63,6 @@ GameService.connect = function () {
         store.dispatch(setConstructableBuildings(parsed.buildingDefinitions));
       }
 
-      if(type === "ENGINE_UPDATE") {
-        store.dispatch(engineUpdate());
-      }
     };
 
     client.connect({}, frame => {

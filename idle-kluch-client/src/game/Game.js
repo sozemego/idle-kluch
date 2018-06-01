@@ -215,7 +215,6 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.ADD_TILES ]: addTiles,
   [ GAME_ACTIONS.ADD_ENTITY ]: addEntity,
   [ GAME_ACTIONS.REMOVE_ENTITY ]: removeEntity,
-  [ GAME_ACTIONS.ENGINE_UPDATE ]: engineUpdate,
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });
@@ -362,10 +361,7 @@ const createGame = () => {
       updateSelectedConstructableBuilding();
 
       const delta = game.time.physicsElapsed;
-      if(updateTimeLeft >= delta) {
-        engine.update(delta);
-        updateTimeLeft -= delta;
-      }
+      engine.update(delta);
     };
 
     const render = () => {
