@@ -17,6 +17,18 @@ public interface GameEngine {
    */
   void update(float delta);
 
+  /**
+   * Starts the engine. Has no effect if engine is already started.
+   */
+  void start();
+
+  /**
+   * Stops the engine. Has no effect if engine is not running.
+   */
+  void stop();
+
+  void setDelta(final float delta);
+
   Entity createEmptyEntity();
 
   Entity createEmptyEntity(EntityUUID entityId);

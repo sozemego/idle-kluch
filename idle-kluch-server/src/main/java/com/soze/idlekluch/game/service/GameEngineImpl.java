@@ -1,7 +1,9 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.aop.annotations.Profiled;
+import com.soze.idlekluch.game.engine.EngineRunner;
 import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
+import com.soze.idlekluch.game.event.GameUpdatedEvent;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
@@ -13,34 +15,67 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import javax.annotation.PreDestroy;
+import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 public class GameEngineImpl implements GameEngine {
 
   private static final Logger LOG = LoggerFactory.getLogger(GameEngineImpl.class);
-
-  private final Engine engine;
+  private final ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
   private final ApplicationEventPublisher publisher;
+  private final GameUpdatedEvent gameUpdatedEvent = new GameUpdatedEvent();
+
+  private final Engine engine;
+  private final EngineRunner engineRunner;
 
   @Autowired
   public GameEngineImpl(final ApplicationEventPublisher publisher) {
     this.engine = new Engine(EntityUUID::randomId);
     this.engine.addSystem(new PhysicsSystem(this.engine));
     this.publisher = Objects.requireNonNull(publisher);
+
+    this.engineRunner = new EngineRunner(engine, 1f);
   }
 
   @PostConstruct
   public void setup() {
     engine.addEntityEventListener(publisher::publishEvent);
+
+    this.engineRunner.afterUpdateCallback(this::notifyGameUpdated);
+
+    executor.execute(this.engineRunner);
+    this.engineRunner.start();
+  }
+
+  @PreDestroy
+  public void dispose() {
+    engineRunner.dispose();
+    executor.shutdown();
   }
 
   @Override
   public void update(float delta) {
     engine.update(delta);
+  }
+
+  @Override
+  public void start() {
+    engineRunner.start();
+  }
+
+  @Override
+  public void stop() {
+    engineRunner.stop();
+  }
+
+  @Override
+  public void setDelta(final float delta) {
+    engineRunner.setDelta(delta);
   }
 
   @Override
@@ -88,6 +123,10 @@ public class GameEngineImpl implements GameEngine {
     engine
       .getAllEntities()
       .forEach(entity -> engine.removeEntity(entity.getId()));
+  }
+
+  private void notifyGameUpdated() {
+    publisher.publishEvent(gameUpdatedEvent);
   }
 
 }

@@ -3,6 +3,7 @@ package com.soze.idlekluch.game.service;
 import com.soze.idlekluch.aop.annotations.AuthLog;
 import com.soze.idlekluch.aop.annotations.Profiled;
 import com.soze.idlekluch.game.engine.EntityConverter;
+import com.soze.idlekluch.game.event.GameUpdatedEvent;
 import com.soze.idlekluch.game.message.*;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.routes.Routes;
@@ -130,4 +131,8 @@ public class GameServiceImpl implements GameService {
     webSocketMessagingService.send(Routes.GAME_OUTBOUND, removeEntityMessage);
   }
 
+  @Override
+  public void handleGameUpdatedEvent(final GameUpdatedEvent gameUpdatedEvent) {
+    webSocketMessagingService.send(Routes.GAME_OUTBOUND, new EngineUpdateMessage());
+  }
 }
