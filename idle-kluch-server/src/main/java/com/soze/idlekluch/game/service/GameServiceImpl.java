@@ -85,9 +85,6 @@ public class GameServiceImpl implements GameService {
 
     final Optional<TileId> tileId = WorldUtils.getEntityTileId(building);
     worldService.createWorldChunk(tileId.get(), 5, 5);
-
-    final EntityMessage entityMessage = entityConverter.toMessage(building);
-    webSocketMessagingService.send(Routes.GAME_OUTBOUND, entityMessage);
   }
 
   @Override
