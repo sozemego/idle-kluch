@@ -36,6 +36,7 @@ import {
   killSprite,
   translateCoordinatesToTile,
 } from "./utils";
+import { ResourceSourceComponent } from "../ecs/components/ResourceSourceComponent";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const getTiles = () => _getTiles(store.getState());
@@ -113,6 +114,9 @@ const addEntity = (state, { payload: entity }) => {
       }
       if (componentType === COMPONENT_TYPES.COST) {
         return new CostComponent(component.idleBucks);
+      }
+      if (componentType === COMPONENT_TYPES.RESOURCE_SOURCE) {
+        return new ResourceSourceComponent(component.resource);
       }
       throw new Error("INVALID COMPONENT TYPE");
     })

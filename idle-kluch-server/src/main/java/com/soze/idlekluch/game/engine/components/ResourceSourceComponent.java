@@ -33,7 +33,7 @@ public class ResourceSourceComponent extends BaseComponent {
   }
 
   @Override
-  public BaseComponent copy() {
-    return null;
+  public ResourceSourceComponent copy() {
+    return new ResourceSourceComponent(getEntityId(), getResource());
   }
 }

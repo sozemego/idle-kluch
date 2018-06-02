@@ -53,4 +53,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ExceptionUtils.convertErrorResponse(errorResponse);
   }
 
+//  @ExceptionHandler(Exception.class)
+//  public ResponseEntity<Object> handleException(final Exception exception) {
+//    final Map<String, Object> data = new HashMap<>();
+//
+//    final ErrorResponse errorResponse = new ErrorResponse(400, "Problem while processing this request", data);
+//    return ExceptionUtils.convertErrorResponse(errorResponse);
+//  }
+
+
 }

@@ -1,6 +1,7 @@
 package com.soze.idlekluch.world.utils;
 
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.klecs.entity.Entity;
@@ -47,6 +48,10 @@ public final class WorldUtils {
 
   public static Point getTileCenter(final TileId tileId) {
     return new Point((tileId.getX() * TILE_SIZE) + (TILE_SIZE / 2), (tileId.getY() * TILE_SIZE) + (TILE_SIZE / 2));
+  }
+
+  public static Point getTileCenter(final Tile tile) {
+    return getTileCenter(tile.getTileId());
   }
 
 }

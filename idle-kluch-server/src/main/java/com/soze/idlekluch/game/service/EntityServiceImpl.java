@@ -5,8 +5,10 @@ import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.entity.PersistentEntity;
+import com.soze.idlekluch.game.message.EntityMessage;
 import com.soze.idlekluch.game.repository.EntityRepository;
 import com.soze.idlekluch.kingdom.events.KingdomRemovedEvent;
+import com.soze.idlekluch.routes.Routes;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.AddedEntityEvent;
 import com.soze.klecs.engine.RemovedEntityEvent;
@@ -32,6 +34,7 @@ public class EntityServiceImpl implements EntityService {
   private final GameEngine gameEngine;
   private final EntityRepository entityRepository;
   private final EntityConverter entityConverter;
+  private final WebSocketMessagingService webSocketMessagingService;
 
   private final Map<EntityUUID, Entity> entityTemplates = new HashMap<>();
 
@@ -41,10 +44,12 @@ public class EntityServiceImpl implements EntityService {
   @Autowired
   public EntityServiceImpl(final GameEngine gameEngine,
                            final EntityRepository entityRepository,
-                           final EntityConverter entityConverter) {
+                           final EntityConverter entityConverter,
+                           final WebSocketMessagingService webSocketMessagingService) {
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.entityRepository = Objects.requireNonNull(entityRepository);
     this.entityConverter = Objects.requireNonNull(entityConverter);
+    this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
   }
 
   @PostConstruct
@@ -111,6 +116,8 @@ public class EntityServiceImpl implements EntityService {
       entityRepository.addEntity(persistentEntity);
       LOG.info("Added entity ID: [{}]", entity.getId());
     }
+    final EntityMessage entityMessage = entityConverter.toMessage(entity);
+    webSocketMessagingService.send(Routes.GAME_OUTBOUND, entityMessage);
   }
 
   @Override
