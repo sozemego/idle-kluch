@@ -100,6 +100,7 @@ public class EntityServiceImpl implements EntityService {
   }
 
   @Override
+  @EventListener
   public void handleAddedEntity(final AddedEntityEvent addedEntityEvent) {
     final Entity entity = addedEntityEvent.getEntity();
     LOG.info("Added event for entity ID:[{}]", entity.getId());
@@ -113,6 +114,7 @@ public class EntityServiceImpl implements EntityService {
   }
 
   @Override
+  @EventListener
   public void handleRemovedEntity(final RemovedEntityEvent removedEntityEvent) {
     final Entity entity = removedEntityEvent.getEntity();
     LOG.info("Removed event for entity ID: [{}]", entity.getId());
@@ -120,6 +122,7 @@ public class EntityServiceImpl implements EntityService {
   }
 
   @Override
+  @EventListener
   public void handleKingdomRemovedEvent(final KingdomRemovedEvent kingdomRemovedEvent) {
     final EntityUUID kingdomId = kingdomRemovedEvent.getKingdomId();
 

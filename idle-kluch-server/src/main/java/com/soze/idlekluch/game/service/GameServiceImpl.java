@@ -16,6 +16,7 @@ import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.stereotype.Service;
@@ -108,6 +109,7 @@ public class GameServiceImpl implements GameService {
 
   @Override
   @Profiled
+  @EventListener
   public void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent event) {
     final List<Tile> tiles = event.getTiles();
     if(tiles.isEmpty()) {
@@ -120,6 +122,7 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
+  @EventListener
   public void handleRemovedEntityEvent(final RemovedEntityEvent removedEntityEvent) {
     final RemoveEntityMessage removeEntityMessage = new RemoveEntityMessage(removedEntityEvent.getEntity().getId().toString());
     webSocketMessagingService.send(Routes.GAME_OUTBOUND, removeEntityMessage);

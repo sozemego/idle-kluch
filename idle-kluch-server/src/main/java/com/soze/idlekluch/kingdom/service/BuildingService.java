@@ -32,13 +32,11 @@ public interface BuildingService {
    */
   void destroyBuilding(EntityUUID buildingId);
 
-  @EventListener
   void handleRemovedEntity(RemovedEntityEvent removedEntityEvent);
 
   /**
    * When a kingdom is created, we want to create the first building for this kingdom.
    */
-  @EventListener
   void handleKingdomAddedEvent(KingdomAddedEvent kingdomAddedEvent);
 
 }

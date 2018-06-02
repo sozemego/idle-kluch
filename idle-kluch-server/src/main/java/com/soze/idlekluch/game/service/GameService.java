@@ -19,10 +19,8 @@ public interface GameService {
 
   void handleDuplicateSession(String sessionId);
 
-  @EventListener
   void handleWorldChunkCreatedEvent(WorldChunkCreatedEvent event);
 
-  @EventListener
   void handleRemovedEntityEvent(RemovedEntityEvent removedEntityEvent);
 
 }

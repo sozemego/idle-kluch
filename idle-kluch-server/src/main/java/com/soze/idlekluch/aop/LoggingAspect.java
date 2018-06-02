@@ -17,6 +17,7 @@ public class LoggingAspect {
 
   private static final Logger LOG = LoggerFactory.getLogger(LoggingAspect.class);
   private static final Marker AUTHORIZED_MARKER = MarkerFactory.getMarker("AUTHORIZED");
+  private static final Marker EVENT_LISTENER_MARKER = MarkerFactory.getMarker("EVENT_LISTENER");
 
   @Pointcut("execution(* *(..)) && @annotation(com.soze.idlekluch.aop.annotations.AuthLog))")
   public void authorizedMethodExecution() {}
@@ -70,6 +71,19 @@ public class LoggingAspect {
   @Before(value = "messageExceptionHandlerExecuted() && args(ex)", argNames = "ex")
   public void logMessageExceptionHandler(final Exception ex) throws Throwable {
     LOG.info("Exception thrown and handled by MessageExceptionHandler", ex);
+  }
+
+  @Pointcut("execution(* * (..)) && @annotation(org.springframework.context.event.EventListener)")
+  public void eventListenerExecution() {}
+
+  @Before("eventListenerExecution()")
+  public void beforeEventListenerExecution(final JoinPoint joinPoint) {
+    LOG.info(
+      EVENT_LISTENER_MARKER,
+      "Method [{}] is handling event [{}]",
+      joinPoint.getSignature().toShortString(),
+      joinPoint.getArgs()[0]
+    );
   }
 
 }

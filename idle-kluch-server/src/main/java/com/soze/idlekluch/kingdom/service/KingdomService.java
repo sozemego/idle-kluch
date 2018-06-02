@@ -54,7 +54,6 @@ public interface KingdomService {
    */
   Optional<Kingdom> getUsersKingdom(String username);
 
-  @EventListener
   void handleUserRemovedEvent(UserRemovedEvent userRemovedEvent);
 
 }

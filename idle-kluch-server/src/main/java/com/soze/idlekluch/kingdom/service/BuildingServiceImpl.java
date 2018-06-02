@@ -28,6 +28,7 @@ import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -153,11 +154,13 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   @Override
+  @EventListener
   public void handleRemovedEntity(final RemovedEntityEvent removedEntityEvent) {
     buildings.remove(removedEntityEvent.getEntity().getId());
   }
 
   @Override
+  @EventListener
   public void handleKingdomAddedEvent(final KingdomAddedEvent kingdomAddedEvent) {
     final Kingdom kingdom = kingdomService.getKingdom(kingdomAddedEvent.getKingdomId()).get();
     final TileId kingdomStartingPoint = kingdom.getStartingPoint();

@@ -37,13 +37,10 @@ public interface EntityService {
    */
   void copyEntity(Entity source, Entity target);
 
-  @EventListener
   void handleAddedEntity(AddedEntityEvent addedEntityEvent);
 
-  @EventListener
   void handleRemovedEntity(RemovedEntityEvent removedEntityEvent);
 
-  @EventListener
   void handleKingdomRemovedEvent(KingdomRemovedEvent kingdomRemovedEvent);
 
 }

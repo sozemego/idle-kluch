@@ -88,6 +88,35 @@
         </rollingPolicy>
     </appender>
 
+    <appender name="FILE-EVENT-LISTENER"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/eventListener.log</file>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>EVENT_LISTENER</marker>
+            </evaluator>
+            <onMismatch>DENY</onMismatch>
+            <onMatch>ACCEPT</onMatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] - %msg%n
+            </Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>log/past/eventListener.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
@@ -109,6 +138,13 @@
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>MESSAGE</marker>
+            </evaluator>
+            <onMismatch>NEUTRAL</onMismatch>
+            <onMatch>DENY</onMatch>
+        </filter>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>EVENT_LISTENER</marker>
             </evaluator>
             <onMismatch>NEUTRAL</onMismatch>
             <onMatch>DENY</onMatch>
@@ -143,6 +179,13 @@
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>MESSAGE</marker>
+            </evaluator>
+            <onMismatch>NEUTRAL</onMismatch>
+            <onMatch>DENY</onMatch>
+        </filter>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>EVENT_LISTENER</marker>
             </evaluator>
             <onMismatch>NEUTRAL</onMismatch>
             <onMatch>DENY</onMatch>
@@ -192,6 +235,13 @@
             <onMismatch>NEUTRAL</onMismatch>
             <onMatch>DENY</onMatch>
         </filter>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>EVENT_LISTENER</marker>
+            </evaluator>
+            <onMismatch>NEUTRAL</onMismatch>
+            <onMatch>DENY</onMatch>
+        </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
                 %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
@@ -216,6 +266,7 @@
         <appender-ref ref="FILE-PROFILING"/>
         <appender-ref ref="FILE-AUTHORIZED"/>
         <appender-ref ref="FILE-MESSAGE"/>
+        <appender-ref ref="FILE-EVENT-LISTENER"/>
     </root>
 
     <logger name="org.springframework" level="INFO"/>
