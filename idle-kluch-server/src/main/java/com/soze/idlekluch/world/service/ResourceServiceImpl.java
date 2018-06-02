@@ -26,16 +26,13 @@ public class ResourceServiceImpl implements ResourceService {
 
   private final EntityService entityService;
   private final GameEngine gameEngine;
-  private final EntityConverter entityConverter;
 
   @Autowired
   public ResourceServiceImpl(final EntityService entityService,
-                             final GameEngine gameEngine,
-                             final EntityConverter entityConverter) {
+                             final GameEngine gameEngine) {
 
     this.entityService = Objects.requireNonNull(entityService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
-    this.entityConverter = Objects.requireNonNull(entityConverter);
   }
 
   @Override
