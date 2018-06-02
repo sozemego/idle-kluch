@@ -98,7 +98,6 @@ public class WorldServiceImpl implements WorldService {
 
     eventPublisher.publishEvent(new WorldChunkCreatedEvent(tiles));
 
-    //5. nothing more for now, just save. forests/mountains/etc soon to come
     return worldRepository.addTiles(tiles);
   }
 
