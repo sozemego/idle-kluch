@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS static_occupy_space_components CASCADE;
 DROP TABLE IF EXISTS name_components CASCADE;
 DROP TABLE IF EXISTS buildable_components CASCADE;
 DROP TABLE IF EXISTS cost_components CASCADE;
+DROP TABLE IF EXISTS resource_source_components CASCADE;
 
 CREATE TABLE users (
   user_id uuid NOT NULL PRIMARY KEY,
@@ -101,20 +102,30 @@ CREATE TABLE cost_components (
   CONSTRAINT FK_COST_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
 );
 
+CREATE TABLE resource_source_components (
+  entity_id uuid NOT NULL,
+  resource_id uuid NOT NULL,
+  CONSTRAINT FK_RESOURCE_SOURCE_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
+  CONSTRAINT FK_RESOURCE_SOURCE_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
+);
+
 -- here entity templates exist --
 INSERT INTO entities VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb', true),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', true)
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', true),
+  ('f520432b-4bf5-448f-95f4-14643e078288', true)
 ;
 
 INSERT INTO physics_components VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb', 0, 0, 50, 55),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 0, 0, 80, 81)
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 0, 0, 80, 81),
+  ('f520432b-4bf5-448f-95f4-14643e078288', 0, 0, 64, 64)
 ;
 
 INSERT INTO graphics_components VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb', 'small_warehouse'),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 'warehouse')
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 'warehouse'),
+  ('f520432b-4bf5-448f-95f4-14643e078288', 'forest_1')
 ;
 
 INSERT INTO ownership_components VALUES
@@ -124,7 +135,8 @@ INSERT INTO ownership_components VALUES
 
 INSERT INTO static_occupy_space_components VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb'),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d')
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d'),
+  ('f520432b-4bf5-448f-95f4-14643e078288')
 ;
 
 INSERT INTO name_components VALUES
@@ -141,4 +153,8 @@ INSERT INTO cost_components VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb', 100),
   ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 250)
 ;
+
+INSERT INTO resource_source_components(entity_id, resource_id)
+SELECT 'f520432b-4bf5-448f-95f4-14643e078288', resource_id
+FROM resources WHERE name = 'Wood';
 

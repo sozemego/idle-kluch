@@ -23,7 +23,8 @@ import java.util.Objects;
   @JsonSubTypes.Type(value = OwnershipComponent.class, name = "OWNERSHIP"),
   @JsonSubTypes.Type(value = PhysicsComponent.class, name = "PHYSICS"),
   @JsonSubTypes.Type(value = StaticOccupySpaceComponent.class, name = "STATIC_OCCUPY_SPACE"),
-  @JsonSubTypes.Type(value = CostComponent.class, name = "COST")
+  @JsonSubTypes.Type(value = CostComponent.class, name = "COST"),
+  @JsonSubTypes.Type(value = ResourceSourceComponent.class, name = "RESOURCE_SOURCE")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseComponent {
@@ -66,7 +67,7 @@ public abstract class BaseComponent {
   public abstract BaseComponent copy();
 
   public enum ComponentType {
-    PHYSICS, GRAPHICS, OWNERSHIP, STATIC_OCCUPY_SPACE, NAME, BUILDABLE, COST,
+    PHYSICS, GRAPHICS, OWNERSHIP, STATIC_OCCUPY_SPACE, NAME, BUILDABLE, COST, RESOURCE_SOURCE,
   }
 
   @Override

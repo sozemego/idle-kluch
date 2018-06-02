@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "entities")
@@ -47,6 +48,10 @@ public class PersistentEntity {
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "entity_id")
   private CostComponent costComponent;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "entity_id")
+  private ResourceSourceComponent resourceSourceComponent;
 
   public PersistentEntity() {
 
@@ -124,20 +129,28 @@ public class PersistentEntity {
     this.costComponent = costComponent;
   }
 
+  public ResourceSourceComponent getResourceSourceComponent() {
+    return resourceSourceComponent;
+  }
+
+  public void setResourceSourceComponent(final ResourceSourceComponent resourceSourceComponent) {
+    this.resourceSourceComponent = resourceSourceComponent;
+  }
+
   @Transient
   public List<BaseComponent> getAllComponents() {
-    return Arrays.asList(
-        getBuildableComponent(),
-        getCostComponent(),
-        getGraphicsComponent(),
-        getNameComponent(),
-        getOwnershipComponent(),
-        getPhysicsComponent(),
-        getStaticOccupySpaceComponent()
+    return Stream.of(
+      getBuildableComponent(),
+      getCostComponent(),
+      getGraphicsComponent(),
+      getNameComponent(),
+      getOwnershipComponent(),
+      getPhysicsComponent(),
+      getStaticOccupySpaceComponent(),
+      getResourceSourceComponent()
     )
-               .stream()
-               .filter(Objects::nonNull)
-               .collect(Collectors.toList());
+    .filter(Objects::nonNull)
+    .collect(Collectors.toList());
   }
 
 }
