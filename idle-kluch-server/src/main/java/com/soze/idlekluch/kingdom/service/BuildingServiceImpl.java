@@ -18,7 +18,6 @@ import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
 import com.soze.idlekluch.kingdom.exception.CannotAffordBuildingException;
 import com.soze.idlekluch.kingdom.exception.SpaceAlreadyOccupiedException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
-import com.soze.idlekluch.user.service.UserService;
 import com.soze.idlekluch.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.service.WorldService;
