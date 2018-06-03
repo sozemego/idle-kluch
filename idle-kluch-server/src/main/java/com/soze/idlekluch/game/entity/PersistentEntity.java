@@ -53,6 +53,10 @@ public class PersistentEntity {
   @JoinColumn(name = "entity_id")
   private ResourceSourceComponent resourceSourceComponent;
 
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "entity_id")
+  private ResourceHarvesterComponent resourceHarvesterComponent;
+
   public PersistentEntity() {
 
   }
@@ -137,6 +141,14 @@ public class PersistentEntity {
     this.resourceSourceComponent = resourceSourceComponent;
   }
 
+  public ResourceHarvesterComponent getResourceHarvesterComponent() {
+    return resourceHarvesterComponent;
+  }
+
+  public void setResourceHarvesterComponent(final ResourceHarvesterComponent resourceHarvesterComponent) {
+    this.resourceHarvesterComponent = resourceHarvesterComponent;
+  }
+
   @Transient
   public List<BaseComponent> getAllComponents() {
     return Stream.of(
@@ -147,7 +159,8 @@ public class PersistentEntity {
       getOwnershipComponent(),
       getPhysicsComponent(),
       getStaticOccupySpaceComponent(),
-      getResourceSourceComponent()
+      getResourceSourceComponent(),
+      getResourceHarvesterComponent()
     )
     .filter(Objects::nonNull)
     .collect(Collectors.toList());

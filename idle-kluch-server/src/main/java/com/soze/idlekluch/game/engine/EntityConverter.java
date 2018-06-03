@@ -49,6 +49,7 @@ public class EntityConverter {
     persistentEntity.setStaticOccupySpaceComponent(entity.getComponent(StaticOccupySpaceComponent.class));
     persistentEntity.setCostComponent(entity.getComponent(CostComponent.class));
     persistentEntity.setResourceSourceComponent(entity.getComponent(ResourceSourceComponent.class));
+    persistentEntity.setResourceHarvesterComponent(entity.getComponent(ResourceHarvesterComponent.class));
 
     return persistentEntity;
   }

@@ -37,6 +37,7 @@ import {
   translateCoordinatesToTile,
 } from "./utils";
 import { ResourceSourceComponent } from "../ecs/components/ResourceSourceComponent";
+import { ResourceHarvesterComponent } from "../ecs/components/ResourceHarvesterComponent";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const getTiles = () => _getTiles(store.getState());
@@ -117,6 +118,13 @@ const addEntity = (state, { payload: entity }) => {
       }
       if (componentType === COMPONENT_TYPES.RESOURCE_SOURCE) {
         return new ResourceSourceComponent(component.resource);
+      }
+      if(componentType === COMPONENT_TYPES.RESOURCE_HARVESTER) {
+        return new ResourceHarvesterComponent(
+          component.resource,
+          component.radius,
+          component.unitsPerMinute
+        );
       }
       throw new Error("INVALID COMPONENT TYPE");
     })
