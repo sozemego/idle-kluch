@@ -25,7 +25,7 @@ import {
   getTiles as _getTiles,
 } from "./selectors";
 import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
-import { checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
+import { checkEntityInRangeOfResource, checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
 import {
   attachDespawnAnimation,
   attachSpawnAnimation,
@@ -49,6 +49,7 @@ let game = null;
 let engine = null;
 
 let selectedBuildingSprite = null;
+let selectedBuildingRadiusCircle = null;
 
 let tileGroup = null;
 let entitySprites = null;
@@ -173,6 +174,7 @@ const setConstructableBuilding = (state, action) => {
 
   if (!selectedBuildingSprite) {
     selectedBuildingSprite = game.add.sprite(0, 0, graphicsComponent.asset);
+    selectedBuildingRadiusCircle = game.add.graphics(0, 0);
   }
 
   selectedBuildingSprite.revive();
@@ -268,6 +270,28 @@ const updateSelectedConstructableBuilding = () => {
       const tileKey = translateCoordinatesToTile(physicsComponent.x, physicsComponent.y);
       const tiles = getTiles();
       if(!tiles[tileKey]) {
+        isBuildingConstructable = false;
+      }
+    }
+
+    selectedBuildingRadiusCircle.clear();
+
+    const resourceHarvesterComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.RESOURCE_HARVESTER);
+    if(resourceHarvesterComponent != null) {
+
+      const inRangeOfResources = checkEntityInRangeOfResource(engine, selectedConstructableBuilding);
+
+      const color = inRangeOfResources ? 0x00ff00 : 0xff0000;
+
+      selectedBuildingRadiusCircle.beginFill(color, 0.1);
+      selectedBuildingRadiusCircle.drawCircle(
+        mouseX + game.world.pivot.x,
+        mouseY + game.world.pivot.y,
+        resourceHarvesterComponent.radius * 2
+      );
+      selectedBuildingRadiusCircle.endFill();
+
+      if(!inRangeOfResources) {
         isBuildingConstructable = false;
       }
     }

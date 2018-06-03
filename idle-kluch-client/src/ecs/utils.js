@@ -3,6 +3,8 @@ import Phaser from "phaser";
 import Node from "./Node";
 import { StaticOccupySpaceComponent } from "./components/StaticOccupySpaceComponent";
 import { PhysicsComponent } from "./components/PhysicsComponent";
+import { ResourceSourceComponent } from "./components/ResourceSourceComponent";
+import { COMPONENT_TYPES } from "../game/constants";
 
 /**
  * Tries to find a component in an entity json.
@@ -28,6 +30,31 @@ export const checkRectangleIntersectsCollidableEntities = (engine, rectangle) =>
     );
 
     if(rectangle.intersects(rectangle2, 0)) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+export const checkEntityInRangeOfResource = (engine, entity) => {
+  const harvesterComponent = findComponent(entity, COMPONENT_TYPES.RESOURCE_HARVESTER);
+  const radius = harvesterComponent.radius;
+  const resource = harvesterComponent.resource.name;
+
+  const physicsComponent = findComponent(entity, COMPONENT_TYPES.PHYSICS);
+  const point = { x: physicsComponent.x, y: physicsComponent.y };
+
+  const resourceSource = Node.of(ResourceSourceComponent);
+  const resourceSources = engine.getEntitiesByNode(resourceSource).filter(entity => {
+    const resourceSource = entity.getComponent(ResourceSourceComponent);
+    return resourceSource.getResource().name === resource;
+  });
+
+  for(let i = 0; i < resourceSources.length; i++) {
+    const source = resourceSources[i];
+    const sourcePhysicsComponent = source.getComponent(PhysicsComponent);
+    if(Math.hypot(point.x - sourcePhysicsComponent.getX(), point.y - sourcePhysicsComponent.getY()) <= radius) {
       return true;
     }
   }
