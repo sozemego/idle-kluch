@@ -2,13 +2,11 @@ package com.soze.idlekluch.core.event;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 @Service
-@Profile("!integration-test")
 public class EventPublisherImpl implements EventPublisher {
 
   private final EventPublisher applicationEventPublisher;

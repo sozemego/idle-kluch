@@ -60,9 +60,5 @@ public class IntAuthTest {
     final Kingdom kingdom = kingdomService.getKingdom(kingdomName).get();
     kingdom.setIdleBucks(idleBucks);
     kingdomService.updateKingdom(kingdom);
-
-    buildingService
-      .getOwnBuildings(username)
-      .forEach(building -> gameEngine.deleteEntity((EntityUUID) building.getId()));
   }
 }
