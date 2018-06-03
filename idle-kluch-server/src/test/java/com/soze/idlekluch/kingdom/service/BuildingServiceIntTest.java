@@ -37,7 +37,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 
@@ -177,21 +179,32 @@ public class BuildingServiceIntTest extends IntAuthTest {
     kingdom.setIdleBucks(100 * 50); //100 is a cost of a small warehouse so this kingdom should afford 50 of them
     kingdomService.updateKingdom(kingdom);
 
+    final List<Point> pointsToUse = IntStream.range(0, 100)
+                                      .mapToObj(i -> nextBuildingPosition())
+                                      .collect(Collectors.toList());
+
+    pointsToUse.forEach(point -> worldService.createWorldChunk(WorldUtils.translateCoordinates(point.x, point.y)));
+    resourceService
+      .getAllResourceSources()
+      .forEach(source -> {
+        gameEngine.deleteEntity((EntityUUID) source.getId());
+      });
+    final ConcurrentLinkedQueue<Point> queue = new ConcurrentLinkedQueue<>(pointsToUse);
+
     final List<Thread> threads = new ArrayList<>();
 
     for(int i = 0; i < 5; i++) {
       final Thread thread = new Thread(() -> {
         for(int j = 0; j < 20; j++) {
           try {
-            final Point point = nextBuildingPosition();
-            worldService.createWorldChunk(WorldUtils.translateCoordinates(point.x, point.y));
+            final Point point = queue.poll();
             final BuildBuildingForm form = new BuildBuildingForm(
                 UUID.randomUUID().toString(), SMALL_WAREHOUSE_ID, point.x, point.y
             );
 
             buildingService.buildBuilding(username, form);
-          } catch (CannotAffordBuildingException e) {
-
+          } catch (CannotAffordBuildingException | SpaceAlreadyOccupiedException e) {
+            System.out.println(e.getClass());
           }
         }
       });
