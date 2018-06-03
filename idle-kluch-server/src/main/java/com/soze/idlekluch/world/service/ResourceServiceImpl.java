@@ -62,8 +62,6 @@ public class ResourceServiceImpl implements ResourceService {
 
   /**
    * Finds a random position within the given tile for a resource.
-   * @param tile
-   * @return
    */
   private Point getResourcePosition(final Tile tile, final int resourceWidth, final int resourceHeight) {
     final Point position = WorldUtils.getTileCenter(tile);
