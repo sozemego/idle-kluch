@@ -165,13 +165,24 @@ public class BuildingServiceImpl implements BuildingService {
     final TileId kingdomStartingPoint = kingdom.getStartingPoint();
     final Point startingBuildingPosition = WorldUtils.getTileCenter(kingdomStartingPoint);
 
+    //remove any obstacles for the first building
+    gameEngine
+      .getEntitiesByNode(Nodes.OCCUPY_SPACE)
+      .stream()
+      .forEach(entity -> {
+        final TileId tileId = WorldUtils.getEntityTileId(entity).get();
+        if(tileId.equals(kingdomStartingPoint)) {
+          gameEngine.deleteEntity((EntityUUID) entity.getId());
+        }
+      });
+
     buildBuilding(
       kingdom.getOwner().getUsername(),
       new BuildBuildingForm(
         EntityUUID.randomId().toString(),
         FIRST_BUILDING_ID,
-        startingBuildingPosition.x,
-        startingBuildingPosition.y
+        startingBuildingPosition.x - 25,
+        startingBuildingPosition.y - 27
       ));
   }
 
