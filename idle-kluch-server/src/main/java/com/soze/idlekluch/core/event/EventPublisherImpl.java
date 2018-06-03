@@ -2,6 +2,7 @@ package com.soze.idlekluch.core.event;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -9,10 +10,10 @@ import java.util.Objects;
 @Service
 public class EventPublisherImpl implements EventPublisher {
 
-  private final EventPublisher applicationEventPublisher;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   @Autowired
-  public EventPublisherImpl(final EventPublisher applicationEventPublisher) {
+  public EventPublisherImpl(final ApplicationEventPublisher applicationEventPublisher) {
     this.applicationEventPublisher = Objects.requireNonNull(applicationEventPublisher);
   }
 
