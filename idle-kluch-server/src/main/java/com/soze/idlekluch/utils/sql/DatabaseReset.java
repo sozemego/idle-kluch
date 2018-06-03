@@ -27,14 +27,33 @@ public class DatabaseReset {
   public static void resetDatabase() {
 
     try {
-      final List<String> file = Files.lines(Paths.get("sql/create.sql"))
-        .collect(Collectors.toList());
-      final String fileContent = file.stream().reduce("", (prev, cur) -> prev += cur + '\n');
+      final String fileContent = loadSql("sql/create.sql");
       executeSql(fileContent);
     } catch (IOException e) {
       e.printStackTrace();
     }
 
+  }
+
+  /**
+   * This method will delete most inserted rows.
+   * Rows which are necessary (entity templates, configuration etc.) will remain intact;
+   */
+  public static void deleteData() {
+
+    try {
+      final String fileContent = loadSql("sql/int-test-reset.sql");
+      executeSql(fileContent);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  private static String loadSql(final String path) throws IOException {
+    final List<String> file = Files.lines(Paths.get(path))
+                                .collect(Collectors.toList());
+    return file.stream().reduce("", (prev, cur) -> prev += cur + '\n');
   }
 
   private static void executeSql(String sql) {

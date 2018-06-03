@@ -26,6 +26,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -47,6 +48,7 @@ import static org.junit.Assert.*;
 )
 @WebAppConfiguration
 @ActiveProfiles({"integration-test"})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class BuildingServiceIntTest extends IntAuthTest {
 
   private static final String SMALL_WAREHOUSE_ID = "7a4df465-b4c3-4e9f-854a-248988220dfb";
@@ -76,10 +78,15 @@ public class BuildingServiceIntTest extends IntAuthTest {
 
   @BeforeClass
   public static void beforeClass() {
-    DatabaseReset.resetDatabase();
+    DatabaseReset.deleteData();
     for (int i = 0; i < 250; i++) {
       AVAILABLE_BUILDING_POSITIONS.add(new Point(i * SEPARATION, i * SEPARATION));
     }
+  }
+
+  @Before
+  public void setup() {
+    DatabaseReset.deleteData();
   }
 
   @Test(expected = UserDoesNotHaveKingdomException.class)

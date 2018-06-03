@@ -37,7 +37,7 @@ public class ChunkCreationIntTest {
 
   @BeforeClass
   public static void beforeClass() {
-    DatabaseReset.resetDatabase();
+    DatabaseReset.deleteData();
   }
 
   @Before

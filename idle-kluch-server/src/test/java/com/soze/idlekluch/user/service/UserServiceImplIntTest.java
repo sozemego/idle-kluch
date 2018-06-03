@@ -39,7 +39,7 @@ public class UserServiceImplIntTest {
 
   @BeforeClass
   public static void setup() {
-    DatabaseReset.resetDatabase();
+    DatabaseReset.deleteData();
   }
 
   @Test

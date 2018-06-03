@@ -35,7 +35,7 @@ public class KingdomServiceImplIntTest extends IntAuthTest {
 
   @BeforeClass
   public static void setup() {
-    DatabaseReset.resetDatabase();
+    DatabaseReset.deleteData();
   }
 
   @Test

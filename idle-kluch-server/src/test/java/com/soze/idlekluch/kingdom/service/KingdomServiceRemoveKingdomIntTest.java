@@ -16,6 +16,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -38,6 +39,7 @@ import static org.junit.Assert.assertFalse;
 )
 @WebAppConfiguration
 @ActiveProfiles({"integration-test"})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class KingdomServiceRemoveKingdomIntTest extends IntAuthTest {
 
   private static final String WAREHOUSE_ID = "4517e8b9-de2e-473d-98e8-4c6c73c46c4d";
@@ -56,13 +58,13 @@ public class KingdomServiceRemoveKingdomIntTest extends IntAuthTest {
 
   @BeforeClass
   public static void beforeClass() {
-    DatabaseReset.resetDatabase();
+    DatabaseReset.deleteData();
   }
 
   @Before
   public void setup() {
     gameEngine.reset();
-    DatabaseReset.resetDatabase();
+    DatabaseReset.deleteData();
   }
 
   @Test

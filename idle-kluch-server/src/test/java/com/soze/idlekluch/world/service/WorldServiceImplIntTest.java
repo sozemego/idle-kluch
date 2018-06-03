@@ -41,7 +41,7 @@ public class WorldServiceImplIntTest {
 
   @BeforeClass
   public static void beforeClass() {
-    DatabaseReset.resetDatabase();
+    DatabaseReset.deleteData();
   }
 
   @Before
