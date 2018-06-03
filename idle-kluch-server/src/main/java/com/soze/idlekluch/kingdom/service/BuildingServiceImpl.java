@@ -1,7 +1,7 @@
 package com.soze.idlekluch.kingdom.service;
 
-import com.soze.idlekluch.aop.annotations.AuthLog;
-import com.soze.idlekluch.aop.annotations.Profiled;
+import com.soze.idlekluch.core.aop.annotations.AuthLog;
+import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.BuildableComponent;
 import com.soze.idlekluch.game.engine.components.CostComponent;
@@ -18,7 +18,7 @@ import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
 import com.soze.idlekluch.kingdom.exception.CannotAffordBuildingException;
 import com.soze.idlekluch.kingdom.exception.SpaceAlreadyOccupiedException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
-import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.idlekluch.world.utils.WorldUtils;

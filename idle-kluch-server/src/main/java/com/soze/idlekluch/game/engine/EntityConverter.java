@@ -4,7 +4,7 @@ import com.soze.idlekluch.game.engine.components.*;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.EntityMessage;
 import com.soze.idlekluch.game.service.GameEngine;
-import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.klecs.entity.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

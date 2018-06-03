@@ -1,7 +1,8 @@
 package com.soze.idlekluch.user.service;
 
-import com.soze.idlekluch.aop.annotations.AuthLog;
-import com.soze.idlekluch.aop.annotations.Profiled;
+import com.soze.idlekluch.core.aop.annotations.AuthLog;
+import com.soze.idlekluch.core.aop.annotations.Profiled;
+import com.soze.idlekluch.core.event.EventPublisher;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.event.UserRemovedEvent;
@@ -9,11 +10,10 @@ import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.exception.UserRegistrationException;
 import com.soze.idlekluch.user.password.PasswordHash;
 import com.soze.idlekluch.user.repository.UserRepository;
-import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements com.soze.idlekluch.user.service.UserService {
@@ -31,12 +30,12 @@ public class UserServiceImpl implements com.soze.idlekluch.user.service.UserServ
 
   private final UserRepository userRepository;
   private final PasswordHash passwordHash;
-  private final ApplicationEventPublisher eventPublisher;
+  private final EventPublisher eventPublisher;
 
   @Autowired
   public UserServiceImpl(final UserRepository userRepository,
                          final PasswordHash passwordHash,
-                         final ApplicationEventPublisher eventPublisher) {
+                         final EventPublisher eventPublisher) {
 
     this.userRepository = Objects.requireNonNull(userRepository);
     this.passwordHash = Objects.requireNonNull(passwordHash);

@@ -1,12 +1,12 @@
 package com.soze.idlekluch.kingdom.controller;
 
-import com.soze.idlekluch.exception.EntityDoesNotExistException;
+import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.kingdom.dto.KingdomDto;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.kingdom.service.KingdomService;
-import com.soze.idlekluch.routes.Routes;
+import com.soze.idlekluch.core.routes.Routes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

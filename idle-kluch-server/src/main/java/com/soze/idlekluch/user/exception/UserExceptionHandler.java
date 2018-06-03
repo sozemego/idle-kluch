@@ -1,7 +1,7 @@
 package com.soze.idlekluch.user.exception;
 
-import com.soze.idlekluch.utils.ExceptionUtils;
-import com.soze.idlekluch.utils.http.ErrorResponse;
+import com.soze.idlekluch.core.utils.ExceptionUtils;
+import com.soze.idlekluch.core.utils.http.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

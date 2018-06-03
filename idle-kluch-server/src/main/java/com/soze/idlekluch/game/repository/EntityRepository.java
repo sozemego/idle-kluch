@@ -1,7 +1,7 @@
 package com.soze.idlekluch.game.repository;
 
 import com.soze.idlekluch.game.entity.PersistentEntity;
-import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
 import java.util.List;
 import java.util.Optional;

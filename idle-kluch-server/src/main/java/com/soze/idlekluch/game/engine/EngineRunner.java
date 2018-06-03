@@ -1,6 +1,6 @@
 package com.soze.idlekluch.game.engine;
 
-import com.soze.idlekluch.aop.annotations.Profiled;
+import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.klecs.engine.Engine;
 
 import java.util.Objects;

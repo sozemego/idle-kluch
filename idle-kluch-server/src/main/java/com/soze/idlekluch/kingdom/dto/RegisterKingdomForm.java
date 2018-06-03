@@ -2,7 +2,7 @@ package com.soze.idlekluch.kingdom.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.soze.idlekluch.dto.Form;
+import com.soze.idlekluch.core.dto.Form;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

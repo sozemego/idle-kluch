@@ -1,0 +1,13 @@
+DELETE FROM tiles;
+DELETE FROM kingdoms;
+DELETE FROM users;
+DELETE FROM physics_components WHERE entity_id IN (SELECT entity_id FROM entities WHERE template = false);
+DELETE FROM graphics_components WHERE entity_id IN (SELECT entity_id FROM entities WHERE template = false);
+DELETE FROM ownership_components WHERE entity_id IN (SELECT entity_id FROM entities WHERE template = false);
+DELETE FROM static_occupy_space_components WHERE entity_id IN (SELECT entity_id FROM entities WHERE template = false);
+DELETE FROM name_components WHERE entity_id IN (SELECT entity_id FROM entities WHERE template = false);
+DELETE FROM buildable_components WHERE entity_id IN (SELECT entity_id FROM entities WHERE template = false);
+DELETE FROM cost_components WHERE entity_id IN (SELECT entity_id FROM entities WHERE template = false);
+DELETE FROM resource_source_components WHERE entity_id IN (SELECT entity_id FROM entities WHERE template = false);
+DELETE FROM resource_harvester_components WHERE entity_id IN (SELECT entity_id FROM entities WHERE template = false);
+DELETE FROM entities WHERE template = false;

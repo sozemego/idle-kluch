@@ -1,11 +1,7 @@
 package com.soze.idlekluch.game.service;
 
-import com.soze.idlekluch.aop.annotations.Profiled;
-import com.soze.idlekluch.utils.JsonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
-import org.slf4j.MarkerFactory;
+import com.soze.idlekluch.core.aop.annotations.Profiled;
+import com.soze.idlekluch.core.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.MessageHeaders;

@@ -1,11 +1,13 @@
 package com.soze.idlekluch.world.service;
 
-import com.soze.idlekluch.game.engine.EntityConverter;
+import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.engine.components.ResourceSourceComponent;
+import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
-import com.soze.idlekluch.utils.CommonUtils;
+import com.soze.idlekluch.kingdom.entity.Resource;
+import com.soze.idlekluch.core.utils.CommonUtils;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.idlekluch.world.utils.WorldUtils;
@@ -36,13 +38,51 @@ public class ResourceServiceImpl implements ResourceService {
   }
 
   @Override
+  @Profiled
+  public List<Entity> getAllResourceEntityTemplates() {
+    return entityService
+             .getEntityTemplates()
+             .stream()
+             .filter(entity -> entity.getComponent(ResourceSourceComponent.class) != null)
+             .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Entity> getResourceEntityTemplates(final Resource resource) {
+    Objects.requireNonNull(resource);
+
+    return getAllResourceEntityTemplates()
+             .stream()
+             .filter(entity -> {
+               final ResourceSourceComponent resourceSourceComponent = entity.getComponent(ResourceSourceComponent.class);
+               return resource.equals(resourceSourceComponent.getResource());
+             })
+             .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Entity> getResourceEntityTemplates(final String resourceName) {
+    Objects.requireNonNull(resourceName);
+
+    return getAllResourceEntityTemplates()
+             .stream()
+             .filter(entity -> {
+               final ResourceSourceComponent resourceSourceComponent = entity.getComponent(ResourceSourceComponent.class);
+               return resourceSourceComponent.getResource().getName().equalsIgnoreCase(resourceName);
+             })
+             .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Entity> getAllResourceSources() {
+    return gameEngine.getEntitiesByNode(Nodes.RESOURCE_SOURCE);
+  }
+
+  @Override
   @EventListener
+  @Profiled
   public void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent worldChunkCreatedEvent) {
-    final List<Entity> resourceSources = entityService
-                                           .getEntityTemplates()
-                                           .stream()
-                                           .filter(entity -> entity.getComponent(ResourceSourceComponent.class) != null)
-                                           .collect(Collectors.toList());
+    final List<Entity> resourceSources = getAllResourceEntityTemplates();
 
     if(resourceSources.isEmpty()) {
       return;

@@ -1,16 +1,16 @@
 package com.soze.idlekluch.game.service;
 
-import com.soze.idlekluch.aop.annotations.Profiled;
+import com.soze.idlekluch.core.aop.annotations.Profiled;
+import com.soze.idlekluch.core.event.EventPublisher;
 import com.soze.idlekluch.game.engine.EngineRunner;
 import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
-import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
 import com.soze.klecs.node.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class GameEngineImpl implements GameEngine {
   private static final Logger LOG = LoggerFactory.getLogger(GameEngineImpl.class);
   private final ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-  private final ApplicationEventPublisher publisher;
+  private final EventPublisher publisher;
 
   private final Engine engine;
   private final EngineRunner engineRunner;
@@ -34,7 +34,7 @@ public class GameEngineImpl implements GameEngine {
   private final boolean isIntegrationTest;
 
   @Autowired
-  public GameEngineImpl(final ApplicationEventPublisher publisher,
+  public GameEngineImpl(final EventPublisher publisher,
                         final Environment environment) {
     this.engine = new Engine(EntityUUID::randomId);
     this.engine.addSystem(new PhysicsSystem(this.engine));

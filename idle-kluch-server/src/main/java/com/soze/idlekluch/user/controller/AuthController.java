@@ -1,7 +1,7 @@
 package com.soze.idlekluch.user.controller;
 
-import com.soze.idlekluch.interceptors.RateLimited;
-import com.soze.idlekluch.routes.Routes;
+import com.soze.idlekluch.core.interceptors.RateLimited;
+import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.user.dto.ChangePasswordForm;
 import com.soze.idlekluch.user.dto.Jwt;
 import com.soze.idlekluch.user.dto.LoginForm;

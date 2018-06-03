@@ -1,7 +1,7 @@
 package com.soze.idlekluch.world.repository;
 
 import com.soze.idlekluch.kingdom.entity.Resource;
-import com.soze.idlekluch.utils.jpa.QueryUtils;
+import com.soze.idlekluch.core.utils.jpa.QueryUtils;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.entity.World;

@@ -1,15 +1,14 @@
 package com.soze.idlekluch.user.service;
 
-import com.soze.idlekluch.IntAuthTest;
 import com.soze.idlekluch.RootConfig;
-import com.soze.idlekluch.exception.InvalidFormException;
+import com.soze.idlekluch.core.exception.InvalidFormException;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.service.KingdomService;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.UserRegistrationException;
-import com.soze.idlekluch.utils.CommonUtils;
-import com.soze.idlekluch.utils.sql.DatabaseReset;
+import com.soze.idlekluch.core.utils.CommonUtils;
+import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;

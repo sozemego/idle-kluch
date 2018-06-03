@@ -1,6 +1,6 @@
 package com.soze.idlekluch.kingdom.entity;
 
-import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -39,6 +39,19 @@ public class Resource {
 
   public void setName(final String name) {
     this.name = name;
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    final Resource resource = (Resource) o;
+    return Objects.equals(resourceId, resource.resourceId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(resourceId);
   }
 
   @Override

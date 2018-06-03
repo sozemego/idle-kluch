@@ -1,7 +1,7 @@
 package com.soze.idlekluch.game.service;
 
 
-import com.soze.idlekluch.aop.annotations.AuthLog;
+import com.soze.idlekluch.core.aop.annotations.AuthLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

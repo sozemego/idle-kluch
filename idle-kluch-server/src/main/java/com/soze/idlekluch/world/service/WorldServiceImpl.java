@@ -1,6 +1,7 @@
 package com.soze.idlekluch.world.service;
 
-import com.soze.idlekluch.aop.annotations.Profiled;
+import com.soze.idlekluch.core.aop.annotations.Profiled;
+import com.soze.idlekluch.core.event.EventPublisher;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.entity.World;
@@ -9,7 +10,6 @@ import com.soze.idlekluch.world.repository.WorldRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -26,11 +26,11 @@ public class WorldServiceImpl implements WorldService {
   private static final Logger LOG = LoggerFactory.getLogger(WorldServiceImpl.class);
 
   private final WorldRepository worldRepository;
-  private final ApplicationEventPublisher eventPublisher;
+  private final EventPublisher eventPublisher;
 
   @Autowired
   public WorldServiceImpl(final WorldRepository worldRepository,
-                          final ApplicationEventPublisher eventPublisher) {
+                          final EventPublisher eventPublisher) {
     this.worldRepository = Objects.requireNonNull(worldRepository);
     this.eventPublisher = Objects.requireNonNull(eventPublisher);
   }

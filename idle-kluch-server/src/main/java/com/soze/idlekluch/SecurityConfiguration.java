@@ -1,7 +1,7 @@
 package com.soze.idlekluch;
 
 import com.google.common.collect.ImmutableList;
-import com.soze.idlekluch.routes.Routes;
+import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.security.JWTAuthenticationFilter;
 import com.soze.idlekluch.security.JWTAuthorizationFilter;
 import com.soze.idlekluch.user.service.AuthService;

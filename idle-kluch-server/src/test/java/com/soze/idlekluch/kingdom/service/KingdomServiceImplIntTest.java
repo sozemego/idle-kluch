@@ -2,13 +2,14 @@ package com.soze.idlekluch.kingdom.service;
 
 import com.soze.idlekluch.IntAuthTest;
 import com.soze.idlekluch.RootConfig;
-import com.soze.idlekluch.exception.EntityAlreadyExistsException;
-import com.soze.idlekluch.exception.InvalidFormException;
+import com.soze.idlekluch.core.exception.EntityAlreadyExistsException;
+import com.soze.idlekluch.core.exception.InvalidFormException;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.UserAlreadyHasKingdomException;
-import com.soze.idlekluch.utils.CommonUtils;
-import com.soze.idlekluch.utils.sql.DatabaseReset;
+import com.soze.idlekluch.core.utils.CommonUtils;
+import com.soze.idlekluch.core.utils.sql.DatabaseReset;
+import com.soze.klecs.entity.Entity;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -32,6 +35,9 @@ public class KingdomServiceImplIntTest extends IntAuthTest {
 
   @Autowired
   private KingdomService kingdomService;
+
+  @Autowired
+  private BuildingService buildingService;
 
   @BeforeClass
   public static void setup() {
@@ -51,6 +57,18 @@ public class KingdomServiceImplIntTest extends IntAuthTest {
     assertTrue(kingdom.getName().equals(kingdomName));
     assertTrue(kingdom.getOwner().getUsername().equals(username));
     assertTrue(kingdom.getCreatedAt() != null);
+  }
+
+  @Test
+  public void testRegisterKingdomShouldHaveStartingBuilding() {
+    final String username = CommonUtils.generateRandomString(12);
+    register(username);
+    final String kingdomName = "great_kingdom";
+
+    kingdomService.addKingdom(username, new RegisterKingdomForm(kingdomName));
+
+    final List<Entity> buildings = buildingService.getOwnBuildings(username);
+    assertEquals(1, buildings.size());
   }
 
   @Test

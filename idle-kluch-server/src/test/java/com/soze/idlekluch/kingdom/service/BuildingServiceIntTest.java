@@ -12,11 +12,12 @@ import com.soze.idlekluch.kingdom.exception.SpaceAlreadyOccupiedException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.exception.NotAuthenticatedException;
-import com.soze.idlekluch.utils.CommonUtils;
-import com.soze.idlekluch.utils.jpa.EntityUUID;
-import com.soze.idlekluch.utils.jpa.InvalidUUIDException;
-import com.soze.idlekluch.utils.sql.DatabaseReset;
+import com.soze.idlekluch.core.utils.CommonUtils;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.core.utils.jpa.InvalidUUIDException;
+import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import com.soze.idlekluch.world.entity.TileId;
+import com.soze.idlekluch.world.service.ResourceService;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.entity.Entity;
@@ -75,6 +76,9 @@ public class BuildingServiceIntTest extends IntAuthTest {
 
   @Autowired
   private WorldService worldService;
+
+  @Autowired
+  private ResourceService resourceService;
 
   @BeforeClass
   public static void beforeClass() {
@@ -204,11 +208,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
     });
 
     //after all threads have run, there should be only 50 buildings/entities for this kingdom
-    final List<PersistentEntity> kingdomBuildings = buildingService
-                                                        .getAllConstructedBuildings()
-                                                        .stream()
-                                                        .filter(building -> building.getOwnershipComponent().getOwnerId().equals(kingdom.getKingdomId()))
-                                                        .collect(Collectors.toList());
+    final List<Entity> kingdomBuildings = buildingService.getOwnBuildings(username);
 
     assertEquals(0, kingdomService.getUsersKingdom(username).get().getIdleBucks());
     assertEquals(50, kingdomBuildings.size());

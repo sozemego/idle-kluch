@@ -1,6 +1,6 @@
 package com.soze.idlekluch.kingdom.entity;
 
-import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;

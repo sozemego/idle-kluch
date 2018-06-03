@@ -1,7 +1,7 @@
 package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.RootConfig;
-import com.soze.idlekluch.utils.sql.DatabaseReset;
+import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.repository.WorldRepository;

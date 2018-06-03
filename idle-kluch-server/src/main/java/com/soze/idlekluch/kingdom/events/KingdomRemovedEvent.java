@@ -1,6 +1,6 @@
 package com.soze.idlekluch.kingdom.events;
 
-import com.soze.idlekluch.utils.jpa.EntityUUID;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
 import java.util.Objects;
 

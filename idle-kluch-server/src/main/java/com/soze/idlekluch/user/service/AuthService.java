@@ -1,6 +1,6 @@
 package com.soze.idlekluch.user.service;
 
-import com.soze.idlekluch.aop.annotations.ValidForm;
+import com.soze.idlekluch.core.aop.annotations.ValidForm;
 import com.soze.idlekluch.user.dto.ChangePasswordForm;
 import com.soze.idlekluch.user.dto.Jwt;
 import com.soze.idlekluch.user.dto.LoginForm;
