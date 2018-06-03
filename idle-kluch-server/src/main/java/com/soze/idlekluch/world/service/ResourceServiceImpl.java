@@ -44,6 +44,10 @@ public class ResourceServiceImpl implements ResourceService {
                                            .filter(entity -> entity.getComponent(ResourceSourceComponent.class) != null)
                                            .collect(Collectors.toList());
 
+    if(resourceSources.isEmpty()) {
+      return;
+    }
+
     for (final Tile tile : worldChunkCreatedEvent.getTiles()) {
       if (Math.random() < resourceDensity) {
         final Entity randomResourceSourceTemplate = CommonUtils.getRandomElement(resourceSources).get();
