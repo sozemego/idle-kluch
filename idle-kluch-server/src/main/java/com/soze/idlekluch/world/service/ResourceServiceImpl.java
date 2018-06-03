@@ -50,7 +50,7 @@ public class ResourceServiceImpl implements ResourceService {
         final Entity randomResourceSource = gameEngine.createEmptyEntity();
         entityService.copyEntity(randomResourceSourceTemplate, randomResourceSource);
         final PhysicsComponent physicsComponent = randomResourceSource.getComponent(PhysicsComponent.class);
-        final Point position = WorldUtils.getTileCenter(tile);
+        final Point position = getResourcePosition(tile, physicsComponent.getWidth(), physicsComponent.getHeight());
         physicsComponent.setX(position.x);
         physicsComponent.setY(position.y);
 
@@ -58,5 +58,17 @@ public class ResourceServiceImpl implements ResourceService {
       }
     }
 
+  }
+
+  /**
+   * Finds a random position within the given tile for a resource.
+   * @param tile
+   * @return
+   */
+  private Point getResourcePosition(final Tile tile, final int resourceWidth, final int resourceHeight) {
+    final Point position = WorldUtils.getTileCenter(tile);
+    position.x -= CommonUtils.randomNumber(0, resourceWidth);
+    position.y -= CommonUtils.randomNumber(0, resourceHeight);
+    return position;
   }
 }

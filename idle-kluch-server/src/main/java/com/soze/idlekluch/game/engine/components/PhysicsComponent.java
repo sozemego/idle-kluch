@@ -16,15 +16,15 @@ public class PhysicsComponent extends BaseComponent {
   private float y;
 
   @Column(name = "width")
-  private float width;
+  private int width;
   @Column(name = "height")
-  private float height;
+  private int height;
 
   public PhysicsComponent() {
     super(ComponentType.PHYSICS);
   }
 
-  public PhysicsComponent(final EntityUUID entityId, final float x, final float y, final float width, final float height) {
+  public PhysicsComponent(final EntityUUID entityId, final float x, final float y, final int width, final int height) {
     this();
     setEntityId(entityId);
     this.x = x;
@@ -49,19 +49,19 @@ public class PhysicsComponent extends BaseComponent {
     this.y = y;
   }
 
-  public float getWidth() {
+  public int getWidth() {
     return width;
   }
 
-  public void setWidth(float width) {
+  public void setWidth(int width) {
     this.width = width;
   }
 
-  public float getHeight() {
+  public int getHeight() {
     return height;
   }
 
-  public void setHeight(float height) {
+  public void setHeight(int height) {
     this.height = height;
   }
 
