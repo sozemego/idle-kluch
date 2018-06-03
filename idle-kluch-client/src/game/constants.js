@@ -32,6 +32,7 @@ export const ZOOM_AMOUNT = 0.125;
 
 export const IMAGES = {
   "grass_1": "grass_1.png",
+  "grass_1_outline": "grass_1_outline.png",
   "small_warehouse": "small_warehouse.png",
   "warehouse": "warehouse.png",
   "forest_1": "forest_1.png",
