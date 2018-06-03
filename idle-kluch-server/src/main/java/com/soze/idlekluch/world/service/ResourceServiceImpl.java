@@ -48,8 +48,11 @@ public class ResourceServiceImpl implements ResourceService {
       return;
     }
 
-    for (final Tile tile : worldChunkCreatedEvent.getTiles()) {
-      if (Math.random() < resourceDensity) {
+    worldChunkCreatedEvent
+      .getTiles()
+      .stream()
+      .filter(tile -> Math.random() < resourceDensity)
+      .forEach(tile -> {
         final Entity randomResourceSourceTemplate = CommonUtils.getRandomElement(resourceSources).get();
         final Entity randomResourceSource = gameEngine.createEmptyEntity();
         entityService.copyEntity(randomResourceSourceTemplate, randomResourceSource);
@@ -59,8 +62,7 @@ public class ResourceServiceImpl implements ResourceService {
         physicsComponent.setY(position.y);
 
         gameEngine.addEntity(randomResourceSource);
-      }
-    }
+      });
 
   }
 
