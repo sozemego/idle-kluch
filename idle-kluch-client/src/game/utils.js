@@ -11,7 +11,9 @@ import { TILE_SIZE } from "./constants";
  * Centers camera at a given point.
  */
 export const centerCameraAt = (game, { x, y }) => {
-  game.world.pivot.setTo(x * TILE_SIZE, y * TILE_SIZE);
+  const nextX = x * TILE_SIZE + (TILE_SIZE / 2);
+  const nextY = y * TILE_SIZE + (TILE_SIZE / 2);
+  game.world.pivot.setTo(nextX, nextY);
 };
 
 export const UP = 'UP';
