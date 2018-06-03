@@ -68,4 +68,12 @@ public class EntityUtils {
     return rectangle.intersects(new Rectangle(point.x, point.y, 1, 1));
   }
 
+
+  public static float distance(final Entity entity, final Point point) {
+    Objects.requireNonNull(entity);
+    Objects.requireNonNull(point);
+
+    final PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
+    return (float) Math.hypot(physicsComponent.getX() - point.x, physicsComponent.getY() - point.y);
+  }
 }

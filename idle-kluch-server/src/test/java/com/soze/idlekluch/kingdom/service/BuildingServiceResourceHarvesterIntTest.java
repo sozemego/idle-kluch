@@ -17,7 +17,6 @@ import com.soze.idlekluch.world.repository.WorldRepository;
 import com.soze.idlekluch.world.service.ResourceService;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.klecs.entity.Entity;
-import org.aspectj.lang.reflect.CodeSignature;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,7 +28,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +86,11 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
 
     final String username = CommonUtils.generateRandomString(12);
     createKingdom(username, CommonUtils.generateRandomString(12));
+
+    resourceService
+      .getAllResourceSources()
+      .forEach(source -> gameEngine.deleteEntity((EntityUUID) source.getId()));
+
     buildingService.buildBuilding(
       username,
       new BuildBuildingForm(
@@ -115,6 +118,11 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
 
     final String username = CommonUtils.generateRandomString(12);
     createKingdom(username, CommonUtils.generateRandomString(12));
+
+    resourceService
+      .getAllResourceSources()
+      .forEach(source -> gameEngine.deleteEntity((EntityUUID) source.getId()));
+
     buildingService.buildBuilding(
       username,
       new BuildBuildingForm(

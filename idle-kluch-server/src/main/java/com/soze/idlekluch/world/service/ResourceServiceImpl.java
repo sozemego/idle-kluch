@@ -1,6 +1,7 @@
 package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.core.aop.annotations.Profiled;
+import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.engine.components.ResourceSourceComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
@@ -79,6 +80,17 @@ public class ResourceServiceImpl implements ResourceService {
   }
 
   @Override
+  public List<Entity> getAllResourceSources(final Resource resource) {
+    return getAllResourceSources()
+             .stream()
+             .filter(source -> {
+               final ResourceSourceComponent resourceSourceComponent = source.getComponent(ResourceSourceComponent.class);
+               return resource.equals(resourceSourceComponent.getResource());
+             })
+             .collect(Collectors.toList());
+  }
+
+  @Override
   @EventListener
   @Profiled
   public void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent worldChunkCreatedEvent) {
@@ -104,6 +116,14 @@ public class ResourceServiceImpl implements ResourceService {
         gameEngine.addEntity(randomResourceSource);
       });
 
+  }
+
+  @Override
+  public List<Entity> getResourceSourcesInRadius(final Resource resource, final Point center, final float radius) {
+    return getAllResourceSources(resource)
+             .stream()
+             .filter(source -> EntityUtils.distance(source, center) <= radius)
+             .collect(Collectors.toList());
   }
 
   /**

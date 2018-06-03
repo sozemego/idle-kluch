@@ -5,6 +5,7 @@ import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.klecs.entity.Entity;
 
+import java.awt.*;
 import java.util.List;
 
 public interface ResourceService {
@@ -28,11 +29,17 @@ public interface ResourceService {
   List<Entity> getResourceEntityTemplates(String resourceName);
 
   /**
-   * Returns all entities which are sources of {@link Resource};
-   * @return
+   * Returns all entities which are sources of any {@link Resource}.
    */
   List<Entity> getAllResourceSources();
 
+  /**
+   * Returns all entities which are sources of this particular {@link Resource}.
+   */
+  List<Entity> getAllResourceSources(Resource resource);
+
   void handleWorldChunkCreatedEvent(WorldChunkCreatedEvent worldChunkCreatedEvent);
+
+  List<Entity> getResourceSourcesInRadius(Resource resource, Point center, float radius);
 
 }

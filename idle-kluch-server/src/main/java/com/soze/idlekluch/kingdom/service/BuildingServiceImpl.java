@@ -3,10 +3,7 @@ package com.soze.idlekluch.kingdom.service;
 import com.soze.idlekluch.core.aop.annotations.AuthLog;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.idlekluch.game.engine.EntityUtils;
-import com.soze.idlekluch.game.engine.components.BuildableComponent;
-import com.soze.idlekluch.game.engine.components.CostComponent;
-import com.soze.idlekluch.game.engine.components.OwnershipComponent;
-import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.game.engine.components.*;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
@@ -14,12 +11,10 @@ import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.events.KingdomAddedEvent;
-import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
-import com.soze.idlekluch.kingdom.exception.CannotAffordBuildingException;
-import com.soze.idlekluch.kingdom.exception.SpaceAlreadyOccupiedException;
-import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
+import com.soze.idlekluch.kingdom.exception.*;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.world.entity.TileId;
+import com.soze.idlekluch.world.service.ResourceService;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.engine.RemovedEntityEvent;
@@ -28,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -43,10 +39,10 @@ public class BuildingServiceImpl implements BuildingService {
   private static final String FIRST_BUILDING_ID = "7a4df465-b4c3-4e9f-854a-248988220dfb";
 
   private final KingdomService kingdomService;
-
   private final GameEngine gameEngine;
   private final EntityService entityService;
   private final WorldService worldService;
+  private final ResourceService resourceService;
 
   private final Set<EntityUUID> buildings = ConcurrentHashMap.newKeySet();
 
@@ -56,11 +52,13 @@ public class BuildingServiceImpl implements BuildingService {
   public BuildingServiceImpl(final KingdomService kingdomService,
                              final GameEngine gameEngine,
                              final EntityService entityService,
-                             final WorldService worldService) {
+                             final WorldService worldService,
+                             final ResourceService resourceService) {
     this.kingdomService = Objects.requireNonNull(kingdomService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.entityService = Objects.requireNonNull(entityService);
     this.worldService = Objects.requireNonNull(worldService);
+    this.resourceService = Objects.requireNonNull(resourceService);
   }
 
   @Override
@@ -76,6 +74,25 @@ public class BuildingServiceImpl implements BuildingService {
     validateCollision(form);
 
     final Entity building = constructBuilding(form);
+
+    //check if there are proper resources in radius
+    final ResourceHarvesterComponent resourceHarvesterComponent = building.getComponent(ResourceHarvesterComponent.class);
+    if(resourceHarvesterComponent != null) {
+      final PhysicsComponent physicsComponent = building.getComponent(PhysicsComponent.class);
+      final List<Entity> resources = resourceService.getResourceSourcesInRadius(
+        resourceHarvesterComponent.getResource(),
+        new Point((int) physicsComponent.getX(), (int) physicsComponent.getY()),
+        resourceHarvesterComponent.getRadius()
+      );
+
+      if(resources.isEmpty()) {
+        throw new NoResourceInRadiusException(
+          form.getMessageId(),
+          resourceHarvesterComponent.getResource().getName() + " not in radius " + resourceHarvesterComponent.getRadius()
+        );
+      }
+    }
+
     final Kingdom kingdom = kingdomService.getUsersKingdom(owner).get();
 
     final OwnershipComponent ownershipComponent = new OwnershipComponent();
