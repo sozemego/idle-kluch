@@ -2,6 +2,7 @@ package com.soze.idlekluch.game.engine;
 
 import com.soze.idlekluch.game.engine.components.NameComponent;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.klecs.entity.Entity;
 
 import java.awt.*;
@@ -88,6 +89,21 @@ public class EntityUtils {
     final NameComponent nameComponent = entity.getComponent(NameComponent.class);
     if(nameComponent == null) {
       throw new IllegalStateException("Entity with id " + entity.getId() + " does not have name component.");
+    }
+
+    return nameComponent.getName();
+  }
+
+  /**
+   * Returns name of the entity from {@link NameComponent}.
+   * All entities must have this component, if one doesn't, an {@link IllegalStateException} is thrown.
+   */
+  public static String getName(final PersistentEntity persistentEntity) {
+    Objects.requireNonNull(persistentEntity);
+
+    final NameComponent nameComponent = persistentEntity.getNameComponent();
+    if(nameComponent == null) {
+      throw new IllegalStateException("Entity with id " + persistentEntity.getEntityId() + " does not have name component.");
     }
 
     return nameComponent.getName();

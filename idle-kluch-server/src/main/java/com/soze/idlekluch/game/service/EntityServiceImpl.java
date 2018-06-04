@@ -158,7 +158,7 @@ public class EntityServiceImpl implements EntityService {
     final List<PersistentEntity> persistentEntities = entityRepository.getAllEntities();
     final List<Entity> entities = persistentEntities
                                     .stream()
-                                    .peek(e -> LOG.info("Converting persistent entity with ID:[{}] to ECS Entity", e.getEntityId()))
+                                    .peek(e -> LOG.info("Converting persistent entity [{} - {}] to ECS Entity", getName(e), e.getEntityId()))
                                     .map(entityConverter::convertPersistentToEntity)
                                     .peek(gameEngine::addEntity)
                                     .collect(Collectors.toList());
