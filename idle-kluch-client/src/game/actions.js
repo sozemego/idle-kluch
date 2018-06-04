@@ -20,6 +20,9 @@ export const addEntity = makeActionCreator(ADD_ENTITY, "payload");
 export const REMOVE_ENTITY = "REMOVE_ENTITY";
 export const removeEntity = makeActionCreator(REMOVE_ENTITY, "payload");
 
+export const SET_RUNNING_STATE = "SET_RUNNING_STATE";
+export const setRunningState = makeActionCreator(SET_RUNNING_STATE, "payload");
+
 let gameContainer = null;
 
 export const connect = () => {

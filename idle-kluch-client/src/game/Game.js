@@ -58,6 +58,8 @@ let isBuildingConstructable = false;
 
 let updateTimeLeft = 0;
 
+let isRunning = true;
+
 const initialState = {
   tiles: {},
 };
@@ -206,8 +208,8 @@ const logout = (state, action) => {
   return { ...state, tiles: {} };
 };
 
-const engineUpdate = (state, action) => {
-  updateTimeLeft += 1;
+const setRunningState = (state, action) => {
+  isRunning = action.payload;
   return state;
 };
 
@@ -229,6 +231,7 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.ADD_TILES ]: addTiles,
   [ GAME_ACTIONS.ADD_ENTITY ]: addEntity,
   [ GAME_ACTIONS.REMOVE_ENTITY ]: removeEntity,
+  [ GAME_ACTIONS.SET_RUNNING_STATE]: setRunningState,
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });
@@ -403,8 +406,10 @@ const createGame = () => {
 
       updateSelectedConstructableBuilding();
 
-      const delta = game.time.physicsElapsed;
-      engine.update(delta);
+      if(isRunning) {
+        const delta = game.time.physicsElapsed;
+        engine.update(delta);
+      }
     };
 
     const render = () => {

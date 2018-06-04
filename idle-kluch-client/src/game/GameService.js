@@ -2,7 +2,7 @@ import { networkConfig } from "../api/config";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 import uuid from 'uuid/v4';
-import { addEntity, addTiles, removeEntity } from "./actions";
+import { addEntity, addTiles, removeEntity, setRunningState } from "./actions";
 import store from "../store/store";
 import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
@@ -62,6 +62,10 @@ GameService.connect = function () {
 
       if(type === "BUILDING_LIST") {
         store.dispatch(setConstructableBuildings(parsed.buildingDefinitions));
+      }
+
+      if(type === "PAUSE_STATE") {
+        store.dispatch(setRunningState(parsed.running));
       }
 
     };
