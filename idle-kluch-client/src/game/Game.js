@@ -239,6 +239,10 @@ const mouseOut = (event) => {
   // });
 }
 
+const togglePause = () => {
+  gameService.togglePause();
+};
+
 const updateSelectedConstructableBuilding = () => {
   //selected building highlight
   const selectedConstructableBuilding = getSelectedConstructableBuilding();
@@ -327,6 +331,9 @@ const createGame = () => {
         if(key['key'] === 'l') {
           attachTileSpawnAnimation(tileGroup.children);
           attachEntitySpawnAnimation(entitySprites.children, tileGroup.children.length * 2);
+        }
+        if(key['key'] === 'p') {
+          togglePause();
         }
       }, null);
 

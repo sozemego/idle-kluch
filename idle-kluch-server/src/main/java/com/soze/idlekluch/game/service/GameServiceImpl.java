@@ -128,7 +128,7 @@ public class GameServiceImpl implements GameService {
 
   @Override
   @Profiled
-  public void handlePauseToggle(final PauseToggleMessage pauseToggleMessage) {
+  public void handlePauseToggle() {
     if(gameEngine.isPaused()) {
       LOG.info("Game was paused, starting!");
       gameEngine.start();

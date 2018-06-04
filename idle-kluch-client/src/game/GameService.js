@@ -16,6 +16,7 @@ const game = `/game-socket`;
 
 const base = `/game/inbound`;
 const buildingBuild = `${base}/build`;
+const pauseToggle = `${base}/pause`;
 
 let client = null;
 
@@ -90,6 +91,16 @@ GameService.constructBuilding = (buildingId, x, y) => {
     buildingBuild,
     {},
     JSON.stringify({ messageId, buildingId, x, y, type: "BUILD_BUILDING" }),
+  );
+  return messageId;
+};
+
+GameService.togglePause = () => {
+  const messageId = uuid();
+  client.send(
+    pauseToggle,
+    {},
+    null,
   );
   return messageId;
 };

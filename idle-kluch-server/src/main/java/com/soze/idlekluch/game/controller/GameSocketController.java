@@ -46,8 +46,8 @@ public class GameSocketController {
   }
 
   @MessageMapping(Routes.PAUSE_TOGGLE_MESSAGE)
-  public void handleBuildBuildingMessage(final Principal principal, final PauseToggleMessage message) {
-    gameService.handlePauseToggle(message);
+  public void handleBuildBuildingMessage(final Principal principal) {
+    gameService.handlePauseToggle();
   }
 
   @MessageExceptionHandler(GameException.class)

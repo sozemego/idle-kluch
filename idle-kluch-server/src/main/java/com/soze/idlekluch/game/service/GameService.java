@@ -24,6 +24,6 @@ public interface GameService {
 
   void handleRemovedEntityEvent(RemovedEntityEvent removedEntityEvent);
 
-  void handlePauseToggle(PauseToggleMessage pauseToggleMessage);
+  void handlePauseToggle();
 
 }
