@@ -120,9 +120,22 @@ public class GameServiceImpl implements GameService {
 
   @Override
   @EventListener
+  @Profiled
   public void handleRemovedEntityEvent(final RemovedEntityEvent removedEntityEvent) {
     final RemoveEntityMessage removeEntityMessage = new RemoveEntityMessage(removedEntityEvent.getEntity().getId().toString());
     webSocketMessagingService.send(Routes.GAME_OUTBOUND, removeEntityMessage);
+  }
+
+  @Override
+  @Profiled
+  public void handlePauseToggle(final PauseToggleMessage pauseToggleMessage) {
+    if(gameEngine.isPaused()) {
+      gameEngine.start();
+    } else {
+      gameEngine.stop();
+    }
+
+    webSocketMessagingService.send(Routes.GAME_OUTBOUND, new PauseStateMessage(!gameEngine.isPaused()));
   }
 
 }

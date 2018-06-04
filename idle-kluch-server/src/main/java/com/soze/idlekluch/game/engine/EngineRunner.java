@@ -41,6 +41,10 @@ public class EngineRunner implements Runnable {
     this.delta = delta;
   }
 
+  public boolean isEngineRunning() {
+    return engineRunning;
+  }
+
   public long updates() {
     return updates;
   }

@@ -77,6 +77,11 @@ public class GameEngineImpl implements GameEngine {
   }
 
   @Override
+  public boolean isPaused() {
+    return !engineRunner.isEngineRunning();
+  }
+
+  @Override
   public void setDelta(final float delta) {
     engineRunner.setDelta(delta);
   }

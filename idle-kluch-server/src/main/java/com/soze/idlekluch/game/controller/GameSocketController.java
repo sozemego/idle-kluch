@@ -3,6 +3,7 @@ package com.soze.idlekluch.game.controller;
 import com.soze.idlekluch.game.exception.GameException;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.message.MessageRevert;
+import com.soze.idlekluch.game.message.PauseToggleMessage;
 import com.soze.idlekluch.game.service.GameConnectionRegistryService;
 import com.soze.idlekluch.game.service.GameService;
 import com.soze.idlekluch.core.routes.Routes;
@@ -42,6 +43,11 @@ public class GameSocketController {
   @MessageMapping(Routes.BUILD_BUILDING_MESSAGE)
   public void handleBuildBuildingMessage(final Principal principal, final BuildBuildingForm message) {
     gameService.handleBuildBuildingMessage(principal.getName(), message);
+  }
+
+  @MessageMapping(Routes.PAUSE_TOGGLE_MESSAGE)
+  public void handleBuildBuildingMessage(final Principal principal, final PauseToggleMessage message) {
+    gameService.handlePauseToggle(message);
   }
 
   @MessageExceptionHandler(GameException.class)

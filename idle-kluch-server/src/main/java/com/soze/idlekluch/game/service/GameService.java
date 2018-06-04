@@ -1,6 +1,7 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.message.BuildBuildingForm;
+import com.soze.idlekluch.game.message.PauseToggleMessage;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.klecs.engine.RemovedEntityEvent;
 import org.springframework.context.event.EventListener;
@@ -22,5 +23,7 @@ public interface GameService {
   void handleWorldChunkCreatedEvent(WorldChunkCreatedEvent event);
 
   void handleRemovedEntityEvent(RemovedEntityEvent removedEntityEvent);
+
+  void handlePauseToggle(PauseToggleMessage pauseToggleMessage);
 
 }
