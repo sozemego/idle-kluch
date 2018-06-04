@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -17,9 +18,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+  private static final Collection<? extends GrantedAuthority> EMPTY_COLLECTION = Collections.EMPTY_LIST;
 
   private final AuthenticationManager authenticationManager;
   private final AuthService authService;
@@ -38,11 +43,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
       final LoginForm form = new ObjectMapper().readValue(request.getInputStream(), LoginForm.class);
 
       return authenticationManager.authenticate(
-          new UsernamePasswordAuthenticationToken(
-              form.getUsername(),
-              form.getPassword(),
-              new ArrayList<>()
-          )
+        new UsernamePasswordAuthenticationToken(
+          form.getUsername(),
+          form.getPassword(),
+          EMPTY_COLLECTION
+        )
       );
     } catch (IOException e) {
       throw new RuntimeException(e);

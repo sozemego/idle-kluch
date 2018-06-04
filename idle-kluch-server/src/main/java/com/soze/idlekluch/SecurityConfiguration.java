@@ -3,7 +3,7 @@ package com.soze.idlekluch;
 import com.google.common.collect.ImmutableList;
 import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.security.JWTAuthenticationFilter;
-import com.soze.idlekluch.security.JWTAuthorizationFilter;
+import com.soze.idlekluch.security.JWTBasicAuthenticationFilter;
 import com.soze.idlekluch.user.service.AuthService;
 import com.soze.idlekluch.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .anyRequest().permitAll()
       .and()
         .addFilter(new JWTAuthenticationFilter(authenticationManager(), authService))
-        .addFilter(new JWTAuthorizationFilter(authenticationManager(), authService))
+        .addFilter(new JWTBasicAuthenticationFilter(authenticationManager(), authService))
         // this disables session creation on Spring Security
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
   }

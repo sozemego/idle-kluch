@@ -15,14 +15,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+public class JWTBasicAuthenticationFilter extends BasicAuthenticationFilter {
 
   private static final String AUTHORIZATION = "Authorization";
   private static final String AUTHENTICATION_SCHEME = "Bearer";
 
   private final AuthService authService;
 
-  public JWTAuthorizationFilter(final AuthenticationManager authenticationManager, final AuthService authService) {
+  public JWTBasicAuthenticationFilter(final AuthenticationManager authenticationManager, final AuthService authService) {
     super(authenticationManager);
     this.authService = Objects.requireNonNull(authService);
   }
