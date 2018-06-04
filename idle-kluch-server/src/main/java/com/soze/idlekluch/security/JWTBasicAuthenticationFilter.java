@@ -3,6 +3,7 @@ package com.soze.idlekluch.security;
 import com.soze.idlekluch.user.service.AuthService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class JWTBasicAuthenticationFilter extends BasicAuthenticationFilter {
@@ -64,7 +66,8 @@ public class JWTBasicAuthenticationFilter extends BasicAuthenticationFilter {
     }
 
     final String username = authService.getUsernameClaim(token);
-    return new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+    final List<? extends GrantedAuthority> grantedAuthorities = authService.getUserAuthorities(username);
+    return new UsernamePasswordAuthenticationToken(username, null, grantedAuthorities);
   }
 
   private String getQueryParamToken(final HttpServletRequest request) {

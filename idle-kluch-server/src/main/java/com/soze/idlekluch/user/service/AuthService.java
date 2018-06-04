@@ -6,6 +6,9 @@ import com.soze.idlekluch.user.dto.Jwt;
 import com.soze.idlekluch.user.dto.LoginForm;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.exception.InvalidPasswordException;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.List;
 
 
 public interface AuthService {
@@ -39,6 +42,8 @@ public interface AuthService {
    * Returns username claim from a given token.
    */
   String getUsernameClaim(String token);
+
+  List<? extends GrantedAuthority> getUserAuthorities(String username);
 
   /**
    * Attempts to change user's password.

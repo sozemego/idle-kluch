@@ -13,11 +13,10 @@ import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.IdenticalPasswordChangeException;
 import com.soze.idlekluch.user.exception.InvalidPasswordException;
 import com.soze.idlekluch.user.password.PasswordHash;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -109,6 +108,11 @@ public class AuthServiceImpl implements AuthService {
       throw new IllegalArgumentException("NO USERNAME CLAIM");
     }
     return claim.asString();
+  }
+
+  @Override
+  public List<? extends GrantedAuthority> getUserAuthorities(final String username) {
+    return new ArrayList<>();
   }
 
   @Override
