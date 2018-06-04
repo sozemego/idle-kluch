@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static com.soze.idlekluch.game.engine.EntityUtils.getName;
+
 @Service
 public class BuildingServiceImpl implements BuildingService {
 
@@ -103,7 +105,7 @@ public class BuildingServiceImpl implements BuildingService {
     gameEngine.addEntity(building);
 
     buildings.add((EntityUUID) building.getId());
-    LOG.info("[{}] constructed building [{}] at [{}]", owner, form.getBuildingId(), new Point(form.getX(), form.getY()));
+    LOG.info("[{}] constructed building [{} - {}] at [{}]", owner, form.getBuildingId(), getName(building), new Point(form.getX(), form.getY()));
     return building;
   }
 
@@ -117,7 +119,7 @@ public class BuildingServiceImpl implements BuildingService {
       .filter(entity -> EntityUtils.intersects(entity, buildingPosition))
       .findFirst()
       .ifPresent(entity -> {
-        throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by entityId: " + entity.getId());
+        throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by entityId " + entity.getId() + " named " + getName(entity));
       });
   }
 

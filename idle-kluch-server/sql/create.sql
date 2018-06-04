@@ -157,7 +157,8 @@ INSERT INTO static_occupy_space_components VALUES
 INSERT INTO name_components VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb', 'Small warehouse'),
   ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 'Warehouse'),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d', 'Woodcutter')
+  ('7e10d339-dc10-4204-914c-cdfb2039460d', 'Woodcutter'),
+  ('f520432b-4bf5-448f-95f4-14643e078288', 'forest_1')
 ;
 
 INSERT INTO buildable_components VALUES

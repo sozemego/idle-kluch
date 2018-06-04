@@ -1,6 +1,7 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.engine.EntityConverter;
+import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
@@ -25,6 +26,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.soze.idlekluch.game.engine.EntityUtils.*;
 
 @Service
 public class EntityServiceImpl implements EntityService {
@@ -108,13 +111,13 @@ public class EntityServiceImpl implements EntityService {
   @EventListener
   public void handleAddedEntity(final AddedEntityEvent addedEntityEvent) {
     final Entity entity = addedEntityEvent.getEntity();
-    LOG.info("Added event for entity ID:[{}]", entity.getId());
+    LOG.info("Added event for entity [{} - {}]", getName(entity), entity.getId());
     final boolean entityExists = entityRepository.entityExists((EntityUUID) entity.getId());
-    LOG.info("Entity [{}] is already present [{}]", entity.getId(), entityExists);
+    LOG.info("Entity [{} - {}] is already present [{}]", getName(entity), entity.getId(), entityExists);
     if(!entityExists) {
       final PersistentEntity persistentEntity = entityConverter.convertEntityToPersistent(entity);
       entityRepository.addEntity(persistentEntity);
-      LOG.info("Added entity ID: [{}]", entity.getId());
+      LOG.info("Added entity [{} - {}]", getName(entity), entity.getId());
     }
     final EntityMessage entityMessage = entityConverter.toMessage(entity);
     webSocketMessagingService.send(Routes.GAME_OUTBOUND, entityMessage);
@@ -124,7 +127,7 @@ public class EntityServiceImpl implements EntityService {
   @EventListener
   public void handleRemovedEntity(final RemovedEntityEvent removedEntityEvent) {
     final Entity entity = removedEntityEvent.getEntity();
-    LOG.info("Removed event for entity ID: [{}]", entity.getId());
+    LOG.info("Removed event for entity [{} - {}]", getName(entity), entity.getId());
     entityRepository.deleteEntity((EntityUUID) entity.getId());
   }
 
