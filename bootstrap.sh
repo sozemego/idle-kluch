@@ -18,6 +18,9 @@ curl -O http://ftp.man.poznan.pl/apache/tomcat/tomcat-8/v8.5.31/bin/apache-tomca
 sudo mkdir /opt/tomcat
 sudo tar xzvf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
 
+sudo cp /vagrant/tomcat-users.xml /opt/tomcat/conf/tomcat-users.xml
+sudo cp /vagrant/context.xml /opt/tomcat/webapps/manager/META-INF/context.xml
+
 #give tomcat user rights over the tomcat folder
 cd /opt/tomcat
 sudo chgrp -R tomcat /opt/tomcat
@@ -60,3 +63,5 @@ sudo systemctl start tomcat
 
 #allow tomcat to receive requests through the firewall
 sudo ufw allow 8080
+
+sudo systemctl enable tomcat

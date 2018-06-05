@@ -14,6 +14,11 @@ Vagrant.configure("2") do |config|
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "ubuntu/xenial64"
 
+  config.ssh.private_key_path
+  config.ssh.insert_key = false
+  config.ssh.username = "vagrant"
+  config.ssh.password = "vagrant"
+
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
@@ -59,6 +64,8 @@ Vagrant.configure("2") do |config|
   #
   # View the documentation for the provider you are using for more
   # information on available options.
+  config.vm.provision "file", source: "tomcat-users.xml", destination: "/home/vagrant/tomcat-users.xml"
+  config.vm.provision "file", source: "context.xml", destination: "/home/vagrant/context.xml"
 
   config.vm.provision :shell, path: "bootstrap.sh"
 
