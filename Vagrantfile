@@ -66,6 +66,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision :shell, path: "vagrant-bootstrap.sh"
   config.vm.provision :shell, path: "bootstrap.sh"
+  config.vm.provision :shell, path: "bootstrap-postgresql.sh", env: {"POSTGRES_PASSWORD" => ENV['IDLE_KLUCH_DATABASE_PASSWORD']}
 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
