@@ -61,6 +61,7 @@ EOF
 #start the service
 sudo systemctl daemon-reload
 sudo systemctl start tomcat
+sudo services tomcat restart
 
 #allow tomcat to receive requests through the firewall
 sudo ufw allow 8080
