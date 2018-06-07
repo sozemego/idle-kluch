@@ -32,6 +32,8 @@ Vagrant.configure("2") do |config|
   # via 127.0.0.1 to disable public access
   config.vm.network "forwarded_port", guest: 8080, host: 8080, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port", guest: 80, host: 80, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 8787, host: 8787, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 1099, host: 1099, host_ip: "127.0.0.1"
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -68,6 +70,10 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, path: "vagrant-bootstrap.sh"
   config.vm.provision :shell, path: "bootstrap.sh"
   config.vm.provision :shell, path: "bootstrap-postgresql.sh", env: {"POSTGRES_PASSWORD" => ENV['IDLE_KLUCH_DATABASE_PASSWORD']}
+  config.vm.provision :shell, inline: <<-SHELL
+    reboot
+  SHELL
+
 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the

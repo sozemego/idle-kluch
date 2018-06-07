@@ -43,7 +43,7 @@ Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid
 Environment=CATALINA_HOME=/opt/tomcat
 Environment=CATALINA_BASE=/opt/tomcat
 Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
-Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1099 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
 
 ExecStart=/opt/tomcat/bin/startup.sh
 ExecStop=/opt/tomcat/bin/shutdown.sh
@@ -72,8 +72,10 @@ sudo systemctl enable tomcat
 sudo apt-get install -y apache2
 sudo ufw allow "Apache Full"
 
-sudo usermod -G www-data soze
-sudo usermod -G www-data vagrant
+sudo usermod -G tomcat,www-data soze
+sudo usermod -G tomcat,www-data vagrant
 sudo chown -R www-data:www-data /var/www
 sudo chmod -R 0775 /var/www
 
+sudo chown -R tomcat:tomcat /opt/tomcat
+sudo chmod -R 0775 /opt/tomcat

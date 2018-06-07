@@ -143,3 +143,6 @@ log/
 deploy-client.bat
 deploy-local-client.bat
 deploy-remote-client.bat
+
+env.sh
+set-env.bat
