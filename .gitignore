@@ -139,3 +139,5 @@ typings/
 .next
 
 log/
+
+deploy-client.bat
