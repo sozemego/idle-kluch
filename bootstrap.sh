@@ -73,6 +73,7 @@ sudo apt-get install -y apache2
 sudo ufw allow "Apache Full"
 
 sudo usermod -G www-data soze
+sudo usermod -G www-data vagrant
 sudo chown -R www-data:www-data /var/www
 sudo chmod -R 0775 /var/www
 
