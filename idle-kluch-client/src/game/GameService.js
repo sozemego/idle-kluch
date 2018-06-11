@@ -29,9 +29,9 @@ GameService.connect = function () {
     //   return;
     // }
 
-    const { protocol, base, port, version } = networkConfig;
+    const { protocol, base, port, version, app } = networkConfig;
     const socket = new SockJS(
-      `${protocol}://${base}:${port}${version}${game}?token=${getToken()}`,
+      `${protocol}://${base}:${port}${app}${version}${game}?token=${getToken()}`,
     );
     client = Stomp.over(socket);
 

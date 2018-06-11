@@ -10,6 +10,7 @@ const configurations = {
     wsProtocol: "ws",
     base: "localhost",
     port: 8080,
+    app: "",
     version: "/api/0.1",
   },
   [ testEnv ]: {
@@ -17,6 +18,7 @@ const configurations = {
     wsProtocol: "ws",
     base: "localhost",
     port: 8180,
+    app: "",
     version: "/api/0.1",
   },
   [ prodEnv ]: {
@@ -24,6 +26,7 @@ const configurations = {
     wsProtocol: "ws",
     base: "localhost",
     port: 8080,
+    app: "/idle-kluch-server",
     version: "/api/0.1",
   },
 };
