@@ -1,8 +1,9 @@
 const localEnv = "LOCAL";
 const testEnv = "TEST";
-const prodEnv = "PROD";
+const prodEnv = "production";
 
-const currentEnv = localEnv;
+
+const currentEnv = process.env.NODE_ENV || localEnv;
 
 const configurations = {
   [ localEnv ]: {

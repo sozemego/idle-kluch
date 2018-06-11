@@ -37,9 +37,9 @@ public class JPAConfiguration {
   public DataSource dataSource() throws SQLException {
     final DriverManagerDataSource driver = new DriverManagerDataSource();
     driver.setDriverClassName("org.postgresql.Driver");
-    driver.setUrl("jdbc:postgresql://localhost:5432/" + dbName + "?stringtype=unspecified");
-    driver.setUsername(dbUsername);
-    driver.setPassword(dbPassword);
+    driver.setUrl("jdbc:postgresql://localhost:5432/" + dbName.trim() + "?stringtype=unspecified");
+    driver.setUsername(dbUsername.trim());
+    driver.setPassword(dbPassword.trim());
     return driver;
   }
 

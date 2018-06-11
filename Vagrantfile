@@ -67,6 +67,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: "tomcat-users.xml", destination: "/home/vagrant/tomcat-users.xml"
   config.vm.provision "file", source: "context.xml", destination: "/home/vagrant/context.xml"
   config.vm.provision "file", source: "setenv.sh", destination: "/home/vagrant/setenv.sh"
+  config.vm.provision "file", source: "idle-kluch-server/sql/create.sql", destination: "/home/vagrant/create.sql"
 
   config.vm.provision :shell, path: "vagrant-bootstrap.sh"
   config.vm.provision :shell, path: "bootstrap.sh"
