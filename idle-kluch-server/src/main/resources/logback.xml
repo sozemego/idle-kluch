@@ -3,7 +3,7 @@
 
     <appender name="FILE-PROFILING"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/profiling.log</file>
+        <file>${IDLE_KLUCH_LOG_BASE}/profiling.log</file>
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>PROFILING</marker>
@@ -32,7 +32,7 @@
 
     <appender name="FILE-AUTHORIZED"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/authorized.log</file>
+        <file>${IDLE_KLUCH_LOG_BASE}/authorized.log</file>
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>AUTHORIZED</marker>
@@ -61,7 +61,7 @@
 
     <appender name="FILE-MESSAGE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/message.log</file>
+        <file>${IDLE_KLUCH_LOG_BASE}/message.log</file>
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>MESSAGE</marker>
@@ -90,7 +90,7 @@
 
     <appender name="FILE-EVENT-LISTENER"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/eventListener.log</file>
+        <file>${IDLE_KLUCH_LOG_BASE}/eventListener.log</file>
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>EVENT_LISTENER</marker>
@@ -158,7 +158,7 @@
 
     <appender name="FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/file.log</file>
+        <file>${IDLE_KLUCH_LOG_BASE}/file.log</file>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
         </filter>
@@ -210,7 +210,7 @@
 
     <appender name="FILE-ERROR"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/error.log</file>
+        <file>${IDLE_KLUCH_LOG_BASE}/error.log</file>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>
