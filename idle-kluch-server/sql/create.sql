@@ -174,7 +174,7 @@ INSERT INTO cost_components VALUES
 ;
 
 INSERT INTO resource_harvester_components(entity_id, resource_id, radius, units_per_minute)
-SELECT '7e10d339-dc10-4204-914c-cdfb2039460d', resource_id, 256, 10
+SELECT '7e10d339-dc10-4204-914c-cdfb2039460d', resource_id, 256, 5
 FROM resources WHERE name = 'Wood';
 
 INSERT INTO resource_source_components(entity_id, resource_id)

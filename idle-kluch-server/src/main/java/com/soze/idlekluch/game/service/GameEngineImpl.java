@@ -5,6 +5,7 @@ import com.soze.idlekluch.core.event.EventPublisher;
 import com.soze.idlekluch.game.engine.EngineRunner;
 import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.game.engine.systems.ResourceHarvesterSystem;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
 import com.soze.klecs.node.Node;
@@ -38,6 +39,7 @@ public class GameEngineImpl implements GameEngine {
                         final Environment environment) {
     this.engine = new Engine(EntityUUID::randomId);
     this.engine.addSystem(new PhysicsSystem(this.engine));
+    this.engine.addSystem(new ResourceHarvesterSystem(this.engine));
 
     this.publisher = Objects.requireNonNull(publisher);
 
