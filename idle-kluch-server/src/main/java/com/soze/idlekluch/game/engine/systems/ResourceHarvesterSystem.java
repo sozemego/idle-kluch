@@ -1,16 +1,21 @@
 package com.soze.idlekluch.game.engine.systems;
 
+import com.soze.idlekluch.core.utils.MathUtils;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ResourceHarvesterSystem extends BaseEntitySystem {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ResourceHarvesterSystem.class);
 
   private final Map<EntityUUID, Float> productionMap = new HashMap<>();
 
@@ -25,9 +30,9 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
 
   private void update(final Entity entity, final float delta) {
     final float currentProductionPercent = getCurrentProductionProgress(entity);
-    if(currentProductionPercent == 1f) {
+    if(MathUtils.equals(currentProductionPercent, 1f, 0.05f)) {
       productionMap.put((EntityUUID) entity.getId(), 0f);
-      System.out.println("FINISHED PRODUCTION FOR ENTITY " + entity.getId());
+      LOG.debug("FINISHED PRODUCTION FOR ENTITY [{}]", entity.getId());
       return;
     }
     final ResourceHarvesterComponent resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
@@ -35,7 +40,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     final float secondsPerUnit = 60 / (float) unitsPerMinute;
     final float productionPercentageChange = delta / secondsPerUnit;
     final float nextProductionPercentage = Math.min(1f, currentProductionPercent + productionPercentageChange);
-    System.out.println(nextProductionPercentage);
+    LOG.debug("Next production percentage for [{}]: [{}]", entity.getId(), nextProductionPercentage);
     productionMap.put((EntityUUID) entity.getId(), nextProductionPercentage);
   }
 
