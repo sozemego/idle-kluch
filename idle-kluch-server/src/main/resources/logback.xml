@@ -124,26 +124,8 @@
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>PROFILING</marker>
-            </evaluator>
-            <onMismatch>NEUTRAL</onMismatch>
-            <onMatch>DENY</onMatch>
-        </filter>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                <marker>AUTHORIZED</marker>
-            </evaluator>
-            <onMismatch>NEUTRAL</onMismatch>
-            <onMatch>DENY</onMatch>
-        </filter>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>MESSAGE</marker>
-            </evaluator>
-            <onMismatch>NEUTRAL</onMismatch>
-            <onMatch>DENY</onMatch>
-        </filter>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>AUTHORIZED</marker>
                 <marker>EVENT_LISTENER</marker>
             </evaluator>
             <onMismatch>NEUTRAL</onMismatch>
@@ -165,26 +147,8 @@
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>PROFILING</marker>
-            </evaluator>
-            <onMismatch>NEUTRAL</onMismatch>
-            <onMatch>DENY</onMatch>
-        </filter>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                <marker>AUTHORIZED</marker>
-            </evaluator>
-            <onMismatch>NEUTRAL</onMismatch>
-            <onMatch>DENY</onMatch>
-        </filter>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>MESSAGE</marker>
-            </evaluator>
-            <onMismatch>NEUTRAL</onMismatch>
-            <onMatch>DENY</onMatch>
-        </filter>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>AUTHORIZED</marker>
                 <marker>EVENT_LISTENER</marker>
             </evaluator>
             <onMismatch>NEUTRAL</onMismatch>
@@ -217,26 +181,8 @@
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>PROFILING</marker>
-            </evaluator>
-            <onMismatch>NEUTRAL</onMismatch>
-            <onMatch>DENY</onMatch>
-        </filter>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>MESSAGE</marker>
-            </evaluator>
-            <onMismatch>NEUTRAL</onMismatch>
-            <onMatch>DENY</onMatch>
-        </filter>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>AUTHORIZED</marker>
-            </evaluator>
-            <onMismatch>NEUTRAL</onMismatch>
-            <onMatch>DENY</onMatch>
-        </filter>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>EVENT_LISTENER</marker>
             </evaluator>
             <onMismatch>NEUTRAL</onMismatch>
