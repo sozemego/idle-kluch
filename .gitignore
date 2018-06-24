@@ -147,3 +147,6 @@ deploy-remote-client.bat
 env.sh
 set-env.bat
 setenv.sh
+
+.vagrant
+build/
