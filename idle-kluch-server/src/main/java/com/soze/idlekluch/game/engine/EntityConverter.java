@@ -50,6 +50,7 @@ public class EntityConverter {
     persistentEntity.setCostComponent(entity.getComponent(CostComponent.class));
     persistentEntity.setResourceSourceComponent(entity.getComponent(ResourceSourceComponent.class));
     persistentEntity.setResourceHarvesterComponent(entity.getComponent(ResourceHarvesterComponent.class));
+    persistentEntity.setResourceStorageComponent(entity.getComponent(ResourceStorageComponent.class));
 
     return persistentEntity;
   }

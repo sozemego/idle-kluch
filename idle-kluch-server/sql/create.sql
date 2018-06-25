@@ -119,6 +119,12 @@ CREATE TABLE resource_harvester_components (
   CONSTRAINT FK_RESOURCE_HARVESTER_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
 );
 
+CREATE TABLE resource_storage_components (
+  entity_id uuid NOT NULL,
+  capacity INTEGER NOT NULL,
+  CONSTRAINT FK_RESOURCE_STORAGE_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
+);
+
 -- here entity templates live --
 INSERT INTO entities VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb', true),
@@ -172,6 +178,19 @@ INSERT INTO cost_components VALUES
   ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 250),
   ('7e10d339-dc10-4204-914c-cdfb2039460d', 125)
 ;
+
+INSERT INTO resource_storage_components VALUES
+  ('7a4df465-b4c3-4e9f-854a-248988220dfb', 100),
+  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 250),
+  ('7e10d339-dc10-4204-914c-cdfb2039460d', 20)
+;
+
+CREATE TABLE resource_storage (
+  entity_id uuid NOT NULL,
+  resource_id uuid NOT NULL,
+  CONSTRAINT FK_RESOURCE_STORAGE_ROW_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
+  CONSTRAINT FK_RESOURCE_STORAGE_ROW_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
+);
 
 INSERT INTO resource_harvester_components(entity_id, resource_id, radius, units_per_minute)
 SELECT '7e10d339-dc10-4204-914c-cdfb2039460d', resource_id, 256, 5

@@ -24,7 +24,9 @@ import java.util.Objects;
   @JsonSubTypes.Type(value = PhysicsComponent.class, name = "PHYSICS"),
   @JsonSubTypes.Type(value = StaticOccupySpaceComponent.class, name = "STATIC_OCCUPY_SPACE"),
   @JsonSubTypes.Type(value = CostComponent.class, name = "COST"),
-  @JsonSubTypes.Type(value = ResourceSourceComponent.class, name = "RESOURCE_SOURCE")
+  @JsonSubTypes.Type(value = ResourceSourceComponent.class, name = "RESOURCE_SOURCE"),
+  @JsonSubTypes.Type(value = ResourceHarvesterComponent.class, name = "RESOURCE_HARVESTER"),
+  @JsonSubTypes.Type(value = ResourceStorageComponent.class, name = "RESOURCE_STORAGE")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseComponent {
@@ -69,7 +71,8 @@ public abstract class BaseComponent {
   public enum ComponentType {
     PHYSICS, GRAPHICS, OWNERSHIP,
     STATIC_OCCUPY_SPACE, NAME, BUILDABLE,
-    COST, RESOURCE_SOURCE, RESOURCE_HARVESTER
+    COST, RESOURCE_SOURCE, RESOURCE_HARVESTER,
+    RESOURCE_STORAGE,
   }
 
   @Override
