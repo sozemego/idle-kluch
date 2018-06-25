@@ -40,16 +40,17 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     final int remainingCapacity = storage.getCapacity() - storage.getResources().size();
     if(remainingCapacity > 0 && currentHarvestingProgress.getHarvestingState() == HarvestingState.WAITING) {
       currentHarvestingProgress.setHarvestingState(HarvestingState.HARVESTING);
+      currentHarvestingProgress.setHarvestingProgressPercent(0f);
     }
 
     if(currentHarvestingProgress.getHarvestingState() == HarvestingState.HARVESTING) {
       final ResourceHarvesterComponent resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
       final int unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
       final float secondsPerUnit = 60 / (float) unitsPerMinute;
-      final float productionPercentageChange = delta / secondsPerUnit;
-      final float nextProductionPercentage = Math.min(1f, currentHarvestingProgress.getHarvestingProgressPercent() + productionPercentageChange);
-      currentHarvestingProgress.setHarvestingProgressPercent(nextProductionPercentage);
-      LOG.debug("Next production percentage for [{}]: [{}]", entity.getId(), nextProductionPercentage);
+      final float harvestingPercentageChange = delta / secondsPerUnit;
+      final float nextHarvestingPercentage = Math.min(1f, currentHarvestingProgress.getHarvestingProgressPercent() + harvestingPercentageChange);
+      currentHarvestingProgress.setHarvestingProgressPercent(nextHarvestingPercentage);
+      LOG.debug("Next harvesting percentage for [{}]: [{}]", entity.getId(), nextHarvestingPercentage);
     }
 
     if(currentHarvestingProgress.isFinished()) {
@@ -57,7 +58,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
       currentHarvestingProgress.setHarvestingProgressPercent(0f);
       final ResourceHarvesterComponent harvester = entity.getComponent(ResourceHarvesterComponent.class);
       storage.addResource(harvester.getResource());
-      LOG.debug("FINISHED PRODUCTION FOR ENTITY [{}]", entity.getId());
+      LOG.debug("FINISHED HARVESTING FOR ENTITY [{}]", entity.getId());
     }
   }
 
