@@ -6,6 +6,7 @@ import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import com.soze.idlekluch.game.engine.components.NameComponent;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingState;
+import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.world.repository.WorldRepository;
@@ -60,22 +61,28 @@ public class ResourceHarvesterSystemTest {
     resourceHarvesterComponent.setResource(worldRepository.getResource("Wood").get());
     entity.addComponent(resourceHarvesterComponent);
 
+    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent((EntityUUID) entity.getId(), 40);
+    entity.addComponent(resourceStorageComponent);
 
     gameEngine.addEntity(entity);
 
     assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
     assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
+    assertEquals(0, resourceStorageComponent.getResources().size());
 
     //pass time by 30 seconds
     gameEngine.update(30f);
 
     assertEquals(HarvestingState.HARVESTING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
     assertEquals(0.5f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
+    assertEquals(0, resourceStorageComponent.getResources().size());
 
     gameEngine.update(30f);
 
     assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
     assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
+    assertEquals(1, resourceStorageComponent.getResources().size());
+    assertTrue(resourceStorageComponent.getResources().get(0).equals(worldRepository.getResource("Wood").get()));
   }
 
 

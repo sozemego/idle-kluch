@@ -5,6 +5,7 @@ import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingProgress;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingState;
+import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
@@ -35,20 +36,27 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
    */
   private void update(final Entity entity, final float delta) {
     final HarvestingProgress currentHarvestingProgress = getCurrentHarvestingProgress(entity);
-    currentHarvestingProgress.setHarvestingState(HarvestingState.HARVESTING);
+    final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
+    final int remainingCapacity = storage.getCapacity() - storage.getResources().size();
+    if(remainingCapacity > 0 && currentHarvestingProgress.getHarvestingState() == HarvestingState.WAITING) {
+      currentHarvestingProgress.setHarvestingState(HarvestingState.HARVESTING);
+    }
 
-    final ResourceHarvesterComponent resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
-    final int unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
-    final float secondsPerUnit = 60 / (float) unitsPerMinute;
-    final float productionPercentageChange = delta / secondsPerUnit;
-    final float nextProductionPercentage = Math.min(1f, currentHarvestingProgress.getHarvestingProgressPercent() + productionPercentageChange);
-    currentHarvestingProgress.setHarvestingProgressPercent(nextProductionPercentage);
-
-    LOG.debug("Next production percentage for [{}]: [{}]", entity.getId(), nextProductionPercentage);
+    if(currentHarvestingProgress.getHarvestingState() == HarvestingState.HARVESTING) {
+      final ResourceHarvesterComponent resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
+      final int unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
+      final float secondsPerUnit = 60 / (float) unitsPerMinute;
+      final float productionPercentageChange = delta / secondsPerUnit;
+      final float nextProductionPercentage = Math.min(1f, currentHarvestingProgress.getHarvestingProgressPercent() + productionPercentageChange);
+      currentHarvestingProgress.setHarvestingProgressPercent(nextProductionPercentage);
+      LOG.debug("Next production percentage for [{}]: [{}]", entity.getId(), nextProductionPercentage);
+    }
 
     if(currentHarvestingProgress.isFinished()) {
       currentHarvestingProgress.setHarvestingState(HarvestingState.WAITING);
       currentHarvestingProgress.setHarvestingProgressPercent(0f);
+      final ResourceHarvesterComponent harvester = entity.getComponent(ResourceHarvesterComponent.class);
+      storage.addResource(harvester.getResource());
       LOG.debug("FINISHED PRODUCTION FOR ENTITY [{}]", entity.getId());
     }
   }

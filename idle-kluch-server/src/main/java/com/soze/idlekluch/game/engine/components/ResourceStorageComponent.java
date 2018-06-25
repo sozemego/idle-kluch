@@ -16,8 +16,12 @@ public class ResourceStorageComponent extends BaseComponent {
   @Column(name = "capacity")
   private int capacity;
 
-  @ElementCollection
-  @JoinTable(name = "resource_storage", joinColumns = @JoinColumn(name = "entity_id"))
+  @OneToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+    name = "resource_storage",
+    joinColumns = @JoinColumn(name = "entity_id"),
+    inverseJoinColumns = @JoinColumn(name = "resource_id")
+  )
   private List<Resource> resources = new ArrayList<>();
 
   public ResourceStorageComponent() {
@@ -52,6 +56,10 @@ public class ResourceStorageComponent extends BaseComponent {
         return;
       }
     }
+  }
+
+  public List<Resource> getResources() {
+    return new ArrayList<>(resources);
   }
 
   @Override

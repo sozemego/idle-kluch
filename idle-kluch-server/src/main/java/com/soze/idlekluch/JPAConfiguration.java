@@ -84,7 +84,7 @@ public class JPAConfiguration {
     HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
     adapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect"); //you can change this if you have a different DB
     adapter.setGenerateDdl(false);
-    adapter.setShowSql(false);
+    adapter.setShowSql(true);
 
     LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
     factory.setJpaVendorAdapter(adapter);
