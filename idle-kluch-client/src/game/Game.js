@@ -40,6 +40,7 @@ import { ResourceSourceComponent } from "../ecs/components/ResourceSourceCompone
 import { ResourceHarvesterComponent } from "../ecs/components/ResourceHarvesterComponent";
 import { ResourceHarvesterSystem } from "../ecs/systems/ResourceHarvesterSystem";
 import { ResourceStorageComponent } from "../ecs/components/ResourceStorageComponent";
+import { ResourceHarvesterRendererSystem } from "../ecs/systems/ResourceHarvesterRendererSystem";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const getTiles = () => _getTiles(store.getState());
@@ -390,6 +391,12 @@ const createGame = () => {
       tileGroup = game.add.group();
       entitySprites = game.add.group();
 
+      engine = new Engine();
+      engine.addSystem(new PhysicsSystem(engine));
+      engine.addSystem(new GraphicsSystem(engine));
+      engine.addSystem(new ResourceHarvesterRendererSystem(engine, game.add.graphics(0, 0)));
+      engine.addSystem(new ResourceHarvesterSystem(engine));
+
       return resolve({
         game,
         engine,
@@ -446,10 +453,6 @@ const createGame = () => {
       },
     );
 
-    engine = new Engine();
-    engine.addSystem(new PhysicsSystem(engine));
-    engine.addSystem(new GraphicsSystem(engine));
-    engine.addSystem(new ResourceHarvesterSystem(engine));
   });
 };
 

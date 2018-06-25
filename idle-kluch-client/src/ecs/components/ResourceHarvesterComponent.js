@@ -51,7 +51,7 @@ export class ResourceHarvesterComponent {
   }
 
   isFinished() {
-    return isEqual(this.progress, 1, 0.05);
+    return isEqual(this.progress, 1, 0.065);
   }
 
 }

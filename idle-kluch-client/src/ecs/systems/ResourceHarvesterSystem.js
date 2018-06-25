@@ -41,7 +41,6 @@ export class ResourceHarvesterSystem {
 
     if(harvesterComponent.isFinished()) {
       harvesterComponent.setState(HARVESTING_STATE.WAITING);
-      harvesterComponent.setProgress(0);
       storage.addResource(harvesterComponent.getResource());
       console.log("FINISHED HARVESTING");
     }
