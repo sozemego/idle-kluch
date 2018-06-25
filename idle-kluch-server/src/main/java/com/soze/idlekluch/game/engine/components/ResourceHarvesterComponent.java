@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.engine.components;
 
+import com.soze.idlekluch.core.utils.MathUtils;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
@@ -19,6 +20,9 @@ public class ResourceHarvesterComponent extends BaseComponent {
 
   @Column(name = "units_per_minute")
   private int unitsPerMinute;
+
+  @Transient
+  private final HarvestingProgress harvestingProgress = new HarvestingProgress();
 
   public ResourceHarvesterComponent() {
     super(ComponentType.RESOURCE_HARVESTER);
@@ -59,6 +63,10 @@ public class ResourceHarvesterComponent extends BaseComponent {
     this.unitsPerMinute = unitsPerMinute;
   }
 
+  public HarvestingProgress getHarvestingProgress() {
+    return harvestingProgress;
+  }
+
   @Override
   public ResourceHarvesterComponent copy() {
     return new ResourceHarvesterComponent(
@@ -68,4 +76,41 @@ public class ResourceHarvesterComponent extends BaseComponent {
       getUnitsPerMinute()
     );
   }
+
+  public static class HarvestingProgress {
+
+    private HarvestingState harvestingState;
+    private float harvestingProgressPercent;
+
+    public HarvestingProgress() {
+      this.harvestingState = HarvestingState.WAITING;
+      this.harvestingProgressPercent = 0f;
+    }
+
+    public HarvestingState getHarvestingState() {
+      return harvestingState;
+    }
+
+    public void setHarvestingState(final HarvestingState harvestingState) {
+      this.harvestingState = harvestingState;
+    }
+
+    public float getHarvestingProgressPercent() {
+      return harvestingProgressPercent;
+    }
+
+    public void setHarvestingProgressPercent(final float harvestingProgressPercent) {
+      this.harvestingProgressPercent = harvestingProgressPercent;
+    }
+
+    public boolean isFinished() {
+      return MathUtils.equals(getHarvestingProgressPercent(), 1f, 0.05f);
+    }
+  }
+
+  public enum HarvestingState {
+    HARVESTING, WAITING
+  }
+
+
 }
