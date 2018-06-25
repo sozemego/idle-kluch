@@ -38,6 +38,8 @@ import {
 } from "./utils";
 import { ResourceSourceComponent } from "../ecs/components/ResourceSourceComponent";
 import { ResourceHarvesterComponent } from "../ecs/components/ResourceHarvesterComponent";
+import { ResourceHarvesterSystem } from "../ecs/systems/ResourceHarvesterSystem";
+import { ResourceStorageComponent } from "../ecs/components/ResourceStorageComponent";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const getTiles = () => _getTiles(store.getState());
@@ -129,7 +131,13 @@ const addEntity = (state, { payload: entity }) => {
           component.unitsPerMinute
         );
       }
-      throw new Error("INVALID COMPONENT TYPE");
+      if(componentType === COMPONENT_TYPES.RESOURCE_STORAGE) {
+        const storageComponent = new ResourceStorageComponent(5000);
+        component.resources.forEach(resource => storageComponent.addResource(resource));
+        return storageComponent;
+      }
+
+      throw new Error("INVALID COMPONENT TYPE " + componentType);
     })
     .forEach(component => newEntity.addComponent(component));
 
@@ -441,6 +449,7 @@ const createGame = () => {
     engine = new Engine();
     engine.addSystem(new PhysicsSystem(engine));
     engine.addSystem(new GraphicsSystem(engine));
+    engine.addSystem(new ResourceHarvesterSystem(engine));
   });
 };
 

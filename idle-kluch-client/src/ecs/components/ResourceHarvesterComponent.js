@@ -1,9 +1,13 @@
+import { HARVESTING_STATE } from "../constants";
+import { isEqual } from "../../utils/MathUtils";
 export class ResourceHarvesterComponent {
 
   constructor(resource, radius, unitsPerMinute) {
     this.resource = resource;
     this.radius = radius;
     this.unitsPerMinute = unitsPerMinute;
+    this.progress = 0;
+    this.state = HARVESTING_STATE.WAITING;
   }
 
   getResource() {
@@ -28,6 +32,26 @@ export class ResourceHarvesterComponent {
 
   setUnitsPerMinute(unitsPerMinute) {
     this.unitsPerMinute = unitsPerMinute;
+  }
+
+  setProgress(progress) {
+    this.progress = progress;
+  }
+
+  getProgress() {
+    return this.progress;
+  }
+
+  setState(state) {
+    this.state = state;
+  }
+
+  getState() {
+    return this.state;
+  }
+
+  isFinished() {
+    return isEqual(this.progress, 1, 0.05);
   }
 
 }

@@ -1,5 +1,6 @@
 package com.soze.idlekluch.kingdom.entity;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ public class Resource {
 
   @EmbeddedId
   @AttributeOverride(name = "id", column = @Column(name = "resource_id"))
+  @JsonUnwrapped
   private EntityUUID resourceId;
 
   @Column(name = "name")
