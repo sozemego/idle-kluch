@@ -64,6 +64,6 @@ public class ResourceStorageComponent extends BaseComponent {
 
   @Override
   public BaseComponent copy() {
-    return null;
+    return new ResourceStorageComponent(getEntityId(), getCapacity());
   }
 }
