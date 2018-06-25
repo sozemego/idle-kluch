@@ -39,10 +39,10 @@ CREATE TABLE resources (
 );
 
 INSERT INTO resources VALUES
-  (uuid_generate_v4(), 'Wood'),
-  (uuid_generate_v4(), 'Stone'),
-  (uuid_generate_v4(), 'Plank'),
-  (uuid_generate_v4(), 'Brick');
+  ('771d49e6-3fd1-436d-88aa-02b5377ba29e', 'Wood'),
+  ('b7bdf2b9-e129-437d-bdde-00e8964fc173', 'Stone'),
+  ('510bcc29-ec8d-4465-80eb-7f826faba019', 'Plank'),
+  ('7d747f18-6805-4364-bd2b-2eb7b717cd20', 'Brick');
 
 CREATE TABLE kingdoms (
   kingdom_id uuid NOT NULL PRIMARY KEY,
