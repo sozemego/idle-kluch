@@ -85,5 +85,72 @@ public class ResourceHarvesterSystemTest {
     assertTrue(resourceStorageComponent.getResources().get(0).equals(worldRepository.getResource("Wood").get()));
   }
 
+  @Test
+  public void testResourceHarvestingSystemNoCapacity() {
+    Entity entity = gameEngine.createEmptyEntity(EntityUUID.randomId());
+
+    NameComponent name = new NameComponent((EntityUUID) entity.getId(), "Harvester");
+    entity.addComponent(name);
+
+    ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
+    resourceHarvesterComponent.setEntityId((EntityUUID) entity.getId());
+    resourceHarvesterComponent.setUnitsPerMinute(1);
+    resourceHarvesterComponent.setResource(worldRepository.getResource("Wood").get());
+    entity.addComponent(resourceHarvesterComponent);
+
+    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent((EntityUUID) entity.getId(), 0);
+    entity.addComponent(resourceStorageComponent);
+
+    gameEngine.addEntity(entity);
+
+    assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
+    assertEquals(0, resourceStorageComponent.getResources().size());
+
+    //pass time by 30 seconds
+    gameEngine.update(30f);
+
+    assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
+    assertEquals(0, resourceStorageComponent.getResources().size());
+
+    gameEngine.update(30f);
+
+    assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
+    assertEquals(0, resourceStorageComponent.getResources().size());
+  }
+
+  @Test
+  public void testHarvestTillCapacity() {
+    Entity entity = gameEngine.createEmptyEntity(EntityUUID.randomId());
+
+    NameComponent name = new NameComponent((EntityUUID) entity.getId(), "Harvester");
+    entity.addComponent(name);
+
+    ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
+    resourceHarvesterComponent.setEntityId((EntityUUID) entity.getId());
+    resourceHarvesterComponent.setUnitsPerMinute(1);
+    resourceHarvesterComponent.setResource(worldRepository.getResource("Wood").get());
+    entity.addComponent(resourceHarvesterComponent);
+
+    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent((EntityUUID) entity.getId(), 20);
+    entity.addComponent(resourceStorageComponent);
+
+    gameEngine.addEntity(entity);
+
+    assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
+    assertEquals(0, resourceStorageComponent.getResources().size());
+
+    //update 40 times one minute
+    for(int i = 0; i < 20; i++) {
+      gameEngine.update(60f);
+    }
+
+    assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
+    assertEquals(20, resourceStorageComponent.getResources().size());
+  }
 
 }
