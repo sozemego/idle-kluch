@@ -13,6 +13,8 @@ DROP TABLE IF EXISTS buildable_components CASCADE;
 DROP TABLE IF EXISTS cost_components CASCADE;
 DROP TABLE IF EXISTS resource_source_components CASCADE;
 DROP TABLE IF EXISTS resource_harvester_components CASCADE;
+DROP TABLE IF EXISTS resource_storage_components CASCADE;
+DROP TABLE IF EXISTS resource_storage CASCADE;
 
 CREATE TABLE users (
   user_id uuid NOT NULL PRIMARY KEY,
