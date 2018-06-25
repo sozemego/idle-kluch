@@ -26,7 +26,6 @@ export class ResourceHarvesterSystem {
     if(remainingCapacity > 0 && harvesterComponent.getState() === HARVESTING_STATE.WAITING) {
       harvesterComponent.setState(HARVESTING_STATE.HARVESTING);
       harvesterComponent.setProgress(0);
-      console.log(remainingCapacity);
     }
     if(remainingCapacity === 0) {
       console.log("NO CAPACITY");
