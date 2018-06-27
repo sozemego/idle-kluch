@@ -32,10 +32,10 @@ export class ResourceHarvesterRendererSystem {
   };
 
   getSprite = (id) => {
-    let sprite = this.sprites[id];
-    if(!sprite) {
+    let sprite = this.sprites[ id ];
+    if (!sprite) {
       sprite = this.spriteFactory.sprite(0, 0, "red_button01");
-      this.sprites[id] = sprite;
+      this.sprites[ id ] = sprite;
     }
     return sprite;
   };
