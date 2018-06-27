@@ -44,7 +44,7 @@ public class GameEngineImpl implements GameEngine {
     this.publisher = Objects.requireNonNull(publisher);
 
     this.isIntegrationTest = environment.acceptsProfiles("integration-test");
-    this.engineRunner = new EngineRunner(engine, 1f);
+    this.engineRunner = new EngineRunner(engine, 1f / 60f);
   }
 
   @PostConstruct

@@ -1,7 +1,5 @@
 package com.soze.idlekluch.game.engine.systems;
 
-import com.soze.idlekluch.core.utils.MathUtils;
-import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingProgress;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingState;

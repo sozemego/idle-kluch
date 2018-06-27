@@ -34,12 +34,12 @@ export class ResourceHarvesterSystem {
       const harvestingProgressChange = delta / secondsPerUnit;
       const nextHarvestingPercentage = Math.min(1, harvesterComponent.getProgress() + harvestingProgressChange);
       harvesterComponent.setProgress(nextHarvestingPercentage);
+      // console.log(nextHarvestingPercentage);
     }
 
     if(harvesterComponent.isFinished() && harvesterComponent.getState() === HARVESTING_STATE.HARVESTING) {
       harvesterComponent.setState(HARVESTING_STATE.WAITING);
       storage.addResource(harvesterComponent.getResource());
-      console.log("FINISHED HARVESTING");
     }
 
   };
