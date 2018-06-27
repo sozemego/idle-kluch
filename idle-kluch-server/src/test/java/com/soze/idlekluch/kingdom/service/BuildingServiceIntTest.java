@@ -93,6 +93,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
   @Before
   public void setup() {
     DatabaseReset.deleteData();
+    gameEngine.reset();
   }
 
   @Test(expected = UserDoesNotHaveKingdomException.class)
