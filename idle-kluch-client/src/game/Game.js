@@ -130,7 +130,8 @@ const addEntity = (state, { payload: entity }) => {
         return new ResourceHarvesterComponent(
           component.resource,
           component.radius,
-          component.unitsPerMinute
+          component.unitsPerMinute,
+          component.harvestingProgress,
         );
       }
       if(componentType === COMPONENT_TYPES.RESOURCE_STORAGE) {

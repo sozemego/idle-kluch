@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.engine.components;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.soze.idlekluch.core.utils.MathUtils;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
@@ -103,6 +104,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
       this.harvestingProgressPercent = harvestingProgressPercent;
     }
 
+    @JsonIgnore
     public boolean isFinished() {
       return MathUtils.equals(getHarvestingProgressPercent(), 1f, 0.05f);
     }
