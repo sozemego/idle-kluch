@@ -62,7 +62,7 @@ public class EngineRunner implements Runnable {
 
       try {
         Thread.sleep(Math.max(0, sleepTime));
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         e.printStackTrace();
         stopFlag = true;
       }
