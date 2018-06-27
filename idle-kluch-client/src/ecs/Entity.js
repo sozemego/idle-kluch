@@ -4,6 +4,8 @@ export class Entity {
     this.componentContainer = componentContainer;
   }
 
+  getId = () => this.id;
+
   addComponent = component => {
     return this.componentContainer.addComponent(this.id, component);
   };

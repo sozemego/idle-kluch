@@ -41,6 +41,7 @@ import { ResourceHarvesterComponent } from "../ecs/components/ResourceHarvesterC
 import { ResourceHarvesterSystem } from "../ecs/systems/ResourceHarvesterSystem";
 import { ResourceStorageComponent } from "../ecs/components/ResourceStorageComponent";
 import { ResourceHarvesterRendererSystem } from "../ecs/systems/ResourceHarvesterRendererSystem";
+import { ResourceStorageRendererSystem } from "../ecs/systems/ResourceStorageRendererSystem";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const getTiles = () => _getTiles(store.getState());
@@ -133,7 +134,7 @@ const addEntity = (state, { payload: entity }) => {
         );
       }
       if(componentType === COMPONENT_TYPES.RESOURCE_STORAGE) {
-        const storageComponent = new ResourceStorageComponent(5000);
+        const storageComponent = new ResourceStorageComponent(component.capacity);
         component.resources.forEach(resource => storageComponent.addResource(resource));
         return storageComponent;
       }
@@ -394,8 +395,9 @@ const createGame = () => {
       engine = new Engine();
       engine.addSystem(new PhysicsSystem(engine));
       engine.addSystem(new GraphicsSystem(engine));
-      engine.addSystem(new ResourceHarvesterRendererSystem(engine, game.add.graphics(0, 0)));
       engine.addSystem(new ResourceHarvesterSystem(engine));
+      engine.addSystem(new ResourceHarvesterRendererSystem(engine, game.add));
+      engine.addSystem(new ResourceStorageRendererSystem(engine, game.add.group(), game.make));
 
       return resolve({
         game,

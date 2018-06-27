@@ -4,10 +4,11 @@ import { PhysicsComponent } from "../components/PhysicsComponent";
 
 export class ResourceHarvesterRendererSystem {
 
-  constructor(engine, graphics) {
+  constructor(engine, spriteFactory) {
     this.engine = engine;
-    this.graphics = graphics;
+    this.spriteFactory = spriteFactory;
     this.node = Node.of([ ResourceHarvesterComponent, PhysicsComponent ]);
+    this.sprites = {};
   }
 
   update = delta => {
@@ -22,20 +23,21 @@ export class ResourceHarvesterRendererSystem {
   updateEntity = (entity, delta) => {
     const harvesterComponent = entity.getComponent(ResourceHarvesterComponent);
     const physicsComponent = entity.getComponent(PhysicsComponent);
+    const sprite = this.getSprite(entity.getId());
 
-    const g = this.graphics;
+    sprite.x = physicsComponent.getX();
+    sprite.y = physicsComponent.getY() + physicsComponent.getHeight();
+    sprite.width = physicsComponent.getWidth() * harvesterComponent.getProgress();
+    sprite.height = 12;
+  };
 
-    g.lineStyle(1, 0x0000FF, 1);
-    g.drawRect(
-      physicsComponent.getX(),
-      physicsComponent.getY() + physicsComponent.getHeight(),
-      physicsComponent.getWidth() * harvesterComponent.getProgress(),
-      12
-    );
-
-    if(harvesterComponent.isFinished()) {
-      g.clear();
+  getSprite = (id) => {
+    let sprite = this.sprites[id];
+    if(!sprite) {
+      sprite = this.spriteFactory.sprite(0, 0, "red_button01");
+      this.sprites[id] = sprite;
     }
+    return sprite;
   };
 
   getEngine = () => {

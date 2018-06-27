@@ -42,4 +42,6 @@ export const IMAGES = {
   "forest_3": "forest_3.png",
   "forest_4": "forest_4.png",
   "woodcutter": "woodcutter.png",
+  "blue_button01": "ui/blue_button01.png",
+  "red_button01": "ui/red_button01.png",
 };
