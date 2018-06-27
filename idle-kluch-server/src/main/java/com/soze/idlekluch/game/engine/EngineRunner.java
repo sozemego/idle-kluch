@@ -57,8 +57,8 @@ public class EngineRunner implements Runnable {
       //so that it's value is not changed with setDelta method call between update and calculating sleep time
       final float deltaToUse = delta;
 
-      final long totalTime = engineRunning ? runOnce(deltaToUse) : 0;
-      final long sleepTime = ((int) (deltaToUse * 1000)) - totalTime;
+      final long timeToRun = engineRunning ? runOnce(deltaToUse) : 0;
+      final long sleepTime = ((int) (deltaToUse * 1000)) - timeToRun;
 
       try {
         Thread.sleep(Math.max(0, sleepTime));
