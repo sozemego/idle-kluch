@@ -53,7 +53,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
       LOG.debug("Next harvesting percentage for [{}]: [{}]", entity.getId(), nextHarvestingPercentage);
     }
 
-    if(currentHarvestingProgress.isFinished()) {
+    if(currentHarvestingProgress.isFinished() && currentHarvestingProgress.getHarvestingState() == HarvestingState.HARVESTING) {
       currentHarvestingProgress.setHarvestingState(HarvestingState.WAITING);
       final ResourceHarvesterComponent harvester = entity.getComponent(ResourceHarvesterComponent.class);
       storage.addResource(harvester.getResource());
