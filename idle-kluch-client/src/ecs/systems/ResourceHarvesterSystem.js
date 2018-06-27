@@ -27,9 +27,6 @@ export class ResourceHarvesterSystem {
       harvesterComponent.setState(HARVESTING_STATE.HARVESTING);
       harvesterComponent.setProgress(0);
     }
-    if(remainingCapacity === 0) {
-      console.log("NO CAPACITY");
-    }
 
     if(harvesterComponent.getState() === HARVESTING_STATE.HARVESTING) {
       const unitsPerMinute = harvesterComponent.getUnitsPerMinute();
@@ -39,7 +36,7 @@ export class ResourceHarvesterSystem {
       harvesterComponent.setProgress(nextHarvestingPercentage);
     }
 
-    if(harvesterComponent.isFinished()) {
+    if(harvesterComponent.isFinished() && harvesterComponent.getState() === HARVESTING_STATE.HARVESTING) {
       harvesterComponent.setState(HARVESTING_STATE.WAITING);
       storage.addResource(harvesterComponent.getResource());
       console.log("FINISHED HARVESTING");
