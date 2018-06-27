@@ -1,7 +1,5 @@
 import Node from "../Node";
 import { ResourceHarvesterComponent } from "../components/ResourceHarvesterComponent";
-import { ResourceStorageComponent } from "../components/ResourceStorageComponent";
-import { HARVESTING_STATE } from "../constants";
 import { PhysicsComponent } from "../components/PhysicsComponent";
 
 export class ResourceHarvesterRendererSystem {
