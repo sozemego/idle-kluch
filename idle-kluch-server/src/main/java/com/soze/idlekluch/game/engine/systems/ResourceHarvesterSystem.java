@@ -1,28 +1,41 @@
 package com.soze.idlekluch.game.engine.systems;
 
+import com.soze.idlekluch.core.routes.Routes;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingProgress;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingState;
 import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
+import com.soze.idlekluch.game.message.StartHarvestingMessage;
+import com.soze.idlekluch.game.service.WebSocketMessagingService;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ResourceHarvesterSystem extends BaseEntitySystem {
 
   private static final Logger LOG = LoggerFactory.getLogger(ResourceHarvesterSystem.class);
 
-  public ResourceHarvesterSystem(final Engine engine) {
+  private final WebSocketMessagingService webSocketMessagingService;
+
+  private final List<EntityUUID> beganHarvesting = new ArrayList<>();
+
+  public ResourceHarvesterSystem(final Engine engine, final WebSocketMessagingService webSocketMessagingService) {
     super(engine);
+    this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
   }
 
   @Override
   public void update(final float delta) {
+    beganHarvesting.clear();
     getHarvesters().forEach((entity -> update(entity, delta)));
+    beganHarvesting.forEach(id -> webSocketMessagingService.send(Routes.GAME_OUTBOUND, new StartHarvestingMessage(id)));
   }
 
   /**
@@ -39,6 +52,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     if(remainingCapacity > 0 && currentHarvestingProgress.getHarvestingState() == HarvestingState.WAITING) {
       currentHarvestingProgress.setHarvestingState(HarvestingState.HARVESTING);
       currentHarvestingProgress.setHarvestingProgressPercent(0f);
+      beganHarvesting.add((EntityUUID) entity.getId());
     }
 
     if(currentHarvestingProgress.getHarvestingState() == HarvestingState.HARVESTING) {
@@ -53,6 +67,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
 
     if(currentHarvestingProgress.isFinished() && currentHarvestingProgress.getHarvestingState() == HarvestingState.HARVESTING) {
       currentHarvestingProgress.setHarvestingState(HarvestingState.WAITING);
+      currentHarvestingProgress.setHarvestingProgressPercent(0f);
       final ResourceHarvesterComponent harvester = entity.getComponent(ResourceHarvesterComponent.class);
       storage.addResource(harvester.getResource());
       LOG.debug("FINISHED HARVESTING FOR ENTITY [{}]", entity.getId());

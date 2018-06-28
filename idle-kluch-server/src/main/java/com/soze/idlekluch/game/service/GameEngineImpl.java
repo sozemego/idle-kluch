@@ -36,10 +36,11 @@ public class GameEngineImpl implements GameEngine {
 
   @Autowired
   public GameEngineImpl(final EventPublisher publisher,
-                        final Environment environment) {
+                        final Environment environment,
+                        final WebSocketMessagingService webSocketMessagingService) {
     this.engine = new Engine(EntityUUID::randomId);
     this.engine.addSystem(new PhysicsSystem(this.engine));
-    this.engine.addSystem(new ResourceHarvesterSystem(this.engine));
+    this.engine.addSystem(new ResourceHarvesterSystem(this.engine, webSocketMessagingService));
 
     this.publisher = Objects.requireNonNull(publisher);
 
