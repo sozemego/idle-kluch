@@ -2,6 +2,7 @@ package com.soze.idlekluch.game.engine.systems;
 
 import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingProgress;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingState;
@@ -67,7 +68,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
       currentHarvestingProgress.stop();
       final ResourceHarvesterComponent harvester = entity.getComponent(ResourceHarvesterComponent.class);
       storage.addResource(harvester.getResource());
-      LOG.debug("FINISHED HARVESTING FOR ENTITY [{}]", entity.getId());
+      LOG.debug("FINISHED HARVESTING FOR ENTITY [{}][{}]", entity.getId(), EntityUtils.getName(entity));
     }
   }
 

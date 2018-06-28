@@ -230,6 +230,9 @@ const setRunningState = (state, action) => {
 const startHarvesting = (state, action) => {
   const { payload: id } = action;
   const entity = engine.getEntity(id);
+  if(entity == null) {
+    return state;
+  }
   const harvester = entity.getComponent(ResourceHarvesterComponent);
   harvester.addHarvest();
   return state;
