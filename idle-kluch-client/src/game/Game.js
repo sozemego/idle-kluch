@@ -65,6 +65,8 @@ let updateTimeLeft = 0;
 
 let isRunning = true;
 
+const delta = 1 / 60;
+
 const initialState = {
   tiles: {},
 };
@@ -416,6 +418,8 @@ const createGame = () => {
       });
     };
 
+    let accumulator = 0;
+
     const update = () => {
       const scale = game.world.scale.x;
 
@@ -435,8 +439,11 @@ const createGame = () => {
       updateSelectedConstructableBuilding();
 
       if(isRunning) {
-        const delta = game.time.physicsElapsed;
-        engine.update(delta);
+        accumulator += (game.time.elapsedMS / 1000);
+        while(accumulator >= delta) {
+          engine.update(delta);
+          accumulator -= delta;
+        }
       }
     };
 
