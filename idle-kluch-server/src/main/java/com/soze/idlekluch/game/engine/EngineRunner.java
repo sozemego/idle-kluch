@@ -4,6 +4,7 @@ import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.klecs.engine.Engine;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Thread responsible for running the {@link Engine}.
@@ -52,29 +53,39 @@ public class EngineRunner implements Runnable {
   @Override
   @Profiled
   public void run() {
+    long currentTime = System.nanoTime();
+    double accumulator = 0;
+
     while(!stopFlag) {
 
       //so that it's value is not changed with setDelta method call between update and calculating sleep time
       final float deltaToUse = delta;
+      final long now = System.nanoTime();
+      final long frameTime = now - currentTime;
+      accumulator += TimeUnit.NANOSECONDS.toMillis(frameTime) / 1000f;
+      currentTime = now;
 
-      final long timeToRun = engineRunning ? runOnce(deltaToUse) : 0;
-      final long sleepTime = ((int) (deltaToUse * 1000)) - timeToRun;
+      while(accumulator >= deltaToUse) {
+        if(engineRunning) {
+          runOnce(deltaToUse);
+        }
+        accumulator -= deltaToUse;
+      }
 
       try {
-        Thread.sleep(Math.max(0, sleepTime));
+        Thread.sleep(Math.max(0, (int) (deltaToUse * 1000) - TimeUnit.NANOSECONDS.toMillis(frameTime)));
       } catch (final InterruptedException e) {
         e.printStackTrace();
         stopFlag = true;
+        System.out.println("STOPPING ENGINE RUNNER");
       }
 
     }
   }
 
-  private long runOnce(final float delta) {
-    final long startTime = System.currentTimeMillis();
+  private void runOnce(final float delta) {
     engine.update(delta);
     ++updates;
-    return System.currentTimeMillis() - startTime;
   }
 
 }
