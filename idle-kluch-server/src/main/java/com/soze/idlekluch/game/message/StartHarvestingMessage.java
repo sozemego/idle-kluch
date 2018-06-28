@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.message;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
 import java.util.Objects;
@@ -11,6 +12,7 @@ import java.util.Objects;
  */
 public class StartHarvestingMessage extends OutgoingMessage {
 
+  @JsonUnwrapped
   private final EntityUUID entityId;
 
   public StartHarvestingMessage(final EntityUUID entityId) {

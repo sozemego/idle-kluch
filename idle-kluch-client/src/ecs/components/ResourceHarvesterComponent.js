@@ -8,6 +8,7 @@ export class ResourceHarvesterComponent {
     this.unitsPerMinute = unitsPerMinute;
     this.progress = progress.harvestingProgressPercent || 0;
     this.state = progress.harvestingState || HARVESTING_STATE.WAITING;
+    this.harvests = 0;
   }
 
   getResource() {
@@ -52,6 +53,28 @@ export class ResourceHarvesterComponent {
 
   isFinished() {
     return isEqual(this.progress, 1, 0.065);
+  }
+
+  start() {
+    this.setState(HARVESTING_STATE.HARVESTING);
+    this.setProgress(0);
+  }
+
+  stop() {
+    this.setState(HARVESTING_STATE.WAITING);
+    this.setProgress(0);
+  }
+
+  addHarvest() {
+    this.harvests++;
+  }
+
+  removeHarvest() {
+    this.harvests--;
+  }
+
+  getHarvests() {
+    return this.harvests;
   }
 
 }

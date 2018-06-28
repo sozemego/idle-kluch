@@ -23,6 +23,9 @@ export const removeEntity = makeActionCreator(REMOVE_ENTITY, "payload");
 export const SET_RUNNING_STATE = "SET_RUNNING_STATE";
 export const setRunningState = makeActionCreator(SET_RUNNING_STATE, "payload");
 
+export const START_HARVESTING = "START_HARVESTING";
+export const startHarvesting = makeActionCreator(START_HARVESTING, "payload");
+
 let gameContainer = null;
 
 export const connect = () => {

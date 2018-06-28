@@ -42,6 +42,7 @@ import { ResourceHarvesterSystem } from "../ecs/systems/ResourceHarvesterSystem"
 import { ResourceStorageComponent } from "../ecs/components/ResourceStorageComponent";
 import { ResourceHarvesterRendererSystem } from "../ecs/systems/ResourceHarvesterRendererSystem";
 import { ResourceStorageRendererSystem } from "../ecs/systems/ResourceStorageRendererSystem";
+import { HARVESTING_STATE } from "../ecs/constants";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const getTiles = () => _getTiles(store.getState());
@@ -224,6 +225,14 @@ const setRunningState = (state, action) => {
   return state;
 };
 
+const startHarvesting = (state, action) => {
+  const { payload: id } = action;
+  const entity = engine.getEntity(id);
+  const harvester = entity.getComponent(ResourceHarvesterComponent);
+  harvester.addHarvest();
+  return state;
+};
+
 const attachTileSpawnAnimation = (tileSprites) => {
   [...tileSprites]
     .sort((a, b) => b.y - a.y) //so tiles that are lower are spawned first
@@ -243,6 +252,7 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.ADD_ENTITY ]: addEntity,
   [ GAME_ACTIONS.REMOVE_ENTITY ]: removeEntity,
   [ GAME_ACTIONS.SET_RUNNING_STATE]: setRunningState,
+  [ GAME_ACTIONS.START_HARVESTING ]: startHarvesting,
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });

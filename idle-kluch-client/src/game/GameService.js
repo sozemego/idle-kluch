@@ -2,7 +2,7 @@ import { networkConfig } from "../api/config";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 import uuid from 'uuid/v4';
-import { addEntity, addTiles, removeEntity, setRunningState } from "./actions";
+import { addEntity, addTiles, removeEntity, setRunningState, startHarvesting } from "./actions";
 import store from "../store/store";
 import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
@@ -44,13 +44,16 @@ GameService.connect = function () {
       if (type === "WORLD_CHUNK") {
         store.dispatch(addTiles(parsed.tiles));
       }
+
       if (type === "ENTITY") {
         store.dispatch(addEntity(parsed));
       }
+
       if(type === "ALREADY_CONNECTED") {
         client.disconnect();
         store.dispatch(alreadyConnected(true));
       }
+
       if(type === "MESSAGE_REVERT") {
         const undoAction = undoActions.getAction(parsed.messageId);
         undoAction();
@@ -66,6 +69,10 @@ GameService.connect = function () {
 
       if(type === "PAUSE_STATE") {
         store.dispatch(setRunningState(parsed.running));
+      }
+
+      if(type === "START_HARVESTING") {
+        store.dispatch(startHarvesting(parsed.id))
       }
 
     };

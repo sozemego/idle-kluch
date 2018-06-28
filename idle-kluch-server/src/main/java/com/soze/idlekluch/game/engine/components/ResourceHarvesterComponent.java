@@ -108,6 +108,16 @@ public class ResourceHarvesterComponent extends BaseComponent {
     public boolean isFinished() {
       return MathUtils.equals(getHarvestingProgressPercent(), 1f, 0.05f);
     }
+
+    public void start() {
+      setHarvestingState(HarvestingState.HARVESTING);
+      setHarvestingProgressPercent(0f);
+    }
+
+    public void stop() {
+      setHarvestingState(HarvestingState.WAITING);
+      setHarvestingProgressPercent(0f);
+    }
   }
 
   public enum HarvestingState {
