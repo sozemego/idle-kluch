@@ -10,6 +10,8 @@ public interface EntityRepository {
 
   void addEntity(PersistentEntity entity);
 
+  void updateEntities(List<PersistentEntity> entities);
+
   Optional<PersistentEntity> getEntity(EntityUUID id);
 
   boolean entityExists(EntityUUID id);

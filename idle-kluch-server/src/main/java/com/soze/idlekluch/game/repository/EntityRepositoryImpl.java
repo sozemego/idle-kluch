@@ -26,6 +26,13 @@ public class EntityRepositoryImpl implements EntityRepository {
   }
 
   @Override
+  @Transactional
+  public void updateEntities(final List<PersistentEntity> entities) {
+    Objects.requireNonNull(entities);
+    entities.forEach(em::merge);
+  }
+
+  @Override
   public Optional<PersistentEntity> getEntity(final EntityUUID id) {
     Objects.requireNonNull(id);
     return Optional.ofNullable(em.find(PersistentEntity.class, id));

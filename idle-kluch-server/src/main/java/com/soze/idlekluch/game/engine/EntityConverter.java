@@ -40,19 +40,26 @@ public class EntityConverter {
     Objects.requireNonNull(entity);
 
     final PersistentEntity persistentEntity = new PersistentEntity();
-    persistentEntity.setEntityId((EntityUUID) entity.getId());
-    persistentEntity.setGraphicsComponent(entity.getComponent(GraphicsComponent.class));
-    persistentEntity.setPhysicsComponent(entity.getComponent(PhysicsComponent.class));
-    persistentEntity.setOwnershipComponent(entity.getComponent(OwnershipComponent.class));
-    persistentEntity.setNameComponent(entity.getComponent(NameComponent.class));
-    persistentEntity.setBuildableComponent(entity.getComponent(BuildableComponent.class));
-    persistentEntity.setStaticOccupySpaceComponent(entity.getComponent(StaticOccupySpaceComponent.class));
-    persistentEntity.setCostComponent(entity.getComponent(CostComponent.class));
-    persistentEntity.setResourceSourceComponent(entity.getComponent(ResourceSourceComponent.class));
-    persistentEntity.setResourceHarvesterComponent(entity.getComponent(ResourceHarvesterComponent.class));
-    persistentEntity.setResourceStorageComponent(entity.getComponent(ResourceStorageComponent.class));
+    return copyEntityToPersistent(entity, persistentEntity);
+  }
 
-    return persistentEntity;
+  public PersistentEntity copyEntityToPersistent(final Entity source, final PersistentEntity target) {
+    Objects.requireNonNull(source);
+    Objects.requireNonNull(target);
+
+    target.setEntityId((EntityUUID) source.getId());
+    target.setGraphicsComponent(source.getComponent(GraphicsComponent.class));
+    target.setPhysicsComponent(source.getComponent(PhysicsComponent.class));
+    target.setOwnershipComponent(source.getComponent(OwnershipComponent.class));
+    target.setNameComponent(source.getComponent(NameComponent.class));
+    target.setBuildableComponent(source.getComponent(BuildableComponent.class));
+    target.setStaticOccupySpaceComponent(source.getComponent(StaticOccupySpaceComponent.class));
+    target.setCostComponent(source.getComponent(CostComponent.class));
+    target.setResourceSourceComponent(source.getComponent(ResourceSourceComponent.class));
+    target.setResourceHarvesterComponent(source.getComponent(ResourceHarvesterComponent.class));
+    target.setResourceStorageComponent(source.getComponent(ResourceStorageComponent.class));
+
+    return target;
   }
 
   public EntityMessage toMessage(final Entity entity) {

@@ -43,4 +43,6 @@ public interface EntityService {
 
   void handleKingdomRemovedEvent(KingdomRemovedEvent kingdomRemovedEvent);
 
+  void persistEntities();
+
 }
