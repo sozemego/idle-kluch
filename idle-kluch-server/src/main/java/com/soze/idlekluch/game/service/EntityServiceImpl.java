@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -165,4 +166,23 @@ public class EntityServiceImpl implements EntityService {
 
     LOG.info("Loaded and converted [{}] persistent entities", entities.size());
   }
+
+
+//  @Scheduled(fixedRate = 5000L)
+  public void persistEntities() {
+//    gameEngine.addMessage(() -> {
+//      final List<PersistentEntity> persistentEntities = gameEngine
+//                                                          .getAllEntities()
+//                                                          .stream()
+//                                                          .map(entity -> {
+//                                                            final PersistentEntity persistentEntity = entityRepository.getEntity((EntityUUID) entity.getId()).get();
+//                                                            entityConverter.copyEntityToPersistent(entity, persistentEntity);
+//                                                            return persistentEntity;
+//                                                          })
+//                                                          .collect(Collectors.toList());
+//      LOG.info("Persisting [{}] persistent entities", persistentEntities.size());
+//      entityRepository.updateEntities(persistentEntities);
+//    });
+  }
+
 }

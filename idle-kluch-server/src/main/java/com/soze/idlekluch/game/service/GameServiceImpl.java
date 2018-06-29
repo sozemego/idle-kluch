@@ -58,36 +58,32 @@ public class GameServiceImpl implements GameService {
   @Profiled
   @AuthLog
   public void handleInitMessage(final String username) {
-    gameEngine.addMessage(() -> {
-      final Map<TileId, Tile> allTiles = worldService.getAllTiles();
-      final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
-      webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, worldChunkMessage);
+    final Map<TileId, Tile> allTiles = worldService.getAllTiles();
+    final WorldChunkMessage worldChunkMessage = new WorldChunkMessage(new ArrayList<>(allTiles.values()));
+    webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, worldChunkMessage);
 
-      gameEngine
-        .getAllEntities()
-        .stream()
-        .map(entityConverter::toMessage)
-        .forEach(message -> webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, message));
+    gameEngine
+      .getAllEntities()
+      .stream()
+      .map(entityConverter::toMessage)
+      .forEach(message -> webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, message));
 
-      final List<Entity> buildingDefinitions = buildingService.getAllConstructableBuildings();
-      final List<EntityMessage> convertedBuildingDefinitions = buildingDefinitions
-                                                                 .stream()
-                                                                 .map(entityConverter::toMessage)
-                                                                 .collect(Collectors.toList());
-      webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, new BuildingListMessage(convertedBuildingDefinitions));
-    });
+    final List<Entity> buildingDefinitions = buildingService.getAllConstructableBuildings();
+    final List<EntityMessage> convertedBuildingDefinitions = buildingDefinitions
+                                                               .stream()
+                                                               .map(entityConverter::toMessage)
+                                                               .collect(Collectors.toList());
+    webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, new BuildingListMessage(convertedBuildingDefinitions));
   }
 
   @Override
   @Profiled
   @AuthLog
   public void handleBuildBuildingMessage(final String username, final BuildBuildingForm form) {
-    gameEngine.addMessage(() -> {
-      final Entity building = buildingService.buildBuilding(username, form);
+    final Entity building = buildingService.buildBuilding(username, form);
 
-      final Optional<TileId> tileId = WorldUtils.getEntityTileId(building);
-      worldService.createWorldChunk(tileId.get(), 5, 5);
-    });
+    final Optional<TileId> tileId = WorldUtils.getEntityTileId(building);
+    worldService.createWorldChunk(tileId.get(), 5, 5);
   }
 
   @Override
@@ -112,7 +108,7 @@ public class GameServiceImpl implements GameService {
   @EventListener
   public void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent event) {
     final List<Tile> tiles = event.getTiles();
-    if(tiles.isEmpty()) {
+    if (tiles.isEmpty()) {
       LOG.info("World chunk created without any tiles, ignoring.");
       return;
     }
@@ -132,7 +128,7 @@ public class GameServiceImpl implements GameService {
   @Override
   @Profiled
   public void handlePauseToggle() {
-    if(gameEngine.isPaused()) {
+    if (gameEngine.isPaused()) {
       LOG.info("Game was paused, starting!");
       gameEngine.start();
     } else {
