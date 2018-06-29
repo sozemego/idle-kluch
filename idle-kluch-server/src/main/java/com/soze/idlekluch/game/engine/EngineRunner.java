@@ -3,7 +3,10 @@ package com.soze.idlekluch.game.engine;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.klecs.engine.Engine;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -15,6 +18,8 @@ public class EngineRunner implements Runnable {
   private float delta;
   private boolean stopFlag = false;
   private boolean engineRunning = false;
+
+  private final Queue<Runnable> messages = new ConcurrentLinkedQueue<>();
 
   private long updates = 0;
 
@@ -50,6 +55,11 @@ public class EngineRunner implements Runnable {
     return updates;
   }
 
+  public void addMessage(final Runnable runnable) {
+    Objects.requireNonNull(runnable);
+    this.messages.add(runnable);
+  }
+
   @Override
   @Profiled
   public void run() {
@@ -72,6 +82,8 @@ public class EngineRunner implements Runnable {
         accumulator -= deltaToUse;
       }
 
+      runMessages();
+
       try {
         Thread.sleep(Math.max(0, (int) (deltaToUse * 1000) - TimeUnit.NANOSECONDS.toMillis(frameTime)));
       } catch (final InterruptedException e) {
@@ -86,6 +98,13 @@ public class EngineRunner implements Runnable {
   private void runOnce(final float delta) {
     engine.update(delta);
     ++updates;
+  }
+
+  private void runMessages() {
+    Runnable message;
+    while((message = messages.poll()) != null) {
+      message.run();
+    }
   }
 
 }

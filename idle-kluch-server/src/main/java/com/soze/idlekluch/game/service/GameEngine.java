@@ -29,6 +29,8 @@ public interface GameEngine {
 
   boolean isPaused();
 
+  void addMessage(Runnable message);
+
   void setDelta(final float delta);
 
   Entity createEmptyEntity();

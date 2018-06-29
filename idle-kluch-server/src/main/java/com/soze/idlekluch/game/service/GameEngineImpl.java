@@ -85,6 +85,15 @@ public class GameEngineImpl implements GameEngine {
   }
 
   @Override
+  public void addMessage(final Runnable message) {
+    if (isIntegrationTest) {
+      message.run();
+    } else {
+      engineRunner.addMessage(message);
+    }
+  }
+
+  @Override
   public void setDelta(final float delta) {
     engineRunner.setDelta(delta);
   }
