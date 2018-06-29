@@ -44,7 +44,9 @@ public class ResourceStorageComponent extends BaseComponent {
 
   public void addResource(final Resource resource) {
     Objects.requireNonNull(resource);
-    resources.add(resource);
+    final List<Resource> nextResources = new ArrayList<>(resources);
+    nextResources.add(resource);
+    resources = nextResources;
   }
 
   public void removeResource(final Resource resource) {
