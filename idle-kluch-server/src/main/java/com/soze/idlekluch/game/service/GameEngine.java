@@ -46,8 +46,6 @@ public interface GameEngine {
 
   Collection<Entity> getAllEntitiesCollection();
 
-  Set<Entity> getAllChangedEntities();
-
   List<Entity> getEntitiesByNode(Node node);
 
   Optional<Entity> getEntity(EntityUUID entityId);
@@ -63,5 +61,7 @@ public interface GameEngine {
    * Accepts an action to be run after the engine has updated.
    */
   void addAction(Runnable action);
+
+  Set<Entity> getChangedEntities();
 
 }

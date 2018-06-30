@@ -31,6 +31,7 @@ public class GameEngineImpl implements GameEngine {
 
   private final Engine engine;
   private final EngineRunner engineRunner;
+  private final Set<Entity> changedEntities = new HashSet<>();
 
   private final boolean isIntegrationTest;
 
@@ -38,9 +39,10 @@ public class GameEngineImpl implements GameEngine {
   public GameEngineImpl(final EventPublisher publisher,
                         final Environment environment,
                         final WebSocketMessagingService webSocketMessagingService) {
+
     this.engine = new Engine(EntityUUID::randomId);
-    this.engine.addSystem(new PhysicsSystem(this.engine));
-    this.engine.addSystem(new ResourceHarvesterSystem(this.engine, webSocketMessagingService));
+    this.engine.addSystem(new PhysicsSystem(this.engine, this.changedEntities));
+    this.engine.addSystem(new ResourceHarvesterSystem(this.engine, this.changedEntities, webSocketMessagingService));
 
     this.publisher = Objects.requireNonNull(publisher);
 
@@ -145,6 +147,11 @@ public class GameEngineImpl implements GameEngine {
   public void addAction(final Runnable action) {
     Objects.requireNonNull(action);
     engineRunner.addAction(action);
+  }
+
+  @Override
+  public Set<Entity> getChangedEntities() {
+    return changedEntities;
   }
 
 }

@@ -172,18 +172,21 @@ public class EntityServiceImpl implements EntityService {
   @Scheduled(fixedRate = 5000L)
   @Profile("!integration-test")
   public void persistEntities() {
-    final List<PersistentEntity> persistentEntities = gameEngine
-                                                        .getAllEntitiesCollection()
-                                                        .stream()
-                                                        .map(entity -> {
-                                                          final PersistentEntity persistentEntity = entityRepository.getEntity((EntityUUID) entity.getId()).get();
-                                                          entityConverter.copyEntityToPersistent(entity, persistentEntity);
-                                                          return persistentEntity;
-                                                        })
-                                                        .collect(Collectors.toList());
+    gameEngine.addAction(() -> {
+      final List<PersistentEntity> persistentEntities = gameEngine
+                                                          .getChangedEntities()
+                                                          .stream()
+                                                          .map(entity -> {
+                                                            final PersistentEntity persistentEntity = entityRepository.getEntity((EntityUUID) entity.getId()).get();
+                                                            entityConverter.copyEntityToPersistent(entity, persistentEntity);
+                                                            return persistentEntity;
+                                                          })
+                                                          .collect(Collectors.toList());
 
-    LOG.info("Persisting [{}] persistent entities", persistentEntities.size());
-    entityRepository.updateEntities(persistentEntities);
+      gameEngine.getChangedEntities().clear();
+      LOG.info("Persisting [{}] persistent entities", persistentEntities.size());
+      entityRepository.updateEntities(persistentEntities);
+    });
   }
 
 }

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class ResourceHarvesterSystem extends BaseEntitySystem {
 
@@ -27,8 +28,11 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
 
   private final List<EntityUUID> beganHarvesting = new ArrayList<>();
 
-  public ResourceHarvesterSystem(final Engine engine, final WebSocketMessagingService webSocketMessagingService) {
-    super(engine);
+  public ResourceHarvesterSystem(final Engine engine,
+                                 final Set<Entity> changedEntities,
+                                 final WebSocketMessagingService webSocketMessagingService) {
+
+    super(engine, changedEntities);
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
   }
 
@@ -68,6 +72,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
       currentHarvestingProgress.stop();
       final ResourceHarvesterComponent harvester = entity.getComponent(ResourceHarvesterComponent.class);
       storage.addResource(harvester.getResource());
+      addChangedEntity(entity);
       LOG.debug("FINISHED HARVESTING FOR ENTITY [{}][{}][{}]/[{}]", entity.getId(), EntityUtils.getName(entity), storage.getResources().size(), storage.getCapacity());
     }
   }
