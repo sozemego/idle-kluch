@@ -174,6 +174,9 @@ public class EntityServiceImpl implements EntityService {
   public void persistEntities() {
     gameEngine.addAction(() -> {
       final Map<EntityUUID, Entity> changedEntities = gameEngine.getChangedEntities();
+      if(changedEntities.isEmpty()) {
+        return;
+      }
       final List<EntityUUID> changedEntityIds = new ArrayList<>(changedEntities.keySet());
 
       final List<PersistentEntity> persistentEntities = entityRepository.getEntities(changedEntityIds);
@@ -184,8 +187,8 @@ public class EntityServiceImpl implements EntityService {
         });
 
       changedEntities.clear();
-      LOG.info("Persisting [{}] persistent entities", persistentEntities.size());
       entityRepository.updateEntities(persistentEntities);
+      LOG.info("Persisting [{}] persistent entities", persistentEntities.size());
     });
   }
 
