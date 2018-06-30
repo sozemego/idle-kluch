@@ -111,6 +111,11 @@ public class GameEngineImpl implements GameEngine {
   }
 
   @Override
+  public Collection<Entity> getAllEntitiesCollection() {
+    return engine.getAllEntitiesCollection();
+  }
+
+  @Override
   @Profiled
   public List<Entity> getEntitiesByNode(final Node node) {
     Objects.requireNonNull(node);

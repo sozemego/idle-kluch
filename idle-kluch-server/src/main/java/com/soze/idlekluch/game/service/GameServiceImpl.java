@@ -63,7 +63,7 @@ public class GameServiceImpl implements GameService {
     webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, worldChunkMessage);
 
     gameEngine
-      .getAllEntities()
+      .getAllEntitiesCollection()
       .stream()
       .map(entityConverter::toMessage)
       .forEach(message -> webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, message));

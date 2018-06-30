@@ -171,7 +171,7 @@ public class EntityServiceImpl implements EntityService {
   @Scheduled(fixedRate = 5000L)
   public void persistEntities() {
     final List<PersistentEntity> persistentEntities = gameEngine
-                                                        .getAllEntities()
+                                                        .getAllEntitiesCollection()
                                                         .stream()
                                                         .map(entity -> {
                                                           final PersistentEntity persistentEntity = entityRepository.getEntity((EntityUUID) entity.getId()).get();
@@ -179,6 +179,7 @@ public class EntityServiceImpl implements EntityService {
                                                           return persistentEntity;
                                                         })
                                                         .collect(Collectors.toList());
+
     LOG.info("Persisting [{}] persistent entities", persistentEntities.size());
     entityRepository.updateEntities(persistentEntities);
   }

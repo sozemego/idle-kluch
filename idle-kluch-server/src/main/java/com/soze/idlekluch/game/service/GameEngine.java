@@ -4,6 +4,7 @@ import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.klecs.entity.Entity;
 import com.soze.klecs.node.Node;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,8 @@ public interface GameEngine {
   void addEntity(Entity entity);
 
   List<Entity> getAllEntities();
+
+  Collection<Entity> getAllEntitiesCollection();
 
   List<Entity> getEntitiesByNode(Node node);
 
