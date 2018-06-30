@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,7 @@ public class LoggingAspect {
 
   @Before("authorizedMethodExecution()")
   public void logAuthorizedMethod(final JoinPoint pjp) throws Throwable {
-    final String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    final String username = getCurrentUsername();
     LOG.info(
       AUTHORIZED_MARKER,
       "AUTH BEFORE: [{}] [{}] [{}]",
@@ -36,7 +37,7 @@ public class LoggingAspect {
 
   @AfterReturning("authorizedMethodExecution()")
   public void afterAuthorizedMethodReturning(final JoinPoint pjp) throws Throwable {
-    final String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    final String username = getCurrentUsername();
     LOG.info(
       AUTHORIZED_MARKER,
       "AUTH AFTER: [{}] [{}]",
@@ -47,7 +48,7 @@ public class LoggingAspect {
 
   @AfterThrowing(pointcut = "authorizedMethodExecution()", throwing = "ex")
   public void afterAuthorizedMethodThrowing(final JoinPoint pjp, final Throwable ex) throws Throwable {
-    final String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    final String username = getCurrentUsername();
     LOG.info(
       AUTHORIZED_MARKER,
       "AUTH THROWN: [{}] [{}] [{}]",
@@ -55,6 +56,11 @@ public class LoggingAspect {
       pjp.getSignature().toShortString(),
       ex
     );
+  }
+
+  private String getCurrentUsername() {
+    final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    return authentication != null ? authentication.getName() : "Anonymous";
   }
 
   @Pointcut("execution(* *(..)) && @annotation(org.springframework.web.bind.annotation.ExceptionHandler))")
