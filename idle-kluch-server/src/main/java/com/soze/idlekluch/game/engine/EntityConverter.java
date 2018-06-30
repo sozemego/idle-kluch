@@ -67,4 +67,18 @@ public class EntityConverter {
     return new EntityMessage((EntityUUID)entity.getId(), components);
   }
 
+  /**
+   * Each component in the source is copied ({@link BaseComponent#copy}).
+   * Each component is assigned the id of target.
+   */
+  public void copyEntity(final Entity source, final Entity target) {
+    source.getAllComponents(BaseComponent.class)
+      .stream()
+      .map(BaseComponent::copy)
+      .forEach(component -> {
+        component.setEntityId((EntityUUID) target.getId());
+        target.addComponent(component);
+      });
+  }
+
 }

@@ -2,6 +2,7 @@ package com.soze.idlekluch.kingdom.service;
 
 import com.soze.idlekluch.core.aop.annotations.AuthLog;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
+import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.*;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
@@ -23,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -45,6 +45,7 @@ public class BuildingServiceImpl implements BuildingService {
   private final EntityService entityService;
   private final WorldService worldService;
   private final ResourceService resourceService;
+  private final EntityConverter entityConverter;
 
   private final Set<EntityUUID> buildings = ConcurrentHashMap.newKeySet();
 
@@ -55,12 +56,14 @@ public class BuildingServiceImpl implements BuildingService {
                              final GameEngine gameEngine,
                              final EntityService entityService,
                              final WorldService worldService,
-                             final ResourceService resourceService) {
+                             final ResourceService resourceService,
+                             final EntityConverter entityConverter) {
     this.kingdomService = Objects.requireNonNull(kingdomService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.entityService = Objects.requireNonNull(entityService);
     this.worldService = Objects.requireNonNull(worldService);
     this.resourceService = Objects.requireNonNull(resourceService);
+    this.entityConverter = Objects.requireNonNull(entityConverter);
   }
 
   @Override
@@ -219,7 +222,7 @@ public class BuildingServiceImpl implements BuildingService {
                                       });
 
     final Entity building = gameEngine.createEmptyEntity();
-    entityService.copyEntity(buildingTemplate, building);
+    entityConverter.copyEntity(buildingTemplate, building);
 
     final PhysicsComponent physicsComponent = building.getComponent(PhysicsComponent.class);
     physicsComponent.setX(form.getX());

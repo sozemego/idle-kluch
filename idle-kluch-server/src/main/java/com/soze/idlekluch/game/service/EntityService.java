@@ -31,12 +31,6 @@ public interface EntityService {
 
   List<Entity> getEntitiesByNode(Node node);
 
-  /**
-   * Each component in the source is copied ({@link BaseComponent#copy}).
-   * Each component is assigned the id of target.
-   */
-  void copyEntity(Entity source, Entity target);
-
   void handleAddedEntity(AddedEntityEvent addedEntityEvent);
 
   void handleRemovedEntity(RemovedEntityEvent removedEntityEvent);

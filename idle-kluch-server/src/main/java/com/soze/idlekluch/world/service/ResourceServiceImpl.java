@@ -1,6 +1,7 @@
 package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.core.aop.annotations.Profiled;
+import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.engine.components.ResourceSourceComponent;
@@ -29,13 +30,16 @@ public class ResourceServiceImpl implements ResourceService {
 
   private final EntityService entityService;
   private final GameEngine gameEngine;
+  private final EntityConverter entityConverter;
 
   @Autowired
   public ResourceServiceImpl(final EntityService entityService,
-                             final GameEngine gameEngine) {
+                             final GameEngine gameEngine,
+                             final EntityConverter entityConverter) {
 
     this.entityService = Objects.requireNonNull(entityService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
+    this.entityConverter = entityConverter;
   }
 
   @Override
@@ -107,7 +111,7 @@ public class ResourceServiceImpl implements ResourceService {
       .forEach(tile -> {
         final Entity randomResourceSourceTemplate = CommonUtils.getRandomElement(resourceSources).get();
         final Entity randomResourceSource = gameEngine.createEmptyEntity();
-        entityService.copyEntity(randomResourceSourceTemplate, randomResourceSource);
+        entityConverter.copyEntity(randomResourceSourceTemplate, randomResourceSource);
         final PhysicsComponent physicsComponent = randomResourceSource.getComponent(PhysicsComponent.class);
         final Point position = getResourcePosition(tile, physicsComponent.getWidth(), physicsComponent.getHeight());
         physicsComponent.setX(position.x);

@@ -99,17 +99,6 @@ public class EntityServiceImpl implements EntityService {
   }
 
   @Override
-  public void copyEntity(final Entity source, final Entity target) {
-    source.getAllComponents(BaseComponent.class)
-      .stream()
-      .map(BaseComponent::copy)
-      .forEach(component -> {
-        component.setEntityId((EntityUUID) target.getId());
-        target.addComponent(component);
-      });
-  }
-
-  @Override
   @EventListener
   public void handleAddedEntity(final AddedEntityEvent addedEntityEvent) {
     final Entity entity = addedEntityEvent.getEntity();

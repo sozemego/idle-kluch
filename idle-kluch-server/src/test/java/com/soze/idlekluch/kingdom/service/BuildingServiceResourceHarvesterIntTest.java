@@ -51,12 +51,6 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
   private GameEngine gameEngine;
 
   @Autowired
-  private KingdomService kingdomService;
-
-  @Autowired
-  private WorldService worldService;
-
-  @Autowired
   private EntityService entityService;
 
   @Autowired
@@ -110,7 +104,7 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
     final List<Entity> woodSources = resourceService.getResourceEntityTemplates("Wood");
     final Entity forestTemplate = woodSources.get(0);
     final Entity forest = gameEngine.createEmptyEntity();
-    entityService.copyEntity(forestTemplate, forest);
+    entityConverter.copyEntity(forestTemplate, forest);
 
     final PhysicsComponent physicsComponent = forest.getComponent(PhysicsComponent.class);
     physicsComponent.setX(2000);
@@ -142,7 +136,7 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
     final List<Entity> woodSources = resourceService.getResourceEntityTemplates("Wood");
     final Entity forestTemplate = woodSources.get(0);
     final Entity forest = gameEngine.createEmptyEntity();
-    entityService.copyEntity(forestTemplate, forest);
+    entityConverter.copyEntity(forestTemplate, forest);
 
     final PhysicsComponent physicsComponent = forest.getComponent(PhysicsComponent.class);
     physicsComponent.setX(170);
