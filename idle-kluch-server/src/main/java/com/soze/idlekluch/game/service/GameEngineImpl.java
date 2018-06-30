@@ -57,6 +57,12 @@ public class GameEngineImpl implements GameEngine {
     engine.addEntityEventListener(publisher::publishEvent);
   }
 
+  @PreDestroy
+  public void preDestroy() {
+    this.engineRunner.stop();
+    this.engineRunner.dispose();
+  }
+
   @Override
   public void handleAppStartedEvent(final AppStartedEvent event) {
     LOG.info("App started, starting game engine.");

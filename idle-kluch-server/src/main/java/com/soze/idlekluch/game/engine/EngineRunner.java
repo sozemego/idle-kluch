@@ -43,6 +43,7 @@ public class EngineRunner implements Runnable {
    */
   public void dispose() {
     stopFlag = true;
+    executorService.shutdown();
   }
 
   public void setDelta(final float delta) {
