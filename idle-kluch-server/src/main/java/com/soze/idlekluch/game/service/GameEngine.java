@@ -7,6 +7,7 @@ import com.soze.klecs.node.Node;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Contains the ECS for the game.
@@ -44,6 +45,8 @@ public interface GameEngine {
   List<Entity> getAllEntities();
 
   Collection<Entity> getAllEntitiesCollection();
+
+  Set<Entity> getAllChangedEntities();
 
   List<Entity> getEntitiesByNode(Node node);
 

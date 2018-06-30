@@ -77,6 +77,7 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
   public void setup() {
     worldRepository.removeTiles(new ArrayList<>(worldRepository.getAllTiles().values()));
     DatabaseReset.deleteData();
+    gameEngine.reset();
   }
 
   @Test(expected = NoResourceInRadiusException.class)

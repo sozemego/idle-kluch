@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -168,20 +169,21 @@ public class EntityServiceImpl implements EntityService {
   }
 
 
-//  @Scheduled(fixedRate = 5000L)
+  @Scheduled(fixedRate = 5000L)
+  @Profile("!integration-test")
   public void persistEntities() {
-//    final List<PersistentEntity> persistentEntities = gameEngine
-//                                                        .getAllEntitiesCollection()
-//                                                        .stream()
-//                                                        .map(entity -> {
-//                                                          final PersistentEntity persistentEntity = entityRepository.getEntity((EntityUUID) entity.getId()).get();
-//                                                          entityConverter.copyEntityToPersistent(entity, persistentEntity);
-//                                                          return persistentEntity;
-//                                                        })
-//                                                        .collect(Collectors.toList());
-//
-//    LOG.info("Persisting [{}] persistent entities", persistentEntities.size());
-//    entityRepository.updateEntities(persistentEntities);
+    final List<PersistentEntity> persistentEntities = gameEngine
+                                                        .getAllEntitiesCollection()
+                                                        .stream()
+                                                        .map(entity -> {
+                                                          final PersistentEntity persistentEntity = entityRepository.getEntity((EntityUUID) entity.getId()).get();
+                                                          entityConverter.copyEntityToPersistent(entity, persistentEntity);
+                                                          return persistentEntity;
+                                                        })
+                                                        .collect(Collectors.toList());
+
+    LOG.info("Persisting [{}] persistent entities", persistentEntities.size());
+    entityRepository.updateEntities(persistentEntities);
   }
 
 }
