@@ -170,7 +170,7 @@ public class EntityServiceImpl implements EntityService {
 
 
   @Scheduled(fixedRate = 5000L)
-  @Profile("!integration-test")
+  @Profile({"development", "production"})
   public void persistEntities() {
     gameEngine.addAction(() -> {
       final Map<EntityUUID, Entity> changedEntities = gameEngine.getChangedEntities();
