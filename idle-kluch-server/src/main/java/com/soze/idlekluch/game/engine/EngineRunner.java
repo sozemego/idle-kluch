@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 /**
  * Thread responsible for running the {@link Engine}.
@@ -108,20 +109,21 @@ public class EngineRunner implements Runnable {
   }
 
   private void runActions() {
-    Runnable action;
-    final List<Callable<Void>> callables = new ArrayList<>();
-    while((action = actions.poll()) != null) {
-      callables.add(getCallable(action));
-    }
-
     try {
-      List<Future<Void>> futures = executorService.invokeAll(callables);
+      List<Future<Void>> futures = executorService.invokeAll(getCallables());
       while(!futures.isEmpty()) {
         futures.removeIf(Future::isDone);
       }
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+  }
+
+  private List<Callable<Void>> getCallables() {
+    return actions
+             .stream()
+             .map(this::getCallable)
+             .collect(Collectors.toList());
   }
 
   private Callable<Void> getCallable(final Runnable runnable) {
