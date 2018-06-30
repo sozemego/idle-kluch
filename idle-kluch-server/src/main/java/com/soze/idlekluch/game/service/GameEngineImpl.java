@@ -143,6 +143,7 @@ public class GameEngineImpl implements GameEngine {
 
   @Override
   public void addAction(final Runnable action) {
+    Objects.requireNonNull(action);
     engineRunner.addAction(action);
   }
 
