@@ -68,39 +68,44 @@ public class EngineRunner implements Runnable {
   @Override
   @Profiled
   public void run() {
-    long currentTime = System.nanoTime();
-    double accumulator = 0;
+    try {
+      long currentTime = System.nanoTime();
+      double accumulator = 0;
 
-    while(!stopFlag) {
+      while (!stopFlag) {
 
-      //so that it's value is not changed with setDelta method call between update and calculating sleep time
-      final float deltaToUse = delta;
-      final long now = System.nanoTime();
-      final long frameTime = now - currentTime;
-      accumulator += TimeUnit.NANOSECONDS.toMillis(frameTime) / 1000f;
-      if(accumulator >= deltaToUse * 3) {
-        System.out.println(accumulator);
-      }
-      currentTime = now;
-
-      while(accumulator >= deltaToUse) {
-        if(engineRunning) {
-          runOnce(deltaToUse);
+        //so that it's value is not changed with setDelta method call between update and calculating sleep time
+        final float deltaToUse = delta;
+        final long now = System.nanoTime();
+        final long frameTime = now - currentTime;
+        accumulator += TimeUnit.NANOSECONDS.toMillis(frameTime) / 1000f;
+        if (accumulator >= deltaToUse * 3) {
+          System.out.println(accumulator);
         }
-        accumulator -= deltaToUse;
+        currentTime = now;
+
+        while (accumulator >= deltaToUse) {
+          if (engineRunning) {
+            runOnce(deltaToUse);
+          }
+          accumulator -= deltaToUse;
+        }
+
+        runActions();
+
+        try {
+          Thread.sleep(Math.max(0, (int) (deltaToUse * 1000) - TimeUnit.NANOSECONDS.toMillis(frameTime)));
+        } catch (final InterruptedException e) {
+          e.printStackTrace();
+          stopFlag = true;
+          System.out.println("STOPPING ENGINE RUNNER");
+        }
+
       }
-
-      runActions();
-
-      try {
-        Thread.sleep(Math.max(0, (int) (deltaToUse * 1000) - TimeUnit.NANOSECONDS.toMillis(frameTime)));
-      } catch (final InterruptedException e) {
-        e.printStackTrace();
-        stopFlag = true;
-        System.out.println("STOPPING ENGINE RUNNER");
-      }
-
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+
   }
 
   private void runOnce(final float delta) {
@@ -120,10 +125,13 @@ public class EngineRunner implements Runnable {
   }
 
   private List<Callable<Void>> getCallables() {
-    return actions
-             .stream()
-             .map(this::getCallable)
-             .collect(Collectors.toList());
+    List<Callable<Void>> callables = actions
+                                       .stream()
+                                       .map(this::getCallable)
+                                       .collect(Collectors.toList());
+
+    actions.clear();
+    return callables;
   }
 
   private Callable<Void> getCallable(final Runnable runnable) {

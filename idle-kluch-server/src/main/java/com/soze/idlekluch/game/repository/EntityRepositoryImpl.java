@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,6 +37,17 @@ public class EntityRepositoryImpl implements EntityRepository {
   public Optional<PersistentEntity> getEntity(final EntityUUID id) {
     Objects.requireNonNull(id);
     return Optional.ofNullable(em.find(PersistentEntity.class, id));
+  }
+
+  @Override
+  public List<PersistentEntity> getEntities(final List<EntityUUID> entityIds) {
+    Objects.requireNonNull(entityIds);
+    if(entityIds.isEmpty()) {
+      return new ArrayList<>();
+    }
+    final Query query = em.createQuery("SELECT pe FROM PersistentEntity pe WHERE pe.entityId IN (:ids)");
+    query.setParameter("ids", entityIds);
+    return query.getResultList();
   }
 
   @Override

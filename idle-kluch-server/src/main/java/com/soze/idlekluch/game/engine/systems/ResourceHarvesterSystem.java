@@ -15,10 +15,7 @@ import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class ResourceHarvesterSystem extends BaseEntitySystem {
 
@@ -29,7 +26,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
   private final List<EntityUUID> beganHarvesting = new ArrayList<>();
 
   public ResourceHarvesterSystem(final Engine engine,
-                                 final Set<Entity> changedEntities,
+                                 final Map<EntityUUID, Entity> changedEntities,
                                  final WebSocketMessagingService webSocketMessagingService) {
 
     super(engine, changedEntities);

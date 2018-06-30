@@ -4,10 +4,7 @@ import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.klecs.entity.Entity;
 import com.soze.klecs.node.Node;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Contains the ECS for the game.
@@ -62,6 +59,6 @@ public interface GameEngine {
    */
   void addAction(Runnable action);
 
-  Set<Entity> getChangedEntities();
+  Map<EntityUUID, Entity> getChangedEntities();
 
 }

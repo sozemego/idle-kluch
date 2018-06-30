@@ -1,9 +1,10 @@
 package com.soze.idlekluch.game.engine.systems;
 
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
 
-import java.util.Set;
+import java.util.Map;
 
 /**
  * A system responsible for physical aspects of an entity.
@@ -11,7 +12,7 @@ import java.util.Set;
  */
 public class PhysicsSystem extends BaseEntitySystem {
 
-  public PhysicsSystem(final Engine engine, final Set<Entity> changedEntities) {
+  public PhysicsSystem(final Engine engine, final Map<EntityUUID, Entity> changedEntities) {
     super(engine, changedEntities);
   }
 

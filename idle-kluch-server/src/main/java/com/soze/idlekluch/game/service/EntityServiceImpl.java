@@ -173,17 +173,17 @@ public class EntityServiceImpl implements EntityService {
   @Profile("!integration-test")
   public void persistEntities() {
     gameEngine.addAction(() -> {
-      final List<PersistentEntity> persistentEntities = gameEngine
-                                                          .getChangedEntities()
-                                                          .stream()
-                                                          .map(entity -> {
-                                                            final PersistentEntity persistentEntity = entityRepository.getEntity((EntityUUID) entity.getId()).get();
-                                                            entityConverter.copyEntityToPersistent(entity, persistentEntity);
-                                                            return persistentEntity;
-                                                          })
-                                                          .collect(Collectors.toList());
+      final Map<EntityUUID, Entity> changedEntities = gameEngine.getChangedEntities();
+      final List<EntityUUID> changedEntityIds = new ArrayList<>(changedEntities.keySet());
 
-      gameEngine.getChangedEntities().clear();
+      final List<PersistentEntity> persistentEntities = entityRepository.getEntities(changedEntityIds);
+      persistentEntities
+        .forEach(persistentEntity -> {
+          final Entity entity = changedEntities.get(persistentEntity.getEntityId());
+          entityConverter.copyEntityToPersistent(entity, persistentEntity);
+        });
+
+      changedEntities.clear();
       LOG.info("Persisting [{}] persistent entities", persistentEntities.size());
       entityRepository.updateEntities(persistentEntities);
     });

@@ -14,6 +14,8 @@ public interface EntityRepository {
 
   Optional<PersistentEntity> getEntity(EntityUUID id);
 
+  List<PersistentEntity> getEntities(List<EntityUUID> entityIds);
+
   boolean entityExists(EntityUUID id);
 
   void deleteEntity(EntityUUID id);

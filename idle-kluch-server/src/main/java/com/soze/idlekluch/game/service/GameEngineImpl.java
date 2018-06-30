@@ -31,7 +31,7 @@ public class GameEngineImpl implements GameEngine {
 
   private final Engine engine;
   private final EngineRunner engineRunner;
-  private final Set<Entity> changedEntities = new HashSet<>();
+  private final Map<EntityUUID, Entity> changedEntities = new HashMap<>();
 
   private final boolean isIntegrationTest;
 
@@ -150,7 +150,7 @@ public class GameEngineImpl implements GameEngine {
   }
 
   @Override
-  public Set<Entity> getChangedEntities() {
+  public Map<EntityUUID, Entity> getChangedEntities() {
     return changedEntities;
   }
 
