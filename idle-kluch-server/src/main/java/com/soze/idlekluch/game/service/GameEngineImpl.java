@@ -1,6 +1,7 @@
 package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.core.aop.annotations.Profiled;
+import com.soze.idlekluch.core.event.AppStartedEvent;
 import com.soze.idlekluch.core.event.EventPublisher;
 import com.soze.idlekluch.game.engine.EngineRunner;
 import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
@@ -12,6 +13,7 @@ import com.soze.klecs.node.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +55,11 @@ public class GameEngineImpl implements GameEngine {
   @PostConstruct
   public void setup() {
     engine.addEntityEventListener(publisher::publishEvent);
+  }
 
+  @Override
+  public void handleAppStartedEvent(final AppStartedEvent event) {
+    LOG.info("App started, starting game engine.");
     if(!isIntegrationTest) {
       executor.execute(this.engineRunner);
       this.engineRunner.start();

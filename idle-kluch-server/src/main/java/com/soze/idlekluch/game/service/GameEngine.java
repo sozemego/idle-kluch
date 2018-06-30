@@ -1,8 +1,10 @@
 package com.soze.idlekluch.game.service;
 
+import com.soze.idlekluch.core.event.AppStartedEvent;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.klecs.entity.Entity;
 import com.soze.klecs.node.Node;
+import org.springframework.context.event.EventListener;
 
 import java.util.*;
 
@@ -60,5 +62,8 @@ public interface GameEngine {
   void addAction(Runnable action);
 
   Map<EntityUUID, Entity> getChangedEntities();
+
+  @EventListener
+  void handleAppStartedEvent(final AppStartedEvent event);
 
 }
