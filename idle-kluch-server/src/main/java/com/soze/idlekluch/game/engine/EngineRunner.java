@@ -3,10 +3,11 @@ package com.soze.idlekluch.game.engine;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.klecs.engine.Engine;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Thread responsible for running the {@link Engine}.
@@ -19,6 +20,7 @@ public class EngineRunner implements Runnable {
   private boolean engineRunning = false;
 
   private final Queue<Runnable> actions = new ConcurrentLinkedQueue<>();
+  private final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
   private long updates = 0;
 
@@ -107,9 +109,26 @@ public class EngineRunner implements Runnable {
 
   private void runActions() {
     Runnable action;
+    final List<Callable<Void>> callables = new ArrayList<>();
     while((action = actions.poll()) != null) {
-      action.run();
+      callables.add(getCallable(action));
     }
+
+    try {
+      List<Future<Void>> futures = executorService.invokeAll(callables);
+      while(!futures.isEmpty()) {
+        futures.removeIf(Future::isDone);
+      }
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private Callable<Void> getCallable(final Runnable runnable) {
+    return () -> {
+      runnable.run();
+      return null;
+    };
   }
 
 }
