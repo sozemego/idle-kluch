@@ -141,4 +141,9 @@ public class GameEngineImpl implements GameEngine {
       .forEach(entity -> engine.removeEntity(entity.getId()));
   }
 
+  @Override
+  public void addAction(final Runnable action) {
+    engineRunner.addAction(action);
+  }
+
 }

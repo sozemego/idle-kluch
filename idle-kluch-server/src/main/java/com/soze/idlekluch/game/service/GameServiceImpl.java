@@ -80,10 +80,12 @@ public class GameServiceImpl implements GameService {
   @Profiled
   @AuthLog
   public void handleBuildBuildingMessage(final String username, final BuildBuildingForm form) {
-    final Entity building = buildingService.buildBuilding(username, form);
+    gameEngine.addAction(() -> {
+      final Entity building = buildingService.buildBuilding(username, form);
 
-    final Optional<TileId> tileId = WorldUtils.getEntityTileId(building);
-    worldService.createWorldChunk(tileId.get(), 5, 5);
+      final Optional<TileId> tileId = WorldUtils.getEntityTileId(building);
+      worldService.createWorldChunk(tileId.get(), 5, 5);
+    });
   }
 
   @Override

@@ -3,7 +3,6 @@ package com.soze.idlekluch.game.engine;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.klecs.engine.Engine;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -18,6 +17,8 @@ public class EngineRunner implements Runnable {
   private float delta;
   private boolean stopFlag = false;
   private boolean engineRunning = false;
+
+  private final Queue<Runnable> actions = new ConcurrentLinkedQueue<>();
 
   private long updates = 0;
 
@@ -53,6 +54,14 @@ public class EngineRunner implements Runnable {
     return updates;
   }
 
+  /**
+   * Adds an action to run after engine has updated.
+   */
+  public void addAction(final Runnable action) {
+    Objects.requireNonNull(action);
+    actions.add(action);
+  }
+
   @Override
   @Profiled
   public void run() {
@@ -66,6 +75,9 @@ public class EngineRunner implements Runnable {
       final long now = System.nanoTime();
       final long frameTime = now - currentTime;
       accumulator += TimeUnit.NANOSECONDS.toMillis(frameTime) / 1000f;
+      if(accumulator >= deltaToUse * 3) {
+        System.out.println(accumulator);
+      }
       currentTime = now;
 
       while(accumulator >= deltaToUse) {
@@ -74,6 +86,8 @@ public class EngineRunner implements Runnable {
         }
         accumulator -= deltaToUse;
       }
+
+      runActions();
 
       try {
         Thread.sleep(Math.max(0, (int) (deltaToUse * 1000) - TimeUnit.NANOSECONDS.toMillis(frameTime)));
@@ -89,6 +103,13 @@ public class EngineRunner implements Runnable {
   private void runOnce(final float delta) {
     engine.update(delta);
     ++updates;
+  }
+
+  private void runActions() {
+    Runnable action;
+    while((action = actions.poll()) != null) {
+      action.run();
+    }
   }
 
 }

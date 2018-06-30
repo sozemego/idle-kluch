@@ -56,4 +56,9 @@ public interface GameEngine {
    */
   void reset();
 
+  /**
+   * Accepts an action to be run after the engine has updated.
+   */
+  void addAction(Runnable action);
+
 }

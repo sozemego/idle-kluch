@@ -168,20 +168,20 @@ public class EntityServiceImpl implements EntityService {
   }
 
 
-  @Scheduled(fixedRate = 5000L)
+//  @Scheduled(fixedRate = 5000L)
   public void persistEntities() {
-    final List<PersistentEntity> persistentEntities = gameEngine
-                                                        .getAllEntitiesCollection()
-                                                        .stream()
-                                                        .map(entity -> {
-                                                          final PersistentEntity persistentEntity = entityRepository.getEntity((EntityUUID) entity.getId()).get();
-                                                          entityConverter.copyEntityToPersistent(entity, persistentEntity);
-                                                          return persistentEntity;
-                                                        })
-                                                        .collect(Collectors.toList());
-
-    LOG.info("Persisting [{}] persistent entities", persistentEntities.size());
-    entityRepository.updateEntities(persistentEntities);
+//    final List<PersistentEntity> persistentEntities = gameEngine
+//                                                        .getAllEntitiesCollection()
+//                                                        .stream()
+//                                                        .map(entity -> {
+//                                                          final PersistentEntity persistentEntity = entityRepository.getEntity((EntityUUID) entity.getId()).get();
+//                                                          entityConverter.copyEntityToPersistent(entity, persistentEntity);
+//                                                          return persistentEntity;
+//                                                        })
+//                                                        .collect(Collectors.toList());
+//
+//    LOG.info("Persisting [{}] persistent entities", persistentEntities.size());
+//    entityRepository.updateEntities(persistentEntities);
   }
 
 }
