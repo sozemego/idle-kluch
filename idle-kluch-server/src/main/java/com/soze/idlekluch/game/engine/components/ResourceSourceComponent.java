@@ -16,14 +16,18 @@ public class ResourceSourceComponent extends BaseComponent {
   @JoinColumn(name = "resource_id")
   private Resource resource;
 
+  @Column(name = "bonus")
+  private float bonus;
+
   public ResourceSourceComponent() {
     super(ComponentType.RESOURCE_SOURCE);
   }
 
-  public ResourceSourceComponent(final EntityUUID entityId, final Resource resource) {
+  public ResourceSourceComponent(final EntityUUID entityId, final Resource resource, final float bonus) {
     this();
     setEntityId(entityId);
     this.resource = Objects.requireNonNull(resource);
+    this.bonus = bonus;
   }
 
   public Resource getResource() {
@@ -34,8 +38,16 @@ public class ResourceSourceComponent extends BaseComponent {
     this.resource = resource;
   }
 
+  public float getBonus() {
+    return bonus;
+  }
+
+  public void setBonus(final float bonus) {
+    this.bonus = bonus;
+  }
+
   @Override
   public ResourceSourceComponent copy() {
-    return new ResourceSourceComponent(getEntityId(), getResource());
+    return new ResourceSourceComponent(getEntityId(), getResource(), getBonus());
   }
 }

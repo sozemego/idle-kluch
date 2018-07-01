@@ -99,8 +99,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
              .map(id -> getEngine().getEntityById(id).get())
              .map(source -> {
                final ResourceSourceComponent resourceSourceComponent = source.getComponent(ResourceSourceComponent.class);
-               //TODO bonus
-               return 1f;
+               return resourceSourceComponent.getBonus();
              })
              .reduce(1f, (prev, next) -> prev * next);
   }

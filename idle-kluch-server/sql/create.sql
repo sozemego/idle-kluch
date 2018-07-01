@@ -109,6 +109,7 @@ CREATE TABLE cost_components (
 CREATE TABLE resource_source_components (
   entity_id uuid NOT NULL,
   resource_id uuid NOT NULL,
+  bonus FLOAT NOT NULL,
   CONSTRAINT FK_RESOURCE_SOURCE_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
   CONSTRAINT FK_RESOURCE_SOURCE_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
 );
@@ -141,20 +142,29 @@ INSERT INTO entities VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb', true),
   ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', true),
   ('f520432b-4bf5-448f-95f4-14643e078288', true),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d', true)
+  ('7e10d339-dc10-4204-914c-cdfb2039460d', true),
+  ('24eba6e6-fe5f-4d14-86a4-cd80331beedf', true),
+  ('f0e8b54b-3944-41c8-a6b0-ac291c455cd0', true),
+  ('03c99070-66d5-4dea-b57a-39b4f308a505', true)
 ;
 
 INSERT INTO physics_components VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb', 0, 0, 50, 55),
   ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 0, 0, 80, 81),
   ('f520432b-4bf5-448f-95f4-14643e078288', 0, 0, 64, 64),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d', 0, 0, 80, 81)
+  ('7e10d339-dc10-4204-914c-cdfb2039460d', 0, 0, 80, 81),
+  ('24eba6e6-fe5f-4d14-86a4-cd80331beedf', 0, 0, 64, 64),
+  ('f0e8b54b-3944-41c8-a6b0-ac291c455cd0', 0, 0, 64, 64),
+  ('03c99070-66d5-4dea-b57a-39b4f308a505', 0, 0, 64, 64)
 ;
 
 INSERT INTO graphics_components VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb', 'small_warehouse'),
   ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 'warehouse'),
   ('f520432b-4bf5-448f-95f4-14643e078288', 'forest_1'),
+  ('24eba6e6-fe5f-4d14-86a4-cd80331beedf', 'forest_2'),
+  ('f0e8b54b-3944-41c8-a6b0-ac291c455cd0', 'forest_3'),
+  ('03c99070-66d5-4dea-b57a-39b4f308a505', 'forest_4'),
   ('7e10d339-dc10-4204-914c-cdfb2039460d', 'woodcutter')
 ;
 
@@ -168,14 +178,19 @@ INSERT INTO static_occupy_space_components VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb'),
   ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d'),
   ('f520432b-4bf5-448f-95f4-14643e078288'),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d')
+  ('7e10d339-dc10-4204-914c-cdfb2039460d'),
+  ('f0e8b54b-3944-41c8-a6b0-ac291c455cd0'),
+  ('03c99070-66d5-4dea-b57a-39b4f308a505')
 ;
 
 INSERT INTO name_components VALUES
   ('7a4df465-b4c3-4e9f-854a-248988220dfb', 'Small warehouse'),
   ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 'Warehouse'),
   ('7e10d339-dc10-4204-914c-cdfb2039460d', 'Woodcutter'),
-  ('f520432b-4bf5-448f-95f4-14643e078288', 'forest_1')
+  ('f520432b-4bf5-448f-95f4-14643e078288', 'forest_1'),
+  ('24eba6e6-fe5f-4d14-86a4-cd80331beedf', 'forest_2'),
+  ('f0e8b54b-3944-41c8-a6b0-ac291c455cd0', 'forest_3'),
+  ('03c99070-66d5-4dea-b57a-39b4f308a505', 'forest_4')
 ;
 
 INSERT INTO buildable_components VALUES
@@ -207,7 +222,18 @@ INSERT INTO resource_harvester_components(entity_id, resource_id, radius, units_
 SELECT '7e10d339-dc10-4204-914c-cdfb2039460d', resource_id, 256, 5, 1
 FROM resources WHERE name = 'Wood';
 
-INSERT INTO resource_source_components(entity_id, resource_id)
-SELECT 'f520432b-4bf5-448f-95f4-14643e078288', resource_id
+INSERT INTO resource_source_components(entity_id, resource_id, bonus)
+SELECT 'f520432b-4bf5-448f-95f4-14643e078288', resource_id, 1.2
 FROM resources WHERE name = 'Wood';
 
+INSERT INTO resource_source_components(entity_id, resource_id, bonus)
+SELECT '24eba6e6-fe5f-4d14-86a4-cd80331beedf', resource_id, 1
+FROM resources WHERE name = 'Wood';
+
+INSERT INTO resource_source_components(entity_id, resource_id, bonus)
+SELECT 'f0e8b54b-3944-41c8-a6b0-ac291c455cd0', resource_id, 1.2
+FROM resources WHERE name = 'Wood';
+
+INSERT INTO resource_source_components(entity_id, resource_id, bonus)
+SELECT '03c99070-66d5-4dea-b57a-39b4f308a505', resource_id, 1
+FROM resources WHERE name = 'Wood';

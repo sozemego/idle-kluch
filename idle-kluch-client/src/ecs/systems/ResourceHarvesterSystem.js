@@ -56,8 +56,7 @@ export class ResourceHarvesterSystem {
       .map(id => this.getEngine().getEntityById(id))
       .map(entity => {
         const resourceSource = entity.getComponent(ResourceSourceComponent);
-        //TODO bonus
-        return 1;
+        return resourceSource.getBonus();
       })
       .reduce((prev, next) => prev * next, 1);
   };

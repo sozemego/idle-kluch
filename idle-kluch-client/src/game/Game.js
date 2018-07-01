@@ -126,7 +126,7 @@ const addEntity = (state, { payload: entity }) => {
         return new CostComponent(component.idleBucks);
       }
       if (componentType === COMPONENT_TYPES.RESOURCE_SOURCE) {
-        return new ResourceSourceComponent(component.resource);
+        return new ResourceSourceComponent(component.resource, component.bonus);
       }
       if(componentType === COMPONENT_TYPES.RESOURCE_HARVESTER) {
         return new ResourceHarvesterComponent(
