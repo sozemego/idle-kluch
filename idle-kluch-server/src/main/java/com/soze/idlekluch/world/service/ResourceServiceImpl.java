@@ -145,12 +145,6 @@ public class ResourceServiceImpl implements ResourceService {
              .collect(Collectors.toList());
   }
 
-  @Override
-  @Profiled
-  public void handleAppStartedEvent(final AppStartedEvent event) {
-    attachResourceHarvestersToSources();
-  }
-
   /**
    * Finds a random position within the given tile for a resource.
    */

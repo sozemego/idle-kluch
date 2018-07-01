@@ -44,7 +44,4 @@ public interface ResourceService {
 
   List<Entity> getResourceSourcesInRadius(Resource resource, Point center, float radius);
 
-  @EventListener
-  void handleAppStartedEvent(final AppStartedEvent event);
-
 }
