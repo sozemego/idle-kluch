@@ -127,7 +127,7 @@ CREATE TABLE resource_harvester_slots (
   entity_id uuid NOT NULL,
   source_id uuid NOT NULL,
   CONSTRAINT FK_RESOURCE_HARVESTER_SLOT_HARVESTER FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
-  CONSTRAINT FK_RESOURCE_HARVESTER_SLOT_SOURCE FOREIGN KEY (source_id) REFERENCES entities(entity_id),
+  CONSTRAINT FK_RESOURCE_HARVESTER_SLOT_SOURCE FOREIGN KEY (source_id) REFERENCES entities(entity_id)
 );
 
 CREATE TABLE resource_storage_components (

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.soze.idlekluch.core.utils.MathUtils;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.*;
@@ -30,13 +31,13 @@ public class ResourceHarvesterComponent extends BaseComponent {
   @Transient
   private final HarvestingProgress harvestingProgress = new HarvestingProgress();
 
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
     name = "resource_harvester_slots",
-                    joinColumns = @JoinColumn(name = "entity_id")
+    joinColumns = @JoinColumn(name = "entity_id")
   )
-  @Column(name = "resource_id")
-  private List<EntityUUID> sources = new ArrayList<>();
+  @AttributeOverride(name = "id", column = @Column(name = "source_id"))
+  private Set<EntityUUID> sources = new HashSet<>();
 
   public ResourceHarvesterComponent() {
     super(ComponentType.RESOURCE_HARVESTER);
@@ -47,7 +48,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
                                     final float radius,
                                     final int unitsPerMinute,
                                     final int sourceSlots,
-                                    final List<EntityUUID> sources) {
+                                    final Set<EntityUUID> sources) {
     this();
     setEntityId(entityId);
     this.resource = Objects.requireNonNull(resource);
@@ -95,7 +96,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
     this.fillSources();
   }
 
-  public List<EntityUUID> getSources() {
+  public Set<EntityUUID> getSources() {
     return this.sources;
   }
 
@@ -113,10 +114,10 @@ public class ResourceHarvesterComponent extends BaseComponent {
     }
     final List<EntityUUID> nextSources = new ArrayList<>(this.sources);
     nextSources.set(index, entityId);
-    this.sources = nextSources;
+    this.sources = new HashSet<>(nextSources);
   }
 
-  public void setSources(final List<EntityUUID> sources) {
+  public void setSources(final Set<EntityUUID> sources) {
     this.sources = sources;
   }
 

@@ -96,6 +96,8 @@ public class BuildingServiceImpl implements BuildingService {
           resourceHarvesterComponent.getResource().getName() + " not in radius " + resourceHarvesterComponent.getRadius()
         );
       }
+      final Entity closestSource = EntityUtils.getClosestEntity(building, resources).get();
+      resourceHarvesterComponent.setSource((EntityUUID) closestSource.getId(), 0);
     }
 
     final Kingdom kingdom = kingdomService.getUsersKingdom(owner).get();

@@ -6,7 +6,10 @@ import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.klecs.entity.Entity;
 
 import java.awt.*;
+import java.util.Comparator;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.List;
 
 public class EntityUtils {
 
@@ -89,6 +92,17 @@ public class EntityUtils {
       physicsComponent1.getX() - physicsComponent2.getX(),
       physicsComponent1.getY() - physicsComponent2.getY()
     );
+  }
+
+  public static Optional<Entity> getClosestEntity(final Entity entity, final List<Entity> entities) {
+    if (entities.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return entities
+             .stream()
+             .sorted(Comparator.comparingInt(e -> (int) distance(e, entity)))
+             .findFirst();
   }
 
   /**
