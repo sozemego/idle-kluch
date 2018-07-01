@@ -1,12 +1,14 @@
 package com.soze.idlekluch.game.engine.components;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.soze.idlekluch.core.utils.MathUtils;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "resource_harvester_components")
@@ -28,7 +30,12 @@ public class ResourceHarvesterComponent extends BaseComponent {
   @Transient
   private final HarvestingProgress harvestingProgress = new HarvestingProgress();
 
-  @Transient
+  @ElementCollection
+  @CollectionTable(
+    name = "resource_harvester_slots",
+                    joinColumns = @JoinColumn(name = "entity_id")
+  )
+  @Column(name = "resource_id")
   private List<EntityUUID> sources = new ArrayList<>();
 
   public ResourceHarvesterComponent() {
@@ -92,6 +99,14 @@ public class ResourceHarvesterComponent extends BaseComponent {
     return this.sources;
   }
 
+  @JsonProperty("sources")
+  public List<String> getSourcesJson() {
+    return getSources()
+             .stream()
+             .map(Object::toString)
+             .collect(Collectors.toList());
+  }
+
   public void setSource(final EntityUUID entityId, final int index) {
     if(index > sourceSlots) {
       throw new IllegalArgumentException("This harvester only has " + sourceSlots + ", slot index " + index + " is not accessible.");
@@ -99,6 +114,10 @@ public class ResourceHarvesterComponent extends BaseComponent {
     final List<EntityUUID> nextSources = new ArrayList<>(this.sources);
     nextSources.set(index, entityId);
     this.sources = nextSources;
+  }
+
+  public void setSources(final List<EntityUUID> sources) {
+    this.sources = sources;
   }
 
   private void fillSources() {

@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS static_occupy_space_components CASCADE;
 DROP TABLE IF EXISTS name_components CASCADE;
 DROP TABLE IF EXISTS buildable_components CASCADE;
 DROP TABLE IF EXISTS cost_components CASCADE;
+DROP TABLE IF EXISTS resource_harvester_slots CASCADE;
 DROP TABLE IF EXISTS resource_source_components CASCADE;
 DROP TABLE IF EXISTS resource_harvester_components CASCADE;
 DROP TABLE IF EXISTS resource_storage_components CASCADE;
@@ -120,6 +121,13 @@ CREATE TABLE resource_harvester_components (
   source_slots INT NOT NULL,
   CONSTRAINT FK_RESOURCE_HARVESTER_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
   CONSTRAINT FK_RESOURCE_HARVESTER_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
+);
+
+CREATE TABLE resource_harvester_slots (
+  entity_id uuid NOT NULL,
+  source_id uuid NOT NULL,
+  CONSTRAINT FK_RESOURCE_HARVESTER_SLOT_HARVESTER FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
+  CONSTRAINT FK_RESOURCE_HARVESTER_SLOT_SOURCE FOREIGN KEY (source_id) REFERENCES entities(entity_id),
 );
 
 CREATE TABLE resource_storage_components (
