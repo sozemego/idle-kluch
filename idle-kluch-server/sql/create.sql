@@ -117,6 +117,7 @@ CREATE TABLE resource_harvester_components (
   resource_id uuid NOT NULL,
   radius float NOT NULL,
   units_per_minute INT NOT NULL,
+  source_slots INT NOT NULL,
   CONSTRAINT FK_RESOURCE_HARVESTER_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
   CONSTRAINT FK_RESOURCE_HARVESTER_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
 );
@@ -194,8 +195,8 @@ CREATE TABLE resource_storage (
   CONSTRAINT FK_RESOURCE_STORAGE_ROW_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
 );
 
-INSERT INTO resource_harvester_components(entity_id, resource_id, radius, units_per_minute)
-SELECT '7e10d339-dc10-4204-914c-cdfb2039460d', resource_id, 256, 5
+INSERT INTO resource_harvester_components(entity_id, resource_id, radius, units_per_minute, source_slots)
+SELECT '7e10d339-dc10-4204-914c-cdfb2039460d', resource_id, 256, 5, 1
 FROM resources WHERE name = 'Wood';
 
 INSERT INTO resource_source_components(entity_id, resource_id)

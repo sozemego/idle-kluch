@@ -6,10 +6,7 @@ import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "resource_harvester_components")
@@ -25,11 +22,14 @@ public class ResourceHarvesterComponent extends BaseComponent {
   @Column(name = "units_per_minute")
   private int unitsPerMinute;
 
+  @Column(name = "source_slots")
+  private int sourceSlots;
+
   @Transient
   private final HarvestingProgress harvestingProgress = new HarvestingProgress();
 
   @Transient
-  private Set<com.soze.klecs.entity.Entity> sources = new HashSet<>();
+  private List<EntityUUID> sources = new ArrayList<>();
 
   public ResourceHarvesterComponent() {
     super(ComponentType.RESOURCE_HARVESTER);
@@ -38,12 +38,17 @@ public class ResourceHarvesterComponent extends BaseComponent {
   public ResourceHarvesterComponent(final EntityUUID entityId,
                                     final Resource resource,
                                     final float radius,
-                                    final int unitsPerMinute) {
+                                    final int unitsPerMinute,
+                                    final int sourceSlots,
+                                    final List<EntityUUID> sources) {
     this();
     setEntityId(entityId);
     this.resource = Objects.requireNonNull(resource);
     this.radius = radius;
     this.unitsPerMinute = unitsPerMinute;
+    this.sourceSlots = sourceSlots;
+    this.sources = sources;
+    fillSources();
   }
 
   public Resource getResource() {
@@ -74,16 +79,34 @@ public class ResourceHarvesterComponent extends BaseComponent {
     return harvestingProgress;
   }
 
-  public Set<com.soze.klecs.entity.Entity> getSources() {
+  public int getSourceSlots() {
+    return sourceSlots;
+  }
+
+  public void setSourceSlots(final int sourceSlots) {
+    this.sourceSlots = sourceSlots;
+    this.fillSources();
+  }
+
+  public List<EntityUUID> getSources() {
     return this.sources;
   }
 
-  public void addSource(final com.soze.klecs.entity.Entity source) {
-    this.sources.add(source);
+  public void setSource(final EntityUUID entityId, final int index) {
+    if(index > sourceSlots) {
+      throw new IllegalArgumentException("This harvester only has " + sourceSlots + ", slot index " + index + " is not accessible.");
+    }
+    final List<EntityUUID> nextSources = new ArrayList<>(this.sources);
+    nextSources.set(index, entityId);
+    this.sources = nextSources;
   }
 
-  public void removeSource(final com.soze.klecs.entity.Entity source) {
-    this.sources.remove(source);
+  private void fillSources() {
+    for(int i = 0; i < this.sourceSlots; i++) {
+      if(this.sources.size() <= i) {
+        this.sources.add(null);
+      }
+    }
   }
 
   @Override
@@ -92,7 +115,9 @@ public class ResourceHarvesterComponent extends BaseComponent {
       getEntityId(),
       getResource(),
       getRadius(),
-      getUnitsPerMinute()
+      getUnitsPerMinute(),
+      getSourceSlots(),
+      getSources()
     );
   }
 
