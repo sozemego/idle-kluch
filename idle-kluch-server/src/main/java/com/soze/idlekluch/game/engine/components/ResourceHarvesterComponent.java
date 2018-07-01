@@ -25,6 +25,9 @@ public class ResourceHarvesterComponent extends BaseComponent {
   @Transient
   private final HarvestingProgress harvestingProgress = new HarvestingProgress();
 
+  @Transient
+  private int sources;
+
   public ResourceHarvesterComponent() {
     super(ComponentType.RESOURCE_HARVESTER);
   }
@@ -66,6 +69,18 @@ public class ResourceHarvesterComponent extends BaseComponent {
 
   public HarvestingProgress getHarvestingProgress() {
     return harvestingProgress;
+  }
+
+  public long getSources() {
+    return this.sources;
+  }
+
+  public void addSource() {
+    this.sources++;
+  }
+
+  public void removeSource() {
+    this.sources--;
   }
 
   @Override

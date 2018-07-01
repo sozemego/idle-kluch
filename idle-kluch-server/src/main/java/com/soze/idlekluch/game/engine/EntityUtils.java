@@ -79,6 +79,18 @@ public class EntityUtils {
     return (float) Math.hypot(physicsComponent.getX() - point.x, physicsComponent.getY() - point.y);
   }
 
+  public static float distance(final Entity entity1, final Entity entity2) {
+    Objects.requireNonNull(entity1);
+    Objects.requireNonNull(entity2);
+
+    final PhysicsComponent physicsComponent1 = entity1.getComponent(PhysicsComponent.class);
+    final PhysicsComponent physicsComponent2 = entity2.getComponent(PhysicsComponent.class);
+    return (float) Math.hypot(
+      physicsComponent1.getX() - physicsComponent2.getX(),
+      physicsComponent1.getY() - physicsComponent2.getY()
+    );
+  }
+
   /**
    * Returns name of the entity from {@link NameComponent}.
    * All entities must have this component, if one doesn't, an {@link IllegalStateException} is thrown.

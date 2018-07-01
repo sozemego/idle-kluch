@@ -1,9 +1,11 @@
 package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.core.aop.annotations.Profiled;
+import com.soze.idlekluch.core.event.AppStartedEvent;
 import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.engine.components.ResourceSourceComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.service.EntityService;
@@ -12,34 +14,47 @@ import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.core.utils.CommonUtils;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
+import com.soze.idlekluch.world.repository.WorldRepository;
 import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.entity.Entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import sun.util.locale.provider.LocaleServiceProviderPool.LocalizedObjectGetter;
 
+import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ResourceServiceImpl.class);
 
   private final float resourceDensity = 0.15f;
 
   private final EntityService entityService;
   private final GameEngine gameEngine;
   private final EntityConverter entityConverter;
+  private final WorldRepository worldRepository;
 
   @Autowired
   public ResourceServiceImpl(final EntityService entityService,
                              final GameEngine gameEngine,
-                             final EntityConverter entityConverter) {
+                             final EntityConverter entityConverter,
+                             final WorldRepository worldRepository) {
 
     this.entityService = Objects.requireNonNull(entityService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
-    this.entityConverter = entityConverter;
+    this.entityConverter = Objects.requireNonNull(entityConverter);
+    this.worldRepository = Objects.requireNonNull(worldRepository);
   }
 
   @Override
@@ -130,6 +145,12 @@ public class ResourceServiceImpl implements ResourceService {
              .collect(Collectors.toList());
   }
 
+  @Override
+  @Profiled
+  public void handleAppStartedEvent(final AppStartedEvent event) {
+    attachResourceHarvestersToSources();
+  }
+
   /**
    * Finds a random position within the given tile for a resource.
    */
@@ -139,4 +160,88 @@ public class ResourceServiceImpl implements ResourceService {
     position.y -= CommonUtils.randomNumber(0, resourceHeight);
     return position;
   }
+
+  /**
+   * For each entity which is a resource source, retrieves resource harvesters in range.
+   * For each resource harvester in range, increments the number of harvesters.
+   */
+  private void attachResourceHarvestersToSources() {
+    LOG.info("Attaching resource harvesters to resource sources and vice versa");
+    //1. Get all possible resources
+    final List<Resource> resources = worldRepository.getAllAvailableResources();
+    //2. Get all possible entities which are resource sources
+    final List<Entity> resourceSources = gameEngine.getEntitiesByNode(Nodes.RESOURCE_SOURCE);
+    //3. Get all possible entities which are resource harvesters
+    final List<Entity> resourceHarvesters = gameEngine.getEntitiesByNode(Nodes.HARVESTER);
+    //3. Create a Resource/List<Entity> (resource source) map
+    final Map<Resource, List<Entity>> resourceSourcesMap = resources
+                                                              .stream()
+                                                              .collect(Collectors.toMap(
+                                                                Function.identity(),
+                                                                (resource) -> findResourceSources(resource, resourceSources))
+                                                              );
+    //4. Create a Resource/List<Entity> (resource harvester) map
+    final Map<Resource, List<Entity>> resourceHarvestersMap = resources
+                                                              .stream()
+                                                              .collect(Collectors.toMap(
+                                                                Function.identity(),
+                                                                (resource) -> findResourceHarvesters(resource, resourceHarvesters))
+                                                              );
+    //5. Next we will match each resource source with resource harvesters
+    for (Map.Entry<Resource, List<Entity>> entry: resourceSourcesMap.entrySet()) {
+      final Resource resource = entry.getKey();
+      final List<Entity> sources = entry.getValue();
+      final List<Entity> harvesters = resourceHarvestersMap.get(resource);
+      sources.forEach(source -> {
+        final List<Entity> inRangeHarvesters = findAllHarvestersInRange(source, harvesters);
+        inRangeHarvesters.forEach(harvester -> {
+          LOG.debug("Attaching source [{}] to harvester [{}]", source, harvester);
+          incrementSources(harvester);
+          LOG.debug("Attaching harvester [{}] to source [{}]", harvester, source);
+          incrementHarvesters(source);
+        });
+      });
+    }
+  }
+
+  private List<Entity> findResourceSources(final Resource resource, final List<Entity> resourceSources) {
+    return resourceSources
+             .stream()
+             .filter(entity -> {
+               final ResourceSourceComponent resourceSourceComponent = entity.getComponent(ResourceSourceComponent.class);
+               return resourceSourceComponent.getResource().equals(resource);
+             })
+             .collect(Collectors.toList());
+  }
+
+  private List<Entity> findResourceHarvesters(final Resource resource, final List<Entity> resourceHarvesters) {
+    return resourceHarvesters
+             .stream()
+             .filter(entity -> {
+               final ResourceHarvesterComponent resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
+               return resourceHarvesterComponent.getResource().equals(resource);
+             })
+             .collect(Collectors.toList());
+  }
+
+  final List<Entity> findAllHarvestersInRange(final Entity source, final List<Entity> harvesters) {
+    return harvesters
+             .stream()
+             .filter(harvester -> {
+               final ResourceHarvesterComponent resourceHarvesterComponent = harvester.getComponent(ResourceHarvesterComponent.class);
+               return EntityUtils.distance(source, harvester) <= resourceHarvesterComponent.getRadius();
+             })
+             .collect(Collectors.toList());
+  }
+
+  final void incrementHarvesters(final Entity source) {
+    final ResourceSourceComponent resourceSourceComponent = source.getComponent(ResourceSourceComponent.class);
+    resourceSourceComponent.addHarvester();
+  }
+
+  final void incrementSources(final Entity harvester) {
+    final ResourceHarvesterComponent resourceHarvesterComponent = harvester.getComponent(ResourceHarvesterComponent.class);
+    resourceHarvesterComponent.removeSource();
+  }
+
 }

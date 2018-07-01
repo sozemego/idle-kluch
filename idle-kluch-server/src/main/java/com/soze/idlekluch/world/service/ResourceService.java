@@ -1,9 +1,11 @@
 package com.soze.idlekluch.world.service;
 
+import com.soze.idlekluch.core.event.AppStartedEvent;
 import com.soze.idlekluch.game.engine.components.ResourceSourceComponent;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.klecs.entity.Entity;
+import org.springframework.context.event.EventListener;
 
 import java.awt.*;
 import java.util.List;
@@ -41,5 +43,8 @@ public interface ResourceService {
   void handleWorldChunkCreatedEvent(WorldChunkCreatedEvent worldChunkCreatedEvent);
 
   List<Entity> getResourceSourcesInRadius(Resource resource, Point center, float radius);
+
+  @EventListener
+  void handleAppStartedEvent(final AppStartedEvent event);
 
 }

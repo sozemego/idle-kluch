@@ -14,6 +14,9 @@ public class ResourceSourceComponent extends BaseComponent {
   @JoinColumn(name = "resource_id")
   private Resource resource;
 
+  @Transient
+  private int harvesters;
+
   public ResourceSourceComponent() {
     super(ComponentType.RESOURCE_SOURCE);
   }
@@ -30,6 +33,18 @@ public class ResourceSourceComponent extends BaseComponent {
 
   public void setResource(final Resource resource) {
     this.resource = resource;
+  }
+
+  public int getHarvesters() {
+    return harvesters;
+  }
+
+  public void addHarvester() {
+    this.harvesters++;
+  }
+
+  public void removeHarvester() {
+    this.harvesters--;
   }
 
   @Override
