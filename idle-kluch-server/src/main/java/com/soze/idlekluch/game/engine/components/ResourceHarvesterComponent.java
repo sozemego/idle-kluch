@@ -56,7 +56,6 @@ public class ResourceHarvesterComponent extends BaseComponent {
     this.unitsPerMinute = unitsPerMinute;
     this.sourceSlots = sourceSlots;
     this.sources = sources;
-    fillSources();
   }
 
   public Resource getResource() {
@@ -93,7 +92,6 @@ public class ResourceHarvesterComponent extends BaseComponent {
 
   public void setSourceSlots(final int sourceSlots) {
     this.sourceSlots = sourceSlots;
-    this.fillSources();
   }
 
   public Set<EntityUUID> getSources() {
@@ -113,6 +111,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
       throw new IllegalArgumentException("This harvester only has " + sourceSlots + ", slot index " + index + " is not accessible.");
     }
     final List<EntityUUID> nextSources = new ArrayList<>(this.sources);
+    fillSources(nextSources);
     nextSources.set(index, entityId);
     this.sources = new HashSet<>(nextSources);
   }
@@ -121,10 +120,10 @@ public class ResourceHarvesterComponent extends BaseComponent {
     this.sources = sources;
   }
 
-  private void fillSources() {
+  private void fillSources(final List<EntityUUID> sources) {
     for(int i = 0; i < this.sourceSlots; i++) {
-      if(this.sources.size() <= i) {
-        this.sources.add(null);
+      if(sources.size() <= i) {
+        sources.add(null);
       }
     }
   }

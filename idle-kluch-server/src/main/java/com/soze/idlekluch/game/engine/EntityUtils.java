@@ -99,6 +99,10 @@ public class EntityUtils {
       return Optional.empty();
     }
 
+    if(entities.size() == 1) {
+      return Optional.of(entities.get(0));
+    }
+
     return entities
              .stream()
              .sorted(Comparator.comparingInt(e -> (int) distance(e, entity)))
