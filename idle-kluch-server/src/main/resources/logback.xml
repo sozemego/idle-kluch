@@ -217,7 +217,13 @@
 
     <logger name="org.springframework" level="INFO"/>
 
-    <logger name="org.hibernate" level="INFO">
+    <logger name="org.hibernate.SQL" level="DEBUG">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="FILE-ERROR"/>
+    </logger>
+
+    <logger name="org.hibernate.type.descriptor.sql" level="TRACE">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE"/>
         <appender-ref ref="FILE-ERROR"/>
