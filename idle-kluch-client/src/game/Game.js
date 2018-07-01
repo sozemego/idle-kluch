@@ -181,6 +181,9 @@ const setConstructableBuilding = (state, action) => {
 
   if (!building) {
     killSprite(selectedBuildingSprite);
+    if (selectedBuildingRadiusCircle) {
+      selectedBuildingRadiusCircle.clear();
+    }
     // if (selectedBuildingSprite) {
     //   selectedBuildingSprite.kill(true);
     // }
