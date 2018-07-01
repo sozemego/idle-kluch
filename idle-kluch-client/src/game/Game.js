@@ -134,6 +134,7 @@ const addEntity = (state, { payload: entity }) => {
           component.radius,
           component.unitsPerMinute,
           component.sources,
+          component.sourceSlots,
           component.harvestingProgress,
         );
       }

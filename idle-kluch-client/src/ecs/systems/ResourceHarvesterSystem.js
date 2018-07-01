@@ -2,6 +2,7 @@ import Node from "../Node";
 import { ResourceHarvesterComponent } from "../components/ResourceHarvesterComponent";
 import { ResourceStorageComponent } from "../components/ResourceStorageComponent";
 import { HARVESTING_STATE } from "../constants";
+import { ResourceSourceComponent } from "../components/ResourceSourceComponent";
 
 export class ResourceHarvesterSystem {
 
@@ -45,12 +46,20 @@ export class ResourceHarvesterSystem {
   getSecondsPerUnit = (entity) => {
     const resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent);
     const unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
-    let secondsPerUnit = 60 / unitsPerMinute;
-    const sources = resourceHarvesterComponent.getSources().length;
-    for (let i = 0; i < sources; i++) {
-      secondsPerUnit *= 0.8;
-    }
+    const bonus = this.getBonus(resourceHarvesterComponent.getSources());
+    const secondsPerUnit = 60 / (unitsPerMinute * bonus);
     return secondsPerUnit;
+  };
+
+  getBonus = (sources) => {
+    return sources
+      .map(id => this.getEngine().getEntityById(id))
+      .map(entity => {
+        const resourceSource = entity.getComponent(ResourceSourceComponent);
+        //TODO bonus
+        return 1;
+      })
+      .reduce((prev, next) => prev * next, 1);
   };
 
   getEngine = () => {

@@ -6,6 +6,7 @@ import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingProgress;
 import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingState;
+import com.soze.idlekluch.game.engine.components.ResourceSourceComponent;
 import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.message.StartHarvestingMessage;
@@ -87,12 +88,23 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
   private float getSecondsPerUnit(final Entity entity) {
     final ResourceHarvesterComponent resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
     final int unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
-    float secondsPerUnit = 60 / (float) unitsPerMinute;
-    final int sources = resourceHarvesterComponent.getSources().size();
-    for (int i = 0; i < sources; i++) {
-      secondsPerUnit *= 0.8;
-    }
+    final float bonus = getBonus(resourceHarvesterComponent.getSources());
+    float secondsPerUnit = 60 / ((float) unitsPerMinute * bonus);
     return secondsPerUnit;
   }
+
+  private float getBonus(final Collection<EntityUUID> sourceIds) {
+    return sourceIds
+             .stream()
+             .map(id -> getEngine().getEntityById(id).get())
+             .map(source -> {
+               final ResourceSourceComponent resourceSourceComponent = source.getComponent(ResourceSourceComponent.class);
+               //TODO bonus
+               return 1f;
+             })
+             .reduce(1f, (prev, next) -> prev * next);
+  }
+
+
 
 }

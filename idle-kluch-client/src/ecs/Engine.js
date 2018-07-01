@@ -16,6 +16,10 @@ export class Engine {
 
   addSystem = system => this.systems.push(system);
 
+  getEntityById = (id) => {
+    return this.entities[id] || null;
+  };
+
   getSystem = clazz => {
     const index = this.systems.findIndex(
       system => system.constructor === clazz,
