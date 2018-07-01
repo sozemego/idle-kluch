@@ -230,7 +230,7 @@ public class ResourceServiceImpl implements ResourceService {
 
   final void addHarvester(final Entity source, final Entity harvester) {
     final ResourceSourceComponent resourceSourceComponent = source.getComponent(ResourceSourceComponent.class);
-    resourceSourceComponent.addHarvester(harvester);
+//    resourceSourceComponent.addHarvester(harvester);
   }
 
   final void addSource(final Entity harvester, final Entity source) {

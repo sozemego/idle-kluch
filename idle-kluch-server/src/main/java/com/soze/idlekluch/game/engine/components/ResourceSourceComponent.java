@@ -16,9 +16,6 @@ public class ResourceSourceComponent extends BaseComponent {
   @JoinColumn(name = "resource_id")
   private Resource resource;
 
-  @Transient
-  private Set<com.soze.klecs.entity.Entity> harvesters = new HashSet<>();
-
   public ResourceSourceComponent() {
     super(ComponentType.RESOURCE_SOURCE);
   }
@@ -35,18 +32,6 @@ public class ResourceSourceComponent extends BaseComponent {
 
   public void setResource(final Resource resource) {
     this.resource = resource;
-  }
-
-  public Set<com.soze.klecs.entity.Entity> getHarvesters() {
-    return harvesters;
-  }
-
-  public void addHarvester(final com.soze.klecs.entity.Entity harvester) {
-    this.harvesters.add(harvester);
-  }
-
-  public void removeHarvester(final com.soze.klecs.entity.Entity harvester) {
-    this.harvesters.remove(harvester);
   }
 
   @Override
