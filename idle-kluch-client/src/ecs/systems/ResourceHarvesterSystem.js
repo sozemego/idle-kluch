@@ -29,8 +29,7 @@ export class ResourceHarvesterSystem {
     }
 
     if(harvesterComponent.getState() === HARVESTING_STATE.HARVESTING) {
-      const unitsPerMinute = harvesterComponent.getUnitsPerMinute();
-      const secondsPerUnit = 60 / unitsPerMinute;
+      const secondsPerUnit = this.getSecondsPerUnit(entity);
       const harvestingProgressChange = delta / secondsPerUnit;
       const nextHarvestingPercentage = Math.min(1, harvesterComponent.getProgress() + harvestingProgressChange);
       harvesterComponent.setProgress(nextHarvestingPercentage);
@@ -41,6 +40,17 @@ export class ResourceHarvesterSystem {
       storage.addResource(harvesterComponent.getResource());
     }
 
+  };
+
+  getSecondsPerUnit = (entity) => {
+    const resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent);
+    const unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
+    let secondsPerUnit = 60 / unitsPerMinute;
+    const sources = resourceHarvesterComponent.getSources().length;
+    for (let i = 0; i < sources; i++) {
+      secondsPerUnit *= 0.8;
+    }
+    return secondsPerUnit;
   };
 
   getEngine = () => {

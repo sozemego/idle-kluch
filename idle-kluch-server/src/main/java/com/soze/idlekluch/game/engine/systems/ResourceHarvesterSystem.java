@@ -57,9 +57,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     }
 
     if(currentHarvestingProgress.getHarvestingState() == HarvestingState.HARVESTING) {
-      final ResourceHarvesterComponent resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
-      final int unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
-      final float secondsPerUnit = 60 / (float) unitsPerMinute;
+      final float secondsPerUnit = getSecondsPerUnit(entity);
       final float harvestingPercentageChange = delta / secondsPerUnit;
       final float nextHarvestingPercentage = Math.min(1f, currentHarvestingProgress.getHarvestingProgressPercent() + harvestingPercentageChange);
       currentHarvestingProgress.setHarvestingProgressPercent(nextHarvestingPercentage);
@@ -80,6 +78,21 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
 
   private List<Entity> getHarvesters() {
     return getEngine().getEntitiesByNode(Nodes.HARVESTER);
+  }
+
+  /**
+   * Determines the speed of harvesting based on how many resource sources are attached to this harvester,
+   * but also how many harvesters are attached to the sources.
+   */
+  private float getSecondsPerUnit(final Entity entity) {
+    final ResourceHarvesterComponent resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
+    final int unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
+    float secondsPerUnit = 60 / (float) unitsPerMinute;
+    final int sources = resourceHarvesterComponent.getSources().size();
+    for (int i = 0; i < sources; i++) {
+      secondsPerUnit *= 0.8;
+    }
+    return secondsPerUnit;
   }
 
 }

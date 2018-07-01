@@ -4,7 +4,9 @@ import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "resource_source_components")
@@ -15,7 +17,7 @@ public class ResourceSourceComponent extends BaseComponent {
   private Resource resource;
 
   @Transient
-  private int harvesters;
+  private Set<com.soze.klecs.entity.Entity> harvesters = new HashSet<>();
 
   public ResourceSourceComponent() {
     super(ComponentType.RESOURCE_SOURCE);
@@ -35,16 +37,16 @@ public class ResourceSourceComponent extends BaseComponent {
     this.resource = resource;
   }
 
-  public int getHarvesters() {
+  public Set<com.soze.klecs.entity.Entity> getHarvesters() {
     return harvesters;
   }
 
-  public void addHarvester() {
-    this.harvesters++;
+  public void addHarvester(final com.soze.klecs.entity.Entity harvester) {
+    this.harvesters.add(harvester);
   }
 
-  public void removeHarvester() {
-    this.harvesters--;
+  public void removeHarvester(final com.soze.klecs.entity.Entity harvester) {
+    this.harvesters.remove(harvester);
   }
 
   @Override

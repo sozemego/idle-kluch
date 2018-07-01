@@ -42,7 +42,6 @@ import { ResourceHarvesterSystem } from "../ecs/systems/ResourceHarvesterSystem"
 import { ResourceStorageComponent } from "../ecs/components/ResourceStorageComponent";
 import { ResourceHarvesterRendererSystem } from "../ecs/systems/ResourceHarvesterRendererSystem";
 import { ResourceStorageRendererSystem } from "../ecs/systems/ResourceStorageRendererSystem";
-import { HARVESTING_STATE } from "../ecs/constants";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const getTiles = () => _getTiles(store.getState());
@@ -134,6 +133,7 @@ const addEntity = (state, { payload: entity }) => {
           component.resource,
           component.radius,
           component.unitsPerMinute,
+          component.sources,
           component.harvestingProgress,
         );
       }

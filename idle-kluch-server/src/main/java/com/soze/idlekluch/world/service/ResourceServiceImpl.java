@@ -196,9 +196,9 @@ public class ResourceServiceImpl implements ResourceService {
         final List<Entity> inRangeHarvesters = findAllHarvestersInRange(source, harvesters);
         inRangeHarvesters.forEach(harvester -> {
           LOG.debug("Attaching source [{}] to harvester [{}]", source, harvester);
-          incrementSources(harvester);
+          addSource(harvester, source);
           LOG.debug("Attaching harvester [{}] to source [{}]", harvester, source);
-          incrementHarvesters(source);
+          addHarvester(source, harvester);
         });
       });
     }
@@ -234,14 +234,14 @@ public class ResourceServiceImpl implements ResourceService {
              .collect(Collectors.toList());
   }
 
-  final void incrementHarvesters(final Entity source) {
+  final void addHarvester(final Entity source, final Entity harvester) {
     final ResourceSourceComponent resourceSourceComponent = source.getComponent(ResourceSourceComponent.class);
-    resourceSourceComponent.addHarvester();
+    resourceSourceComponent.addHarvester(harvester);
   }
 
-  final void incrementSources(final Entity harvester) {
+  final void addSource(final Entity harvester, final Entity source) {
     final ResourceHarvesterComponent resourceHarvesterComponent = harvester.getComponent(ResourceHarvesterComponent.class);
-    resourceHarvesterComponent.removeSource();
+    resourceHarvesterComponent.addSource(source);
   }
 
 }
