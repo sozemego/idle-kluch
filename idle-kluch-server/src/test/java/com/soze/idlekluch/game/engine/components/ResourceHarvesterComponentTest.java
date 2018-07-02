@@ -5,8 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.ArrayList;
-
 import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
@@ -17,7 +15,7 @@ public class ResourceHarvesterComponentTest {
     final ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
     resourceHarvesterComponent.setSourceSlots(1);
     assertEquals(1, resourceHarvesterComponent.getSources().size());
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(0));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(0));
   }
 
   @Test
@@ -25,11 +23,11 @@ public class ResourceHarvesterComponentTest {
     final ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
     resourceHarvesterComponent.setSourceSlots(5);
     assertEquals(5, resourceHarvesterComponent.getSources().size());
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(0));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(1));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(2));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(3));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(4));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(0));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(1));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(2));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(3));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(4));
   }
 
   @Test
@@ -39,11 +37,11 @@ public class ResourceHarvesterComponentTest {
     final EntityUUID id = EntityUUID.randomId();
     resourceHarvesterComponent.setSource(id, 3);
     assertEquals(5, resourceHarvesterComponent.getSources().size());
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(0));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(1));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(2));
-    assertEquals(id, new ArrayList<>(resourceHarvesterComponent.getSources()).get(3));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(4));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(0));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(1));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(2));
+    assertEquals(id, resourceHarvesterComponent.getSources().get(3));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(4));
   }
 
   @Test
@@ -53,19 +51,19 @@ public class ResourceHarvesterComponentTest {
     final EntityUUID id = EntityUUID.randomId();
     resourceHarvesterComponent.setSource(id, 3);
     assertEquals(5, resourceHarvesterComponent.getSources().size());
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(0));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(1));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(2));
-    assertEquals(id, new ArrayList<>(resourceHarvesterComponent.getSources()).get(3));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(4));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(0));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(1));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(2));
+    assertEquals(id, resourceHarvesterComponent.getSources().get(3));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(4));
 
     resourceHarvesterComponent.setSource(null, 3);
     assertEquals(5, resourceHarvesterComponent.getSources().size());
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(0));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(1));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(2));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(3));
-    assertEquals(null, new ArrayList<>(resourceHarvesterComponent.getSources()).get(4));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(0));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(1));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(2));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(3));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(4));
   }
 
   @Test(expected = IllegalArgumentException.class)
