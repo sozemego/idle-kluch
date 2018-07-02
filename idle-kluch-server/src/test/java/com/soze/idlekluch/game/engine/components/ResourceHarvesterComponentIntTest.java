@@ -4,6 +4,7 @@ import com.soze.idlekluch.RootConfig;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
+import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceSourceSlot;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
@@ -19,6 +20,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -72,15 +76,44 @@ public class ResourceHarvesterComponentIntTest {
     entityService.addEntity(pe);
 
     assertEquals(3, resourceHarvesterComponent.getSources().size());
-    assertEquals(null, resourceHarvesterComponent.getSources().get(0));
-    assertEquals(null, resourceHarvesterComponent.getSources().get(1));
-    assertEquals(sourceId, resourceHarvesterComponent.getSources().get(2));
+    assertEquals(null, resourceHarvesterComponent.getSources().get(0).getSourceId());
+    assertEquals(null, resourceHarvesterComponent.getSources().get(1).getSourceId());
+    assertEquals(sourceId, resourceHarvesterComponent.getSources().get(2).getSourceId());
 
     final PersistentEntity retrievedPe = entityService.getEntity(id).get();
     final ResourceHarvesterComponent retrievedHarvesterComponent = retrievedPe.getResourceHarvesterComponent();
     assertEquals(3, retrievedHarvesterComponent.getSources().size());
-    assertEquals(null, retrievedHarvesterComponent.getSources().get(0));
-    assertEquals(null, retrievedHarvesterComponent.getSources().get(1));
-    assertEquals(sourceId, retrievedHarvesterComponent.getSources().get(2));
+    assertEquals(null, retrievedHarvesterComponent.getSources().get(0).getSourceId());
+    assertEquals(null, retrievedHarvesterComponent.getSources().get(1).getSourceId());
+    assertEquals(sourceId, retrievedHarvesterComponent.getSources().get(2).getSourceId());
+  }
+
+  @Test
+  public void testOrderIsOkAfterPersistence2() {
+    final EntityUUID sourceId = EntityUUID.randomId();
+    final PersistentEntity sourceEntity = new PersistentEntity();
+    sourceEntity.setEntityId(sourceId);
+    entityService.addEntity(sourceEntity);
+
+    final EntityUUID id = EntityUUID.randomId();
+    final PersistentEntity pe = new PersistentEntity();
+    pe.setEntityId(id);
+    final ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
+    resourceHarvesterComponent.setEntityId(id);
+    resourceHarvesterComponent.setSourceSlots(25);
+    resourceHarvesterComponent.setSource(sourceId, 12);
+    final List<ResourceSourceSlot> slots = resourceHarvesterComponent.getSources();
+    Collections.shuffle(slots);
+    resourceHarvesterComponent.setSources(slots);
+    resourceHarvesterComponent.setResource(worldRepository.getResource("Wood").get());
+    pe.setResourceHarvesterComponent(resourceHarvesterComponent);
+    entityService.addEntity(pe);
+
+    final PersistentEntity retrievedPe = entityService.getEntity(id).get();
+    final ResourceHarvesterComponent retrievedHarvesterComponent = retrievedPe.getResourceHarvesterComponent();
+    assertEquals(25, retrievedHarvesterComponent.getSources().size());
+    assertEquals(null, retrievedHarvesterComponent.getSources().get(0).getSourceId());
+    assertEquals(null, retrievedHarvesterComponent.getSources().get(1).getSourceId());
+    assertEquals(sourceId, retrievedHarvesterComponent.getSources().get(12).getSourceId());
   }
 }

@@ -36,8 +36,8 @@ public class ResourceHarvesterComponent extends BaseComponent {
     name = "resource_harvester_slots",
     joinColumns = @JoinColumn(name = "entity_id")
   )
-  @AttributeOverride(name = "id", column = @Column(name = "source_id"))
   @LazyCollection(LazyCollectionOption.FALSE)
+  @OrderBy("slot_number ASC")
   private List<ResourceSourceSlot> sources = new ArrayList<>();
 
   public ResourceHarvesterComponent() {
