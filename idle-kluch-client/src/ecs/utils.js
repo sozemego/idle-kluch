@@ -61,3 +61,19 @@ export const checkEntityInRangeOfResource = (engine, entity) => {
 
   return false;
 };
+
+/**
+ * Checks if this point is within physical bounds of a given entity.
+ * @param {Entity} entity
+ * @param {{x, y}} point
+ */
+export const doesContain = (entity, point) => {
+  const physicsComponent = entity.getComponent(PhysicsComponent);
+
+  const rectangle = new Phaser.Rectangle(
+    physicsComponent.getX(), physicsComponent.getY(),
+    physicsComponent.getWidth(), physicsComponent.getHeight()
+  );
+
+  return rectangle.contains(point.x, point.y);
+};

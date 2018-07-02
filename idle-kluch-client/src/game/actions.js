@@ -4,7 +4,7 @@ import { makeActionCreator } from "../store/utils";
 import createGame from "./Game";
 import { getConstructableBuildingsData, getKingdom, getSelectedConstructableBuilding } from "../kingdom/selectors";
 import { idleBucksChanged, setSelectedConstructableBuilding } from "../kingdom/actions";
-import { checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
+import { checkRectangleIntersectsCollidableEntities, doesContain, findComponent } from "../ecs/utils";
 import { COMPONENT_TYPES } from "./constants";
 import { default as undoActions } from "./UndoActions";
 
@@ -26,6 +26,9 @@ export const setRunningState = makeActionCreator(SET_RUNNING_STATE, "payload");
 export const START_HARVESTING = "START_HARVESTING";
 export const startHarvesting = makeActionCreator(START_HARVESTING, "payload");
 
+export const SET_SELECTED_ENTITY = "SET_SELECTED_ENTITY";
+export const setSelectedEntity = makeActionCreator(SET_SELECTED_ENTITY, "payload");
+
 let gameContainer = null;
 
 export const connect = () => {
@@ -38,7 +41,7 @@ export const connect = () => {
 export const startGame = () => {
   return (dispatch, getState) => {
     return createGame()
-      .then(game => gameContainer = game);
+      .then(data => gameContainer = data);
   };
 };
 
@@ -87,6 +90,14 @@ export const onCanvasClicked = (x, y) => {
 
       return Promise.resolve();
     }
+
+    const engine = gameContainer.engine;
+    const entities = engine.getAllEntities();
+    const selectedEntity = entities.find(entity => doesContain(entity, { x, y })) || null;
+
+    console.log(selectedEntity);
+    dispatch(setSelectedEntity(selectedEntity));
+
     return Promise.resolve();
   };
 };

@@ -23,6 +23,7 @@ import {
 } from "../kingdom/selectors";
 import {
   getTiles as _getTiles,
+  getSelectedEntity as _getSelectedEntity,
 } from "./selectors";
 import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
 import { checkEntityInRangeOfResource, checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
@@ -44,6 +45,7 @@ import { ResourceHarvesterRendererSystem } from "../ecs/systems/ResourceHarveste
 import { ResourceStorageRendererSystem } from "../ecs/systems/ResourceStorageRendererSystem";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
+const getSelectedEntity = () => _getSelectedEntity(store.getState());
 const getTiles = () => _getTiles(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 const getKingdomStartingPoint = () => _getKingdomStartingPoint(store.getState());
@@ -54,6 +56,7 @@ let engine = null;
 
 let selectedBuildingSprite = null;
 let selectedBuildingRadiusCircle = null;
+let entitySelector = null;
 
 let tileGroup = null;
 let entitySprites = null;
@@ -68,6 +71,7 @@ const delta = 1 / 60;
 
 const initialState = {
   tiles: {},
+  selectedEntity: null,
 };
 
 const addTiles = (state, { payload: tiles }) => {
@@ -242,6 +246,10 @@ const startHarvesting = (state, action) => {
   return state;
 };
 
+const setSelectedEntity = (state, action) => {
+  return { ...state, selectedEntity: action.payload };
+};
+
 const attachTileSpawnAnimation = (tileSprites) => {
   [...tileSprites]
     .sort((a, b) => b.y - a.y) //so tiles that are lower are spawned first
@@ -262,6 +270,7 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.REMOVE_ENTITY ]: removeEntity,
   [ GAME_ACTIONS.SET_RUNNING_STATE]: setRunningState,
   [ GAME_ACTIONS.START_HARVESTING ]: startHarvesting,
+  [ GAME_ACTIONS.SET_SELECTED_ENTITY]: setSelectedEntity,
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });
@@ -342,6 +351,21 @@ const updateSelectedConstructableBuilding = () => {
   }
 }
 
+const updateSelectedEntity = () => {
+  const selectedEntity = getSelectedEntity();
+  if(selectedEntity === null) {
+    entitySelector.clear();
+  } else {
+    const physicsComponent = selectedEntity.getComponent(PhysicsComponent);
+    entitySelector.clear();
+    entitySelector.lineStyle(2, 0xdd00dd, 1);
+    entitySelector.drawRect(
+      physicsComponent.getX(), physicsComponent.getY(),
+      physicsComponent.getWidth(), physicsComponent.getHeight(),
+    );
+  }
+};
+
 const createGame = () => {
   return new Promise(resolve => {
     let cursors = null;
@@ -411,6 +435,7 @@ const createGame = () => {
 
       tileGroup = game.add.group();
       entitySprites = game.add.group();
+      entitySelector = game.add.graphics(0, 0);
 
       engine = new Engine();
       engine.addSystem(new PhysicsSystem(engine));
@@ -444,6 +469,7 @@ const createGame = () => {
       }
 
       updateSelectedConstructableBuilding();
+      updateSelectedEntity();
 
       if(isRunning) {
         accumulator += (game.time.elapsedMS / 1000);
