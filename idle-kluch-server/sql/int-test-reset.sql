@@ -11,5 +11,6 @@ DELETE FROM cost_components WHERE entity_id IN (SELECT entity_id FROM entities W
 DELETE FROM resource_source_components WHERE entity_id IN (SELECT entity_id FROM entities WHERE template = false);
 DELETE FROM resource_harvester_components WHERE entity_id IN (SELECT entity_id FROM entities WHERE template = false);
 DELETE FROM resource_storage_components WHERE entity_id IN (SELECT entity_id FROM entities WHERE template = false);
+DELETE FROM resource_harvester_slots;
 DELETE FROM resource_storage;
 DELETE FROM entities WHERE template = false;
