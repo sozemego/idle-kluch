@@ -6,6 +6,8 @@ import com.soze.idlekluch.core.utils.MathUtils;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import org.hibernate.annotations.IndexColumn;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.*;
@@ -31,13 +33,14 @@ public class ResourceHarvesterComponent extends BaseComponent {
   @Transient
   private final HarvestingProgress harvestingProgress = new HarvestingProgress();
 
-  @ElementCollection(fetch = FetchType.EAGER)
+  @ElementCollection
   @CollectionTable(
     name = "resource_harvester_slots",
     joinColumns = @JoinColumn(name = "entity_id")
   )
   @AttributeOverride(name = "id", column = @Column(name = "source_id"))
-  private Set<EntityUUID> sources = new HashSet<>();
+  @LazyCollection(LazyCollectionOption.FALSE)
+  private List<EntityUUID> sources = new ArrayList<>();
 
   public ResourceHarvesterComponent() {
     super(ComponentType.RESOURCE_HARVESTER);
@@ -48,14 +51,15 @@ public class ResourceHarvesterComponent extends BaseComponent {
                                     final float radius,
                                     final int unitsPerMinute,
                                     final int sourceSlots,
-                                    final Set<EntityUUID> sources) {
+                                    final List<EntityUUID> sources) {
     this();
     setEntityId(entityId);
     this.resource = Objects.requireNonNull(resource);
     this.radius = radius;
     this.unitsPerMinute = unitsPerMinute;
     this.sourceSlots = sourceSlots;
-    this.sources = sources;
+    this.sources = Objects.requireNonNull(sources);
+    fillSources(sources);
   }
 
   public Resource getResource() {
@@ -92,9 +96,10 @@ public class ResourceHarvesterComponent extends BaseComponent {
 
   public void setSourceSlots(final int sourceSlots) {
     this.sourceSlots = sourceSlots;
+    this.fillSources(this.sources);
   }
 
-  public Set<EntityUUID> getSources() {
+  public List<EntityUUID> getSources() {
     return this.sources;
   }
 
@@ -113,10 +118,10 @@ public class ResourceHarvesterComponent extends BaseComponent {
     final List<EntityUUID> nextSources = new ArrayList<>(this.sources);
     fillSources(nextSources);
     nextSources.set(index, entityId);
-    this.sources = new HashSet<>(nextSources);
+    this.sources = new ArrayList<>(nextSources);
   }
 
-  public void setSources(final Set<EntityUUID> sources) {
+  public void setSources(final List<EntityUUID> sources) {
     this.sources = sources;
   }
 
