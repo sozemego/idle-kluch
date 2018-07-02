@@ -2,9 +2,9 @@ package com.soze.idlekluch.game.entity;
 
 import com.soze.idlekluch.game.engine.components.*;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

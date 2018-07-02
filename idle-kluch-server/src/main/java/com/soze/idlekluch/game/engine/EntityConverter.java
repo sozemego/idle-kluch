@@ -1,6 +1,7 @@
 package com.soze.idlekluch.game.engine;
 
 import com.soze.idlekluch.game.engine.components.*;
+import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.EntityMessage;
 import com.soze.idlekluch.game.service.GameEngine;

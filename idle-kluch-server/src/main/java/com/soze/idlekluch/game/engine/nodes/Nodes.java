@@ -1,6 +1,7 @@
 package com.soze.idlekluch.game.engine.nodes;
 
 import com.soze.idlekluch.game.engine.components.*;
+import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 import com.soze.klecs.node.Node;
 
 public interface Nodes {

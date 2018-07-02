@@ -3,9 +3,8 @@ package com.soze.idlekluch.game.engine.systems;
 import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.EntityUtils;
-import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent;
-import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingProgress;
-import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingState;
+import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
+import com.soze.idlekluch.game.engine.components.resourceharvester.HarvestingProgress;
 import com.soze.idlekluch.game.engine.components.ResourceSourceComponent;
 import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
@@ -52,19 +51,19 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     final HarvestingProgress currentHarvestingProgress = getCurrentHarvestingProgress(entity);
     final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
     final int remainingCapacity = storage.getCapacity() - storage.getResources().size();
-    if(remainingCapacity > 0 && currentHarvestingProgress.getHarvestingState() == HarvestingState.WAITING) {
+    if(remainingCapacity > 0 && currentHarvestingProgress.getHarvestingState() == HarvestingProgress.HarvestingState.WAITING) {
       currentHarvestingProgress.start();
       beganHarvesting.add((EntityUUID) entity.getId());
     }
 
-    if(currentHarvestingProgress.getHarvestingState() == HarvestingState.HARVESTING) {
+    if(currentHarvestingProgress.getHarvestingState() == HarvestingProgress.HarvestingState.HARVESTING) {
       final float secondsPerUnit = getSecondsPerUnit(entity);
       final float harvestingPercentageChange = delta / secondsPerUnit;
       final float nextHarvestingPercentage = Math.min(1f, currentHarvestingProgress.getHarvestingProgressPercent() + harvestingPercentageChange);
       currentHarvestingProgress.setHarvestingProgressPercent(nextHarvestingPercentage);
     }
 
-    if (currentHarvestingProgress.isFinished() && currentHarvestingProgress.getHarvestingState() == HarvestingState.HARVESTING) {
+    if (currentHarvestingProgress.isFinished() && currentHarvestingProgress.getHarvestingState() == HarvestingProgress.HarvestingState.HARVESTING) {
       currentHarvestingProgress.stop();
       final ResourceHarvesterComponent harvester = entity.getComponent(ResourceHarvesterComponent.class);
       storage.addResource(harvester.getResource());

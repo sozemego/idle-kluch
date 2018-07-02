@@ -1,11 +1,9 @@
-package com.soze.idlekluch.game.engine.components;
+package com.soze.idlekluch.game.engine.components.resourceharvester;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.soze.idlekluch.core.utils.MathUtils;
+import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
-import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -144,52 +142,5 @@ public class ResourceHarvesterComponent extends BaseComponent {
       getSources()
     );
   }
-
-  public static class HarvestingProgress {
-
-    private HarvestingState harvestingState;
-    private float harvestingProgressPercent;
-
-    public HarvestingProgress() {
-      this.harvestingState = HarvestingState.WAITING;
-      this.harvestingProgressPercent = 0f;
-    }
-
-    public HarvestingState getHarvestingState() {
-      return harvestingState;
-    }
-
-    public void setHarvestingState(final HarvestingState harvestingState) {
-      this.harvestingState = harvestingState;
-    }
-
-    public float getHarvestingProgressPercent() {
-      return harvestingProgressPercent;
-    }
-
-    public void setHarvestingProgressPercent(final float harvestingProgressPercent) {
-      this.harvestingProgressPercent = harvestingProgressPercent;
-    }
-
-    @JsonIgnore
-    public boolean isFinished() {
-      return MathUtils.equals(getHarvestingProgressPercent(), 1f, 0.05f);
-    }
-
-    public void start() {
-      setHarvestingState(HarvestingState.HARVESTING);
-      setHarvestingProgressPercent(0f);
-    }
-
-    public void stop() {
-      setHarvestingState(HarvestingState.WAITING);
-      setHarvestingProgressPercent(0f);
-    }
-  }
-
-  public enum HarvestingState {
-    HARVESTING, WAITING
-  }
-
 
 }
