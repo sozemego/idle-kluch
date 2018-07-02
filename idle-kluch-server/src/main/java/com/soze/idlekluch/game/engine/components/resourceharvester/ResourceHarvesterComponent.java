@@ -38,7 +38,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
   )
   @AttributeOverride(name = "id", column = @Column(name = "source_id"))
   @LazyCollection(LazyCollectionOption.FALSE)
-  private List<EntityUUID> sources = new ArrayList<>();
+  private List<ResourceSourceSlot> sources = new ArrayList<>();
 
   public ResourceHarvesterComponent() {
     super(ComponentType.RESOURCE_HARVESTER);
@@ -49,7 +49,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
                                     final float radius,
                                     final int unitsPerMinute,
                                     final int sourceSlots,
-                                    final List<EntityUUID> sources) {
+                                    final List<ResourceSourceSlot> sources) {
     this();
     setEntityId(entityId);
     this.resource = Objects.requireNonNull(resource);
@@ -97,7 +97,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
     this.fillSources(this.sources);
   }
 
-  public List<EntityUUID> getSources() {
+  public List<ResourceSourceSlot> getSources() {
     return this.sources;
   }
 
@@ -113,20 +113,20 @@ public class ResourceHarvesterComponent extends BaseComponent {
     if(index > sourceSlots) {
       throw new IllegalArgumentException("This harvester only has " + sourceSlots + ", slot index " + index + " is not accessible.");
     }
-    final List<EntityUUID> nextSources = new ArrayList<>(this.sources);
+    final List<ResourceSourceSlot> nextSources = new ArrayList<>(this.sources);
     fillSources(nextSources);
-    nextSources.set(index, entityId);
+    nextSources.set(index, new ResourceSourceSlot(entityId, index));
     this.sources = new ArrayList<>(nextSources);
   }
 
-  public void setSources(final List<EntityUUID> sources) {
+  public void setSources(final List<ResourceSourceSlot> sources) {
     this.sources = sources;
   }
 
-  private void fillSources(final List<EntityUUID> sources) {
+  private void fillSources(final List<ResourceSourceSlot> sources) {
     for(int i = 0; i < this.sourceSlots; i++) {
       if(sources.size() <= i) {
-        sources.add(null);
+        sources.add(new ResourceSourceSlot(null, i));
       }
     }
   }

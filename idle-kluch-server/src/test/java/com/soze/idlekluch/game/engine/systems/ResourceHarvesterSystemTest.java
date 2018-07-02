@@ -4,16 +4,13 @@ import com.soze.idlekluch.RootConfig;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import com.soze.idlekluch.game.engine.components.NameComponent;
-import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent;
-import com.soze.idlekluch.game.engine.components.ResourceHarvesterComponent.HarvestingState;
+import com.soze.idlekluch.game.engine.components.resourceharvester.HarvestingProgress;
+import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.message.StartHarvestingMessage;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.game.service.WebSocketMessagingServiceTest;
-import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.world.repository.WorldRepository;
-import com.soze.idlekluch.world.service.WorldService;
-import com.soze.idlekluch.world.service.WorldServiceImpl;
 import com.soze.klecs.entity.Entity;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,7 +70,7 @@ public class ResourceHarvesterSystemTest {
 
     gameEngine.addEntity(entity);
 
-    assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(HarvestingProgress.HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
     assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
     assertEquals(0, resourceStorageComponent.getResources().size());
     assertEquals(0, webSocketMessagingServiceTest.getBroadcastMessages(StartHarvestingMessage.class).size());
@@ -81,14 +78,14 @@ public class ResourceHarvesterSystemTest {
     //pass time by 30 seconds
     gameEngine.update(30f);
 
-    assertEquals(HarvestingState.HARVESTING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(HarvestingProgress.HarvestingState.HARVESTING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
     assertEquals(0.5f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
     assertEquals(0, resourceStorageComponent.getResources().size());
     assertEquals(1, webSocketMessagingServiceTest.getBroadcastMessages(StartHarvestingMessage.class).size());
 
     gameEngine.update(30f);
 
-    assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(HarvestingProgress.HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
     assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
     assertEquals(1, resourceStorageComponent.getResources().size());
     assertTrue(resourceStorageComponent.getResources().get(0).equals(worldRepository.getResource("Wood").get()));
@@ -113,7 +110,7 @@ public class ResourceHarvesterSystemTest {
 
     gameEngine.addEntity(entity);
 
-    assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(HarvestingProgress.HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
     assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
     assertEquals(0, resourceStorageComponent.getResources().size());
     assertEquals(0, webSocketMessagingServiceTest.getBroadcastMessages(StartHarvestingMessage.class).size());
@@ -121,14 +118,14 @@ public class ResourceHarvesterSystemTest {
     //pass time by 30 seconds
     gameEngine.update(30f);
 
-    assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(HarvestingProgress.HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
     assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
     assertEquals(0, resourceStorageComponent.getResources().size());
     assertEquals(0, webSocketMessagingServiceTest.getBroadcastMessages(StartHarvestingMessage.class).size());
 
     gameEngine.update(30f);
 
-    assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(HarvestingProgress.HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
     assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
     assertEquals(0, resourceStorageComponent.getResources().size());
     assertEquals(0, webSocketMessagingServiceTest.getBroadcastMessages(StartHarvestingMessage.class).size());
@@ -152,7 +149,7 @@ public class ResourceHarvesterSystemTest {
 
     gameEngine.addEntity(entity);
 
-    assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(HarvestingProgress.HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
     assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
     assertEquals(0, resourceStorageComponent.getResources().size());
 
@@ -162,7 +159,7 @@ public class ResourceHarvesterSystemTest {
     }
     assertEquals(20, webSocketMessagingServiceTest.getBroadcastMessages(StartHarvestingMessage.class).size());
 
-    assertEquals(HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
+    assertEquals(HarvestingProgress.HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
     assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
     assertEquals(20, resourceStorageComponent.getResources().size());
   }

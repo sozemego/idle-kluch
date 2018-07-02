@@ -7,6 +7,7 @@ import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarve
 import com.soze.idlekluch.game.engine.components.resourceharvester.HarvestingProgress;
 import com.soze.idlekluch.game.engine.components.ResourceSourceComponent;
 import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
+import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceSourceSlot;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.message.StartHarvestingMessage;
 import com.soze.idlekluch.game.service.WebSocketMessagingService;
@@ -92,9 +93,10 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     return secondsPerUnit;
   }
 
-  private float getBonus(final Collection<EntityUUID> sourceIds) {
+  private float getBonus(final Collection<ResourceSourceSlot> sourceIds) {
     return sourceIds
              .stream()
+             .filter(slot -> slot.getSourceId() != null)
              .map(id -> getEngine().getEntityById(id).get())
              .map(source -> {
                final ResourceSourceComponent resourceSourceComponent = source.getComponent(ResourceSourceComponent.class);
