@@ -97,7 +97,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     return sourceIds
              .stream()
              .filter(slot -> slot.getSourceId() != null)
-             .map(id -> getEngine().getEntityById(id).get())
+             .map(slot -> getEngine().getEntityById(slot.getSourceId()).get())
              .map(source -> {
                final ResourceSourceComponent resourceSourceComponent = source.getComponent(ResourceSourceComponent.class);
                return resourceSourceComponent.getBonus();

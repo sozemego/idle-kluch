@@ -97,18 +97,6 @@ public class ResourceHarvesterComponent extends BaseComponent {
     this.fillSources(this.sources);
   }
 
-  public List<ResourceSourceSlot> getSources() {
-    return this.sources;
-  }
-
-  @JsonProperty("sources")
-  public List<String> getSourcesJson() {
-    return getSources()
-             .stream()
-             .map(Object::toString)
-             .collect(Collectors.toList());
-  }
-
   public void setSource(final EntityUUID entityId, final int index) {
     if(index > sourceSlots) {
       throw new IllegalArgumentException("This harvester only has " + sourceSlots + ", slot index " + index + " is not accessible.");
@@ -129,6 +117,11 @@ public class ResourceHarvesterComponent extends BaseComponent {
         sources.add(new ResourceSourceSlot(null, i));
       }
     }
+  }
+
+  @JsonProperty("sources")
+  public List<ResourceSourceSlot> getSources() {
+    return this.sources;
   }
 
   @Override

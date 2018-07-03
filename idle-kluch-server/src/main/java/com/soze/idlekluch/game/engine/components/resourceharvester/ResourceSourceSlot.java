@@ -1,16 +1,17 @@
 package com.soze.idlekluch.game.engine.components.resourceharvester;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.util.Objects;
 
 @Embeddable
 public class ResourceSourceSlot {
 
   @AttributeOverride(name = "id", column = @Column(name = "source_id"))
+  @JsonUnwrapped
   private EntityUUID sourceId;
 
   @Column(name = "slot_number")
