@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import * as appActions from "../../app/actions";
@@ -31,35 +31,35 @@ class HeaderUserComponent extends Component {
       return null;
     }
 
-    return [
-      <div
-        className={styles.name__container}
-        key={0}
-        onClick={this.onContainerClicked}
-      >
-        <img src={avatar} className={styles.avatar} alt={"User avatar"}/>
-        <div className={styles.name}>{user.name}</div>
-        <i className={"material-icons"}>arrow_drop_down</i>
-      </div>,
-      <Popover
-        anchorOrigin={{ horizontal: "middle", vertical: "bottom" }}
-        open={userMenuOpen}
-        key={1}
-        onRequestClose={() => this.setState({ userMenuOpen: false })}
-        anchorEl={userMenuAnchor}
-      >
-        <Menu>
-          <MenuItem
-            value="Logout"
-            primaryText={"Logout"}
-            onClick={() => {
-              this.setState({ userMenuOpen: false });
-              logout();
-            }}
-          />
-        </Menu>
-      </Popover>,
-    ];
+    return (
+      <Fragment>
+        <div
+          className={styles.name__container}
+          onClick={this.onContainerClicked}
+        >
+          <img src={avatar} className={styles.avatar} alt={"User avatar"}/>
+          <div className={styles.name}>{user.name}</div>
+          <i className={"material-icons"}>arrow_drop_down</i>
+        </div>
+        <Popover
+          anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+          open={userMenuOpen}
+          onClose={() => this.setState({ userMenuOpen: false })}
+          anchorEl={userMenuAnchor}
+        >
+          <Menu>
+            <MenuItem
+              value="Logout"
+              primaryText={"Logout"}
+              onClick={() => {
+                this.setState({ userMenuOpen: false });
+                logout();
+              }}
+            />
+          </Menu>
+        </Popover>
+      </Fragment>
+    )
   }
 }
 

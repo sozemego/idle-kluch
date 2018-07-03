@@ -23,7 +23,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <MuiThemeProvider muiTheme={createMuiTheme({})}>
+        <MuiThemeProvider theme={createMuiTheme({})}>
           <Router history={history}>
             <div>
               <Header/>

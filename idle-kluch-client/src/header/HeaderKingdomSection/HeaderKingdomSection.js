@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import * as appActions from "../../app/actions";
@@ -35,36 +35,37 @@ class HeaderKingdomSection extends Component {
 
     const { kingdomMenuOpen, kingdomMenuAnchor } = this.state;
 
-    return [
-      <div
-        className={styles.name__container}
-        key={0}
-        onClick={this.onContainerClicked}
-      >
-        <img src={avatar} className={styles.avatar} alt={"Kingdom avatar"}/>
-        <div className={styles.name}>{kingdom.name}</div>
-        <i className={"material-icons"}>arrow_drop_down</i>
-      </div>,
-      <Popover
-        anchorOrigin={{ horizontal: "middle", vertical: "bottom" }}
-        open={kingdomMenuOpen}
-        key={1}
-        onRequestClose={() => this.setState({ kingdomMenuOpen: false })}
-        anchorEl={kingdomMenuAnchor}
-      >
-        <Menu>
-          <MenuItem
-            value="Delete kingdom"
-            primaryText={"Delete kingdom"}
-            style={deletingKingdom ? { opacity: 0.5 }: {} }
-            onClick={() => {
-              this.setState({ kingdomMenuOpen: false });
-              deleteKingdom();
-            }}
-          />
-        </Menu>
-      </Popover>,
-    ];
+    return (
+      <Fragment>
+        <div
+          className={styles.name__container}
+          onClick={this.onContainerClicked}
+        >
+          <img src={avatar} className={styles.avatar} alt={"Kingdom avatar"}/>
+          <div className={styles.name}>{kingdom.name}</div>
+          <i className={"material-icons"}>arrow_drop_down</i>
+        </div>
+        <Popover
+          anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+          transformOrigin={{ vertical: "top", horizontal: "center" }}
+          open={kingdomMenuOpen}
+          onClose={() => this.setState({ kingdomMenuOpen: false })}
+          anchorEl={kingdomMenuAnchor}
+        >
+          <Menu>
+            <MenuItem
+              value="Delete kingdom"
+              primaryText={"Delete kingdom"}
+              style={deletingKingdom ? { opacity: 0.5 } : {}}
+              onClick={() => {
+                this.setState({ kingdomMenuOpen: false });
+                deleteKingdom();
+              }}
+            />
+          </Menu>
+        </Popover>
+      </Fragment>
+    )
   }
 }
 
