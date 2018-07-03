@@ -53,7 +53,7 @@ export class ResourceHarvesterSystem {
 
   getBonus = (sources) => {
     return sources
-      .map(id => this.getEngine().getEntityById(id))
+      .map(source => this.getEngine().getEntityById(source.id))
       .map(entity => {
         const resourceSource = entity.getComponent(ResourceSourceComponent);
         return resourceSource.getBonus();
