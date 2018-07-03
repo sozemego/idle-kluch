@@ -72,6 +72,7 @@ const delta = 1 / 60;
 const initialState = {
   tiles: {},
   selectedEntity: null,
+  resources: [],
 };
 
 const addTiles = (state, { payload: tiles }) => {
@@ -250,6 +251,10 @@ const setSelectedEntity = (state, action) => {
   return { ...state, selectedEntity: action.payload };
 };
 
+const setResources = (state, action) => {
+  return { ...state, resources: action.payload };
+};
+
 const attachTileSpawnAnimation = (tileSprites) => {
   [...tileSprites]
     .sort((a, b) => b.y - a.y) //so tiles that are lower are spawned first
@@ -271,6 +276,7 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.SET_RUNNING_STATE]: setRunningState,
   [ GAME_ACTIONS.START_HARVESTING ]: startHarvesting,
   [ GAME_ACTIONS.SET_SELECTED_ENTITY]: setSelectedEntity,
+  [ GAME_ACTIONS.SET_RESOURCES]: setResources,
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });

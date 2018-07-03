@@ -2,7 +2,7 @@ import { networkConfig } from "../api/config";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 import uuid from 'uuid/v4';
-import { addEntity, addTiles, removeEntity, setRunningState, startHarvesting } from "./actions";
+import { addEntity, addTiles, removeEntity, setResources, setRunningState, startHarvesting } from "./actions";
 import store from "../store/store";
 import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
@@ -73,6 +73,10 @@ GameService.connect = function () {
 
       if(type === "START_HARVESTING") {
         store.dispatch(startHarvesting(parsed.id))
+      }
+
+      if(type === "RESOURCE_LIST") {
+        store.dispatch(setResources(parsed.resources))
       }
 
     };

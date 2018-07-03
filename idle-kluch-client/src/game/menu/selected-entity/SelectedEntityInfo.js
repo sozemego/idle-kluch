@@ -5,8 +5,17 @@ import { NameComponent } from "../../../ecs/components/NameComponent";
 import style from "./selected-entity-info.css";
 import { Divider, LinearProgress } from "@material-ui/core";
 import { ResourceHarvesterComponent } from "../../../ecs/components/ResourceHarvesterComponent";
+import { HARVESTING_STATE } from "../../../ecs/constants";
 
 export class SelectedEntityInfo extends Component {
+
+  componentDidMount = () => {
+    this.interval = setInterval(() => this.setState({}), 16);
+  };
+
+  componentWillUnmount = () => {
+    clearInterval(this.interval);
+  };
 
   getNameComponent = () => {
     const { selectedEntity } = this.props;
@@ -18,24 +27,29 @@ export class SelectedEntityInfo extends Component {
         </div>
         <Divider/>
       </Fragment>
-    )
+    );
   };
 
   getHarvestingComponent = () => {
-    const { selectedEntity } = this.props;
+    const { selectedEntity, getResourceByName } = this.props;
     const harvester = selectedEntity.getComponent(ResourceHarvesterComponent);
     if(!harvester) {
       return null;
     }
 
-    const value = harvester.getProgress() * 100;
-    const buffer = value + 10;
+    const resource = getResourceByName(harvester.getResource().name);
+    const harvestingState = harvester.getState();
+    const value = harvestingState === HARVESTING_STATE.WAITING ? 0 : harvester.getProgress() * 100;
 
     return (
       <Fragment>
-        <div>
-          <LinearProgress variant={"buffer"} value={value} valueBuffer={buffer}/>
+        <div className={style.harvester_header}>
+          <img className={style.resource_icon} src={`/resources/${resource.name}.png`}/>{harvestingState}
         </div>
+        <div>
+          <LinearProgress variant={"determinate"} value={value}/>
+        </div>
+        <Divider />
       </Fragment>
     )
   };
@@ -58,4 +72,5 @@ export class SelectedEntityInfo extends Component {
 
 SelectedEntityInfo.propTypes = {
   selectedEntity: PropTypes.instanceOf(Entity).isRequired,
+  getResourceByName: PropTypes.func.isRequired,
 };

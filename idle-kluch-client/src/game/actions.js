@@ -29,6 +29,9 @@ export const startHarvesting = makeActionCreator(START_HARVESTING, "payload");
 export const SET_SELECTED_ENTITY = "SET_SELECTED_ENTITY";
 export const setSelectedEntity = makeActionCreator(SET_SELECTED_ENTITY, "payload");
 
+export const SET_RESOURCES = "SET_RESOURCES";
+export const setResources = makeActionCreator(SET_RESOURCES, "payload");
+
 let gameContainer = null;
 
 export const connect = () => {

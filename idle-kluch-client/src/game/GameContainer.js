@@ -6,7 +6,7 @@ import styles from "./game-container.css";
 import GameMenu from "./menu/GameMenu";
 import Toolbar from "./menu/Toolbar";
 import { SelectedEntityInfo } from "./menu/selected-entity/SelectedEntityInfo";
-import { getSelectedEntity } from "./selectors";
+import { getResourceByName, getSelectedEntity } from "./selectors";
 
 class GameContainer extends Component {
   componentDidMount = () => {
@@ -14,7 +14,7 @@ class GameContainer extends Component {
   };
 
   render() {
-    const { selectedEntity } = this.props;
+    const { selectedEntity, getResourceByName } = this.props;
     return (
       <div className={styles.container}>
         <Toolbar/>
@@ -24,7 +24,7 @@ class GameContainer extends Component {
           </div>
           <div className={styles.game} id="game"/>
           <div className={styles.menu}>
-            {selectedEntity && <SelectedEntityInfo selectedEntity={selectedEntity}/>}
+            {selectedEntity && <SelectedEntityInfo selectedEntity={selectedEntity} getResourceByName={getResourceByName}/>}
           </div>
         </div>
       </div>
@@ -35,6 +35,7 @@ class GameContainer extends Component {
 const mapStateToProps = state => {
   return {
     selectedEntity: getSelectedEntity(state),
+    getResourceByName: (name) => getResourceByName(state, name),
   };
 };
 

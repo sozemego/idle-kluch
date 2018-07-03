@@ -5,3 +5,13 @@
     align-items: center;
     font-size: 1.2rem;
 }
+
+.harvester_header {
+    display: flex;
+    align-items: center;
+}
+
+.resource_icon {
+    width: 32px;
+    height: 32px;
+}

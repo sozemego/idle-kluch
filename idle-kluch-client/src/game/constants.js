@@ -44,4 +44,5 @@ export const IMAGES = {
   "woodcutter": "woodcutter.png",
   "blue_button01": "ui/blue_button01.png",
   "red_button01": "ui/red_button01.png",
+  "Wood": "resources/Wood.png",
 };
