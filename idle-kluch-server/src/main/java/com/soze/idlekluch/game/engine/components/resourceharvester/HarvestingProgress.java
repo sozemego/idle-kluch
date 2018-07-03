@@ -31,7 +31,7 @@ public class HarvestingProgress {
 
   @JsonIgnore
   public boolean isFinished() {
-    return MathUtils.equals(getHarvestingProgressPercent(), 1f, 0.05f);
+    return MathUtils.equals(getHarvestingProgressPercent(), 1f, 0.01f);
   }
 
   public void start() {
