@@ -17,5 +17,7 @@
 }
 
 .game {
-    width: 75%;
+    width: 70%;
+    max-width: 70%;
+    overflow: hidden;
 }
