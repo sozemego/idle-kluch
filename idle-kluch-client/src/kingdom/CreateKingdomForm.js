@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import styles from "./create-kingdom-form.css";
-import { Divider, RaisedButton, TextField } from "material-ui";
+import { Divider, Button, TextField } from "@material-ui/core";
 
 import * as kingdomActions from "./actions";
 import { getKingdomNameRegistrationError } from "./selectors";
@@ -45,10 +45,11 @@ class CreateKingdomForm extends Component {
             errorText={kingdomNameRegistrationError}
           />
         </div>
-        <RaisedButton
+        <Button
           label={"Create kingdom!"}
           onClick={onSubmit}
           className={styles.submit_button}
+          variant={"Contained"}
         />
       </div>
     );

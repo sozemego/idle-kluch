@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import * as appActions from "../../app/actions";
 import { getUser, isLoggedIn } from "../../app/selectors";
-import { Menu, MenuItem, Popover } from "material-ui";
+import { Menu, MenuItem, Popover } from "@material-ui/core";
 
 import avatar from "../avatar_temp.png";
 import styles from "./header-user.css";

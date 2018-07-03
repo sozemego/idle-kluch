@@ -5,7 +5,7 @@ import styles from "./header.css";
 import HeaderLinearProgress from "./HeaderLinearProgress";
 import HeaderAuthButtons from "./HeaderUserSection/HeaderUserSection";
 import * as appActions from "../app/actions";
-import { Divider } from "material-ui";
+import { Divider } from "@material-ui/core";
 import HeaderKingdomSection from "./HeaderKingdomSection/HeaderKingdomSection";
 
 class Header extends Component {

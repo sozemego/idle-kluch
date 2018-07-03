@@ -7,7 +7,7 @@ import * as kingdomActions from "../../kingdom/actions";
 import avatar from "../avatar_temp.png";
 import styles from "./header-kingdom-section.css";
 import { getKingdom, hasKingdom, isDeletingKingdom } from "../../kingdom/selectors";
-import { Menu, MenuItem, Popover } from "material-ui";
+import { Menu, MenuItem, Popover } from "@material-ui/core";
 
 class HeaderKingdomSection extends Component {
   constructor(props) {

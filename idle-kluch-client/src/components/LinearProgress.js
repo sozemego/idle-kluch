@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { LinearProgress as VendorLinearProgress } from "material-ui";
+import { LinearProgress as VendorLinearProgress } from "@material-ui/core";
 import PropTypes from "prop-types";
 
 export class LinearProgress extends Component {

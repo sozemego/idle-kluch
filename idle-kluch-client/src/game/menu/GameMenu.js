@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import * as gameActions from "../actions";
-import { Dialog } from "material-ui";
+import { Dialog } from "@material-ui/core";
 import { isAlreadyConnected } from "../../app/selectors";
 import BuildingList from "./buildinglist/BuildingList";
 

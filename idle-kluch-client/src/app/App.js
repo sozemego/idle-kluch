@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Provider } from "react-redux";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import lightBaseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import {createMuiTheme, MuiThemeProvider} from "@material-ui/core/styles";
 
 import { createBrowserHistory } from "history";
 import { Router } from "react-router-dom";
@@ -15,7 +13,6 @@ import ContentContainer from "./ContentContainer";
 
 import * as appActions from "./actions";
 
-const theme = getMuiTheme(lightBaseTheme);
 const history = createBrowserHistory();
 
 class App extends Component {
@@ -26,7 +23,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <MuiThemeProvider muiTheme={theme}>
+        <MuiThemeProvider muiTheme={createMuiTheme({})}>
           <Router history={history}>
             <div>
               <Header/>
