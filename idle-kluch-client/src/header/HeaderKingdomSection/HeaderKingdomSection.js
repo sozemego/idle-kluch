@@ -7,21 +7,20 @@ import * as kingdomActions from "../../kingdom/actions";
 import avatar from "../avatar_temp.png";
 import styles from "./header-kingdom-section.css";
 import { getKingdom, hasKingdom, isDeletingKingdom } from "../../kingdom/selectors";
-import { Menu, MenuItem, Popover } from "@material-ui/core";
+import Menu from "@material-ui/core/es/Menu/Menu";
+import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
 
 class HeaderKingdomSection extends Component {
   constructor(props) {
     super(props);
     this.state = {
       kingdomMenuAnchor: null,
-      kingdomMenuOpen: false,
     };
   }
 
   onContainerClicked = event => {
     event.preventDefault();
     this.setState({
-      kingdomMenuOpen: true,
       kingdomMenuAnchor: event.currentTarget,
     });
   };
@@ -33,37 +32,33 @@ class HeaderKingdomSection extends Component {
       return null;
     }
 
-    const { kingdomMenuOpen, kingdomMenuAnchor } = this.state;
+    const { kingdomMenuAnchor } = this.state;
 
     return (
       <Fragment>
         <div
           className={styles.name__container}
           onClick={this.onContainerClicked}
+          aria-owns={kingdomMenuAnchor ? "simple-menu" : null}
+          aria-haspopup="true"
         >
           <img src={avatar} className={styles.avatar} alt={"Kingdom avatar"}/>
           <div className={styles.name}>{kingdom.name}</div>
           <i className={"material-icons"}>arrow_drop_down</i>
         </div>
-        <Popover
-          anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
-          transformOrigin={{ vertical: "top", horizontal: "center" }}
-          open={kingdomMenuOpen}
-          onClose={() => this.setState({ kingdomMenuOpen: false })}
+        <Menu
+          id="simple-menu"
           anchorEl={kingdomMenuAnchor}
+          open={Boolean(kingdomMenuAnchor)}
+          onClose={() => this.setState({ kingdomMenuAnchor: null })}
         >
-          <Menu>
-            <MenuItem
-              value="Delete kingdom"
-              primaryText={"Delete kingdom"}
-              style={deletingKingdom ? { opacity: 0.5 } : {}}
-              onClick={() => {
-                this.setState({ kingdomMenuOpen: false });
-                deleteKingdom();
-              }}
-            />
-          </Menu>
-        </Popover>
+          <MenuItem onClick={() => {
+            this.setState({ kingdomMenuAnchor: null });
+            deleteKingdom();
+          }}>
+            Delete kingdom
+          </MenuItem>
+        </Menu>
       </Fragment>
     )
   }

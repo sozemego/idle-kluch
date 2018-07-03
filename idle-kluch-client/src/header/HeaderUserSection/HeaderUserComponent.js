@@ -3,17 +3,17 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import * as appActions from "../../app/actions";
 import { getUser, isLoggedIn } from "../../app/selectors";
-import { Menu, MenuItem, Popover } from "@material-ui/core";
 
 import avatar from "../avatar_temp.png";
 import styles from "./header-user.css";
+import Menu from "@material-ui/core/es/Menu/Menu";
+import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
 
 class HeaderUserComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userMenuAnchor: null,
-      userMenuOpen: false,
     };
   }
 
@@ -23,7 +23,7 @@ class HeaderUserComponent extends Component {
   };
 
   render() {
-    const { userMenuOpen, userMenuAnchor } = this.state;
+    const { userMenuAnchor } = this.state;
 
     const { user, isLoggedIn, logout } = this.props;
 
@@ -41,23 +41,18 @@ class HeaderUserComponent extends Component {
           <div className={styles.name}>{user.name}</div>
           <i className={"material-icons"}>arrow_drop_down</i>
         </div>
-        <Popover
-          anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
-          open={userMenuOpen}
-          onClose={() => this.setState({ userMenuOpen: false })}
+        <Menu
+          open={Boolean(userMenuAnchor)}
+          onClose={() => this.setState({ userMenuAnchor: null })}
           anchorEl={userMenuAnchor}
         >
-          <Menu>
-            <MenuItem
-              value="Logout"
-              primaryText={"Logout"}
-              onClick={() => {
-                this.setState({ userMenuOpen: false });
-                logout();
-              }}
-            />
-          </Menu>
-        </Popover>
+          <MenuItem onClick={() => {
+            this.setState({ userMenuAnchor: null });
+            logout();
+          }}>
+            Logout
+          </MenuItem>
+        </Menu>
       </Fragment>
     )
   }
