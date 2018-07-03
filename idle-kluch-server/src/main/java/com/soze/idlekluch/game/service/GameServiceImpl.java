@@ -4,11 +4,13 @@ import com.soze.idlekluch.core.aop.annotations.AuthLog;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.message.*;
+import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
+import com.soze.idlekluch.world.repository.WorldRepository;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.engine.RemovedEntityEvent;
@@ -34,25 +36,29 @@ public class GameServiceImpl implements GameService {
   private final BuildingService buildingService;
   private final GameEngine gameEngine;
   private final EntityConverter entityConverter;
+  private final WorldRepository worldRepository;
 
   @Autowired
   public GameServiceImpl(final WorldService worldService,
                          final WebSocketMessagingService webSocketMessagingService,
                          final BuildingService buildingService,
                          final GameEngine gameEngine,
-                         final EntityConverter entityConverter) {
+                         final EntityConverter entityConverter,
+                         final WorldRepository worldRepository) {
     this.worldService = Objects.requireNonNull(worldService);
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
     this.buildingService = Objects.requireNonNull(buildingService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.entityConverter = Objects.requireNonNull(entityConverter);
+    this.worldRepository = Objects.requireNonNull(worldRepository);
   }
 
   /**
-   * Responsibilities right now:
-   * 1. Send all tile data to the joining player
-   * 2. Send all entities to the joining player
-   * 3. Send a list of all constructable buildings to the joining player
+   * List of what is being sent to the joining player:
+   * 1. Send all tile data
+   * 2. Send all entities
+   * 3. Send a list of all constructable buildings
+   * 4. Send all available resources
    */
   @Override
   @Profiled
@@ -74,6 +80,10 @@ public class GameServiceImpl implements GameService {
                                                                .map(entityConverter::toMessage)
                                                                .collect(Collectors.toList());
     webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, new BuildingListMessage(convertedBuildingDefinitions));
+
+    final List<Resource> resources = worldRepository.getAllAvailableResources();
+    final ResourceListMessage resourceListMessage = new ResourceListMessage(resources);
+    webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, resourceListMessage);
   }
 
   @Override
