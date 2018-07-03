@@ -9,7 +9,7 @@ export class LinearProgress extends Component {
     return (
       <VendorLinearProgress
         mode={"indeterminate"}
-        color={"red"}
+        color={"primary"}
         style={isFetching ? {} : { visibility: "hidden" }}
       />
     );
