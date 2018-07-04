@@ -33,7 +33,7 @@ export class SelectedEntityInfo extends Component {
   getHarvestingComponent = () => {
     const { selectedEntity, getResourceByName } = this.props;
     const harvester = selectedEntity.getComponent(ResourceHarvesterComponent);
-    if(!harvester) {
+    if (!harvester) {
       return null;
     }
 
@@ -49,7 +49,7 @@ export class SelectedEntityInfo extends Component {
         <div>
           <LinearProgress variant={"determinate"} value={value}/>
         </div>
-        <Divider />
+        <Divider/>
       </Fragment>
     )
   };
