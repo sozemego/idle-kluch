@@ -5,12 +5,13 @@ import { PhysicsComponent } from "../components/PhysicsComponent";
 
 export class ResourceStorageRendererSystem {
 
-  constructor(engine, textGroup, textFactory) {
+  constructor(engine, textGroup, textFactory, getSelectedEntity) {
     this.engine = engine;
     this.node = Node.of([ PhysicsComponent, ResourceStorageComponent ]);
     this.textGroup = textGroup;
     this.textFactory = textFactory;
     this.texts = {};
+    this.getSelectedEntity = getSelectedEntity;
   }
 
   getEngine() {
@@ -20,13 +21,22 @@ export class ResourceStorageRendererSystem {
   shouldUpdate = () => true;
 
   update = (delta) => {
+    const selectedEntity = this.getSelectedEntity() || { getId: () => null };
+
     this.getEngine()
       .getEntitiesByNode(this.node)
+      .map(entity => {
+        const text = this.getText(entity.getId());
+        text.kill();
+        return entity;
+      })
+      .filter(entity => entity.getId() === selectedEntity.getId())
       .forEach((entity) => this.updateEntity(entity, delta));
   }
 
   updateEntity = (entity, delta) => {
     const text = this.getText(entity.getId());
+    text.revive();
     const physicsComponent = entity.getComponent(PhysicsComponent);
     const storageComponent = entity.getComponent(ResourceStorageComponent);
 
