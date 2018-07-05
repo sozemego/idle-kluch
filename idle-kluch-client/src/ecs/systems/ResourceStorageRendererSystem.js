@@ -40,8 +40,8 @@ export class ResourceStorageRendererSystem {
     const physicsComponent = entity.getComponent(PhysicsComponent);
     const storageComponent = entity.getComponent(ResourceStorageComponent);
 
-    text.x = physicsComponent.getX();
-    text.y = physicsComponent.getY() - 16;
+    text.x = physicsComponent.getX() + physicsComponent.getWidth();
+    text.y = physicsComponent.getY();
     text.text = storageComponent.getResources().length + "/" + storageComponent.getCapacity();
 
   }
