@@ -448,7 +448,7 @@ const createGame = () => {
       engine.addSystem(new PhysicsSystem(engine));
       engine.addSystem(new GraphicsSystem(engine));
       engine.addSystem(new ResourceHarvesterSystem(engine));
-      engine.addSystem(new ResourceHarvesterRendererSystem(engine, game.add));
+      engine.addSystem(new ResourceHarvesterRendererSystem(engine, game.add, getSelectedEntity));
       engine.addSystem(new ResourceStorageRendererSystem(engine, game.add.group(), game.make, getSelectedEntity));
       engine.addSystem(new EntityNameRendererSystem(engine, game.add.group(), game.make, getSelectedEntity));
 

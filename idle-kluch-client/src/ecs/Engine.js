@@ -116,4 +116,8 @@ export class Engine {
     this.updating = false;
   };
 
+  static nullInstance() {
+    return { getId: () => null };
+  }
+
 }

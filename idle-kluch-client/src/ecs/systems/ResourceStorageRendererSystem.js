@@ -2,6 +2,7 @@ import Node from "../Node";
 import { ResourceStorageComponent } from "../components/ResourceStorageComponent";
 import { PhysicsComponent } from "../components/PhysicsComponent";
 import { IN_GAME_FONT_SIZE } from "../../game/constants";
+import { Engine as Entity } from "../Engine";
 
 
 export class ResourceStorageRendererSystem {
@@ -22,7 +23,7 @@ export class ResourceStorageRendererSystem {
   shouldUpdate = () => true;
 
   update = (delta) => {
-    const selectedEntity = this.getSelectedEntity() || { getId: () => null };
+    const selectedEntity = this.getSelectedEntity() || Entity.nullInstance();
 
     this.getEngine()
       .getEntitiesByNode(this.node)

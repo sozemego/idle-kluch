@@ -3,6 +3,7 @@ import { ResourceStorageComponent } from "../components/ResourceStorageComponent
 import { PhysicsComponent } from "../components/PhysicsComponent";
 import { IN_GAME_FONT_SIZE } from "../../game/constants";
 import { NameComponent } from "../components/NameComponent";
+import { Engine as Entity } from "../Engine";
 
 
 export class EntityNameRendererSystem {
@@ -23,7 +24,7 @@ export class EntityNameRendererSystem {
   shouldUpdate = () => true;
 
   update = (delta) => {
-    const selectedEntity = this.getSelectedEntity() || { getId: () => null };
+    const selectedEntity = this.getSelectedEntity() || Entity.nullInstance();
 
     this.getEngine()
       .getEntitiesByNode(this.node)
