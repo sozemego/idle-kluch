@@ -1,6 +1,7 @@
 import Node from "../Node";
 import { ResourceStorageComponent } from "../components/ResourceStorageComponent";
 import { PhysicsComponent } from "../components/PhysicsComponent";
+import { IN_GAME_FONT_SIZE } from "../../game/constants";
 
 
 export class ResourceStorageRendererSystem {
@@ -41,7 +42,7 @@ export class ResourceStorageRendererSystem {
     const storageComponent = entity.getComponent(ResourceStorageComponent);
 
     text.x = physicsComponent.getX() + physicsComponent.getWidth();
-    text.y = physicsComponent.getY();
+    text.y = physicsComponent.getY() + IN_GAME_FONT_SIZE;
     text.text = storageComponent.getResources().length + "/" + storageComponent.getCapacity();
 
   }
@@ -49,7 +50,7 @@ export class ResourceStorageRendererSystem {
   getText = (id) => {
     let text = this.texts[ id ];
     if (!text) {
-      text = this.textFactory.text(0, 0, "", { font: "16px Arial", fill: "rgba(255, 255, 255, 0.9)", stroke: "black" });
+      text = this.textFactory.text(0, 0, "", { font: `${IN_GAME_FONT_SIZE}px Arial`, fill: "rgba(255, 255, 255, 0.9)", stroke: "black" });
       this.textGroup.add(text);
       this.texts[ id ] = text;
     }

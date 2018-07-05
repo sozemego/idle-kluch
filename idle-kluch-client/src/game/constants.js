@@ -32,6 +32,8 @@ export const MAX_HEIGHT = 2500;
 
 export const ZOOM_AMOUNT = 0.125;
 
+export const IN_GAME_FONT_SIZE = 16;
+
 export const IMAGES = {
   "grass_1": "grass_1.png",
   "grass_1_outline": "grass_1_outline.png",
