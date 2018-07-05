@@ -5,15 +5,17 @@ import { Engine as Entity } from "../Engine";
 
 export class ResourceHarvesterRendererSystem {
 
-  constructor(engine, spriteFactory, getSelectedEntity) {
+  constructor(engine, spriteFactory, getSelectedEntity, entitySelector) {
     this.engine = engine;
     this.spriteFactory = spriteFactory;
     this.node = Node.of([ ResourceHarvesterComponent, PhysicsComponent ]);
     this.sprites = {};
     this.getSelectedEntity = getSelectedEntity;
+    this.entitySelector = entitySelector;
   }
 
   update = delta => {
+    this.entitySelector.clear();
     const entities = this.getEngine().getEntitiesByNode(this.node);
     const selectedEntity = this.getSelectedEntity() || Entity.nullInstance();
     entities.forEach(entity => this.updateEntity(entity, selectedEntity));
@@ -33,8 +35,8 @@ export class ResourceHarvesterRendererSystem {
     sprite.width = physicsComponent.getWidth() * harvesterComponent.getProgress();
     sprite.height = 12;
 
-    if(selectedEntity.getId() === entity.getId()) {
-      //do something
+    if (selectedEntity.getId() === entity.getId()) {
+      harvesterComponent.getSources().forEach(this.renderSource);
     }
   };
 
@@ -46,6 +48,19 @@ export class ResourceHarvesterRendererSystem {
     }
     return sprite;
   };
+
+  renderSource = (source) => {
+    const id = source.id;
+    const sourceEntity = this.getEngine().getEntityById(id);
+    const physicsComponent = sourceEntity.getComponent(PhysicsComponent);
+    this.entitySelector.clear();
+    this.entitySelector.lineStyle(2, 0xdd00dd, 1);
+    this.entitySelector.drawRect(
+      physicsComponent.getX(), physicsComponent.getY(),
+      physicsComponent.getWidth(), physicsComponent.getHeight(),
+    );
+  };
+
 
   getEngine = () => {
     return this.engine;
