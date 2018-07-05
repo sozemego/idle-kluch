@@ -22,14 +22,12 @@ class CreateKingdomForm extends Component {
   };
 
   onKingdomNameChange = (e, kingdomName) => {
-    this.setState({ kingdomName });
+    this.setState({ kingdomName: e.target.value });
   };
 
   render() {
     const { kingdomNameRegistrationError } = this.props;
-
     const { kingdomName } = this.state;
-
     const { onKingdomNameChange, onSubmit } = this;
 
     return (
@@ -40,17 +38,18 @@ class CreateKingdomForm extends Component {
           <TextField
             value={kingdomName}
             onChange={onKingdomNameChange}
-            floatingLabelFixed
-            floatingLabelText={"Kingdom name"}
-            errorText={kingdomNameRegistrationError}
+            label={"Kingdom name"}
+            error={Boolean(kingdomNameRegistrationError)}
           />
         </div>
+        {kingdomNameRegistrationError}
         <Button
-          label={"Create kingdom!"}
           onClick={onSubmit}
           className={styles.submit_button}
-          variant={"Contained"}
-        />
+          variant={"outlined"}
+        >
+          Create kingdom!
+        </Button>
       </div>
     );
   }
