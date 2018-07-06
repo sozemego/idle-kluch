@@ -50,8 +50,7 @@ export class ResourceHarvesterRendererSystem {
   };
 
   renderSource = (source) => {
-    const id = source.id;
-    const sourceEntity = this.getEngine().getEntityById(id);
+    const sourceEntity = this.getEngine().getEntityById(source.id);
     const physicsComponent = sourceEntity.getComponent(PhysicsComponent);
     this.entitySelector.clear();
     this.entitySelector.lineStyle(2, 0xdd00dd, 1);
