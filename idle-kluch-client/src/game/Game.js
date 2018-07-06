@@ -4,7 +4,7 @@ import * as GAME_ACTIONS from "./actions";
 import { onCanvasClicked } from "./actions";
 import { GameService as gameService } from "./GameService";
 import * as APP_ACTIONS from "../app/actions";
-import { createReducer } from "../store/utils";
+import { createReducer, makeSetter } from "../store/utils";
 import * as KINGDOM_ACTIONS from "../kingdom/actions";
 import { Engine } from "../ecs/Engine";
 import { GraphicsComponent } from "../ecs/components/GraphicsComponent";
@@ -248,14 +248,6 @@ const startHarvesting = (state, action) => {
   return state;
 };
 
-const setSelectedEntity = (state, action) => {
-  return { ...state, selectedEntity: action.payload };
-};
-
-const setResources = (state, action) => {
-  return { ...state, resources: action.payload };
-};
-
 const attachTileSpawnAnimation = (tileSprites) => {
   [...tileSprites]
     .sort((a, b) => b.y - a.y) //so tiles that are lower are spawned first
@@ -276,8 +268,9 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.REMOVE_ENTITY ]: removeEntity,
   [ GAME_ACTIONS.SET_RUNNING_STATE]: setRunningState,
   [ GAME_ACTIONS.START_HARVESTING ]: startHarvesting,
-  [ GAME_ACTIONS.SET_SELECTED_ENTITY]: setSelectedEntity,
-  [ GAME_ACTIONS.SET_RESOURCES]: setResources,
+  [ GAME_ACTIONS.SET_SELECTED_ENTITY]: makeSetter("selectedEntity"),
+  [ GAME_ACTIONS.SET_RESOURCES]: makeSetter("resources"),
+  [ GAME_ACTIONS.SET_ENGINE]: makeSetter("engine"),
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });

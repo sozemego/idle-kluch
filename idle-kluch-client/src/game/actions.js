@@ -5,6 +5,7 @@ import createGame from "./Game";
 import { getConstructableBuildingsData, getKingdom, getSelectedConstructableBuilding } from "../kingdom/selectors";
 import { idleBucksChanged, setSelectedConstructableBuilding } from "../kingdom/actions";
 import { checkRectangleIntersectsCollidableEntities, doesContain, findComponent } from "../ecs/utils";
+import { getEngine } from "./selectors";
 import { COMPONENT_TYPES } from "./constants";
 import { default as undoActions } from "./UndoActions";
 
@@ -32,6 +33,9 @@ export const setSelectedEntity = makeActionCreator(SET_SELECTED_ENTITY, "payload
 export const SET_RESOURCES = "SET_RESOURCES";
 export const setResources = makeActionCreator(SET_RESOURCES, "payload");
 
+export const SET_ENGINE = "SET_ENGINE";
+export const setEngine = makeActionCreator(SET_ENGINE, "payload");
+
 let gameContainer = null;
 
 export const connect = () => {
@@ -44,7 +48,10 @@ export const connect = () => {
 export const startGame = () => {
   return (dispatch, getState) => {
     return createGame()
-      .then(data => gameContainer = data);
+      .then(data => {
+        dispatch(setEngine(data.engine));
+        gameContainer = data;
+      });
   };
 };
 
@@ -68,15 +75,15 @@ export const onCanvasClicked = (x, y) => {
       //check player money
       const kingdom = getKingdom(getState);
       const costComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.COST);
-      if(kingdom.idleBucks < costComponent.idleBucks) {
+      if (kingdom.idleBucks < costComponent.idleBucks) {
         return Promise.resolve();
       }
 
       //check if doesn't collide with any other entities
       const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
       const bounds = new Phaser.Rectangle(physicsComponent.x, physicsComponent.y, physicsComponent.width, physicsComponent.height);
-      const selectedConstructableBuildingCollides = checkRectangleIntersectsCollidableEntities(gameContainer.engine, bounds);
-      if(selectedConstructableBuildingCollides) {
+      const selectedConstructableBuildingCollides = checkRectangleIntersectsCollidableEntities(getEngine(getState), bounds);
+      if (selectedConstructableBuildingCollides) {
         return Promise.resolve();
       }
 

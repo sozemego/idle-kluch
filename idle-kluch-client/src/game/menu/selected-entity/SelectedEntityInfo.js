@@ -6,6 +6,7 @@ import style from "./selected-entity-info.css";
 import { Divider, LinearProgress } from "@material-ui/core";
 import { ResourceHarvesterComponent } from "../../../ecs/components/ResourceHarvesterComponent";
 import { HARVESTING_STATE } from "../../../ecs/constants";
+import { ResourceSourceComponent } from "../../../ecs/components/ResourceSourceComponent";
 
 export class SelectedEntityInfo extends Component {
 
@@ -41,6 +42,9 @@ export class SelectedEntityInfo extends Component {
     const harvestingState = harvester.getState();
     const value = harvestingState === HARVESTING_STATE.WAITING ? 0 : harvester.getProgress() * 100;
 
+    const harvestingStats = this.getHarvestingStats();
+    const { unitsPerMinute, bonus, baseUnitsPerMinute } = harvestingStats;
+
     return (
       <Fragment>
         <div className={style.harvester_header}>
@@ -49,10 +53,41 @@ export class SelectedEntityInfo extends Component {
         <div>
           <LinearProgress variant={"determinate"} value={value}/>
         </div>
+        <div>
+          {`${unitsPerMinute} per minute (base ${baseUnitsPerMinute})`}
+        </div>
+        <div>
+          {bonus === 1 ? "No bonus" : `Bonus multiplier ${bonus}`}
+        </div>
         <Divider/>
       </Fragment>
     )
   };
+
+  getHarvestingStats = () => {
+    const { selectedEntity } = this.props;
+
+    const resourceHarvesterComponent = selectedEntity.getComponent(ResourceHarvesterComponent);
+    const unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
+    const bonus = this.getBonus(resourceHarvesterComponent.getSources());
+
+    return {
+      baseUnitsPerMinute: unitsPerMinute,
+      unitsPerMinute: unitsPerMinute * bonus,
+      bonus,
+    };
+  };
+
+  getBonus = (sources) => {
+    const { getEntityById } = this.props;
+    return sources
+      .map(source => getEntityById(source.id))
+      .map(entity => {
+        const resourceSource = entity.getComponent(ResourceSourceComponent);
+        return resourceSource.getBonus();
+      })
+      .reduce((prev, next) => prev * next, 1);
+  }
 
   render() {
     const {
@@ -73,4 +108,5 @@ export class SelectedEntityInfo extends Component {
 SelectedEntityInfo.propTypes = {
   selectedEntity: PropTypes.instanceOf(Entity).isRequired,
   getResourceByName: PropTypes.func.isRequired,
+  getEntityById: PropTypes.func.isRequired,
 };
