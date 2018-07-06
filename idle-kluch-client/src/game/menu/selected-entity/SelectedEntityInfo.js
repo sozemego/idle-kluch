@@ -47,12 +47,12 @@ export class SelectedEntityInfo extends Component {
 
     return (
       <Fragment>
+        <span>Harvesting</span>
+        <Divider />
         <div className={style.harvester_header}>
           <img className={style.resource_icon} src={`/resources/${resource.name}.png`}/>{harvestingState}
         </div>
-        <div>
-          <LinearProgress variant={"determinate"} value={value}/>
-        </div>
+        <LinearProgress variant={"determinate"} value={value}/>
         <div>
           {`${unitsPerMinute} per minute (base ${baseUnitsPerMinute})`}
         </div>
