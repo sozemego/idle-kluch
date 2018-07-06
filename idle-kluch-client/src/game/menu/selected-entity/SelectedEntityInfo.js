@@ -7,11 +7,13 @@ import { Divider, LinearProgress } from "@material-ui/core";
 import { ResourceHarvesterComponent } from "../../../ecs/components/ResourceHarvesterComponent";
 import { HARVESTING_STATE } from "../../../ecs/constants";
 import { ResourceSourceComponent } from "../../../ecs/components/ResourceSourceComponent";
+import { ResourceStorageComponent } from "../../../ecs/components/ResourceStorageComponent";
+import { Chip } from "@material-ui/core/es/index";
 
 export class SelectedEntityInfo extends Component {
 
   componentDidMount = () => {
-    this.interval = setInterval(() => this.setState({}), 16);
+    this.interval = setInterval(() => this.setState({}), 250);
   };
 
   componentWillUnmount = () => {
@@ -22,23 +24,23 @@ export class SelectedEntityInfo extends Component {
     const { selectedEntity } = this.props;
     const nameComponent = selectedEntity.getComponent(NameComponent);
     return (
-      <Fragment>
+      <div className={style.section}>
         <div className={style.name_container}>
           {nameComponent.getName()}
         </div>
         <Divider/>
-      </Fragment>
+      </div>
     );
   };
 
   getHarvestingComponent = () => {
-    const { selectedEntity, getResourceByName } = this.props;
+    const { selectedEntity } = this.props;
     const harvester = selectedEntity.getComponent(ResourceHarvesterComponent);
     if (!harvester) {
       return null;
     }
 
-    const resource = getResourceByName(harvester.getResource().name);
+    const resource = harvester.getResource();
     const harvestingState = harvester.getState();
     const value = harvestingState === HARVESTING_STATE.WAITING ? 0 : harvester.getProgress() * 100;
 
@@ -46,9 +48,8 @@ export class SelectedEntityInfo extends Component {
     const { unitsPerMinute, bonus, baseUnitsPerMinute } = harvestingStats;
 
     return (
-      <Fragment>
+      <div className={style.section}>
         <span>Harvesting</span>
-        <Divider />
         <div className={style.harvester_header}>
           <img className={style.resource_icon} src={`/resources/${resource.name}.png`}/>{harvestingState}
         </div>
@@ -60,7 +61,7 @@ export class SelectedEntityInfo extends Component {
           {bonus === 1 ? "No bonus" : `Bonus multiplier ${bonus}`}
         </div>
         <Divider/>
-      </Fragment>
+      </div>
     )
   };
 
@@ -87,18 +88,68 @@ export class SelectedEntityInfo extends Component {
         return resourceSource.getBonus();
       })
       .reduce((prev, next) => prev * next, 1);
-  }
+  };
+
+  getStorageComponent = () => {
+    const { selectedEntity, getResourceByName } = this.props;
+    const storageComponent = selectedEntity.getComponent(ResourceStorageComponent);
+    if (!storageComponent) {
+      return null;
+    }
+
+    const resourceCounts = this.getResourceCounts();
+    console.log(resourceCounts);
+
+    return (
+      <div className={style.section}>
+        <span>Storage</span>
+        <div className={style.storage_container}>
+          {resourceCounts.map(resource => {
+            return (
+              <Chip
+                label={resource.count}
+                avatar={
+                  <img className={style.resource_icon} src={`/resources/${resource.name}.png`}/>
+                }
+              />
+            )
+          })}
+        </div>
+        <Divider />
+      </div>
+    );
+  };
+
+  getResourceCounts = () => {
+    const { selectedEntity } = this.props;
+    const storageComponent = selectedEntity.getComponent(ResourceStorageComponent);
+    const resources = storageComponent.getResources();
+    const resourceMap = resources.reduce((prev, curr) => {
+      if(!prev[curr.name]) {
+        prev[curr.name] = {
+          count: 0,
+          name: curr.name,
+        }
+      }
+      prev[curr.name].count++;
+      return prev;
+    }, {});
+
+    return Object.values(resourceMap);
+  };
 
   render() {
     const {
       getNameComponent,
       getHarvestingComponent,
+      getStorageComponent,
     } = this;
 
     return (
       <div>
         {getNameComponent()}
         {getHarvestingComponent()}
+        {getStorageComponent()}
       </div>
     )
   }
