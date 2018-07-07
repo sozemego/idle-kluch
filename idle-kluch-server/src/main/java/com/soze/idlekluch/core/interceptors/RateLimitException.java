@@ -6,7 +6,7 @@ public class RateLimitException extends RuntimeException {
 
   private final LimitedResource limitedResource;
   private final RateLimit rateLimit;
-  private final long nextRequest; //time in seconds when a valid request can be made
+  private final long nextRequest; //time in seconds after which valid request can be made
 
   public RateLimitException(final LimitedResource limitedResource, final RateLimit rateLimit, final long nextRequest) {
     this.limitedResource = Objects.requireNonNull(limitedResource);

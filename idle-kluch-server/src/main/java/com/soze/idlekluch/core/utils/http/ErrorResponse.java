@@ -38,11 +38,6 @@ public class ErrorResponse {
     return new HashMap<>(data);
   }
 
-  public void put(final String key, final Object value) {
-    Objects.requireNonNull(key);
-    data.put(key, value);
-  }
-
   public void addData(final String key, final Object value) {
     Objects.requireNonNull(key);
     Objects.requireNonNull(value);
