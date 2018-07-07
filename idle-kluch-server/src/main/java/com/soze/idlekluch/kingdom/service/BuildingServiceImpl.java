@@ -87,7 +87,10 @@ public class BuildingServiceImpl implements BuildingService {
       final PhysicsComponent physicsComponent = building.getComponent(PhysicsComponent.class);
       final List<Entity> resources = resourceService.getResourceSourcesInRadius(
         resourceHarvesterComponent.getResource(),
-        new Point((int) physicsComponent.getX(), (int) physicsComponent.getY()),
+        new Point(
+          (int) physicsComponent.getX() - (physicsComponent.getWidth() / 2),
+          (int) physicsComponent.getY() - (physicsComponent.getHeight() / 2)
+        ),
         resourceHarvesterComponent.getRadius()
       );
 

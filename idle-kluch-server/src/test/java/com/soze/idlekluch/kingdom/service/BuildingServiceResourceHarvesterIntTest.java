@@ -4,6 +4,9 @@ import com.soze.idlekluch.IntAuthTest;
 import com.soze.idlekluch.RootConfig;
 import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.game.engine.components.ResourceSourceComponent;
+import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
+import com.soze.idlekluch.game.engine.systems.ResourceHarvesterSystem;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
@@ -28,8 +31,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(
@@ -103,13 +109,7 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
 
     final List<Entity> woodSources = resourceService.getResourceEntityTemplates("Wood");
     final Entity forestTemplate = woodSources.get(0);
-    final Entity forest = gameEngine.createEmptyEntity();
-    entityConverter.copyEntity(forestTemplate, forest);
-
-    final PhysicsComponent physicsComponent = forest.getComponent(PhysicsComponent.class);
-    physicsComponent.setX(2000);
-    physicsComponent.setY(2000);
-    gameEngine.addEntity(forest);
+    resourceService.placeResourceSource((EntityUUID) forestTemplate.getId(), new Point(2000, 2000));
 
     final String username = CommonUtils.generateRandomString(12);
     createKingdom(username, CommonUtils.generateRandomString(12));
@@ -135,13 +135,7 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
 
     final List<Entity> woodSources = resourceService.getResourceEntityTemplates("Wood");
     final Entity forestTemplate = woodSources.get(0);
-    final Entity forest = gameEngine.createEmptyEntity();
-    entityConverter.copyEntity(forestTemplate, forest);
-
-    final PhysicsComponent physicsComponent = forest.getComponent(PhysicsComponent.class);
-    physicsComponent.setX(170);
-    physicsComponent.setY(170);
-    gameEngine.addEntity(forest);
+    resourceService.placeResourceSource((EntityUUID) forestTemplate.getId(), new Point(170, 170));
 
     final String username = CommonUtils.generateRandomString(12);
     createKingdom(username, CommonUtils.generateRandomString(12));
@@ -153,6 +147,37 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
         buildingTile.getX() - 25,
         buildingTile.getY() - 25
       ));
+  }
+
+  @Test
+  public void testPlaceHarvesterShouldAttachToHighestBonusSource() {
+    final Tile buildingTile = new Tile(new TileId(0, 0));
+    worldRepository.addTile(buildingTile);
+
+    final List<Entity> woodSources = resourceService.getResourceEntityTemplates("Wood");
+    final Entity forestTemplate = woodSources.get(0);
+    final ResourceSourceComponent forestSource = forestTemplate.getComponent(ResourceSourceComponent.class);
+    final float forestBonus = forestSource.getBonus();
+    resourceService.placeResourceSource((EntityUUID) forestTemplate.getId(), new Point(170, 170));
+
+    final Entity smallForestTemplate = woodSources.get(1);
+    resourceService.placeResourceSource((EntityUUID) smallForestTemplate.getId(), new Point(-170, -170));
+
+    final String username = CommonUtils.generateRandomString(12);
+    createKingdom(username, CommonUtils.generateRandomString(12));
+    final Entity building = buildingService.buildBuilding(
+      username,
+      new BuildBuildingForm(
+        EntityUUID.randomId().toString(),
+        WOODCUTTER_ID,
+        buildingTile.getX() - 25,
+        buildingTile.getY() - 25
+      ));
+
+    final ResourceHarvesterComponent resourceHarvesterComponent = building.getComponent(ResourceHarvesterComponent.class);
+    final Entity chosenSource = gameEngine.getEntity(resourceHarvesterComponent.getSources().get(0).getSourceId()).get();
+    final ResourceSourceComponent source = chosenSource.getComponent(ResourceSourceComponent.class);
+    assertEquals(source.getBonus(), forestBonus, 0.01);
   }
 
 }
