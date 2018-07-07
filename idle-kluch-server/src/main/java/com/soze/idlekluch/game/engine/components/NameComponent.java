@@ -22,9 +22,8 @@ public class NameComponent extends BaseComponent {
     super(ComponentType.NAME);
   }
 
-  public NameComponent(final EntityUUID entityId, final String name) {
+  public NameComponent(final String name) {
     this();
-    setEntityId(entityId);
     this.name = Objects.requireNonNull(name);
   }
 
@@ -38,7 +37,7 @@ public class NameComponent extends BaseComponent {
 
   @Override
   public NameComponent copy() {
-    return new NameComponent(getEntityId(), getName());
+    return new NameComponent(getName());
   }
 
   @Override

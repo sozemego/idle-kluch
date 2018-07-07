@@ -23,14 +23,8 @@ public class GraphicsComponent extends BaseComponent {
     super(ComponentType.GRAPHICS);
   }
 
-  public GraphicsComponent(final EntityUUID entityId, final String asset) {
+  public GraphicsComponent(final String asset) {
     this();
-    setEntityId(entityId);
-    this.asset = Objects.requireNonNull(asset);
-  }
-
-  public GraphicsComponent(String asset) {
-    super(ComponentType.GRAPHICS);
     this.asset = Objects.requireNonNull(asset);
   }
 
@@ -44,7 +38,7 @@ public class GraphicsComponent extends BaseComponent {
 
   @Override
   public GraphicsComponent copy() {
-    return new GraphicsComponent(getEntityId(), getAsset());
+    return new GraphicsComponent(getAsset());
   }
 
   @Override

@@ -28,9 +28,8 @@ public class ResourceStorageComponent extends BaseComponent {
     super(ComponentType.RESOURCE_STORAGE);
   }
 
-  public ResourceStorageComponent(final EntityUUID entityId, final int capacity) {
+  public ResourceStorageComponent(final int capacity) {
     this();
-    setEntityId(entityId);
     this.capacity = capacity;
   }
 
@@ -66,6 +65,6 @@ public class ResourceStorageComponent extends BaseComponent {
 
   @Override
   public BaseComponent copy() {
-    return new ResourceStorageComponent(getEntityId(), getCapacity());
+    return new ResourceStorageComponent(getCapacity());
   }
 }

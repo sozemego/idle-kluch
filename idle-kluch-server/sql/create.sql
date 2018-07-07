@@ -60,16 +60,8 @@ CREATE TABLE kingdoms (
 
 CREATE TABLE entities (
   entity_id uuid PRIMARY KEY,
-  template BOOLEAN NOT NULL DEFAULT false
-);
-
-CREATE TABLE physics_components (
-  entity_id uuid,
-  x real NOT NULL,
-  y real NOT NULL,
-  width real NOT NULL,
-  height real NOT NULL,
-  CONSTRAINT FK_PHYSICS_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
+  template BOOLEAN NOT NULL DEFAULT false,
+  physics_component jsonb
 );
 
 CREATE TABLE graphics_components (
@@ -139,24 +131,54 @@ CREATE TABLE resource_storage_components (
 );
 
 -- here entity templates live --
-INSERT INTO entities VALUES
-  ('7a4df465-b4c3-4e9f-854a-248988220dfb', true),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', true),
-  ('f520432b-4bf5-448f-95f4-14643e078288', true),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d', true),
-  ('24eba6e6-fe5f-4d14-86a4-cd80331beedf', true),
-  ('f0e8b54b-3944-41c8-a6b0-ac291c455cd0', true),
-  ('03c99070-66d5-4dea-b57a-39b4f308a505', true)
+
+INSERT INTO entities (entity_id, template, physics_component) VALUES
+  (
+    '7a4df465-b4c3-4e9f-854a-248988220dfb', true,
+    '{"x": 0, "y": 0, "width": 50, "height": 55, "type": "PHYSICS"}'
+  )
 ;
 
-INSERT INTO physics_components VALUES
-  ('7a4df465-b4c3-4e9f-854a-248988220dfb', 0, 0, 50, 55),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 0, 0, 80, 81),
-  ('f520432b-4bf5-448f-95f4-14643e078288', 0, 0, 64, 64),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d', 0, 0, 80, 81),
-  ('24eba6e6-fe5f-4d14-86a4-cd80331beedf', 0, 0, 64, 64),
-  ('f0e8b54b-3944-41c8-a6b0-ac291c455cd0', 0, 0, 64, 64),
-  ('03c99070-66d5-4dea-b57a-39b4f308a505', 0, 0, 64, 64)
+INSERT INTO entities (entity_id, template, physics_component) VALUES
+  (
+    '4517e8b9-de2e-473d-98e8-4c6c73c46c4d', true,
+    '{"x": 0, "y": 0, "width": 80, "height": 81, "type": "PHYSICS"}'
+  )
+;
+
+INSERT INTO entities (entity_id, template, physics_component) VALUES
+  (
+    'f520432b-4bf5-448f-95f4-14643e078288', true,
+    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}'
+  )
+;
+
+INSERT INTO entities (entity_id, template, physics_component) VALUES
+  (
+    '7e10d339-dc10-4204-914c-cdfb2039460d', true,
+    '{"x": 0, "y": 0, "width": 80, "height": 81, "type": "PHYSICS"}'
+  )
+;
+
+INSERT INTO entities (entity_id, template, physics_component) VALUES
+  (
+    '24eba6e6-fe5f-4d14-86a4-cd80331beedf', true,
+    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}'
+  )
+;
+
+INSERT INTO entities (entity_id, template, physics_component) VALUES
+  (
+    'f0e8b54b-3944-41c8-a6b0-ac291c455cd0', true,
+    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}'
+  )
+;
+
+INSERT INTO entities (entity_id, template, physics_component) VALUES
+  (
+    '03c99070-66d5-4dea-b57a-39b4f308a505', true,
+    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}'
+  )
 ;
 
 INSERT INTO graphics_components VALUES

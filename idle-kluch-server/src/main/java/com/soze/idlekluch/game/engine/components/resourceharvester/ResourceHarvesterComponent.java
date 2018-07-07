@@ -45,14 +45,12 @@ public class ResourceHarvesterComponent extends BaseComponent {
     super(ComponentType.RESOURCE_HARVESTER);
   }
 
-  public ResourceHarvesterComponent(final EntityUUID entityId,
-                                    final Resource resource,
+  public ResourceHarvesterComponent(final Resource resource,
                                     final float radius,
                                     final int unitsPerMinute,
                                     final int sourceSlots,
                                     final List<ResourceSourceSlot> sources) {
     this();
-    setEntityId(entityId);
     this.resource = Objects.requireNonNull(resource);
     this.radius = radius;
     this.unitsPerMinute = unitsPerMinute;
@@ -128,7 +126,6 @@ public class ResourceHarvesterComponent extends BaseComponent {
   @Override
   public ResourceHarvesterComponent copy() {
     return new ResourceHarvesterComponent(
-      getEntityId(),
       getResource(),
       getRadius(),
       getUnitsPerMinute(),

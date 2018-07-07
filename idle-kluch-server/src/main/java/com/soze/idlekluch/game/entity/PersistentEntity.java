@@ -3,6 +3,7 @@ package com.soze.idlekluch.game.entity;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.*;
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
@@ -25,8 +26,8 @@ public class PersistentEntity {
   @JoinColumn(name = "entity_id")
   private GraphicsComponent graphicsComponent;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "entity_id")
+  @Column(name = "physics_component")
+  @Type(type = "PhysicsComponentType")
   private PhysicsComponent physicsComponent;
 
   @OneToOne(cascade = CascadeType.ALL)

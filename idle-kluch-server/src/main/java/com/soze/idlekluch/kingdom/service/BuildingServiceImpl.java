@@ -108,7 +108,6 @@ public class BuildingServiceImpl implements BuildingService {
 
     final OwnershipComponent ownershipComponent = new OwnershipComponent();
     ownershipComponent.setOwnerId(kingdom.getKingdomId());
-    ownershipComponent.setEntityId((EntityUUID) building.getId());
     building.addComponent(ownershipComponent);
 
     gameEngine.addEntity(building);

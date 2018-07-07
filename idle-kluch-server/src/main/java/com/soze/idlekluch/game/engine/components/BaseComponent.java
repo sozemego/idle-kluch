@@ -14,7 +14,7 @@ import java.util.Objects;
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.EXISTING_PROPERTY,
-  property = "componentType",
+  property = "type",
   visible = true
 )
 @JsonSubTypes({
@@ -32,11 +32,6 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseComponent {
 
-  @EmbeddedId
-  @AttributeOverride(name = "id", column = @Column(name = "entity_id"))
-  @JsonUnwrapped
-  private EntityUUID entityId;
-
   @Transient
   private ComponentType componentType;
 
@@ -50,14 +45,6 @@ public abstract class BaseComponent {
 
   public ComponentType getComponentType() {
     return componentType;
-  }
-
-  public EntityUUID getEntityId() {
-    return entityId;
-  }
-
-  public void setEntityId(final EntityUUID entityId) {
-    this.entityId = Objects.requireNonNull(entityId);
   }
 
   /**
@@ -79,7 +66,6 @@ public abstract class BaseComponent {
   @Override
   public String toString() {
     return "BaseComponent{" +
-             "entityId=" + entityId +
              ", componentType=" + componentType +
              '}';
   }

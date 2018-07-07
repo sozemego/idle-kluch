@@ -1,13 +1,13 @@
 package com.soze.idlekluch.game.engine.components;
 
-import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.game.entity.PhysicsComponentType;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.Embeddable;
 
-@Entity
-@Table(name = "physics_components")
+@Embeddable
+@TypeDef(name = "PhysicsComponentType", typeClass = PhysicsComponentType.class)
 public class PhysicsComponent extends BaseComponent {
 
   @Column(name = "x")
@@ -24,9 +24,8 @@ public class PhysicsComponent extends BaseComponent {
     super(ComponentType.PHYSICS);
   }
 
-  public PhysicsComponent(final EntityUUID entityId, final float x, final float y, final int width, final int height) {
+  public PhysicsComponent(final float x, final float y, final int width, final int height) {
     this();
-    setEntityId(entityId);
     this.x = x;
     this.y = y;
     this.width = width;
@@ -67,7 +66,7 @@ public class PhysicsComponent extends BaseComponent {
 
   @Override
   public PhysicsComponent copy() {
-    return new PhysicsComponent(getEntityId(), getX(), getY(), getWidth(), getHeight());
+    return new PhysicsComponent(getX(), getY(), getWidth(), getHeight());
   }
 
   @Override

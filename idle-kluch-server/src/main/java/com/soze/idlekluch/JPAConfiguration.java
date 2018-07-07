@@ -82,7 +82,7 @@ public class JPAConfiguration {
     properties.put("hibernate.order_inserts", true);
     properties.put("hibernate.order_updates", true);
     HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
-    adapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect"); //you can change this if you have a different DB
+    adapter.setDatabasePlatform("com.soze.idlekluch.JsonPostgreSQLDialect"); //you can change this if you have a different DB
     adapter.setGenerateDdl(false);
     adapter.setShowSql(false);
 

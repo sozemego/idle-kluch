@@ -1,7 +1,5 @@
 package com.soze.idlekluch.game.engine.components;
 
-import com.soze.idlekluch.core.utils.jpa.EntityUUID;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -16,14 +14,9 @@ public class StaticOccupySpaceComponent extends BaseComponent {
     super(ComponentType.STATIC_OCCUPY_SPACE);
   }
 
-  public StaticOccupySpaceComponent(final EntityUUID entityId) {
-    this();
-    setEntityId(entityId);
-  }
-
   @Override
   public StaticOccupySpaceComponent copy() {
-    return new StaticOccupySpaceComponent(getEntityId());
+    return new StaticOccupySpaceComponent();
   }
 
   @Override

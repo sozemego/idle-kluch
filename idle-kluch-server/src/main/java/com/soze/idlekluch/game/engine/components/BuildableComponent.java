@@ -17,14 +17,9 @@ public class BuildableComponent extends BaseComponent {
     super(ComponentType.BUILDABLE);
   }
 
-  public BuildableComponent(final EntityUUID entityId) {
-    this();
-    setEntityId(entityId);
-  }
-
   @Override
   public BuildableComponent copy() {
-    return new BuildableComponent(getEntityId());
+    return new BuildableComponent();
   }
 
   @Override

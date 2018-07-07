@@ -16,9 +16,8 @@ public class CostComponent extends BaseComponent {
   @Column(name = "idle_bucks")
   private int idleBucks;
 
-  public CostComponent(final EntityUUID entityId, final int idleBucks) {
+  public CostComponent(final int idleBucks) {
     this();
-    setEntityId(entityId);
     this.idleBucks = idleBucks;
   }
 
@@ -36,7 +35,7 @@ public class CostComponent extends BaseComponent {
 
   @Override
   public CostComponent copy() {
-    return new CostComponent(getEntityId(), getIdleBucks());
+    return new CostComponent(getIdleBucks());
   }
 
   @Override

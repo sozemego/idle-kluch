@@ -68,7 +68,6 @@ public class ResourceHarvesterComponentIntTest {
     final PersistentEntity pe = new PersistentEntity();
     pe.setEntityId(id);
     final ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
-    resourceHarvesterComponent.setEntityId(id);
     resourceHarvesterComponent.setSourceSlots(3);
     resourceHarvesterComponent.setSource(sourceId, 2);
     resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
@@ -99,7 +98,6 @@ public class ResourceHarvesterComponentIntTest {
     final PersistentEntity pe = new PersistentEntity();
     pe.setEntityId(id);
     final ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
-    resourceHarvesterComponent.setEntityId(id);
     resourceHarvesterComponent.setSourceSlots(25);
     resourceHarvesterComponent.setSource(sourceId, 12);
     final List<ResourceSourceSlot> slots = resourceHarvesterComponent.getSources();

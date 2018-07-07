@@ -76,10 +76,7 @@ public class EntityConverter {
     source.getAllComponents(BaseComponent.class)
       .stream()
       .map(BaseComponent::copy)
-      .forEach(component -> {
-        component.setEntityId((EntityUUID) target.getId());
-        target.addComponent(component);
-      });
+      .forEach(target::addComponent);
   }
 
 }

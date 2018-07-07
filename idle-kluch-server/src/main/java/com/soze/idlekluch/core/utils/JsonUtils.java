@@ -25,10 +25,19 @@ public final class JsonUtils {
    * If the conversion fails, wraps {@link JsonProcessingException} in {@link IllegalArgumentException}.
    */
   public static String objectToJson(final Object object) {
+    return objectToJson(object, MAPPER);
+  }
+
+  /**
+   * Attempts to stringify a given object to json.
+   * If the conversion fails, wraps {@link JsonProcessingException} in {@link IllegalArgumentException}.
+   */
+  public static String objectToJson(final Object object, final ObjectMapper mapper) {
     Objects.requireNonNull(object);
+    Objects.requireNonNull(mapper);
 
     try {
-      return MAPPER.writeValueAsString(object);
+      return mapper.writeValueAsString(object);
     } catch (final JsonProcessingException e) {
       //TODO throw own exception
       throw new IllegalArgumentException(e);

@@ -57,16 +57,15 @@ public class ResourceHarvesterSystemTest {
   public void testResourceHarvesterSystem() {
     Entity entity = gameEngine.createEmptyEntity(EntityUUID.randomId());
 
-    NameComponent name = new NameComponent((EntityUUID) entity.getId(), "Harvester");
+    NameComponent name = new NameComponent("Harvester");
     entity.addComponent(name);
 
     ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
-    resourceHarvesterComponent.setEntityId((EntityUUID) entity.getId());
     resourceHarvesterComponent.setUnitsPerMinute(1);
     resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
     entity.addComponent(resourceHarvesterComponent);
 
-    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent((EntityUUID) entity.getId(), 40);
+    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent(40);
     entity.addComponent(resourceStorageComponent);
 
     gameEngine.addEntity(entity);
@@ -97,16 +96,15 @@ public class ResourceHarvesterSystemTest {
   public void testResourceHarvestingSystemNoCapacity() {
     Entity entity = gameEngine.createEmptyEntity(EntityUUID.randomId());
 
-    NameComponent name = new NameComponent((EntityUUID) entity.getId(), "Harvester");
+    NameComponent name = new NameComponent("Harvester");
     entity.addComponent(name);
 
     ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
-    resourceHarvesterComponent.setEntityId((EntityUUID) entity.getId());
     resourceHarvesterComponent.setUnitsPerMinute(1);
     resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
     entity.addComponent(resourceHarvesterComponent);
 
-    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent((EntityUUID) entity.getId(), 0);
+    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent(0);
     entity.addComponent(resourceStorageComponent);
 
     gameEngine.addEntity(entity);
@@ -136,16 +134,15 @@ public class ResourceHarvesterSystemTest {
   public void testHarvestTillCapacity() {
     Entity entity = gameEngine.createEmptyEntity(EntityUUID.randomId());
 
-    NameComponent name = new NameComponent((EntityUUID) entity.getId(), "Harvester");
+    NameComponent name = new NameComponent("Harvester");
     entity.addComponent(name);
 
     ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
-    resourceHarvesterComponent.setEntityId((EntityUUID) entity.getId());
     resourceHarvesterComponent.setUnitsPerMinute(1);
     resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
     entity.addComponent(resourceHarvesterComponent);
 
-    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent((EntityUUID) entity.getId(), 20);
+    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent(20);
     entity.addComponent(resourceStorageComponent);
 
     gameEngine.addEntity(entity);

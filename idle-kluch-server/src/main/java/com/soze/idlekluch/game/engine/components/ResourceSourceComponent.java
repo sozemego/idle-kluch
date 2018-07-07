@@ -21,9 +21,8 @@ public class ResourceSourceComponent extends BaseComponent {
     super(ComponentType.RESOURCE_SOURCE);
   }
 
-  public ResourceSourceComponent(final EntityUUID entityId, final Resource resource, final float bonus) {
+  public ResourceSourceComponent(final Resource resource, final float bonus) {
     this();
-    setEntityId(entityId);
     this.resource = Objects.requireNonNull(resource);
     this.bonus = bonus;
   }
@@ -46,6 +45,6 @@ public class ResourceSourceComponent extends BaseComponent {
 
   @Override
   public ResourceSourceComponent copy() {
-    return new ResourceSourceComponent(getEntityId(), getResource(), getBonus());
+    return new ResourceSourceComponent(getResource(), getBonus());
   }
 }
