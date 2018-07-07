@@ -97,8 +97,8 @@ public class BuildingServiceImpl implements BuildingService {
           resourceHarvesterComponent.getResource().getName() + " not in radius " + resourceHarvesterComponent.getRadius()
         );
       }
-      final Entity closestSource = EntityUtils.getClosestEntity(building, resources).get();
-      resourceHarvesterComponent.setSource((EntityUUID) closestSource.getId(), 0);
+      final Entity highestBonusResourceSource = getHighestBonusResourceSource(resources);
+      resourceHarvesterComponent.setSource((EntityUUID) highestBonusResourceSource.getId(), 0);
     }
 
     final Kingdom kingdom = kingdomService.getUsersKingdom(owner).get();
@@ -127,6 +127,15 @@ public class BuildingServiceImpl implements BuildingService {
       .ifPresent(entity -> {
         throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by entityId " + entity.getId() + " named " + getName(entity));
       });
+  }
+
+  private Entity getHighestBonusResourceSource(final List<Entity> entities) {
+    entities.sort((e1, e2) -> {
+      final ResourceSourceComponent source1 = e1.getComponent(ResourceSourceComponent.class);
+      final ResourceSourceComponent source2 = e2.getComponent(ResourceSourceComponent.class);
+      return Double.compare(source2.getBonus(), source1.getBonus());
+    });
+    return entities.get(0);
   }
 
   @Override

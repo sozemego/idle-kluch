@@ -1,6 +1,8 @@
 package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.core.event.AppStartedEvent;
+import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.ResourceSourceComponent;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
@@ -43,5 +45,12 @@ public interface ResourceService {
   void handleWorldChunkCreatedEvent(WorldChunkCreatedEvent worldChunkCreatedEvent);
 
   List<Entity> getResourceSourcesInRadius(Resource resource, Point center, float radius);
+
+  /**
+   * Attempts to find an entity template with given id at a given position.
+   * @throws EntityDoesNotExistException if there is no template with entityId
+   *
+   */
+  Entity placeResourceSource(EntityUUID entityId, Point position);
 
 }

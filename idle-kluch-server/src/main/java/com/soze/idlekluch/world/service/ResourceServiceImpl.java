@@ -1,6 +1,8 @@
 package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.core.aop.annotations.Profiled;
+import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
@@ -118,16 +120,10 @@ public class ResourceServiceImpl implements ResourceService {
       .filter(tile -> Math.random() < resourceDensity)
       .forEach(tile -> {
         final Entity randomResourceSourceTemplate = CommonUtils.getRandomElement(resourceSources).get();
-        final Entity randomResourceSource = gameEngine.createEmptyEntity();
-        entityConverter.copyEntity(randomResourceSourceTemplate, randomResourceSource);
-        final PhysicsComponent physicsComponent = randomResourceSource.getComponent(PhysicsComponent.class);
-        final Point position = getResourcePosition(tile, physicsComponent.getWidth(), physicsComponent.getHeight());
-        physicsComponent.setX(position.x);
-        physicsComponent.setY(position.y);
-
-        gameEngine.addEntity(randomResourceSource);
+        final PhysicsComponent templatePhysicsComponent = randomResourceSourceTemplate.getComponent(PhysicsComponent.class);
+        final Point position = getResourcePosition(tile, templatePhysicsComponent.getWidth(), templatePhysicsComponent.getHeight());
+        placeResourceSource((EntityUUID) randomResourceSourceTemplate.getId(), position);
       });
-
   }
 
   @Override
@@ -136,6 +132,22 @@ public class ResourceServiceImpl implements ResourceService {
              .stream()
              .filter(source -> EntityUtils.distance(source, center) <= radius)
              .collect(Collectors.toList());
+  }
+
+  @Override
+  public Entity placeResourceSource(final EntityUUID entityId, final Point position) {
+    final Entity resourceSourceTemplate = entityService
+                                          .getEntityTemplate(entityId)
+                                          .orElseThrow(() -> new EntityDoesNotExistException("No template with id " + entityId, Entity.class));
+
+    final Entity resourceSource = gameEngine.createEmptyEntity();
+    entityConverter.copyEntity(resourceSourceTemplate, resourceSource);
+    final PhysicsComponent physicsComponent = resourceSource.getComponent(PhysicsComponent.class);
+    physicsComponent.setX(position.x);
+    physicsComponent.setY(position.y);
+
+    gameEngine.addEntity(resourceSource);
+    return resourceSource;
   }
 
   /**
