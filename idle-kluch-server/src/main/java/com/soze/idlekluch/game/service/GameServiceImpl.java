@@ -11,6 +11,7 @@ import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.idlekluch.world.repository.WorldRepository;
+import com.soze.idlekluch.world.service.ResourceService;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.engine.RemovedEntityEvent;
@@ -36,7 +37,7 @@ public class GameServiceImpl implements GameService {
   private final BuildingService buildingService;
   private final GameEngine gameEngine;
   private final EntityConverter entityConverter;
-  private final WorldRepository worldRepository;
+  private final ResourceService resourceService;
 
   @Autowired
   public GameServiceImpl(final WorldService worldService,
@@ -44,13 +45,13 @@ public class GameServiceImpl implements GameService {
                          final BuildingService buildingService,
                          final GameEngine gameEngine,
                          final EntityConverter entityConverter,
-                         final WorldRepository worldRepository) {
+                         final ResourceService resourceService) {
     this.worldService = Objects.requireNonNull(worldService);
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
     this.buildingService = Objects.requireNonNull(buildingService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.entityConverter = Objects.requireNonNull(entityConverter);
-    this.worldRepository = Objects.requireNonNull(worldRepository);
+    this.resourceService = Objects.requireNonNull(resourceService);
   }
 
   /**
@@ -81,7 +82,7 @@ public class GameServiceImpl implements GameService {
                                                                .collect(Collectors.toList());
     webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, new BuildingListMessage(convertedBuildingDefinitions));
 
-    final List<Resource> resources = worldRepository.getAllAvailableResources();
+    final List<Resource> resources = resourceService.getAllAvailableResources();
     final ResourceListMessage resourceListMessage = new ResourceListMessage(resources);
     webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, resourceListMessage);
   }

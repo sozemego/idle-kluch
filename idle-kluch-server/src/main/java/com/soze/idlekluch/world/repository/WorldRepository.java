@@ -25,10 +25,4 @@ public interface WorldRepository {
 
   void removeTiles(List<Tile> tile);
 
-  List<Resource> getAllAvailableResources();
-
-  void addResource(Resource resource);
-
-  Optional<Resource> getResource(String name);
-
 }

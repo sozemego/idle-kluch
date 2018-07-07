@@ -9,6 +9,7 @@ import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.world.repository.WorldRepository;
+import com.soze.idlekluch.world.service.ResourceService;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class ResourceHarvesterComponentIntTest {
   private EntityService entityService;
 
   @Autowired
-  private WorldRepository worldRepository;
+  private ResourceService resourceService;
 
   @Autowired
   private GameEngine gameEngine;
@@ -71,7 +72,7 @@ public class ResourceHarvesterComponentIntTest {
     resourceHarvesterComponent.setEntityId(id);
     resourceHarvesterComponent.setSourceSlots(3);
     resourceHarvesterComponent.setSource(sourceId, 2);
-    resourceHarvesterComponent.setResource(worldRepository.getResource("Wood").get());
+    resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
     pe.setResourceHarvesterComponent(resourceHarvesterComponent);
     entityService.addEntity(pe);
 
@@ -105,7 +106,7 @@ public class ResourceHarvesterComponentIntTest {
     final List<ResourceSourceSlot> slots = resourceHarvesterComponent.getSources();
     Collections.shuffle(slots);
     resourceHarvesterComponent.setSources(slots);
-    resourceHarvesterComponent.setResource(worldRepository.getResource("Wood").get());
+    resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
     pe.setResourceHarvesterComponent(resourceHarvesterComponent);
     entityService.addEntity(pe);
 

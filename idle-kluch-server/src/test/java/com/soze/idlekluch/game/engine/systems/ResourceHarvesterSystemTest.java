@@ -11,6 +11,7 @@ import com.soze.idlekluch.game.message.StartHarvestingMessage;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.game.service.WebSocketMessagingServiceTest;
 import com.soze.idlekluch.world.repository.WorldRepository;
+import com.soze.idlekluch.world.service.ResourceService;
 import com.soze.klecs.entity.Entity;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +41,7 @@ public class ResourceHarvesterSystemTest {
   private GameEngine gameEngine;
 
   @Autowired
-  private WorldRepository worldRepository;
+  private ResourceService resourceService;
 
   @Autowired
   private WebSocketMessagingServiceTest webSocketMessagingServiceTest;
@@ -62,7 +63,7 @@ public class ResourceHarvesterSystemTest {
     ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
     resourceHarvesterComponent.setEntityId((EntityUUID) entity.getId());
     resourceHarvesterComponent.setUnitsPerMinute(1);
-    resourceHarvesterComponent.setResource(worldRepository.getResource("Wood").get());
+    resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
     entity.addComponent(resourceHarvesterComponent);
 
     ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent((EntityUUID) entity.getId(), 40);
@@ -88,7 +89,7 @@ public class ResourceHarvesterSystemTest {
     assertEquals(HarvestingProgress.HarvestingState.WAITING, resourceHarvesterComponent.getHarvestingProgress().getHarvestingState());
     assertEquals(0f, resourceHarvesterComponent.getHarvestingProgress().getHarvestingProgressPercent(), 0f);
     assertEquals(1, resourceStorageComponent.getResources().size());
-    assertTrue(resourceStorageComponent.getResources().get(0).equals(worldRepository.getResource("Wood").get()));
+    assertTrue(resourceStorageComponent.getResources().get(0).equals(resourceService.getResource("Wood").get()));
     assertEquals(1, webSocketMessagingServiceTest.getBroadcastMessages(StartHarvestingMessage.class).size());
   }
 
@@ -102,7 +103,7 @@ public class ResourceHarvesterSystemTest {
     ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
     resourceHarvesterComponent.setEntityId((EntityUUID) entity.getId());
     resourceHarvesterComponent.setUnitsPerMinute(1);
-    resourceHarvesterComponent.setResource(worldRepository.getResource("Wood").get());
+    resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
     entity.addComponent(resourceHarvesterComponent);
 
     ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent((EntityUUID) entity.getId(), 0);
@@ -141,7 +142,7 @@ public class ResourceHarvesterSystemTest {
     ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
     resourceHarvesterComponent.setEntityId((EntityUUID) entity.getId());
     resourceHarvesterComponent.setUnitsPerMinute(1);
-    resourceHarvesterComponent.setResource(worldRepository.getResource("Wood").get());
+    resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
     entity.addComponent(resourceHarvesterComponent);
 
     ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent((EntityUUID) entity.getId(), 20);

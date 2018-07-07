@@ -14,7 +14,7 @@ import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.core.utils.CommonUtils;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
-import com.soze.idlekluch.world.repository.WorldRepository;
+import com.soze.idlekluch.world.repository.ResourceRepository;
 import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,18 +39,18 @@ public class ResourceServiceImpl implements ResourceService {
   private final EntityService entityService;
   private final GameEngine gameEngine;
   private final EntityConverter entityConverter;
-  private final WorldRepository worldRepository;
+  private final ResourceRepository resourceRepository;
 
   @Autowired
   public ResourceServiceImpl(final EntityService entityService,
                              final GameEngine gameEngine,
                              final EntityConverter entityConverter,
-                             final WorldRepository worldRepository) {
+                             final ResourceRepository resourceRepository) {
 
     this.entityService = Objects.requireNonNull(entityService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.entityConverter = Objects.requireNonNull(entityConverter);
-    this.worldRepository = Objects.requireNonNull(worldRepository);
+    this.resourceRepository = Objects.requireNonNull(resourceRepository);
   }
 
   @Override
@@ -160,4 +161,18 @@ public class ResourceServiceImpl implements ResourceService {
     return position;
   }
 
+  @Override
+  public List<Resource> getAllAvailableResources() {
+    return resourceRepository.getAllAvailableResources();
+  }
+
+  @Override
+  public void addResource(final Resource resource) {
+    resourceRepository.addResource(resource);
+  }
+
+  @Override
+  public Optional<Resource> getResource(final String name) {
+    return resourceRepository.getResource(name);
+  }
 }

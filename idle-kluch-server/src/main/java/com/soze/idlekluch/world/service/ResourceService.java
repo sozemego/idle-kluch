@@ -11,6 +11,7 @@ import org.springframework.context.event.EventListener;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Optional;
 
 public interface ResourceService {
 
@@ -52,5 +53,11 @@ public interface ResourceService {
    *
    */
   Entity placeResourceSource(EntityUUID entityId, Point position);
+
+  List<Resource> getAllAvailableResources();
+
+  void addResource(Resource resource);
+
+  Optional<Resource> getResource(String name);
 
 }

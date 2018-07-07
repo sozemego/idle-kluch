@@ -98,27 +98,6 @@ public class WorldRepositoryImpl implements WorldRepository {
     });
   }
 
-  @Override
-  public List<Resource> getAllAvailableResources() {
-    return em.createQuery("SELECT r FROM Resource r").getResultList();
-  }
-
-  @Override
-  @Transactional
-  public void addResource(final Resource resource) {
-    Objects.requireNonNull(resource);
-    em.persist(resource);
-  }
-
-  @Override
-  public Optional<Resource> getResource(final String name) {
-    Objects.requireNonNull(name);
-    final Query query = em.createQuery("SELECT r FROM Resource r WHERE UPPER(r.name) = :name");
-    query.setParameter("name", name.toUpperCase());
-
-    return QueryUtils.getOptional(query, Resource.class);
-  }
-
   private List<Tile> getTileList() {
     final Query query = em.createQuery("SELECT t FROM Tile t");
     return query.getResultList();
