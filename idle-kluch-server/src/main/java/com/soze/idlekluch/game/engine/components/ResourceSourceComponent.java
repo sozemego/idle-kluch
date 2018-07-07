@@ -1,6 +1,8 @@
 package com.soze.idlekluch.game.engine.components;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
@@ -33,6 +35,11 @@ public class ResourceSourceComponent extends BaseComponent {
 
   public EntityUUID getResourceId() {
     return resourceId;
+  }
+
+  @JsonGetter("resourceId")
+  public String getResourceIdString() {
+    return resourceId.toString();
   }
 
   public void setResourceId(final EntityUUID resourceId) {

@@ -102,13 +102,13 @@ const addEntity = (state, { payload: entity }) => {
 
   entity.components
     .map(component => {
-      const { componentType } = component;
-      if (componentType === COMPONENT_TYPES.GRAPHICS) {
+      const { type } = component;
+      if (type === COMPONENT_TYPES.GRAPHICS) {
         const sprite = entitySprites.create(0, 0, component.asset);
         sprite.inputEnabled = true;
         return new GraphicsComponent(sprite);
       }
-      if (componentType === COMPONENT_TYPES.PHYSICS) {
+      if (type === COMPONENT_TYPES.PHYSICS) {
         return new PhysicsComponent(
           component.x,
           component.y,
@@ -116,25 +116,25 @@ const addEntity = (state, { payload: entity }) => {
           component.height,
         );
       }
-      if (componentType === COMPONENT_TYPES.OWNERSHIP) {
+      if (type === COMPONENT_TYPES.OWNERSHIP) {
         return new OwnershipComponent(entity.id);
       }
-      if (componentType === COMPONENT_TYPES.NAME) {
+      if (type === COMPONENT_TYPES.NAME) {
         return new NameComponent(component.name);
       }
-      if (componentType === COMPONENT_TYPES.BUILDABLE) {
+      if (type === COMPONENT_TYPES.BUILDABLE) {
         return new BuildableComponent();
       }
-      if (componentType === COMPONENT_TYPES.STATIC_OCCUPY_SPACE) {
+      if (type === COMPONENT_TYPES.STATIC_OCCUPY_SPACE) {
         return new StaticOccupySpaceComponent();
       }
-      if (componentType === COMPONENT_TYPES.COST) {
+      if (type === COMPONENT_TYPES.COST) {
         return new CostComponent(component.idleBucks);
       }
-      if (componentType === COMPONENT_TYPES.RESOURCE_SOURCE) {
+      if (type === COMPONENT_TYPES.RESOURCE_SOURCE) {
         return new ResourceSourceComponent(component.resourceId, component.bonus);
       }
-      if(componentType === COMPONENT_TYPES.RESOURCE_HARVESTER) {
+      if(type === COMPONENT_TYPES.RESOURCE_HARVESTER) {
         return new ResourceHarvesterComponent(
           component.resourceId,
           component.radius,
@@ -144,13 +144,13 @@ const addEntity = (state, { payload: entity }) => {
           component.harvestingProgress,
         );
       }
-      if(componentType === COMPONENT_TYPES.RESOURCE_STORAGE) {
+      if(type === COMPONENT_TYPES.RESOURCE_STORAGE) {
         const storageComponent = new ResourceStorageComponent(component.capacity);
         component.resources.forEach(resource => storageComponent.addResource(resource));
         return storageComponent;
       }
 
-      throw new Error("INVALID COMPONENT TYPE " + componentType);
+      throw new Error("INVALID COMPONENT TYPE " + type);
     })
     .forEach(component => newEntity.addComponent(component));
 
