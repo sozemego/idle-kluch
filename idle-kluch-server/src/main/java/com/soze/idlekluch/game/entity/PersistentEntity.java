@@ -22,44 +22,44 @@ public class PersistentEntity {
   @Column(name = "template")
   private boolean template;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "entity_id")
+  @Column(name = "graphics_component")
+  @Type(type = "GraphicsComponentType")
   private GraphicsComponent graphicsComponent;
 
   @Column(name = "physics_component")
   @Type(type = "PhysicsComponentType")
   private PhysicsComponent physicsComponent;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "entity_id")
+  @Column(name = "ownership_component")
+  @Type(type = "OwnershipComponentType")
   private OwnershipComponent ownershipComponent;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "entity_id")
+  @Column(name = "static_occupy_space_component")
+  @Type(type = "StaticOccupySpaceComponentType")
   private StaticOccupySpaceComponent staticOccupySpaceComponent;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "entity_id")
+  @Column(name = "name_component")
+  @Type(type = "NameComponentType")
   private NameComponent nameComponent;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "entity_id")
+  @Column(name = "buildable_component")
+  @Type(type = "BuildableComponentType")
   private BuildableComponent buildableComponent;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "entity_id")
+  @Column(name = "cost_component")
+  @Type(type = "CostComponentType")
   private CostComponent costComponent;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "entity_id")
+  @Column(name = "resource_source_component")
+  @Type(type = "ResourceSourceComponentType")
   private ResourceSourceComponent resourceSourceComponent;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "entity_id")
+  @Column(name = "resource_harvester_component")
+  @Type(type = "ResourceHarvesterComponentType")
   private ResourceHarvesterComponent resourceHarvesterComponent;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "entity_id")
+  @Column(name = "resource_storage_component")
+  @Type(type = "ResourceStorageComponentType")
   private ResourceStorageComponent resourceStorageComponent;
 
 

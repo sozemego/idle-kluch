@@ -1,28 +1,19 @@
 package com.soze.idlekluch.game.engine.components;
 
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
-import com.soze.idlekluch.kingdom.entity.Resource;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "resource_storage_components")
 public class ResourceStorageComponent extends BaseComponent {
 
-  @Column(name = "capacity")
   private int capacity;
 
-  @OneToMany(fetch = FetchType.EAGER)
-  @JoinTable(
-    name = "resource_storage",
-    joinColumns = @JoinColumn(name = "entity_id"),
-    inverseJoinColumns = @JoinColumn(name = "resource_id")
-  )
-  private List<Resource> resources = new ArrayList<>();
+  @Type(type = "jsonb")
+  private List<EntityUUID> resources = new ArrayList<>();
 
   public ResourceStorageComponent() {
     super(ComponentType.RESOURCE_STORAGE);
@@ -41,17 +32,17 @@ public class ResourceStorageComponent extends BaseComponent {
     this.capacity = capacity;
   }
 
-  public void addResource(final Resource resource) {
+  public void addResource(final EntityUUID resource) {
     Objects.requireNonNull(resource);
-    final List<Resource> nextResources = new ArrayList<>(resources);
+    final List<EntityUUID> nextResources = new ArrayList<>(resources);
     nextResources.add(resource);
     resources = nextResources;
   }
 
-  public void removeResource(final Resource resource) {
-    Iterator<Resource> it = resources.iterator();
+  public void removeResource(final EntityUUID resource) {
+    final Iterator<EntityUUID> it = resources.iterator();
     while(it.hasNext()) {
-      Resource toRemove = it.next();
+      final EntityUUID toRemove = it.next();
       if(toRemove.equals(resource)) {
         it.remove();
         return;
@@ -59,7 +50,7 @@ public class ResourceStorageComponent extends BaseComponent {
     }
   }
 
-  public List<Resource> getResources() {
+  public List<EntityUUID> getResources() {
     return new ArrayList<>(resources);
   }
 

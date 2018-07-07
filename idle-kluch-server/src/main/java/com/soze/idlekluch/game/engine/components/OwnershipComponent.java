@@ -1,11 +1,11 @@
 package com.soze.idlekluch.game.engine.components;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -13,11 +13,9 @@ import java.util.Objects;
  * of the entity. Right now, they are users, so it contains both
  * the username and their id.
  */
-@Entity
-@Table(name = "ownership_components")
 public class OwnershipComponent extends BaseComponent {
 
-  @AttributeOverride(name = "id", column = @Column(name = "owner_id"))
+  @JsonUnwrapped
   private EntityUUID ownerId;
 
   public OwnershipComponent() {
@@ -27,6 +25,13 @@ public class OwnershipComponent extends BaseComponent {
   public OwnershipComponent(final EntityUUID ownerId) {
     this();
     this.ownerId = Objects.requireNonNull(ownerId);
+  }
+
+  @JsonCreator
+  public static OwnershipComponent factory(final Map<String, Object> properties) {
+    return new OwnershipComponent(
+      EntityUUID.fromString((String) properties.get("ownerId"))
+    );
   }
 
   public EntityUUID getOwnerId() {

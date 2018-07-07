@@ -45,6 +45,8 @@ public interface ResourceService {
 
   List<Entity> getResourceSourcesInRadius(Resource resource, Point center, float radius);
 
+  List<Entity> getResourceSourcesInRadius(EntityUUID resourceId, Point center, float radius);
+
   /**
    * Attempts to find an entity template with given id at a given position.
    * @throws EntityDoesNotExistException if there is no template with entityId
@@ -57,5 +59,7 @@ public interface ResourceService {
   void addResource(Resource resource);
 
   Optional<Resource> getResource(String name);
+
+  public Optional<Resource> getResource(final EntityUUID id);
 
 }

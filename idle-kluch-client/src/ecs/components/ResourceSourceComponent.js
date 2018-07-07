@@ -1,12 +1,12 @@
 export class ResourceSourceComponent {
 
-  constructor(resource, bonus) {
-    this.resource = resource;
+  constructor(resourceId, bonus) {
+    this.resourceId = resourceId;
     this.bonus = bonus;
   }
 
-  getResource() {
-    return this.resource;
+  getResourceId() {
+    return this.resourceId;
   }
 
   getBonus() {

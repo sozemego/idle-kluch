@@ -3,11 +3,19 @@ package com.soze.idlekluch.game.engine.components;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
+import com.soze.idlekluch.game.entity.*;
+import com.vladmihalcea.hibernate.type.array.IntArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonNodeStringType;
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
-import javax.persistence.*;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -30,6 +38,24 @@ import java.util.Objects;
   @JsonSubTypes.Type(value = ResourceStorageComponent.class, name = "RESOURCE_STORAGE")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
+@TypeDefs({
+  @TypeDef(name = "string-array", typeClass = StringArrayType.class),
+  @TypeDef(name = "int-array", typeClass = IntArrayType.class),
+  @TypeDef(name = "json", typeClass = JsonStringType.class),
+  @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class),
+  @TypeDef(name = "jsonb-node", typeClass = JsonNodeBinaryType.class),
+  @TypeDef(name = "json-node", typeClass = JsonNodeStringType.class),
+  @TypeDef(name = "BuildableComponentType", typeClass = BuildableComponentType.class),
+  @TypeDef(name = "GraphicsComponentType", typeClass = GraphicsComponentType.class),
+  @TypeDef(name = "NameComponentType", typeClass = NameComponentType.class),
+  @TypeDef(name = "OwnershipComponentType", typeClass = OwnershipComponentType.class),
+  @TypeDef(name = "PhysicsComponentType", typeClass = PhysicsComponentType.class),
+  @TypeDef(name = "CostComponentType", typeClass = CostComponentType.class),
+  @TypeDef(name = "StaticOccupySpaceComponentType", typeClass = StaticOccupySpaceComponentType.class),
+  @TypeDef(name = "ResourceSourceComponentType", typeClass = ResourceSourceComponentType.class),
+  @TypeDef(name = "ResourceHarvesterComponentType", typeClass = ResourceHarvesterComponentType.class),
+  @TypeDef(name = "ResourceStorageComponentType", typeClass = ResourceStorageComponentType.class)
+})
 public abstract class BaseComponent {
 
   @Transient

@@ -67,7 +67,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     if (currentHarvestingProgress.isFinished() && currentHarvestingProgress.getHarvestingState() == HarvestingProgress.HarvestingState.HARVESTING) {
       currentHarvestingProgress.stop();
       final ResourceHarvesterComponent harvester = entity.getComponent(ResourceHarvesterComponent.class);
-      storage.addResource(harvester.getResource());
+      storage.addResource(harvester.getResourceId());
       addChangedEntity(entity);
       LOG.debug("FINISHED HARVESTING FOR ENTITY [{}][{}][{}]/[{}]", entity.getId(), EntityUtils.getName(entity), storage.getResources().size(), storage.getCapacity());
     }

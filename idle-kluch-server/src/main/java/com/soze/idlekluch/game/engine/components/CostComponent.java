@@ -1,19 +1,10 @@
 package com.soze.idlekluch.game.engine.components;
 
-import com.soze.idlekluch.core.utils.jpa.EntityUUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 /**
  * Represents a cost (in idle bucks) of an entity (to be constructed/recruited/etc).
  */
-@Entity
-@Table(name = "cost_components")
 public class CostComponent extends BaseComponent {
 
-  @Column(name = "idle_bucks")
   private int idleBucks;
 
   public CostComponent(final int idleBucks) {

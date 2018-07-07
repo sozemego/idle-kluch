@@ -1,57 +1,46 @@
 package com.soze.idlekluch.game.engine.components.resourceharvester;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.soze.idlekluch.core.utils.JsonUtils;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.BaseComponent;
-import com.soze.idlekluch.kingdom.entity.Resource;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import com.soze.idlekluch.game.entity.ResourceHarvesterComponentType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-@Entity
-@Table(name = "resource_harvester_components")
+@TypeDef(name = "ResourceHarvesterComponentType", typeClass = ResourceHarvesterComponentType.class)
 public class ResourceHarvesterComponent extends BaseComponent {
 
-  @OneToOne
-  @JoinColumn(name = "resource_id")
-  private Resource resource;
-
-  @Column(name = "radius")
+  private EntityUUID resourceId;
   private float radius;
-
-  @Column(name = "units_per_minute")
   private int unitsPerMinute;
-
-  @Column(name = "source_slots")
   private int sourceSlots;
 
   @Transient
   private final HarvestingProgress harvestingProgress = new HarvestingProgress();
 
-  @ElementCollection
-  @CollectionTable(
-    name = "resource_harvester_slots",
-    joinColumns = @JoinColumn(name = "entity_id")
-  )
-  @LazyCollection(LazyCollectionOption.FALSE)
-  @OrderBy("slot_number ASC")
+  @Type(type = "jsonb")
   private List<ResourceSourceSlot> sources = new ArrayList<>();
 
   public ResourceHarvesterComponent() {
     super(ComponentType.RESOURCE_HARVESTER);
   }
 
-  public ResourceHarvesterComponent(final Resource resource,
+  public ResourceHarvesterComponent(final EntityUUID resourceId,
                                     final float radius,
                                     final int unitsPerMinute,
                                     final int sourceSlots,
                                     final List<ResourceSourceSlot> sources) {
     this();
-    this.resource = Objects.requireNonNull(resource);
+    this.resourceId = Objects.requireNonNull(resourceId);
     this.radius = radius;
     this.unitsPerMinute = unitsPerMinute;
     this.sourceSlots = sourceSlots;
@@ -59,12 +48,23 @@ public class ResourceHarvesterComponent extends BaseComponent {
     fillSources(sources);
   }
 
-  public Resource getResource() {
-    return resource;
+  @JsonCreator
+  public static ResourceHarvesterComponent factory(final Map<String, Object> properties) {
+    return new ResourceHarvesterComponent(
+      EntityUUID.fromString((String) properties.get("resourceId")),
+      Float.valueOf("" + properties.get("radius")),
+      (int) properties.get("unitsPerMinute"),
+      (int) properties.get("sourceSlots"),
+      (List<ResourceSourceSlot>) properties.get("sources")
+    );
   }
 
-  public void setResource(final Resource resource) {
-    this.resource = resource;
+  public EntityUUID getResourceId() {
+    return resourceId;
+  }
+
+  public void setResourceId(final EntityUUID resourceId) {
+    this.resourceId = resourceId;
   }
 
   public float getRadius() {
@@ -126,7 +126,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
   @Override
   public ResourceHarvesterComponent copy() {
     return new ResourceHarvesterComponent(
-      getResource(),
+      getResourceId(),
       getRadius(),
       getUnitsPerMinute(),
       getSourceSlots(),

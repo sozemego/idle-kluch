@@ -62,7 +62,7 @@ public class ResourceHarvesterSystemTest {
 
     ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
     resourceHarvesterComponent.setUnitsPerMinute(1);
-    resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
+    resourceHarvesterComponent.setResourceId(resourceService.getResource("Wood").get().getResourceId());
     entity.addComponent(resourceHarvesterComponent);
 
     ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent(40);
@@ -101,7 +101,7 @@ public class ResourceHarvesterSystemTest {
 
     ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
     resourceHarvesterComponent.setUnitsPerMinute(1);
-    resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
+    resourceHarvesterComponent.setResourceId(resourceService.getResource("Wood").get().getResourceId());
     entity.addComponent(resourceHarvesterComponent);
 
     ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent(0);
@@ -139,7 +139,7 @@ public class ResourceHarvesterSystemTest {
 
     ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
     resourceHarvesterComponent.setUnitsPerMinute(1);
-    resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
+    resourceHarvesterComponent.setResourceId(resourceService.getResource("Wood").get().getResourceId());
     entity.addComponent(resourceHarvesterComponent);
 
     ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent(20);

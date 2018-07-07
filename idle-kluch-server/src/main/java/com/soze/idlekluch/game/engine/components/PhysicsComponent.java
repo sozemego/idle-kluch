@@ -1,23 +1,10 @@
 package com.soze.idlekluch.game.engine.components;
 
-import com.soze.idlekluch.game.entity.PhysicsComponentType;
-import org.hibernate.annotations.TypeDef;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-
-@Embeddable
-@TypeDef(name = "PhysicsComponentType", typeClass = PhysicsComponentType.class)
 public class PhysicsComponent extends BaseComponent {
 
-  @Column(name = "x")
   private float x;
-  @Column(name = "y")
   private float y;
-
-  @Column(name = "width")
   private int width;
-  @Column(name = "height")
   private int height;
 
   public PhysicsComponent() {

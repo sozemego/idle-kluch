@@ -40,7 +40,7 @@ export const checkRectangleIntersectsCollidableEntities = (engine, rectangle) =>
 export const checkEntityInRangeOfResource = (engine, entity) => {
   const harvesterComponent = findComponent(entity, COMPONENT_TYPES.RESOURCE_HARVESTER);
   const radius = harvesterComponent.radius;
-  const resource = harvesterComponent.resource.name;
+  const resource = harvesterComponent.resourceId;
 
   const physicsComponent = findComponent(entity, COMPONENT_TYPES.PHYSICS);
   const point = { x: physicsComponent.x, y: physicsComponent.y };
@@ -48,7 +48,7 @@ export const checkEntityInRangeOfResource = (engine, entity) => {
   const resourceSource = Node.of(ResourceSourceComponent);
   const resourceSources = engine.getEntitiesByNode(resourceSource).filter(entity => {
     const resourceSource = entity.getComponent(ResourceSourceComponent);
-    return resourceSource.getResource().name === resource;
+    return resourceSource.getResourceId() === resource;
   });
 
   for(let i = 0; i < resourceSources.length; i++) {

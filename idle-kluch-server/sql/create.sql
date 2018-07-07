@@ -61,202 +61,163 @@ CREATE TABLE kingdoms (
 CREATE TABLE entities (
   entity_id uuid PRIMARY KEY,
   template BOOLEAN NOT NULL DEFAULT false,
-  physics_component jsonb
-);
-
-CREATE TABLE graphics_components (
-  entity_id uuid NOT NULL,
-  asset varchar NOT NULL,
-  CONSTRAINT FK_PHYSICS_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
-);
-
-CREATE TABLE ownership_components (
-  entity_id uuid NOT NULL,
-  owner_id uuid NOT NULL,
-  CONSTRAINT FK_OWNERSHIP_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
-);
-
-CREATE TABLE static_occupy_space_components (
-  entity_id uuid NOT NULL,
-  CONSTRAINT FK_STATIC_OCCUPY_SPACE_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
-);
-
-CREATE TABLE name_components (
-  entity_id uuid NOT NULL,
-  name VARCHAR(64) NOT NULL,
-  CONSTRAINT FK_NAME_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
-);
-
-CREATE TABLE buildable_components (
-  entity_id uuid NOT NULL,
-  CONSTRAINT FK_BUILDABLE_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
-);
-
-CREATE TABLE cost_components (
-  entity_id uuid NOT NULL,
-  idle_bucks INTEGER NOT NULL,
-  CONSTRAINT FK_COST_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
-);
-
-CREATE TABLE resource_source_components (
-  entity_id uuid NOT NULL,
-  resource_id uuid NOT NULL,
-  bonus FLOAT NOT NULL,
-  CONSTRAINT FK_RESOURCE_SOURCE_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
-  CONSTRAINT FK_RESOURCE_SOURCE_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
-);
-
-CREATE TABLE resource_harvester_components (
-  entity_id uuid NOT NULL,
-  resource_id uuid NOT NULL,
-  radius float NOT NULL,
-  units_per_minute INT NOT NULL,
-  source_slots INT NOT NULL,
-  CONSTRAINT FK_RESOURCE_HARVESTER_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
-  CONSTRAINT FK_RESOURCE_HARVESTER_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
-);
-
-CREATE TABLE resource_harvester_slots (
-  entity_id uuid NOT NULL,
-  source_id uuid,
-  slot_number INT NOT NULL,
-  CONSTRAINT FK_RESOURCE_HARVESTER_SLOT_HARVESTER FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
-  CONSTRAINT FK_RESOURCE_HARVESTER_SLOT_SOURCE FOREIGN KEY (source_id) REFERENCES entities(entity_id)
-);
-
-CREATE TABLE resource_storage_components (
-  entity_id uuid NOT NULL,
-  capacity INTEGER NOT NULL,
-  CONSTRAINT FK_RESOURCE_STORAGE_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id)
+  physics_component jsonb,
+  graphics_component jsonb,
+  ownership_component jsonb,
+  static_occupy_space_component jsonb,
+  name_component jsonb,
+  buildable_component jsonb,
+  cost_component jsonb,
+  resource_source_component jsonb,
+  resource_harvester_component jsonb,
+  resource_storage_component jsonb
 );
 
 -- here entity templates live --
 
-INSERT INTO entities (entity_id, template, physics_component) VALUES
+INSERT INTO entities (
+  entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
+  name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
+  resource_harvester_component
+)
+ VALUES
   (
     '7a4df465-b4c3-4e9f-854a-248988220dfb', true,
-    '{"x": 0, "y": 0, "width": 50, "height": 55, "type": "PHYSICS"}'
+    '{"x": 0, "y": 0, "width": 50, "height": 55, "type": "PHYSICS"}',
+    '{"asset": "small_warehouse", "type": "GRAPHICS"}',
+    '{"ownerId": "7a4df465-b4c3-4e9f-854a-248988220dfb", "type": "OWNERSHIP"}',
+    '{"type": "STATIC_OCCUPY_SPACE"}',
+    '{"name": "Small warehouse", "type": "NAME"}',
+    '{"type": "BUILDABLE"}',
+    '{"idleBucks": 100, "type": "COST"}',
+    null,
+    '{"capacity": 100, "resources": [], "type": "RESOURCE_STORAGE"}',
+    null
   )
 ;
 
-INSERT INTO entities (entity_id, template, physics_component) VALUES
+INSERT INTO entities (
+  entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
+  name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
+  resource_harvester_component
+)
+ VALUES
   (
     '4517e8b9-de2e-473d-98e8-4c6c73c46c4d', true,
-    '{"x": 0, "y": 0, "width": 80, "height": 81, "type": "PHYSICS"}'
+    '{"x": 0, "y": 0, "width": 80, "height": 81, "type": "PHYSICS"}',
+    '{"asset": "warehouse", "type": "GRAPHICS"}',
+    '{"ownerId": "4517e8b9-de2e-473d-98e8-4c6c73c46c4d", "type": "OWNERSHIP"}',
+    '{"type": "STATIC_OCCUPY_SPACE"}',
+    '{"name": "Warehouse", "type": "NAME"}',
+    '{"type": "BUILDABLE"}',
+    '{"idleBucks": 250, "type": "COST"}',
+    null,
+    '{"capacity": 250, "resources": [], "type": "RESOURCE_STORAGE"}',
+    null
   )
 ;
 
-INSERT INTO entities (entity_id, template, physics_component) VALUES
+INSERT INTO entities (
+  entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
+  name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
+  resource_harvester_component
+)
+ VALUES
   (
     'f520432b-4bf5-448f-95f4-14643e078288', true,
-    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}'
+    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}',
+    '{"asset": "forest_1", "type": "GRAPHICS"}',
+    null,
+    '{"type": "STATIC_OCCUPY_SPACE"}',
+    '{"name": "forest_1", "type": "NAME"}',
+    null,
+    null,
+    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "bonus": 1.2, "type": "RESOURCE_SOURCE"}',
+    null,
+    null
   )
 ;
 
-INSERT INTO entities (entity_id, template, physics_component) VALUES
+INSERT INTO entities (
+  entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
+  name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
+  resource_harvester_component
+)
+ VALUES
   (
     '7e10d339-dc10-4204-914c-cdfb2039460d', true,
-    '{"x": 0, "y": 0, "width": 80, "height": 81, "type": "PHYSICS"}'
+    '{"x": 0, "y": 0, "width": 80, "height": 81, "type": "PHYSICS"}',
+    '{"asset": "forest_2", "type": "GRAPHICS"}',
+    null,
+    '{"type": "STATIC_OCCUPY_SPACE"}',
+    '{"name": "forest_2", "type": "NAME"}',
+    null,
+    null,
+    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "bonus": 1.0, "type": "RESOURCE_SOURCE"}',
+    null,
+    null
   )
 ;
 
-INSERT INTO entities (entity_id, template, physics_component) VALUES
+INSERT INTO entities (
+  entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
+  name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
+  resource_harvester_component
+)
+ VALUES
   (
     '24eba6e6-fe5f-4d14-86a4-cd80331beedf', true,
-    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}'
+    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}',
+    '{"asset": "forest_3", "type": "GRAPHICS"}',
+    null,
+    '{"type": "STATIC_OCCUPY_SPACE"}',
+    '{"name": "forest_3", "type": "NAME"}',
+    null,
+    null,
+    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "bonus": 1.2, "type": "RESOURCE_SOURCE"}',
+    null,
+    null
   )
 ;
 
-INSERT INTO entities (entity_id, template, physics_component) VALUES
+INSERT INTO entities (
+  entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
+  name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
+  resource_harvester_component
+)
+ VALUES
   (
     'f0e8b54b-3944-41c8-a6b0-ac291c455cd0', true,
-    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}'
+    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}',
+    '{"asset": "forest_4", "type": "GRAPHICS"}',
+    null,
+    '{"type": "STATIC_OCCUPY_SPACE"}',
+    '{"name": "forest_4", "type": "NAME"}',
+    null,
+    null,
+    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "bonus": 1.0, "type": "RESOURCE_SOURCE"}',
+    null,
+    null
   )
 ;
 
-INSERT INTO entities (entity_id, template, physics_component) VALUES
+INSERT INTO entities (
+  entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
+  name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
+  resource_harvester_component
+)
+ VALUES
   (
     '03c99070-66d5-4dea-b57a-39b4f308a505', true,
-    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}'
+    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}',
+    '{"asset": "woodcutter", "type": "GRAPHICS"}',
+    '{"ownerId": "4517e8b9-de2e-473d-98e8-4c6c73c46c4d", "type": "OWNERSHIP"}',
+    '{"type": "STATIC_OCCUPY_SPACE"}',
+    '{"name": "Woodcutter", "type": "NAME"}',
+    '{"type": "BUILDABLE"}',
+    '{"idleBucks": 125, "type": "COST"}',
+    null,
+    '{"capacity": 20, "resources": [], "type": "RESOURCE_STORAGE"}',
+    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "radius": 256, "unitsPerMinute": 5, "sourceSlots": 0, "sources": [], "type": "RESOURCE_HARVESTER"}'
   )
 ;
-
-INSERT INTO graphics_components VALUES
-  ('7a4df465-b4c3-4e9f-854a-248988220dfb', 'small_warehouse'),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 'warehouse'),
-  ('f520432b-4bf5-448f-95f4-14643e078288', 'forest_1'),
-  ('24eba6e6-fe5f-4d14-86a4-cd80331beedf', 'forest_2'),
-  ('f0e8b54b-3944-41c8-a6b0-ac291c455cd0', 'forest_3'),
-  ('03c99070-66d5-4dea-b57a-39b4f308a505', 'forest_4'),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d', 'woodcutter')
-;
-
-INSERT INTO ownership_components VALUES
-  ('7a4df465-b4c3-4e9f-854a-248988220dfb', '7a4df465-b4c3-4e9f-854a-248988220dfb'),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', '4517e8b9-de2e-473d-98e8-4c6c73c46c4d'),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d', '7e10d339-dc10-4204-914c-cdfb2039460d')
-;
-
-INSERT INTO static_occupy_space_components VALUES
-  ('7a4df465-b4c3-4e9f-854a-248988220dfb'),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d'),
-  ('f520432b-4bf5-448f-95f4-14643e078288'),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d'),
-  ('f0e8b54b-3944-41c8-a6b0-ac291c455cd0'),
-  ('03c99070-66d5-4dea-b57a-39b4f308a505')
-;
-
-INSERT INTO name_components VALUES
-  ('7a4df465-b4c3-4e9f-854a-248988220dfb', 'Small warehouse'),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 'Warehouse'),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d', 'Woodcutter'),
-  ('f520432b-4bf5-448f-95f4-14643e078288', 'forest_1'),
-  ('24eba6e6-fe5f-4d14-86a4-cd80331beedf', 'forest_2'),
-  ('f0e8b54b-3944-41c8-a6b0-ac291c455cd0', 'forest_3'),
-  ('03c99070-66d5-4dea-b57a-39b4f308a505', 'forest_4')
-;
-
-INSERT INTO buildable_components VALUES
-  ('7a4df465-b4c3-4e9f-854a-248988220dfb'),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d'),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d')
-;
-
-INSERT INTO cost_components VALUES
-  ('7a4df465-b4c3-4e9f-854a-248988220dfb', 100),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 250),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d', 125)
-;
-
-INSERT INTO resource_storage_components VALUES
-  ('7a4df465-b4c3-4e9f-854a-248988220dfb', 100),
-  ('4517e8b9-de2e-473d-98e8-4c6c73c46c4d', 250),
-  ('7e10d339-dc10-4204-914c-cdfb2039460d', 20)
-;
-
-CREATE TABLE resource_storage (
-  entity_id uuid NOT NULL,
-  resource_id uuid NOT NULL,
-  CONSTRAINT FK_RESOURCE_STORAGE_ROW_ENTITY FOREIGN KEY (entity_id) REFERENCES entities(entity_id),
-  CONSTRAINT FK_RESOURCE_STORAGE_ROW_RESOURCE FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
-);
-
-INSERT INTO resource_harvester_components(entity_id, resource_id, radius, units_per_minute, source_slots)
-SELECT '7e10d339-dc10-4204-914c-cdfb2039460d', resource_id, 256, 5, 1
-FROM resources WHERE name = 'Wood';
-
-INSERT INTO resource_source_components(entity_id, resource_id, bonus)
-SELECT 'f520432b-4bf5-448f-95f4-14643e078288', resource_id, 1.2
-FROM resources WHERE name = 'Wood';
-
-INSERT INTO resource_source_components(entity_id, resource_id, bonus)
-SELECT '24eba6e6-fe5f-4d14-86a4-cd80331beedf', resource_id, 1
-FROM resources WHERE name = 'Wood';
-
-INSERT INTO resource_source_components(entity_id, resource_id, bonus)
-SELECT 'f0e8b54b-3944-41c8-a6b0-ac291c455cd0', resource_id, 1.2
-FROM resources WHERE name = 'Wood';
-
-INSERT INTO resource_source_components(entity_id, resource_id, bonus)
-SELECT '03c99070-66d5-4dea-b57a-39b4f308a505', resource_id, 1
-FROM resources WHERE name = 'Wood';

@@ -1,38 +1,42 @@
 package com.soze.idlekluch.game.engine.components;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
-import com.soze.idlekluch.kingdom.entity.Resource;
 
-import javax.persistence.*;
+import java.util.Map;
 import java.util.Objects;
 
-@Entity
-@Table(name = "resource_source_components")
 public class ResourceSourceComponent extends BaseComponent {
 
-  @OneToOne
-  @JoinColumn(name = "resource_id")
-  private Resource resource;
-
-  @Column(name = "bonus")
+  @JsonUnwrapped
+  private EntityUUID resourceId;
   private float bonus;
 
   public ResourceSourceComponent() {
     super(ComponentType.RESOURCE_SOURCE);
   }
 
-  public ResourceSourceComponent(final Resource resource, final float bonus) {
+  public ResourceSourceComponent(final EntityUUID resourceId, final float bonus) {
     this();
-    this.resource = Objects.requireNonNull(resource);
+    this.resourceId = Objects.requireNonNull(resourceId);
     this.bonus = bonus;
   }
 
-  public Resource getResource() {
-    return resource;
+  @JsonCreator
+  public static ResourceSourceComponent factory(final Map<String, Object> properties) {
+    return new ResourceSourceComponent(
+      EntityUUID.fromString((String) properties.get("resourceId")),
+      Double.valueOf((double) properties.get("bonus")).floatValue()
+    );
   }
 
-  public void setResource(final Resource resource) {
-    this.resource = resource;
+  public EntityUUID getResourceId() {
+    return resourceId;
+  }
+
+  public void setResourceId(final EntityUUID resourceId) {
+    this.resourceId = resourceId;
   }
 
   public float getBonus() {
@@ -45,6 +49,6 @@ public class ResourceSourceComponent extends BaseComponent {
 
   @Override
   public ResourceSourceComponent copy() {
-    return new ResourceSourceComponent(getResource(), getBonus());
+    return new ResourceSourceComponent(getResourceId(), getBonus());
   }
 }

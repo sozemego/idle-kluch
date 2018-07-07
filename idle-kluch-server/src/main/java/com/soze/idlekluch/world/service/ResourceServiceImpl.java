@@ -71,7 +71,7 @@ public class ResourceServiceImpl implements ResourceService {
              .stream()
              .filter(entity -> {
                final ResourceSourceComponent resourceSourceComponent = entity.getComponent(ResourceSourceComponent.class);
-               return resource.equals(resourceSourceComponent.getResource());
+               return resource.getResourceId().equals(resourceSourceComponent.getResourceId());
              })
              .collect(Collectors.toList());
   }
@@ -79,12 +79,13 @@ public class ResourceServiceImpl implements ResourceService {
   @Override
   public List<Entity> getResourceEntityTemplates(final String resourceName) {
     Objects.requireNonNull(resourceName);
+    final Resource resource = getResource(resourceName).orElseThrow(() -> new IllegalArgumentException());
 
     return getAllResourceEntityTemplates()
              .stream()
              .filter(entity -> {
                final ResourceSourceComponent resourceSourceComponent = entity.getComponent(ResourceSourceComponent.class);
-               return resourceSourceComponent.getResource().getName().equalsIgnoreCase(resourceName);
+               return resourceSourceComponent.getResourceId().equals(resource.getResourceId());
              })
              .collect(Collectors.toList());
   }
@@ -96,11 +97,12 @@ public class ResourceServiceImpl implements ResourceService {
 
   @Override
   public List<Entity> getAllResourceSources(final Resource resource) {
+    Objects.requireNonNull(resource);
     return getAllResourceSources()
              .stream()
              .filter(source -> {
                final ResourceSourceComponent resourceSourceComponent = source.getComponent(ResourceSourceComponent.class);
-               return resource.equals(resourceSourceComponent.getResource());
+               return resource.getResourceId().equals(resourceSourceComponent.getResourceId());
              })
              .collect(Collectors.toList());
   }
@@ -133,6 +135,12 @@ public class ResourceServiceImpl implements ResourceService {
              .stream()
              .filter(source -> EntityUtils.distance(source, center) <= radius)
              .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<Entity> getResourceSourcesInRadius(final EntityUUID resourceId, final Point center, final float radius) {
+    final Resource resource = getResource(resourceId).orElseThrow(() -> new IllegalArgumentException());
+    return getResourceSourcesInRadius(resource, center, radius);
   }
 
   @Override
@@ -174,5 +182,10 @@ public class ResourceServiceImpl implements ResourceService {
   @Override
   public Optional<Resource> getResource(final String name) {
     return resourceRepository.getResource(name);
+  }
+
+  @Override
+  public Optional<Resource> getResource(final EntityUUID id) {
+    return resourceRepository.getResource(id);
   }
 }

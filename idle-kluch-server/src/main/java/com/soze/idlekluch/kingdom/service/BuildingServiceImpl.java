@@ -86,7 +86,7 @@ public class BuildingServiceImpl implements BuildingService {
     if(resourceHarvesterComponent != null) {
       final PhysicsComponent physicsComponent = building.getComponent(PhysicsComponent.class);
       final List<Entity> resources = resourceService.getResourceSourcesInRadius(
-        resourceHarvesterComponent.getResource(),
+        resourceHarvesterComponent.getResourceId(),
         new Point(
           (int) physicsComponent.getX() - (physicsComponent.getWidth() / 2),
           (int) physicsComponent.getY() - (physicsComponent.getHeight() / 2)
@@ -97,7 +97,7 @@ public class BuildingServiceImpl implements BuildingService {
       if(resources.isEmpty()) {
         throw new NoResourceInRadiusException(
           form.getMessageId(),
-          resourceHarvesterComponent.getResource().getName() + " not in radius " + resourceHarvesterComponent.getRadius()
+          resourceHarvesterComponent.getResourceId() + " not in radius " + resourceHarvesterComponent.getRadius()
         );
       }
       final Entity highestBonusResourceSource = getHighestBonusResourceSource(resources);

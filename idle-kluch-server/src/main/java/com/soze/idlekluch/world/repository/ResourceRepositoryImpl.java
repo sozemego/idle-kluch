@@ -1,5 +1,6 @@
 package com.soze.idlekluch.world.repository;
 
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.core.utils.jpa.QueryUtils;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import org.springframework.stereotype.Repository;
@@ -39,5 +40,13 @@ public class ResourceRepositoryImpl implements ResourceRepository {
     return QueryUtils.getOptional(query, Resource.class);
   }
 
+  @Override
+  public Optional<Resource> getResource(final EntityUUID id) {
+    Objects.requireNonNull(id);
+    final Query query = em.createQuery("SELECT r FROM Resource r WHERE r.resourceId = :id");
+    query.setParameter("id", id);
+
+    return QueryUtils.getOptional(query, Resource.class);
+  }
 }
 

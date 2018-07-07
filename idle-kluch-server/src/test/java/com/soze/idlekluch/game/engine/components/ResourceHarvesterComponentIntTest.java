@@ -70,7 +70,7 @@ public class ResourceHarvesterComponentIntTest {
     final ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
     resourceHarvesterComponent.setSourceSlots(3);
     resourceHarvesterComponent.setSource(sourceId, 2);
-    resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
+    resourceHarvesterComponent.setResourceId(resourceService.getResource("Wood").get().getResourceId());
     pe.setResourceHarvesterComponent(resourceHarvesterComponent);
     entityService.addEntity(pe);
 
@@ -103,7 +103,7 @@ public class ResourceHarvesterComponentIntTest {
     final List<ResourceSourceSlot> slots = resourceHarvesterComponent.getSources();
     Collections.shuffle(slots);
     resourceHarvesterComponent.setSources(slots);
-    resourceHarvesterComponent.setResource(resourceService.getResource("Wood").get());
+    resourceHarvesterComponent.setResourceId(resourceService.getResource("Wood").get().getResourceId());
     pe.setResourceHarvesterComponent(resourceHarvesterComponent);
     entityService.addEntity(pe);
 

@@ -3,23 +3,11 @@ package com.soze.idlekluch.game.engine.components.resourceharvester;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-
-@Embeddable
 public class ResourceSourceSlot {
 
-  @AttributeOverride(name = "id", column = @Column(name = "source_id"))
   @JsonUnwrapped
-  private EntityUUID sourceId;
-
-  @Column(name = "slot_number")
-  private int slotNumber;
-
-  public ResourceSourceSlot() {
-
-  }
+  private final EntityUUID sourceId;
+  private final int slotNumber;
 
   public ResourceSourceSlot(final EntityUUID sourceId, final int slotNumber) {
     this.sourceId = sourceId;
@@ -30,16 +18,8 @@ public class ResourceSourceSlot {
     return sourceId;
   }
 
-  public void setSourceId(final EntityUUID sourceId) {
-    this.sourceId = sourceId;
-  }
-
   public int getSlotNumber() {
     return slotNumber;
-  }
-
-  public void setSlotNumber(final int slotNumber) {
-    this.slotNumber = slotNumber;
   }
 
   @Override
