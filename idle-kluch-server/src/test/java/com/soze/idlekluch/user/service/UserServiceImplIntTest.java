@@ -2,13 +2,13 @@ package com.soze.idlekluch.user.service;
 
 import com.soze.idlekluch.RootConfig;
 import com.soze.idlekluch.core.exception.InvalidFormException;
+import com.soze.idlekluch.core.utils.CommonUtils;
+import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.service.KingdomService;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.UserRegistrationException;
-import com.soze.idlekluch.core.utils.CommonUtils;
-import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(

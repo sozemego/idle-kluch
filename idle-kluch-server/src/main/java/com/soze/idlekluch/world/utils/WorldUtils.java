@@ -3,14 +3,13 @@ package com.soze.idlekluch.world.utils;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
-import com.soze.idlekluch.world.service.WorldService;
 import com.soze.klecs.entity.Entity;
 
 import java.awt.*;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.soze.idlekluch.world.service.WorldService.*;
+import static com.soze.idlekluch.world.service.WorldService.TILE_SIZE;
 
 public final class WorldUtils {
 

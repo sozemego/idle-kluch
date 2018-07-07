@@ -1,7 +1,7 @@
 package com.soze.idlekluch.game.repository;
 
-import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.game.entity.PersistentEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

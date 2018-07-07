@@ -1,12 +1,10 @@
 package com.soze.idlekluch.game.engine.components;
 
-import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.kingdom.entity.Resource;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "resource_source_components")

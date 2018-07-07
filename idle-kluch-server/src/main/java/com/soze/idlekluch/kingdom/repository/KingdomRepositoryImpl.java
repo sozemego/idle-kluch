@@ -1,9 +1,9 @@
 package com.soze.idlekluch.kingdom.repository;
 
 import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
-import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.core.utils.jpa.QueryUtils;
+import com.soze.idlekluch.kingdom.entity.Kingdom;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

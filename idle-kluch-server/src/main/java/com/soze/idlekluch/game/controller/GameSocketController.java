@@ -1,12 +1,11 @@
 package com.soze.idlekluch.game.controller;
 
+import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.game.exception.GameException;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.message.MessageRevert;
-import com.soze.idlekluch.game.message.PauseToggleMessage;
 import com.soze.idlekluch.game.service.GameConnectionRegistryService;
 import com.soze.idlekluch.game.service.GameService;
-import com.soze.idlekluch.core.routes.Routes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;

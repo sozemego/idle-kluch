@@ -2,7 +2,10 @@ package com.soze.idlekluch.kingdom.service;
 
 import com.soze.idlekluch.IntAuthTest;
 import com.soze.idlekluch.RootConfig;
-import com.soze.idlekluch.game.entity.PersistentEntity;
+import com.soze.idlekluch.core.utils.CommonUtils;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.core.utils.jpa.InvalidUUIDException;
+import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
@@ -10,20 +13,12 @@ import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
 import com.soze.idlekluch.kingdom.exception.CannotAffordBuildingException;
 import com.soze.idlekluch.kingdom.exception.SpaceAlreadyOccupiedException;
 import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
-import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
-import com.soze.idlekluch.user.exception.NotAuthenticatedException;
-import com.soze.idlekluch.core.utils.CommonUtils;
-import com.soze.idlekluch.core.utils.jpa.EntityUUID;
-import com.soze.idlekluch.core.utils.jpa.InvalidUUIDException;
-import com.soze.idlekluch.core.utils.sql.DatabaseReset;
-import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.service.ResourceService;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.entity.Entity;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +36,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(

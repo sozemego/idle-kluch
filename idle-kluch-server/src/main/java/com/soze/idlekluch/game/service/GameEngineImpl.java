@@ -3,9 +3,9 @@ package com.soze.idlekluch.game.service;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.idlekluch.core.event.AppStartedEvent;
 import com.soze.idlekluch.core.event.EventPublisher;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.EngineRunner;
 import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
-import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.systems.ResourceHarvesterSystem;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
@@ -13,7 +13,6 @@ import com.soze.klecs.node.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 

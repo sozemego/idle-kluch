@@ -1,7 +1,7 @@
 package com.soze.idlekluch.kingdom.entity;
 
-import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.world.entity.TileId;
 
 import javax.persistence.*;

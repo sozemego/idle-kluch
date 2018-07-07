@@ -4,11 +4,11 @@ import com.soze.idlekluch.IntAuthTest;
 import com.soze.idlekluch.RootConfig;
 import com.soze.idlekluch.core.exception.EntityAlreadyExistsException;
 import com.soze.idlekluch.core.exception.InvalidFormException;
+import com.soze.idlekluch.core.utils.CommonUtils;
+import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.UserAlreadyHasKingdomException;
-import com.soze.idlekluch.core.utils.CommonUtils;
-import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import com.soze.klecs.entity.Entity;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -21,7 +21,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(

@@ -2,8 +2,8 @@ package com.soze.idlekluch.kingdom.repository;
 
 import com.soze.idlekluch.core.exception.EntityAlreadyExistsException;
 import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
-import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.kingdom.entity.Kingdom;
 
 import java.util.List;
 import java.util.Optional;

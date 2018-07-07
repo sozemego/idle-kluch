@@ -1,9 +1,9 @@
 package com.soze.idlekluch;
 
+import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.game.websocket.GameSocketLoggerInterceptor;
 import com.soze.idlekluch.game.websocket.GameSocketOutgoingLoggerInterceptor;
 import com.soze.idlekluch.game.websocket.GameSocketSessionInterceptor;
-import com.soze.idlekluch.core.routes.Routes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;

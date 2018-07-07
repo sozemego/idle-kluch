@@ -7,7 +7,6 @@ import com.soze.klecs.system.EntitySystem;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 
 public abstract class BaseEntitySystem implements EntitySystem {

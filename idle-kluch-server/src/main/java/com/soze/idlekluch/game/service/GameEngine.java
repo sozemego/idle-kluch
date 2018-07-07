@@ -6,7 +6,10 @@ import com.soze.klecs.entity.Entity;
 import com.soze.klecs.node.Node;
 import org.springframework.context.event.EventListener;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Contains the ECS for the game.

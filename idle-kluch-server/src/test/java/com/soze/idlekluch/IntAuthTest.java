@@ -1,5 +1,7 @@
 package com.soze.idlekluch;
 
+import com.soze.idlekluch.core.utils.CommonUtils;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.dto.RegisterKingdomForm;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
@@ -7,8 +9,6 @@ import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.kingdom.service.KingdomService;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.service.UserService;
-import com.soze.idlekluch.core.utils.CommonUtils;
-import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;

@@ -2,7 +2,10 @@ package com.soze.idlekluch.core.utils.io;
 
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Objects;
 
 public class FileUtils {

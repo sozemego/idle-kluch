@@ -4,7 +4,6 @@ import com.google.common.base.Stopwatch;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.klecs.engine.Engine;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Queue;

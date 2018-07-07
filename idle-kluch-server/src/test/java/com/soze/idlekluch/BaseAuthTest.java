@@ -2,12 +2,12 @@ package com.soze.idlekluch;
 
 
 import com.soze.idlekluch.core.routes.Routes;
-import com.soze.idlekluch.user.dto.Jwt;
-import com.soze.idlekluch.user.dto.LoginForm;
-import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.core.utils.CommonUtils;
 import com.soze.idlekluch.core.utils.JsonUtils;
 import com.soze.idlekluch.core.utils.http.HttpClient;
+import com.soze.idlekluch.user.dto.Jwt;
+import com.soze.idlekluch.user.dto.LoginForm;
+import com.soze.idlekluch.user.dto.RegisterUserForm;
 import org.junit.Before;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;

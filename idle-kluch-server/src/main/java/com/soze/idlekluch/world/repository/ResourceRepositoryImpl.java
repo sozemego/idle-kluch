@@ -2,7 +2,6 @@ package com.soze.idlekluch.world.repository;
 
 import com.soze.idlekluch.core.utils.jpa.QueryUtils;
 import com.soze.idlekluch.kingdom.entity.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

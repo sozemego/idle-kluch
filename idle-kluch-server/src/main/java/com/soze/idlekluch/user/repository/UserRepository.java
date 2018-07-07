@@ -1,8 +1,8 @@
 package com.soze.idlekluch.user.repository;
 
 
-import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.user.entity.User;
 
 import java.util.List;
 import java.util.Optional;

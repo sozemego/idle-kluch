@@ -1,13 +1,11 @@
 package com.soze.idlekluch.world.service;
 
-import com.soze.idlekluch.core.event.AppStartedEvent;
 import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.ResourceSourceComponent;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.klecs.entity.Entity;
-import org.springframework.context.event.EventListener;
 
 import java.awt.*;
 import java.util.List;

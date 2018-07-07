@@ -4,13 +4,12 @@ import com.soze.idlekluch.RootConfig;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import com.soze.idlekluch.game.engine.components.NameComponent;
+import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.engine.components.resourceharvester.HarvestingProgress;
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
-import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.message.StartHarvestingMessage;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.game.service.WebSocketMessagingServiceTest;
-import com.soze.idlekluch.world.repository.WorldRepository;
 import com.soze.idlekluch.world.service.ResourceService;
 import com.soze.klecs.entity.Entity;
 import org.junit.Before;
@@ -24,7 +23,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(

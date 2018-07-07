@@ -8,7 +8,6 @@ import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceSourc
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
-import com.soze.idlekluch.world.repository.WorldRepository;
 import com.soze.idlekluch.world.service.ResourceService;
 import org.junit.Before;
 import org.junit.BeforeClass;

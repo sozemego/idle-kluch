@@ -1,11 +1,11 @@
 package com.soze.idlekluch.user.service;
 
 import com.soze.idlekluch.core.aop.annotations.ValidForm;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.exception.AuthUserDoesNotExistException;
 import com.soze.idlekluch.user.exception.UserRegistrationException;
-import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;

@@ -1,16 +1,14 @@
 package com.soze.idlekluch.game.service;
 
+import com.soze.idlekluch.core.routes.Routes;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.EntityConverter;
-import com.soze.idlekluch.game.engine.EntityUtils;
-import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.EntityMessage;
 import com.soze.idlekluch.game.repository.EntityRepository;
 import com.soze.idlekluch.kingdom.events.KingdomRemovedEvent;
-import com.soze.idlekluch.core.routes.Routes;
-import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.klecs.engine.AddedEntityEvent;
 import com.soze.klecs.engine.RemovedEntityEvent;
 import com.soze.klecs.entity.Entity;
@@ -29,7 +27,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.soze.idlekluch.game.engine.EntityUtils.*;
+import static com.soze.idlekluch.game.engine.EntityUtils.getName;
 
 @Service
 public class EntityServiceImpl implements EntityService {

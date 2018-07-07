@@ -2,12 +2,12 @@ package com.soze.idlekluch.kingdom.service;
 
 import com.soze.idlekluch.IntAuthTest;
 import com.soze.idlekluch.RootConfig;
-import com.soze.idlekluch.game.message.BuildBuildingForm;
-import com.soze.idlekluch.game.service.GameEngine;
-import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.core.utils.CommonUtils;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.core.utils.sql.DatabaseReset;
+import com.soze.idlekluch.game.message.BuildBuildingForm;
+import com.soze.idlekluch.game.service.GameEngine;
+import com.soze.idlekluch.kingdom.exception.UserDoesNotHaveKingdomException;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.entity.Entity;

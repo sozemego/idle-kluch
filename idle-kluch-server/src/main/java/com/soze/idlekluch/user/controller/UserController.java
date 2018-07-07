@@ -2,11 +2,11 @@ package com.soze.idlekluch.user.controller;
 
 import com.soze.idlekluch.core.interceptors.RateLimited;
 import com.soze.idlekluch.core.routes.Routes;
+import com.soze.idlekluch.core.utils.http.ErrorResponse;
 import com.soze.idlekluch.user.dto.RegisterUserForm;
 import com.soze.idlekluch.user.dto.SimpleUserDto;
 import com.soze.idlekluch.user.entity.User;
 import com.soze.idlekluch.user.service.UserService;
-import com.soze.idlekluch.core.utils.http.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,6 +2,7 @@ package com.soze.idlekluch.world.service;
 
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
+import com.soze.idlekluch.core.utils.CommonUtils;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.engine.EntityUtils;
@@ -11,7 +12,6 @@ import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.entity.Resource;
-import com.soze.idlekluch.core.utils.CommonUtils;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.idlekluch.world.repository.ResourceRepository;

@@ -1,15 +1,16 @@
 package com.soze.idlekluch.game.engine.components.resourceharvester;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.kingdom.entity.Resource;
-import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "resource_harvester_components")
