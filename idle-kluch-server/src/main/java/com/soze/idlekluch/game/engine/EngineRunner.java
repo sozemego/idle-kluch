@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.engine;
 
+import com.google.common.base.Stopwatch;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.klecs.engine.Engine;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
- * Thread responsible for running the {@link Engine}.
+ * Object responsible for running the {@link Engine}.
  */
 public class EngineRunner implements Runnable {
 
@@ -115,14 +116,23 @@ public class EngineRunner implements Runnable {
   }
 
   private void runActions() {
+    final Stopwatch stopwatch = Stopwatch.createStarted();
+
+    final List<Callable<Void>> callables = getCallables();
+    if(callables.isEmpty()) {
+      return;
+    }
+
     try {
-      List<Future<Void>> futures = executorService.invokeAll(getCallables());
+      List<Future<Void>> futures = executorService.invokeAll(callables);
       while(!futures.isEmpty()) {
         futures.removeIf(Future::isDone);
       }
     } catch (InterruptedException e) {
-      e.printStackTrace();
+
     }
+    stopwatch.stop();
+    System.out.println("Took " + stopwatch.elapsed() + " to run " + callables.size() + " actions.");
   }
 
   private List<Callable<Void>> getCallables() {
