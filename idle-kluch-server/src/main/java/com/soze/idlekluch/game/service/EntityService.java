@@ -1,6 +1,5 @@
 package com.soze.idlekluch.game.service;
 
-import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.kingdom.events.KingdomRemovedEvent;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
@@ -8,7 +7,6 @@ import com.soze.klecs.engine.AddedEntityEvent;
 import com.soze.klecs.engine.RemovedEntityEvent;
 import com.soze.klecs.entity.Entity;
 import com.soze.klecs.node.Node;
-import org.springframework.context.event.EventListener;
 
 import java.util.List;
 import java.util.Optional;
