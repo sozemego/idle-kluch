@@ -7,6 +7,7 @@ import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.core.utils.jpa.InvalidUUIDException;
 import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
+import com.soze.idlekluch.game.service.EntityResourceService;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.exception.BuildingDoesNotExistException;
@@ -76,7 +77,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
   private WorldService worldService;
 
   @Autowired
-  private ResourceService resourceService;
+  private EntityResourceService resourceService;
 
   @BeforeClass
   public static void beforeClass() {
@@ -186,6 +187,7 @@ public class BuildingServiceIntTest extends IntAuthTest {
       .forEach(source -> {
         gameEngine.deleteEntity((EntityUUID) source.getId());
       });
+
     final ConcurrentLinkedQueue<Point> queue = new ConcurrentLinkedQueue<>(pointsToUse);
 
     final List<Thread> threads = new ArrayList<>();

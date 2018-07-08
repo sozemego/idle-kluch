@@ -20,7 +20,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
   private final HarvestingProgress harvestingProgress = new HarvestingProgress();
 
   @Type(type = "jsonb")
-  private List<ResourceSourceSlot> sources = new ArrayList<>();
+  private List<ResourceSourceSlot> slots = new ArrayList<>();
 
   public ResourceHarvesterComponent() {
     super(ComponentType.RESOURCE_HARVESTER);
@@ -30,14 +30,14 @@ public class ResourceHarvesterComponent extends BaseComponent {
                                     final float radius,
                                     final int unitsPerMinute,
                                     final int sourceSlots,
-                                    final List<ResourceSourceSlot> sources) {
+                                    final List<ResourceSourceSlot> slots) {
     this();
     this.resourceId = Objects.requireNonNull(resourceId);
     this.radius = radius;
     this.unitsPerMinute = unitsPerMinute;
     this.sourceSlots = sourceSlots;
-    this.sources = Objects.requireNonNull(sources);
-    fillSources(sources);
+    this.slots = Objects.requireNonNull(slots);
+    fillSlots(slots);
   }
 
   public EntityUUID getResourceId() {
@@ -80,35 +80,35 @@ public class ResourceHarvesterComponent extends BaseComponent {
 
   public void setSourceSlots(final int sourceSlots) {
     this.sourceSlots = sourceSlots;
-    this.fillSources(this.sources);
+    this.fillSlots(this.slots);
   }
 
-  public void setSource(final EntityUUID entityId, final int index) {
+  public void setSlot(final EntityUUID entityId, final int index) {
     if(index > sourceSlots) {
       throw new IllegalArgumentException("This harvester only has " + sourceSlots + ", slot index " + index + " is not accessible.");
     }
-    final List<ResourceSourceSlot> nextSources = new ArrayList<>(this.sources);
-    fillSources(nextSources);
-    nextSources.set(index, new ResourceSourceSlot(entityId, index));
-    this.sources = new ArrayList<>(nextSources);
+    final List<ResourceSourceSlot> nextSlots = new ArrayList<>(this.slots);
+    fillSlots(nextSlots);
+    nextSlots.set(index, new ResourceSourceSlot(entityId, index));
+    this.slots = new ArrayList<>(nextSlots);
   }
 
-  public void setSources(final List<ResourceSourceSlot> sources) {
-    this.sources = sources;
+  public void setSlots(final List<ResourceSourceSlot> slots) {
+    this.slots = slots;
   }
 
-  private void fillSources(final List<ResourceSourceSlot> sources) {
+  private void fillSlots(final List<ResourceSourceSlot> slots) {
     for(int i = 0; i < this.sourceSlots; i++) {
-      if(sources.size() <= i) {
-        sources.add(new ResourceSourceSlot(null, i));
+      if(slots.size() <= i) {
+        slots.add(new ResourceSourceSlot(null, i));
       }
     }
   }
 
-  @JsonProperty("sources")
-  public List<ResourceSourceSlot> getSources() {
-    Collections.sort(this.sources, Comparator.comparingInt(ResourceSourceSlot::getSlotNumber));
-    return this.sources;
+  @JsonProperty("slots")
+  public List<ResourceSourceSlot> getSlots() {
+    Collections.sort(this.slots, Comparator.comparingInt(ResourceSourceSlot::getSlotNumber));
+    return this.slots;
   }
 
   @Override
@@ -118,7 +118,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
       getRadius(),
       getUnitsPerMinute(),
       getSourceSlots(),
-      getSources()
+      getSlots()
     );
   }
 

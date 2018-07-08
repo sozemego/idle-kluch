@@ -69,22 +69,22 @@ public class ResourceHarvesterComponentIntTest {
     pe.setEntityId(id);
     final ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
     resourceHarvesterComponent.setSourceSlots(3);
-    resourceHarvesterComponent.setSource(sourceId, 2);
+    resourceHarvesterComponent.setSlot(sourceId, 2);
     resourceHarvesterComponent.setResourceId(resourceService.getResource("Wood").get().getResourceId());
     pe.setResourceHarvesterComponent(resourceHarvesterComponent);
     entityService.addEntity(pe);
 
-    assertEquals(3, resourceHarvesterComponent.getSources().size());
-    assertEquals(null, resourceHarvesterComponent.getSources().get(0).getSourceId());
-    assertEquals(null, resourceHarvesterComponent.getSources().get(1).getSourceId());
-    assertEquals(sourceId, resourceHarvesterComponent.getSources().get(2).getSourceId());
+    assertEquals(3, resourceHarvesterComponent.getSlots().size());
+    assertEquals(null, resourceHarvesterComponent.getSlots().get(0).getSourceId());
+    assertEquals(null, resourceHarvesterComponent.getSlots().get(1).getSourceId());
+    assertEquals(sourceId, resourceHarvesterComponent.getSlots().get(2).getSourceId());
 
     final PersistentEntity retrievedPe = entityService.getEntity(id).get();
     final ResourceHarvesterComponent retrievedHarvesterComponent = retrievedPe.getResourceHarvesterComponent();
-    assertEquals(3, retrievedHarvesterComponent.getSources().size());
-    assertEquals(null, retrievedHarvesterComponent.getSources().get(0).getSourceId());
-    assertEquals(null, retrievedHarvesterComponent.getSources().get(1).getSourceId());
-    assertEquals(sourceId, retrievedHarvesterComponent.getSources().get(2).getSourceId());
+    assertEquals(3, retrievedHarvesterComponent.getSlots().size());
+    assertEquals(null, retrievedHarvesterComponent.getSlots().get(0).getSourceId());
+    assertEquals(null, retrievedHarvesterComponent.getSlots().get(1).getSourceId());
+    assertEquals(sourceId, retrievedHarvesterComponent.getSlots().get(2).getSourceId());
   }
 
   @Test
@@ -99,19 +99,19 @@ public class ResourceHarvesterComponentIntTest {
     pe.setEntityId(id);
     final ResourceHarvesterComponent resourceHarvesterComponent = new ResourceHarvesterComponent();
     resourceHarvesterComponent.setSourceSlots(25);
-    resourceHarvesterComponent.setSource(sourceId, 12);
-    final List<ResourceSourceSlot> slots = resourceHarvesterComponent.getSources();
+    resourceHarvesterComponent.setSlot(sourceId, 12);
+    final List<ResourceSourceSlot> slots = resourceHarvesterComponent.getSlots();
     Collections.shuffle(slots);
-    resourceHarvesterComponent.setSources(slots);
+    resourceHarvesterComponent.setSlots(slots);
     resourceHarvesterComponent.setResourceId(resourceService.getResource("Wood").get().getResourceId());
     pe.setResourceHarvesterComponent(resourceHarvesterComponent);
     entityService.addEntity(pe);
 
     final PersistentEntity retrievedPe = entityService.getEntity(id).get();
     final ResourceHarvesterComponent retrievedHarvesterComponent = retrievedPe.getResourceHarvesterComponent();
-    assertEquals(25, retrievedHarvesterComponent.getSources().size());
-    assertEquals(null, retrievedHarvesterComponent.getSources().get(0).getSourceId());
-    assertEquals(null, retrievedHarvesterComponent.getSources().get(1).getSourceId());
-    assertEquals(sourceId, retrievedHarvesterComponent.getSources().get(12).getSourceId());
+    assertEquals(25, retrievedHarvesterComponent.getSlots().size());
+    assertEquals(null, retrievedHarvesterComponent.getSlots().get(0).getSourceId());
+    assertEquals(null, retrievedHarvesterComponent.getSlots().get(1).getSourceId());
+    assertEquals(sourceId, retrievedHarvesterComponent.getSlots().get(12).getSourceId());
   }
 }

@@ -1,6 +1,7 @@
 package com.soze.idlekluch.game.engine.components;
 
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.kingdom.entity.Resource;
 import org.hibernate.annotations.Type;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class ResourceStorageComponent extends BaseComponent {
   private int capacity;
 
   @Type(type = "jsonb")
-  private List<EntityUUID> resources = new ArrayList<>();
+  private List<Resource> resources = new ArrayList<>();
 
   public ResourceStorageComponent() {
     super(ComponentType.RESOURCE_STORAGE);
@@ -32,17 +33,17 @@ public class ResourceStorageComponent extends BaseComponent {
     this.capacity = capacity;
   }
 
-  public void addResource(final EntityUUID resource) {
+  public void addResource(final Resource resource) {
     Objects.requireNonNull(resource);
-    final List<EntityUUID> nextResources = new ArrayList<>(resources);
+    final List<Resource> nextResources = new ArrayList<>(resources);
     nextResources.add(resource);
     resources = nextResources;
   }
 
-  public void removeResource(final EntityUUID resource) {
-    final Iterator<EntityUUID> it = resources.iterator();
+  public void removeResource(final Resource resource) {
+    final Iterator<Resource> it = resources.iterator();
     while(it.hasNext()) {
-      final EntityUUID toRemove = it.next();
+      final Resource toRemove = it.next();
       if(toRemove.equals(resource)) {
         it.remove();
         return;
@@ -50,7 +51,7 @@ public class ResourceStorageComponent extends BaseComponent {
     }
   }
 
-  public List<EntityUUID> getResources() {
+  public List<Resource> getResources() {
     return new ArrayList<>(resources);
   }
 

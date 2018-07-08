@@ -1,5 +1,6 @@
 package com.soze.idlekluch.kingdom.entity;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
@@ -12,7 +13,6 @@ public class Resource {
 
   @EmbeddedId
   @AttributeOverride(name = "id", column = @Column(name = "resource_id"))
-  @JsonUnwrapped
   private EntityUUID resourceId;
 
   @Column(name = "name")
@@ -29,6 +29,11 @@ public class Resource {
 
   public EntityUUID getResourceId() {
     return resourceId;
+  }
+
+  @JsonGetter("resourceId")
+  public String getResourceIdString() {
+    return resourceId.toString();
   }
 
   public void setResourceId(final EntityUUID resourceId) {

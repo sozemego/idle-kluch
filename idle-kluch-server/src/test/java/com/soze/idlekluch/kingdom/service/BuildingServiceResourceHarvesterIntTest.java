@@ -5,11 +5,10 @@ import com.soze.idlekluch.RootConfig;
 import com.soze.idlekluch.core.utils.CommonUtils;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.core.utils.sql.DatabaseReset;
-import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.engine.components.ResourceSourceComponent;
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
-import com.soze.idlekluch.game.service.EntityService;
+import com.soze.idlekluch.game.service.EntityResourceService;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.exception.NoResourceInRadiusException;
 import com.soze.idlekluch.world.entity.Tile;
@@ -54,7 +53,7 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
   private GameEngine gameEngine;
 
   @Autowired
-  private ResourceService resourceService;
+  private EntityResourceService resourceService;
 
   @Autowired
   private WorldRepository worldRepository;
@@ -164,7 +163,7 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
       ));
 
     final ResourceHarvesterComponent resourceHarvesterComponent = building.getComponent(ResourceHarvesterComponent.class);
-    final Entity chosenSource = gameEngine.getEntity(resourceHarvesterComponent.getSources().get(0).getSourceId()).get();
+    final Entity chosenSource = gameEngine.getEntity(resourceHarvesterComponent.getSlots().get(0).getSourceId()).get();
     final ResourceSourceComponent source = chosenSource.getComponent(ResourceSourceComponent.class);
     assertEquals(1.2f, source.getBonus(), 0.01);
   }

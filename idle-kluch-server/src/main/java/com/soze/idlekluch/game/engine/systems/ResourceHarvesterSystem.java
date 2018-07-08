@@ -11,6 +11,8 @@ import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceSourc
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.message.StartHarvestingMessage;
 import com.soze.idlekluch.game.service.WebSocketMessagingService;
+import com.soze.idlekluch.kingdom.entity.Resource;
+import com.soze.idlekluch.world.service.ResourceService;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
@@ -23,15 +25,18 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
   private static final Logger LOG = LoggerFactory.getLogger(ResourceHarvesterSystem.class);
 
   private final WebSocketMessagingService webSocketMessagingService;
+  private final ResourceService resourceService;
 
   private final List<EntityUUID> beganHarvesting = new ArrayList<>();
 
   public ResourceHarvesterSystem(final Engine engine,
                                  final Map<EntityUUID, Entity> changedEntities,
-                                 final WebSocketMessagingService webSocketMessagingService) {
+                                 final WebSocketMessagingService webSocketMessagingService,
+                                 final ResourceService resourceService) {
 
     super(engine, changedEntities);
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
+    this.resourceService = Objects.requireNonNull(resourceService);
   }
 
   @Override
@@ -67,7 +72,8 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
     if (currentHarvestingProgress.isFinished() && currentHarvestingProgress.getHarvestingState() == HarvestingProgress.HarvestingState.HARVESTING) {
       currentHarvestingProgress.stop();
       final ResourceHarvesterComponent harvester = entity.getComponent(ResourceHarvesterComponent.class);
-      storage.addResource(harvester.getResourceId());
+      final Resource resource = resourceService.getResource(harvester.getResourceId()).get();
+      storage.addResource(resource);
       addChangedEntity(entity);
       LOG.debug("FINISHED HARVESTING FOR ENTITY [{}][{}][{}]/[{}]", entity.getId(), EntityUtils.getName(entity), storage.getResources().size(), storage.getCapacity());
     }
@@ -88,7 +94,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
   private float getSecondsPerUnit(final Entity entity) {
     final ResourceHarvesterComponent resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
     final int unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
-    final float bonus = getBonus(resourceHarvesterComponent.getSources());
+    final float bonus = getBonus(resourceHarvesterComponent.getSlots());
     float secondsPerUnit = 60 / ((float) unitsPerMinute * bonus);
     return secondsPerUnit;
   }

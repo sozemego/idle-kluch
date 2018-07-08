@@ -10,6 +10,7 @@ import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarve
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
+import com.soze.idlekluch.game.service.EntityResourceService;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
@@ -45,7 +46,7 @@ public class BuildingServiceImpl implements BuildingService {
   private final GameEngine gameEngine;
   private final EntityService entityService;
   private final WorldService worldService;
-  private final ResourceService resourceService;
+  private final EntityResourceService resourceService;
   private final EntityConverter entityConverter;
 
   private final Set<EntityUUID> buildings = ConcurrentHashMap.newKeySet();
@@ -57,7 +58,7 @@ public class BuildingServiceImpl implements BuildingService {
                              final GameEngine gameEngine,
                              final EntityService entityService,
                              final WorldService worldService,
-                             final ResourceService resourceService,
+                             final EntityResourceService resourceService,
                              final EntityConverter entityConverter) {
     this.kingdomService = Objects.requireNonNull(kingdomService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
@@ -101,7 +102,7 @@ public class BuildingServiceImpl implements BuildingService {
         );
       }
       final Entity highestBonusResourceSource = getHighestBonusResourceSource(resources);
-      resourceHarvesterComponent.setSource((EntityUUID) highestBonusResourceSource.getId(), 0);
+      resourceHarvesterComponent.setSlot((EntityUUID) highestBonusResourceSource.getId(), 0);
     }
 
     final Kingdom kingdom = kingdomService.getUsersKingdom(owner).get();

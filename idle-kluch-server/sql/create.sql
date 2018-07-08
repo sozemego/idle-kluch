@@ -206,6 +206,6 @@ INSERT INTO entities (
     '{"idleBucks": 125}',
     null,
     '{"capacity": 20, "resources": []}',
-    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "radius": 256, "unitsPerMinute": 5, "sourceSlots": 1, "sources": []}'
+    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "radius": 256, "unitsPerMinute": 5, "sourceSlots": 1, "slots": []}'
   )
 ;
