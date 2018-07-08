@@ -2,7 +2,7 @@ package com.soze.idlekluch.game.entity;
 
 import com.soze.idlekluch.game.engine.components.BuildableComponent;
 
-public class BuildableComponentType extends ComponentType {
+public class BuildableComponentUserType extends ComponentUserType {
 
   @Override
   public Class returnedClass() {

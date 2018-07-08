@@ -23,43 +23,43 @@ public class PersistentEntity {
   private boolean template;
 
   @Column(name = "graphics_component")
-  @Type(type = "GraphicsComponentType")
+  @Type(type = "GraphicsComponentUserType")
   private GraphicsComponent graphicsComponent;
 
   @Column(name = "physics_component")
-  @Type(type = "PhysicsComponentType")
+  @Type(type = "PhysicsComponentUserType")
   private PhysicsComponent physicsComponent;
 
   @Column(name = "ownership_component")
-  @Type(type = "OwnershipComponentType")
+  @Type(type = "OwnershipComponentUserType")
   private OwnershipComponent ownershipComponent;
 
   @Column(name = "static_occupy_space_component")
-  @Type(type = "StaticOccupySpaceComponentType")
+  @Type(type = "StaticOccupySpaceComponentUserType")
   private StaticOccupySpaceComponent staticOccupySpaceComponent;
 
   @Column(name = "name_component")
-  @Type(type = "NameComponentType")
+  @Type(type = "NameComponentUserType")
   private NameComponent nameComponent;
 
   @Column(name = "buildable_component")
-  @Type(type = "BuildableComponentType")
+  @Type(type = "BuildableComponentUserType")
   private BuildableComponent buildableComponent;
 
   @Column(name = "cost_component")
-  @Type(type = "CostComponentType")
+  @Type(type = "CostComponentUserType")
   private CostComponent costComponent;
 
   @Column(name = "resource_source_component")
-  @Type(type = "ResourceSourceComponentType")
+  @Type(type = "ResourceSourceComponentUserType")
   private ResourceSourceComponent resourceSourceComponent;
 
   @Column(name = "resource_harvester_component")
-  @Type(type = "ResourceHarvesterComponentType")
+  @Type(type = "ResourceHarvesterComponentUserType")
   private ResourceHarvesterComponent resourceHarvesterComponent;
 
   @Column(name = "resource_storage_component")
-  @Type(type = "ResourceStorageComponentType")
+  @Type(type = "ResourceStorageComponentUserType")
   private ResourceStorageComponent resourceStorageComponent;
 
 

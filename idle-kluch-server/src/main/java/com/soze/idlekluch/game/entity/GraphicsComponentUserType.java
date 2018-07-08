@@ -2,7 +2,7 @@ package com.soze.idlekluch.game.entity;
 
 import com.soze.idlekluch.game.engine.components.GraphicsComponent;
 
-public class GraphicsComponentType extends ComponentType {
+public class GraphicsComponentUserType extends ComponentUserType {
 
   @Override
   public Class returnedClass() {

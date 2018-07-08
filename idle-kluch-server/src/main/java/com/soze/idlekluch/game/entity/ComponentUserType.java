@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soze.idlekluch.core.utils.JsonUtils;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.BaseComponent;
+import com.soze.idlekluch.game.engine.components.BaseComponent.ComponentType;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
@@ -16,13 +17,17 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Objects;
 
-public abstract class ComponentType implements UserType {
+public abstract class ComponentUserType implements UserType {
 
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
+  /**
+   * Ignores EntityUUID and ComponentType classes when serializing.
+   */
   static {
     MAPPER.addMixIn(EntityUUID.class, IgnoreEntityUUIDType.class);
+    MAPPER.addMixIn(ComponentType.class, IgnoreComponentType.class);
   }
 
   @Override
@@ -106,6 +111,11 @@ public abstract class ComponentType implements UserType {
 
   @JsonIgnoreType
   private static class IgnoreEntityUUIDType {
+
+  }
+
+  @JsonIgnoreType
+  private static class IgnoreComponentType {
 
   }
 

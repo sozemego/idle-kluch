@@ -83,15 +83,15 @@ INSERT INTO entities (
  VALUES
   (
     '7a4df465-b4c3-4e9f-854a-248988220dfb', true,
-    '{"x": 0, "y": 0, "width": 50, "height": 55, "type": "PHYSICS"}',
-    '{"asset": "small_warehouse", "type": "GRAPHICS"}',
-    '{"ownerId": "7a4df465-b4c3-4e9f-854a-248988220dfb", "type": "OWNERSHIP"}',
-    '{"type": "STATIC_OCCUPY_SPACE"}',
-    '{"name": "Small warehouse", "type": "NAME"}',
-    '{"type": "BUILDABLE"}',
-    '{"idleBucks": 100, "type": "COST"}',
+    '{"x": 0, "y": 0, "width": 50, "height": 55}',
+    '{"asset": "small_warehouse"}',
+    '{"ownerId": "7a4df465-b4c3-4e9f-854a-248988220dfb"}',
+    '{}',
+    '{"name": "Small warehouse"}',
+    '{}',
+    '{"idleBucks": 100}',
     null,
-    '{"capacity": 100, "resources": [], "type": "RESOURCE_STORAGE"}',
+    '{"capacity": 100, "resources": []}',
     null
   )
 ;
@@ -104,15 +104,15 @@ INSERT INTO entities (
  VALUES
   (
     '4517e8b9-de2e-473d-98e8-4c6c73c46c4d', true,
-    '{"x": 0, "y": 0, "width": 80, "height": 81, "type": "PHYSICS"}',
-    '{"asset": "warehouse", "type": "GRAPHICS"}',
-    '{"ownerId": "4517e8b9-de2e-473d-98e8-4c6c73c46c4d", "type": "OWNERSHIP"}',
-    '{"type": "STATIC_OCCUPY_SPACE"}',
-    '{"name": "Warehouse", "type": "NAME"}',
-    '{"type": "BUILDABLE"}',
-    '{"idleBucks": 250, "type": "COST"}',
+    '{"x": 0, "y": 0, "width": 80, "height": 81}',
+    '{"asset": "warehouse"}',
+    '{"ownerId": "4517e8b9-de2e-473d-98e8-4c6c73c46c4d"}',
+    '{}',
+    '{"name": "Warehouse"}',
+    '{}',
+    '{"idleBucks": 250}',
     null,
-    '{"capacity": 250, "resources": [], "type": "RESOURCE_STORAGE"}',
+    '{"capacity": 250, "resources": []}',
     null
   )
 ;
@@ -125,14 +125,14 @@ INSERT INTO entities (
  VALUES
   (
     'f520432b-4bf5-448f-95f4-14643e078288', true,
-    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}',
-    '{"asset": "forest_1", "type": "GRAPHICS"}',
+    '{"x": 0, "y": 0, "width": 64, "height": 64}',
+    '{"asset": "forest_1"}',
     null,
-    '{"type": "STATIC_OCCUPY_SPACE"}',
-    '{"name": "forest_1", "type": "NAME"}',
+    '{}',
+    '{"name": "forest_1"}',
     null,
     null,
-    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "bonus": 1.2, "type": "RESOURCE_SOURCE"}',
+    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "bonus": 1.2}',
     null,
     null
   )
@@ -146,14 +146,14 @@ INSERT INTO entities (
  VALUES
   (
     '7e10d339-dc10-4204-914c-cdfb2039460d', true,
-    '{"x": 0, "y": 0, "width": 80, "height": 81, "type": "PHYSICS"}',
-    '{"asset": "forest_2", "type": "GRAPHICS"}',
+    '{"x": 0, "y": 0, "width": 80, "height": 81}',
+    '{"asset": "forest_2"}',
     null,
-    '{"type": "STATIC_OCCUPY_SPACE"}',
-    '{"name": "forest_2", "type": "NAME"}',
+    '{}',
+    '{"name": "forest_2"}',
     null,
     null,
-    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "bonus": 1.0, "type": "RESOURCE_SOURCE"}',
+    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "bonus": 1.0}',
     null,
     null
   )
@@ -167,14 +167,14 @@ INSERT INTO entities (
  VALUES
   (
     '24eba6e6-fe5f-4d14-86a4-cd80331beedf', true,
-    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}',
-    '{"asset": "forest_3", "type": "GRAPHICS"}',
+    '{"x": 0, "y": 0, "width": 64, "height": 64}',
+    '{"asset": "forest_3"}',
     null,
-    '{"type": "STATIC_OCCUPY_SPACE"}',
-    '{"name": "forest_3", "type": "NAME"}',
+    '{}',
+    '{"name": "forest_3"}',
     null,
     null,
-    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "bonus": 1.2, "type": "RESOURCE_SOURCE"}',
+    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "bonus": 1.2}',
     null,
     null
   )
@@ -188,14 +188,14 @@ INSERT INTO entities (
  VALUES
   (
     'f0e8b54b-3944-41c8-a6b0-ac291c455cd0', true,
-    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}',
-    '{"asset": "forest_4", "type": "GRAPHICS"}',
+    '{"x": 0, "y": 0, "width": 64, "height": 64}',
+    '{"asset": "forest_4"}',
     null,
-    '{"type": "STATIC_OCCUPY_SPACE"}',
-    '{"name": "forest_4", "type": "NAME"}',
+    '{}',
+    '{"name": "forest_4"}',
     null,
     null,
-    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "bonus": 1.0, "type": "RESOURCE_SOURCE"}',
+    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "bonus": 1.0}',
     null,
     null
   )
@@ -209,15 +209,15 @@ INSERT INTO entities (
  VALUES
   (
     '03c99070-66d5-4dea-b57a-39b4f308a505', true,
-    '{"x": 0, "y": 0, "width": 64, "height": 64, "type": "PHYSICS"}',
-    '{"asset": "woodcutter", "type": "GRAPHICS"}',
-    '{"ownerId": "4517e8b9-de2e-473d-98e8-4c6c73c46c4d", "type": "OWNERSHIP"}',
-    '{"type": "STATIC_OCCUPY_SPACE"}',
-    '{"name": "Woodcutter", "type": "NAME"}',
-    '{"type": "BUILDABLE"}',
-    '{"idleBucks": 125, "type": "COST"}',
+    '{"x": 0, "y": 0, "width": 64, "height": 64}',
+    '{"asset": "woodcutter"}',
+    '{"ownerId": "4517e8b9-de2e-473d-98e8-4c6c73c46c4d"}',
+    '{}',
+    '{"name": "Woodcutter"}',
+    '{}',
+    '{"idleBucks": 125}',
     null,
-    '{"capacity": 20, "resources": [], "type": "RESOURCE_STORAGE"}',
-    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "radius": 256, "unitsPerMinute": 5, "sourceSlots": 0, "sources": [], "type": "RESOURCE_HARVESTER"}'
+    '{"capacity": 20, "resources": []}',
+    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "radius": 256, "unitsPerMinute": 5, "sourceSlots": 0, "sources": []}'
   )
 ;

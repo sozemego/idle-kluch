@@ -2,7 +2,7 @@ package com.soze.idlekluch.game.entity;
 
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 
-public class OwnershipComponentType extends ComponentType {
+public class OwnershipComponentUserType extends ComponentUserType {
 
   @Override
   public Class returnedClass() {

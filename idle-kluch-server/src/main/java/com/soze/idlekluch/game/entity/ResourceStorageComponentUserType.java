@@ -2,7 +2,7 @@ package com.soze.idlekluch.game.entity;
 
 import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 
-public class ResourceStorageComponentType extends ComponentType {
+public class ResourceStorageComponentUserType extends ComponentUserType {
 
   @Override
   public Class returnedClass() {

@@ -2,7 +2,7 @@ package com.soze.idlekluch.game.entity;
 
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 
-public class ResourceHarvesterComponentType extends ComponentType {
+public class ResourceHarvesterComponentUserType extends ComponentUserType {
 
   @Override
   public Class returnedClass() {

@@ -2,21 +2,19 @@ package com.soze.idlekluch.game.engine.components.resourceharvester;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.soze.idlekluch.core.utils.JsonUtils;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.BaseComponent;
-import com.soze.idlekluch.game.entity.ResourceHarvesterComponentType;
+import com.soze.idlekluch.game.entity.ResourceHarvesterComponentUserType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@TypeDef(name = "ResourceHarvesterComponentType", typeClass = ResourceHarvesterComponentType.class)
+@TypeDef(name = "ResourceHarvesterComponentUserType", typeClass = ResourceHarvesterComponentUserType.class)
 public class ResourceHarvesterComponent extends BaseComponent {
 
   private EntityUUID resourceId;
