@@ -36,7 +36,7 @@ export class ResourceHarvesterRendererSystem {
     sprite.height = 12;
 
     if (selectedEntity.getId() === entity.getId()) {
-      harvesterComponent.getSources().forEach(this.renderSource);
+      harvesterComponent.getSlots().forEach(this.renderSource);
     }
   };
 
@@ -49,8 +49,8 @@ export class ResourceHarvesterRendererSystem {
     return sprite;
   };
 
-  renderSource = (source) => {
-    const sourceEntity = this.getEngine().getEntityById(source.id);
+  renderSource = (slot) => {
+    const sourceEntity = this.getEngine().getEntityById(slot.sourceId);
     const physicsComponent = sourceEntity.getComponent(PhysicsComponent);
     this.entitySelector.clear();
     this.entitySelector.lineStyle(2, 0xdd00dd, 1);

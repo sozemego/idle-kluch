@@ -70,7 +70,7 @@ export class SelectedEntityInfo extends Component {
 
     const resourceHarvesterComponent = selectedEntity.getComponent(ResourceHarvesterComponent);
     const unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
-    const bonus = this.getBonus(resourceHarvesterComponent.getSources());
+    const bonus = this.getBonus(resourceHarvesterComponent.getSlots());
 
     return {
       baseUnitsPerMinute: unitsPerMinute,
@@ -79,10 +79,10 @@ export class SelectedEntityInfo extends Component {
     };
   };
 
-  getBonus = (sources) => {
+  getBonus = (slots) => {
     const { getEntityById } = this.props;
-    return sources
-      .map(source => getEntityById(source.id))
+    return slots
+      .map(slots => getEntityById(slots.sourceId))
       .map(entity => {
         const resourceSource = entity.getComponent(ResourceSourceComponent);
         return resourceSource.getBonus();
@@ -91,14 +91,13 @@ export class SelectedEntityInfo extends Component {
   };
 
   getStorageComponent = () => {
-    const { selectedEntity, getResourceByName } = this.props;
+    const { selectedEntity } = this.props;
     const storageComponent = selectedEntity.getComponent(ResourceStorageComponent);
     if (!storageComponent) {
       return null;
     }
 
     const resourceCounts = this.getResourceCounts();
-    console.log(resourceCounts);
 
     return (
       <div className={style.section}>
@@ -124,6 +123,7 @@ export class SelectedEntityInfo extends Component {
     const { selectedEntity } = this.props;
     const storageComponent = selectedEntity.getComponent(ResourceStorageComponent);
     const resources = storageComponent.getResources();
+
     const resourceMap = resources.reduce((prev, curr) => {
       if(!prev[curr.name]) {
         prev[curr.name] = {

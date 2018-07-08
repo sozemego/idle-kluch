@@ -139,7 +139,7 @@ const addEntity = (state, { payload: entity }) => {
           component.resourceId,
           component.radius,
           component.unitsPerMinute,
-          component.sources,
+          component.slots,
           component.sourceSlots,
           component.harvestingProgress,
         );

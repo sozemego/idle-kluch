@@ -46,14 +46,14 @@ export class ResourceHarvesterSystem {
   getSecondsPerUnit = (entity) => {
     const resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent);
     const unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
-    const bonus = this.getBonus(resourceHarvesterComponent.getSources());
+    const bonus = this.getBonus(resourceHarvesterComponent.getSlots());
     const secondsPerUnit = 60 / (unitsPerMinute * bonus);
     return secondsPerUnit;
   };
 
-  getBonus = (sources) => {
-    return sources
-      .map(source => this.getEngine().getEntityById(source.id))
+  getBonus = (slots) => {
+    return slots
+      .map(slot => this.getEngine().getEntityById(slot.sourceId))
       .map(entity => {
         const resourceSource = entity.getComponent(ResourceSourceComponent);
         return resourceSource.getBonus();
