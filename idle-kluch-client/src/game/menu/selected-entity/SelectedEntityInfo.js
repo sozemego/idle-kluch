@@ -34,13 +34,13 @@ export class SelectedEntityInfo extends Component {
   };
 
   getHarvestingComponent = () => {
-    const { selectedEntity } = this.props;
+    const { selectedEntity, getResourceById } = this.props;
     const harvester = selectedEntity.getComponent(ResourceHarvesterComponent);
     if (!harvester) {
       return null;
     }
 
-    const resource = harvester.getResource();
+    const resource = getResourceById(harvester.getResource());
     const harvestingState = harvester.getState();
     const value = harvestingState === HARVESTING_STATE.WAITING ? 0 : harvester.getProgress() * 100;
 
@@ -158,6 +158,6 @@ export class SelectedEntityInfo extends Component {
 
 SelectedEntityInfo.propTypes = {
   selectedEntity: PropTypes.instanceOf(Entity).isRequired,
-  getResourceByName: PropTypes.func.isRequired,
+  getResourceById: PropTypes.func.isRequired,
   getEntityById: PropTypes.func.isRequired,
 };

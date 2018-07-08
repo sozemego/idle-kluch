@@ -13,6 +13,12 @@ export const getResourceByName = (state, name) => {
   return resources.find(resource => resource.name === name);
 };
 
+export const getResourceById = (state, id) => {
+  const resources = getResources(state);
+
+  return resources.find(resource => resource.resourceId === id);
+};
+
 export const getEntityById = (state, id) => {
   return getEngine(state).getEntityById(id);
 };
