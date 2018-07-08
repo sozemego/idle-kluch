@@ -4,18 +4,6 @@ DROP TABLE IF EXISTS world;
 DROP TABLE IF EXISTS tiles;
 DROP TABLE IF EXISTS resources CASCADE;
 DROP TABLE IF EXISTS entities CASCADE;
-DROP TABLE IF EXISTS physics_components CASCADE;
-DROP TABLE IF EXISTS graphics_components CASCADE;
-DROP TABLE IF EXISTS ownership_components CASCADE;
-DROP TABLE IF EXISTS static_occupy_space_components CASCADE;
-DROP TABLE IF EXISTS name_components CASCADE;
-DROP TABLE IF EXISTS buildable_components CASCADE;
-DROP TABLE IF EXISTS cost_components CASCADE;
-DROP TABLE IF EXISTS resource_harvester_slots CASCADE;
-DROP TABLE IF EXISTS resource_source_components CASCADE;
-DROP TABLE IF EXISTS resource_harvester_components CASCADE;
-DROP TABLE IF EXISTS resource_storage_components CASCADE;
-DROP TABLE IF EXISTS resource_storage CASCADE;
 
 CREATE TABLE users (
   user_id uuid NOT NULL PRIMARY KEY,
@@ -146,7 +134,7 @@ INSERT INTO entities (
  VALUES
   (
     '7e10d339-dc10-4204-914c-cdfb2039460d', true,
-    '{"x": 0, "y": 0, "width": 80, "height": 81}',
+    '{"x": 0, "y": 0, "width": 64, "height": 64}',
     '{"asset": "forest_2"}',
     null,
     '{}',
