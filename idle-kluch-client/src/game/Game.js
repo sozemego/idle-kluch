@@ -64,8 +64,6 @@ let entitySprites = null;
 
 let isBuildingConstructable = false;
 
-let updateTimeLeft = 0;
-
 let isRunning = true;
 
 const delta = 1 / 60;
