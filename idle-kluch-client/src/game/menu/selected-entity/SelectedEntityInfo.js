@@ -107,6 +107,7 @@ export class SelectedEntityInfo extends Component {
             return (
               <Chip
                 label={resource.count}
+                key={resource.name}
                 avatar={
                   <img className={style.resource_icon} src={`/resources/${resource.name}.png`}/>
                 }
