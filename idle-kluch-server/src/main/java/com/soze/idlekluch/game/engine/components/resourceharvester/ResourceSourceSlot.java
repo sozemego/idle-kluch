@@ -1,21 +1,37 @@
 package com.soze.idlekluch.game.engine.components.resourceharvester;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
 public class ResourceSourceSlot {
 
-  @JsonUnwrapped
-  private final EntityUUID sourceId;
-  private final int slotNumber;
+  private EntityUUID sourceId;
+  private int slotNumber;
+
+  public ResourceSourceSlot() {
+  }
 
   public ResourceSourceSlot(final EntityUUID sourceId, final int slotNumber) {
     this.sourceId = sourceId;
     this.slotNumber = slotNumber;
   }
 
+  public void setSourceId(final EntityUUID sourceId) {
+    this.sourceId = sourceId;
+  }
+
+  public void setSlotNumber(final int slotNumber) {
+    this.slotNumber = slotNumber;
+  }
+
   public EntityUUID getSourceId() {
     return sourceId;
+  }
+
+  @JsonGetter("sourceId")
+  public String getSourceIdString() {
+    return sourceId == null ? null : sourceId.toString();
   }
 
   public int getSlotNumber() {

@@ -1,20 +1,16 @@
 package com.soze.idlekluch.game.engine.components.resourceharvester;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.BaseComponent;
-import com.soze.idlekluch.game.entity.ResourceHarvesterComponentUserType;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
-@TypeDef(name = "ResourceHarvesterComponentUserType", typeClass = ResourceHarvesterComponentUserType.class)
 public class ResourceHarvesterComponent extends BaseComponent {
 
   private EntityUUID resourceId;
@@ -46,23 +42,18 @@ public class ResourceHarvesterComponent extends BaseComponent {
     fillSources(sources);
   }
 
-  @JsonCreator
-  public static ResourceHarvesterComponent factory(final Map<String, Object> properties) {
-    return new ResourceHarvesterComponent(
-      EntityUUID.fromString((String) properties.get("resourceId")),
-      Float.valueOf("" + properties.get("radius")),
-      (int) properties.get("unitsPerMinute"),
-      (int) properties.get("sourceSlots"),
-      (List<ResourceSourceSlot>) properties.get("sources")
-    );
-  }
-
   public EntityUUID getResourceId() {
     return resourceId;
   }
 
+  @JsonGetter("resourceId")
+  public String getResourceIdString() {
+    return resourceId.toString();
+  }
+
   public void setResourceId(final EntityUUID resourceId) {
-    this.resourceId = resourceId;
+    Objects.requireNonNull(resourceId.getId());
+    this.resourceId = Objects.requireNonNull(resourceId);
   }
 
   public float getRadius() {

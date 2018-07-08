@@ -23,10 +23,9 @@ public abstract class ComponentUserType implements UserType {
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
   /**
-   * Ignores EntityUUID and ComponentType classes when serializing.
+   * Ignores ComponentType classes when serializing.
    */
   static {
-    MAPPER.addMixIn(EntityUUID.class, IgnoreEntityUUIDType.class);
     MAPPER.addMixIn(ComponentType.class, IgnoreComponentType.class);
   }
 

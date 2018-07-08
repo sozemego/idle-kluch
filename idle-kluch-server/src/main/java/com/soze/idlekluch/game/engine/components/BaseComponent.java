@@ -1,5 +1,7 @@
 package com.soze.idlekluch.game.engine.components;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.soze.idlekluch.game.entity.*;
 import com.vladmihalcea.hibernate.type.array.IntArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
@@ -34,6 +36,7 @@ import java.util.Objects;
   @TypeDef(name = "ResourceHarvesterComponentUserType", typeClass = ResourceHarvesterComponentUserType.class),
   @TypeDef(name = "ResourceStorageComponentUserType", typeClass = ResourceStorageComponentUserType.class)
 })
+@JsonInclude(Include.NON_NULL)
 public abstract class BaseComponent {
 
   @Transient
