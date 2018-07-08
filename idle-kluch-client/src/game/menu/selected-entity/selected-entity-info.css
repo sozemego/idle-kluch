@@ -26,3 +26,7 @@
     flex-direction: row;
     justify-content: flex-start;
 }
+
+.divider {
+    margin: 4px !important;
+}

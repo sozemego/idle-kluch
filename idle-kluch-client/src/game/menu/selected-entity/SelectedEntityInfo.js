@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Entity } from "../../../ecs/Entity";
 import { NameComponent } from "../../../ecs/components/NameComponent";
@@ -28,7 +28,7 @@ export class SelectedEntityInfo extends Component {
         <div className={style.name_container}>
           {nameComponent.getName()}
         </div>
-        <Divider/>
+        <Divider className={style.divider}/>
       </div>
     );
   };
@@ -63,7 +63,7 @@ export class SelectedEntityInfo extends Component {
         <div>
           {bonus === 1 ? "No bonus" : `Bonus multiplier ${bonus}`}
         </div>
-        <Divider/>
+        <Divider className={style.divider}/>
       </div>
     )
   };
@@ -120,7 +120,7 @@ export class SelectedEntityInfo extends Component {
             )
           })}
         </div>
-        <Divider />
+        <Divider className={style.divider}/>
       </div>
     );
   };
