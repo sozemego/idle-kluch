@@ -8,7 +8,7 @@ import { ResourceHarvesterComponent } from "../../../ecs/components/ResourceHarv
 import { HARVESTING_STATE } from "../../../ecs/constants";
 import { ResourceSourceComponent } from "../../../ecs/components/ResourceSourceComponent";
 import { ResourceStorageComponent } from "../../../ecs/components/ResourceStorageComponent";
-import { Chip } from "@material-ui/core/es/index";
+import { Avatar, Chip } from "@material-ui/core/es/index";
 
 export class SelectedEntityInfo extends Component {
 
@@ -51,7 +51,10 @@ export class SelectedEntityInfo extends Component {
       <div className={style.section}>
         <span>Harvesting</span>
         <div className={style.harvester_header}>
-          <img className={style.resource_icon} src={`/resources/${resource.name}.png`}/>{harvestingState}
+          <Avatar>
+            <img className={style.resource_icon} src={`/resources/${resource.name}.png`}/>
+          </Avatar>
+          {harvestingState}
         </div>
         <LinearProgress variant={"determinate"} value={value}/>
         <div>
@@ -109,7 +112,9 @@ export class SelectedEntityInfo extends Component {
                 label={resource.count}
                 key={resource.name}
                 avatar={
-                  <img className={style.resource_icon} src={`/resources/${resource.name}.png`}/>
+                  <Avatar>
+                    <img className={style.resource_icon} src={`/resources/${resource.name}.png`}/>
+                  </Avatar>
                 }
               />
             )
