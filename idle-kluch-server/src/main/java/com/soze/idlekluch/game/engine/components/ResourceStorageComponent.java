@@ -1,6 +1,5 @@
 package com.soze.idlekluch.game.engine.components;
 
-import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import org.hibernate.annotations.Type;
 
@@ -58,5 +57,19 @@ public class ResourceStorageComponent extends BaseComponent {
   @Override
   public BaseComponent copy() {
     return new ResourceStorageComponent(getCapacity());
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    final ResourceStorageComponent that = (ResourceStorageComponent) o;
+    return capacity == that.capacity &&
+             Objects.equals(resources, that.resources);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(capacity, resources);
   }
 }
