@@ -1,11 +1,8 @@
 package com.soze.idlekluch.game.engine.components;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -15,7 +12,6 @@ import java.util.Objects;
  */
 public class OwnershipComponent extends BaseComponent {
 
-  @JsonUnwrapped
   private EntityUUID ownerId;
 
   public OwnershipComponent() {
@@ -27,15 +23,13 @@ public class OwnershipComponent extends BaseComponent {
     this.ownerId = Objects.requireNonNull(ownerId);
   }
 
-  @JsonCreator
-  public static OwnershipComponent factory(final Map<String, Object> properties) {
-    return new OwnershipComponent(
-      EntityUUID.fromString((String) properties.get("ownerId"))
-    );
-  }
-
   public EntityUUID getOwnerId() {
     return ownerId;
+  }
+
+  @JsonGetter("ownerId")
+  public String getOwnerIdString() {
+    return ownerId.toString();
   }
 
   public void setOwnerId(final EntityUUID ownerId) {

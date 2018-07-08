@@ -45,7 +45,7 @@ import static org.junit.Assert.assertEquals;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
 
-  private static final String WOODCUTTER_ID = "7e10d339-dc10-4204-914c-cdfb2039460d";
+  private static final String WOODCUTTER_ID = "03c99070-66d5-4dea-b57a-39b4f308a505";
 
   @Autowired
   private BuildingService buildingService;
@@ -54,16 +54,10 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
   private GameEngine gameEngine;
 
   @Autowired
-  private EntityService entityService;
-
-  @Autowired
   private ResourceService resourceService;
 
   @Autowired
   private WorldRepository worldRepository;
-
-  @Autowired
-  private EntityConverter entityConverter;
 
   @BeforeClass
   public static void beforeClass() {
@@ -153,8 +147,6 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
 
     final List<Entity> woodSources = resourceService.getResourceEntityTemplates("Wood");
     final Entity forestTemplate = woodSources.get(0);
-    final ResourceSourceComponent forestSource = forestTemplate.getComponent(ResourceSourceComponent.class);
-    final float forestBonus = forestSource.getBonus();
     resourceService.placeResourceSource((EntityUUID) forestTemplate.getId(), new Point(170, 170));
 
     final Entity smallForestTemplate = woodSources.get(1);
@@ -174,7 +166,7 @@ public class BuildingServiceResourceHarvesterIntTest extends IntAuthTest {
     final ResourceHarvesterComponent resourceHarvesterComponent = building.getComponent(ResourceHarvesterComponent.class);
     final Entity chosenSource = gameEngine.getEntity(resourceHarvesterComponent.getSources().get(0).getSourceId()).get();
     final ResourceSourceComponent source = chosenSource.getComponent(ResourceSourceComponent.class);
-    assertEquals(source.getBonus(), forestBonus, 0.01);
+    assertEquals(1.2f, source.getBonus(), 0.01);
   }
 
 }
