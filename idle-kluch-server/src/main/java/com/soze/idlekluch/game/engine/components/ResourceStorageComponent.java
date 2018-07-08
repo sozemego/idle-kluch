@@ -19,6 +19,12 @@ public class ResourceStorageComponent extends BaseComponent {
     super(ComponentType.RESOURCE_STORAGE);
   }
 
+  public ResourceStorageComponent(final int capacity, final List<Resource> resources) {
+    this();
+    this.capacity = capacity;
+    this.resources = Objects.requireNonNull(resources);
+  }
+
   public ResourceStorageComponent(final int capacity) {
     this();
     this.capacity = capacity;
@@ -56,7 +62,7 @@ public class ResourceStorageComponent extends BaseComponent {
 
   @Override
   public BaseComponent copy() {
-    return new ResourceStorageComponent(getCapacity());
+    return new ResourceStorageComponent(getCapacity(), getResources());
   }
 
   @Override
