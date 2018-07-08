@@ -197,7 +197,7 @@ INSERT INTO entities (
  VALUES
   (
     '03c99070-66d5-4dea-b57a-39b4f308a505', true,
-    '{"x": 0, "y": 0, "width": 64, "height": 64}',
+    '{"x": 0, "y": 0, "width": 80, "height": 81}',
     '{"asset": "woodcutter"}',
     '{"ownerId": "4517e8b9-de2e-473d-98e8-4c6c73c46c4d"}',
     '{}',
