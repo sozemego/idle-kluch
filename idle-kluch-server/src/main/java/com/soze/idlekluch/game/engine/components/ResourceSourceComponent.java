@@ -1,17 +1,12 @@
 package com.soze.idlekluch.game.engine.components;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
-import java.util.Map;
 import java.util.Objects;
 
 public class ResourceSourceComponent extends BaseComponent {
 
-  @JsonUnwrapped
   private EntityUUID resourceId;
   private float bonus;
 
@@ -23,14 +18,6 @@ public class ResourceSourceComponent extends BaseComponent {
     this();
     this.resourceId = Objects.requireNonNull(resourceId);
     this.bonus = bonus;
-  }
-
-  @JsonCreator
-  public static ResourceSourceComponent factory(final Map<String, Object> properties) {
-    return new ResourceSourceComponent(
-      EntityUUID.fromString((String) properties.get("resourceId")),
-      Double.valueOf((double) properties.get("bonus")).floatValue()
-    );
   }
 
   public EntityUUID getResourceId() {
