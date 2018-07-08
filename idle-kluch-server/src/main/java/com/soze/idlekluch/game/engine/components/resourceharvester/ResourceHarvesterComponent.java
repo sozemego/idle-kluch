@@ -7,9 +7,7 @@ import com.soze.idlekluch.game.engine.components.BaseComponent;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Transient;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class ResourceHarvesterComponent extends BaseComponent {
 
@@ -109,6 +107,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
 
   @JsonProperty("sources")
   public List<ResourceSourceSlot> getSources() {
+    Collections.sort(this.sources, Comparator.comparingInt(ResourceSourceSlot::getSlotNumber));
     return this.sources;
   }
 
