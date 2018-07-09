@@ -7,17 +7,23 @@ sudo apt-get -y install default-jdk
 #set JAVA_HOME
 JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:bin/javac::")
 
-#Configure tomcat
-sudo groupadd tomcat
-sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
-
 #download it to temp folder
 cd /tmp
-curl -O http://ftp.man.poznan.pl/apache/tomcat/tomcat-8/v8.5.31/bin/apache-tomcat-8.5.31.tar.gz
+curl -O http://ftp.ps.pl/pub/apache/tomcat/tomcat-8/v8.5.32/bin/apache-tomcat-8.5.32.tar.gz
+if [ $? -eq 0 ]; then
+    echo 'downloaded tomcat successfuly'
+else
+    echo 'failed to download tomcat'
+    exit 1
+fi
 
 #unpack it
 sudo mkdir /opt/tomcat
 sudo tar xzvf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
+
+#Configure tomcat
+sudo groupadd tomcat
+sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
 
 #give tomcat user rights over the tomcat folder
 cd /opt/tomcat

@@ -73,7 +73,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, path: "bootstrap.sh"
   config.vm.provision :shell, path: "bootstrap-postgresql.sh", env: {"POSTGRES_PASSWORD" => ENV['IDLE_KLUCH_DATABASE_PASSWORD']}
   config.vm.provision :shell, inline: <<-SHELL
-    reboot
+    sudo reboot
   SHELL
 
 
