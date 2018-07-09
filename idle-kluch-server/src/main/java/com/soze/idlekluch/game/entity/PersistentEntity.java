@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Entity
-@Table(name = "entities")
+@Table(name = "entity")
 public class PersistentEntity {
 
   @EmbeddedId

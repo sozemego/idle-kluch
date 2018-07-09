@@ -11,7 +11,7 @@ import javax.persistence.Transient;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tiles")
+@Table(name = "tile")
 public class Tile {
 
   @EmbeddedId

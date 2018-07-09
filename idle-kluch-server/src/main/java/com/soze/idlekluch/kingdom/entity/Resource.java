@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "resources")
+@Table(name = "resource")
 public class Resource {
 
   @EmbeddedId

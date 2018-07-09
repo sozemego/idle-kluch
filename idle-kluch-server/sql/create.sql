@@ -1,11 +1,11 @@
-DROP TABLE IF EXISTS kingdoms CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS kingdom CASCADE;
+DROP TABLE IF EXISTS user_table CASCADE; -- user is postgresql reserved word, so table is called user_table
 DROP TABLE IF EXISTS world;
-DROP TABLE IF EXISTS tiles;
-DROP TABLE IF EXISTS resources CASCADE;
-DROP TABLE IF EXISTS entities CASCADE;
+DROP TABLE IF EXISTS tile;
+DROP TABLE IF EXISTS resource CASCADE;
+DROP TABLE IF EXISTS entity CASCADE;
 
-CREATE TABLE users (
+CREATE TABLE user_table (
   user_id uuid NOT NULL PRIMARY KEY,
   created_at TIMESTAMP NOT NULL,
   deleted boolean DEFAULT FALSE NOT NULL,
@@ -18,24 +18,24 @@ CREATE TABLE world (
   world_id BIGINT PRIMARY KEY
 );
 
-CREATE TABLE tiles (
+CREATE TABLE tile (
   x INTEGER NOT NULL,
   y INTEGER NOT NULL,
   PRIMARY KEY (x, y)
 );
 
-CREATE TABLE resources (
+CREATE TABLE resource (
   resource_id uuid NOT NULL PRIMARY KEY,
   name VARCHAR(32) NOT NULL UNIQUE
 );
 
-INSERT INTO resources VALUES
+INSERT INTO resource VALUES
   ('771d49e6-3fd1-436d-88aa-02b5377ba29e', 'Wood'),
   ('b7bdf2b9-e129-437d-bdde-00e8964fc173', 'Stone'),
   ('510bcc29-ec8d-4465-80eb-7f826faba019', 'Plank'),
   ('7d747f18-6805-4364-bd2b-2eb7b717cd20', 'Brick');
 
-CREATE TABLE kingdoms (
+CREATE TABLE kingdom (
   kingdom_id uuid NOT NULL PRIMARY KEY,
   created_at TIMESTAMP NOT NULL,
   name VARCHAR(32) NOT NULL,
@@ -43,10 +43,10 @@ CREATE TABLE kingdoms (
   idle_bucks BIGINT NOT NULL DEFAULT 0,
   starting_point_x INTEGER NOT NULL,
   starting_point_y INTEGER NOT NULL,
-  CONSTRAINT FK_KINGDOM_USER FOREIGN KEY (owner) REFERENCES users(user_id)
+  CONSTRAINT FK_KINGDOM_USER FOREIGN KEY (owner) REFERENCES user_table(user_id)
 );
 
-CREATE TABLE entities (
+CREATE TABLE entity (
   entity_id uuid PRIMARY KEY,
   template BOOLEAN NOT NULL DEFAULT false,
   physics_component jsonb,
@@ -63,7 +63,7 @@ CREATE TABLE entities (
 
 -- here entity templates live --
 
-INSERT INTO entities (
+INSERT INTO entity (
   entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
   name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
   resource_harvester_component
@@ -84,7 +84,7 @@ INSERT INTO entities (
   )
 ;
 
-INSERT INTO entities (
+INSERT INTO entity (
   entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
   name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
   resource_harvester_component
@@ -105,7 +105,7 @@ INSERT INTO entities (
   )
 ;
 
-INSERT INTO entities (
+INSERT INTO entity (
   entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
   name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
   resource_harvester_component
@@ -126,7 +126,7 @@ INSERT INTO entities (
   )
 ;
 
-INSERT INTO entities (
+INSERT INTO entity (
   entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
   name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
   resource_harvester_component
@@ -147,7 +147,7 @@ INSERT INTO entities (
   )
 ;
 
-INSERT INTO entities (
+INSERT INTO entity (
   entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
   name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
   resource_harvester_component
@@ -168,7 +168,7 @@ INSERT INTO entities (
   )
 ;
 
-INSERT INTO entities (
+INSERT INTO entity (
   entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
   name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
   resource_harvester_component
@@ -189,7 +189,7 @@ INSERT INTO entities (
   )
 ;
 
-INSERT INTO entities (
+INSERT INTO entity (
   entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
   name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
   resource_harvester_component

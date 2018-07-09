@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "kingdoms")
+@Table(name = "kingdom")
 public class Kingdom {
 
   @EmbeddedId

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(
-  name = "users",
+  name = "user_table",
   uniqueConstraints = @UniqueConstraint(columnNames = {"username"})
 )
 public class User {
