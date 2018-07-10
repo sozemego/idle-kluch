@@ -60,6 +60,7 @@ public class BuildingServiceImpl implements BuildingService {
                              final WorldService worldService,
                              final EntityResourceService resourceService,
                              final EntityConverter entityConverter) {
+
     this.kingdomService = Objects.requireNonNull(kingdomService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.entityService = Objects.requireNonNull(entityService);
@@ -78,9 +79,10 @@ public class BuildingServiceImpl implements BuildingService {
     validateKingdom(owner);
     validateTileExists(form);
     validateCost(owner, form);
-    validateCollision(form);
 
     final Entity building = constructBuilding(form);
+    validateCollision(building, form);
+
 
     //check if there are proper resources in radius
     final ResourceHarvesterComponent resourceHarvesterComponent = building.getComponent(ResourceHarvesterComponent.class);
@@ -118,14 +120,13 @@ public class BuildingServiceImpl implements BuildingService {
     return building;
   }
 
-  private void validateCollision(final BuildBuildingForm form) {
-    final Point buildingPosition = new Point(form.getX(), form.getY());
+  private void validateCollision(final Entity building, final BuildBuildingForm form) {
 
     //check for collisions with other buildings
     gameEngine
       .getEntitiesByNode(Nodes.OCCUPY_SPACE)
       .stream()
-      .filter(entity -> EntityUtils.intersects(entity, buildingPosition))
+      .filter(entity -> EntityUtils.doesCollide(entity, building))
       .findFirst()
       .ifPresent(entity -> {
         throw new SpaceAlreadyOccupiedException(form.getMessageId(), "Space is occupied by entityId " + entity.getId() + " named " + getName(entity));
@@ -179,6 +180,17 @@ public class BuildingServiceImpl implements BuildingService {
              .filter(Optional::isPresent)
              .map(Optional::get)
              .collect(Collectors.toList());
+  }
+
+  @Override
+  @Profiled
+  @AuthLog
+  public void attachResourceSource(final EntityUUID harvester, final EntityUUID source, final int slot) {
+    Objects.requireNonNull(harvester);
+    Objects.requireNonNull(source);
+    Objects.requireNonNull(slot);
+
+
   }
 
   @Override

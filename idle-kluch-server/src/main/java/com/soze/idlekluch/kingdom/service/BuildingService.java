@@ -26,6 +26,12 @@ public interface BuildingService {
   List<PersistentEntity> getAllConstructedBuildings();
 
   /**
+   * For given entity, attaches a resource source at a given slot number.
+   * @throws
+   */
+  void attachResourceSource(EntityUUID harvester, EntityUUID source, int slot);
+
+  /**
    * Attempts to delete a building with given buildingId.
    */
   void destroyBuilding(EntityUUID buildingId);

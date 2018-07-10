@@ -64,13 +64,13 @@ public class EntityUtils {
     final PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
 
     final Rectangle rectangle = new Rectangle(
-      (int) physicsComponent.getX(),
-      (int) physicsComponent.getY(),
-      (int) physicsComponent.getWidth(),
-      (int) physicsComponent.getHeight()
+      Math.abs((int) physicsComponent.getX()),
+      Math.abs((int) physicsComponent.getY()),
+      Math.abs(physicsComponent.getWidth()),
+      Math.abs(physicsComponent.getHeight())
     );
 
-    return rectangle.intersects(new Rectangle(point.x, point.y, 1, 1));
+    return rectangle.intersects(new Rectangle(Math.abs(point.x), Math.abs(point.y), 1, 1));
   }
 
 
@@ -137,5 +137,10 @@ public class EntityUtils {
     }
 
     return nameComponent.getName();
+  }
+
+  public static Point getPosition(final Entity entity) {
+    final PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
+    return new Point((int) physicsComponent.getX(), (int) physicsComponent.getY());
   }
 }
