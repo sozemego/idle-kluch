@@ -3,6 +3,7 @@ package com.soze.idlekluch.kingdom.service;
 import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.entity.PersistentEntity;
+import com.soze.idlekluch.game.message.AttachResourceSourceForm;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.events.KingdomAddedEvent;
 import com.soze.idlekluch.kingdom.exception.EntityDoesNotHaveComponentException;
@@ -39,7 +40,7 @@ public interface BuildingService {
    * @throws NoResourceInRadiusException if the resource to attach to is further away than harvester radius
    * @throws InvalidResourceSlotException if the slot to attach does not exist
    */
-  void attachResourceSource(EntityUUID harvester, EntityUUID source, int slot);
+  void attachResourceSource(AttachResourceSourceForm form);
 
   /**
    * Attempts to delete a building with given buildingId.

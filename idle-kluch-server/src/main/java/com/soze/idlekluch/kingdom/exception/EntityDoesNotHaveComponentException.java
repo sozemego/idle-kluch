@@ -15,9 +15,9 @@ import java.util.UUID;
 public class EntityDoesNotHaveComponentException extends GameException {
 
   private final EntityUUID entityId;
-  private final Class<BaseComponent> componentClass;
+  private final Class<? extends BaseComponent> componentClass;
 
-  public EntityDoesNotHaveComponentException(final UUID messageId, final EntityUUID entityId, final Class<BaseComponent> componentClass) {
+  public EntityDoesNotHaveComponentException(final UUID messageId, final EntityUUID entityId, final Class<? extends BaseComponent> componentClass) {
     super(messageId);
     this.entityId = Objects.requireNonNull(entityId);
     this.componentClass = Objects.requireNonNull(componentClass);
@@ -27,7 +27,7 @@ public class EntityDoesNotHaveComponentException extends GameException {
     return entityId;
   }
 
-  public Class<BaseComponent> getComponentClass() {
+  public Class<? extends BaseComponent> getComponentClass() {
     return componentClass;
   }
 

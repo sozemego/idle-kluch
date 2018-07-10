@@ -39,6 +39,8 @@ public interface GameEngine {
 
   Entity createEmptyEntity(EntityUUID entityId);
 
+  Entity createEntityWithName(EntityUUID entityUUID, String name);
+
   /**
    * Adds an entity to the engine.
    */

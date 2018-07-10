@@ -8,6 +8,7 @@ import com.soze.idlekluch.core.utils.sql.DatabaseReset;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.entity.PersistentEntity;
+import com.soze.idlekluch.game.message.AttachResourceSourceForm;
 import com.soze.idlekluch.game.service.EntityResourceService;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
@@ -33,6 +34,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -80,32 +82,32 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
     gameEngine.reset();
   }
 
-
   @Test(expected = EntityDoesNotHaveComponentException.class)
   public void testAttachResourceSourceNotAHarvester() {
     final EntityUUID buildingId = EntityUUID.randomId();
-    gameEngine.addEntity(gameEngine.createEmptyEntity(buildingId));
-    buildingService.attachResourceSource(buildingId, EntityUUID.randomId(), 0);
+    gameEngine.addEntity(gameEngine.createEntityWithName(buildingId, "Name"));
+    final EntityUUID sourceId = EntityUUID.randomId();
+    buildingService.attachResourceSource(getForm(buildingId, sourceId, 0));
   }
 
   @Test(expected = EntityDoesNotExistException.class)
   public void testAttachResourceSourceHarvesterDoesNotExist() {
-    buildingService.attachResourceSource(EntityUUID.randomId(), EntityUUID.randomId(), 1);
+    buildingService.attachResourceSource(getForm(EntityUUID.randomId(), EntityUUID.randomId(), 1));
   }
 
   @Test(expected = EntityDoesNotExistException.class)
   public void testAttachResourceSourceSourceDoesNotExist() {
     final EntityUUID buildingId = EntityUUID.randomId();
-    final Entity building = gameEngine.createEmptyEntity(buildingId);
+    final Entity building = gameEngine.createEntityWithName(buildingId, "Name");
     building.addComponent(new ResourceHarvesterComponent(EntityUUID.randomId(), 12, 5, 1, new ArrayList<>()));
     gameEngine.addEntity(building);
-    buildingService.attachResourceSource(buildingId, EntityUUID.randomId(), 1);
+    buildingService.attachResourceSource(getForm(buildingId, EntityUUID.randomId(), 1));
   }
 
   @Test(expected = InvalidResourceException.class)
   public void testAttachResourceSourceWrongResource() {
     final EntityUUID buildingId = EntityUUID.randomId();
-    final Entity building = gameEngine.createEmptyEntity(buildingId);
+    final Entity building = gameEngine.createEntityWithName(buildingId, "Name");
     building.addComponent(new ResourceHarvesterComponent(EntityUUID.randomId(), 12, 5, 1, new ArrayList<>()));
     gameEngine.addEntity(building);
 
@@ -113,13 +115,13 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
     final List<Entity> resourceSourceTemplates = entityResourceService.getResourceEntityTemplates(resource);
     final Entity placedResource = entityResourceService.placeResourceSource((EntityUUID) resourceSourceTemplates.get(0).getId(), new Point(0, 0));
 
-    buildingService.attachResourceSource(buildingId, (EntityUUID) placedResource.getId(), 1);
+    buildingService.attachResourceSource(getForm(buildingId, (EntityUUID) placedResource.getId(), 1));
   }
 
   @Test(expected = NoResourceInRadiusException.class)
   public void testAttachSourceIsTooFarAway() {
     final EntityUUID buildingId = EntityUUID.randomId();
-    final Entity building = gameEngine.createEmptyEntity(buildingId);
+    final Entity building = gameEngine.createEntityWithName(buildingId, "Name");
     final Resource resource = resourceService.getResource("Wood").get();
     building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 12, 5, 1, new ArrayList<>()));
     building.addComponent(new PhysicsComponent(0, 0, 50, 50));
@@ -128,13 +130,13 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
     final List<Entity> resourceSourceTemplates = entityResourceService.getResourceEntityTemplates(resource);
     final Entity placedResource = entityResourceService.placeResourceSource((EntityUUID) resourceSourceTemplates.get(0).getId(), new Point(1000, 1000));
 
-    buildingService.attachResourceSource(buildingId, (EntityUUID) placedResource.getId(), 1);
+    buildingService.attachResourceSource(getForm(buildingId, (EntityUUID) placedResource.getId(), 1));
   }
 
   @Test(expected = InvalidResourceSlotException.class)
   public void testAttachResourceInvalidSlot() {
     final EntityUUID buildingId = EntityUUID.randomId();
-    final Entity building = gameEngine.createEmptyEntity(buildingId);
+    final Entity building = gameEngine.createEntityWithName(buildingId, "Name");
     final Resource resource = resourceService.getResource("Wood").get();
     building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 5000, 5, 1, new ArrayList<>()));
     building.addComponent(new PhysicsComponent(0, 0, 50, 50));
@@ -143,13 +145,13 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
     final List<Entity> resourceSourceTemplates = entityResourceService.getResourceEntityTemplates(resource);
     final Entity placedResource = entityResourceService.placeResourceSource((EntityUUID) resourceSourceTemplates.get(0).getId(), new Point(150, 150));
 
-    buildingService.attachResourceSource(buildingId, (EntityUUID) placedResource.getId(), 5);
+    buildingService.attachResourceSource(getForm(buildingId, (EntityUUID) placedResource.getId(), 5));
   }
 
   @Test
   public void testAttachResourceValid() {
     final EntityUUID buildingId = EntityUUID.randomId();
-    final Entity building = gameEngine.createEmptyEntity(buildingId);
+    final Entity building = gameEngine.createEntityWithName(buildingId, "Name");
     final Resource resource = resourceService.getResource("Wood").get();
     building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 5000, 5, 1, new ArrayList<>()));
     building.addComponent(new PhysicsComponent(0, 0, 50, 50));
@@ -161,9 +163,13 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
     final List<Entity> resourceSourceTemplates = entityResourceService.getResourceEntityTemplates(resource);
     final Entity placedResource = entityResourceService.placeResourceSource((EntityUUID) resourceSourceTemplates.get(0).getId(), new Point(150, 150));
 
-    buildingService.attachResourceSource(buildingId, (EntityUUID) placedResource.getId(), 0);
+    buildingService.attachResourceSource(getForm(buildingId, (EntityUUID) placedResource.getId(), 0));
     assertNotEquals(null, harvester.getSlots().get(0));
     assertEquals(resourceSourceTemplates.get(0).getId(), harvester.getSlots().get(0).getSourceId());
+  }
+
+  private AttachResourceSourceForm getForm(final EntityUUID harvesterId, final EntityUUID sourceId, final int slot) {
+    return new AttachResourceSourceForm(UUID.randomUUID(), harvesterId, sourceId, slot);
   }
 
 }

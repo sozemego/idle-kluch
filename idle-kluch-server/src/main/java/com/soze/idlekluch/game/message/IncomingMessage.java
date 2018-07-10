@@ -15,7 +15,8 @@ import java.util.UUID;
 )
 @JsonSubTypes({
   @JsonSubTypes.Type(value = BuildBuildingForm.class, name = "BUILD_BUILDING"),
-  @JsonSubTypes.Type(value = PauseToggleMessage.class, name = "PAUSE_TOGGLE")
+  @JsonSubTypes.Type(value = PauseToggleMessage.class, name = "PAUSE_TOGGLE"),
+  @JsonSubTypes.Type(value = AttachResourceSourceForm.class, name = "ATTACH_RESOURCE_SOURCE"),
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class IncomingMessage {
@@ -37,7 +38,7 @@ public abstract class IncomingMessage {
   }
 
   public enum IncomingMessageType {
-    BUILD_BUILDING, PAUSE_TOGGLE
+    BUILD_BUILDING, PAUSE_TOGGLE, ATTACH_RESOURCE_SOURCE
   }
 
 }

@@ -5,6 +5,7 @@ import com.soze.idlekluch.core.event.AppStartedEvent;
 import com.soze.idlekluch.core.event.EventPublisher;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.EngineRunner;
+import com.soze.idlekluch.game.engine.components.NameComponent;
 import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
 import com.soze.idlekluch.game.engine.systems.ResourceHarvesterSystem;
 import com.soze.idlekluch.world.service.ResourceService;
@@ -112,6 +113,13 @@ public class GameEngineImpl implements GameEngine {
   @Override
   public Entity createEmptyEntity(final EntityUUID entityId) {
     return engine.getEntityFactory().createEntity(entityId);
+  }
+
+  @Override
+  public Entity createEntityWithName(final EntityUUID entityUUID, final String name) {
+    final Entity entity = createEmptyEntity(entityUUID);
+    entity.addComponent(new NameComponent(name));
+    return entity;
   }
 
   @Override

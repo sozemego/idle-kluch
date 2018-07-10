@@ -2,6 +2,7 @@ package com.soze.idlekluch.kingdom.service;
 
 import com.soze.idlekluch.core.aop.annotations.AuthLog;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
+import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.EntityConverter;
 import com.soze.idlekluch.game.engine.EntityUtils;
@@ -9,6 +10,7 @@ import com.soze.idlekluch.game.engine.components.*;
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.entity.PersistentEntity;
+import com.soze.idlekluch.game.message.AttachResourceSourceForm;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.service.EntityResourceService;
 import com.soze.idlekluch.game.service.EntityService;
@@ -185,12 +187,28 @@ public class BuildingServiceImpl implements BuildingService {
   @Override
   @Profiled
   @AuthLog
-  public void attachResourceSource(final EntityUUID harvester, final EntityUUID source, final int slot) {
-    Objects.requireNonNull(harvester);
-    Objects.requireNonNull(source);
-    Objects.requireNonNull(slot);
+  public void attachResourceSource(final AttachResourceSourceForm form) {
+    Objects.requireNonNull(form);
+    final EntityUUID harvesterId = form.getHarvesterId();
 
+    //1. check if harvester exists
+    final Entity harvester = gameEngine.getEntity(harvesterId)
+                               .orElseThrow(() -> {
+                                 return new EntityDoesNotExistException("Harvester with id " + harvesterId + " does not exist", Entity.class);
+                               });
 
+    //2. Check if entity is a harvester
+    final ResourceHarvesterComponent harvesterComponent = harvester.getComponent(ResourceHarvesterComponent.class);
+    if(harvesterComponent == null) {
+      throw new EntityDoesNotHaveComponentException(form.getMessageId(), harvesterId, ResourceHarvesterComponent.class);
+    }
+
+    final EntityUUID sourceId = form.getSourceId();
+    //3. check if source exists
+    final Entity source = gameEngine.getEntity(harvesterId)
+                            .orElseThrow(() -> {
+                              return new EntityDoesNotExistException("Source with id " + sourceId + " does not exist", Entity.class);
+                            });
   }
 
   @Override
