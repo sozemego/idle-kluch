@@ -1,0 +1,169 @@
+package com.soze.idlekluch.kingdom.service;
+
+import com.soze.idlekluch.IntAuthTest;
+import com.soze.idlekluch.RootConfig;
+import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.core.utils.sql.DatabaseReset;
+import com.soze.idlekluch.game.engine.components.PhysicsComponent;
+import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
+import com.soze.idlekluch.game.entity.PersistentEntity;
+import com.soze.idlekluch.game.service.EntityResourceService;
+import com.soze.idlekluch.game.service.EntityService;
+import com.soze.idlekluch.game.service.GameEngine;
+import com.soze.idlekluch.kingdom.entity.Resource;
+import com.soze.idlekluch.kingdom.exception.EntityDoesNotHaveComponentException;
+import com.soze.idlekluch.kingdom.exception.InvalidResourceException;
+import com.soze.idlekluch.kingdom.exception.InvalidResourceSlotException;
+import com.soze.idlekluch.kingdom.exception.NoResourceInRadiusException;
+import com.soze.idlekluch.world.service.ResourceService;
+import com.soze.idlekluch.world.service.WorldService;
+import com.soze.klecs.entity.Entity;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
+@RunWith(SpringRunner.class)
+@ContextConfiguration(
+  classes = {
+    RootConfig.class
+  }
+)
+@WebAppConfiguration
+@ActiveProfiles({"integration-test"})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
+
+  @Autowired
+  private BuildingService buildingService;
+
+  @Autowired
+  private GameEngine gameEngine;
+
+  @Autowired
+  private KingdomService kingdomService;
+
+  @Autowired
+  private WorldService worldService;
+
+  @Autowired
+  private EntityResourceService entityResourceService;
+
+  @Autowired
+  private ResourceService resourceService;
+
+  @Autowired
+  private EntityService entityService;
+
+  @BeforeClass
+  public static void beforeClass() {
+    DatabaseReset.deleteData();
+  }
+
+  @Before
+  public void setup() {
+    DatabaseReset.deleteData();
+    gameEngine.reset();
+  }
+
+
+  @Test(expected = EntityDoesNotHaveComponentException.class)
+  public void testAttachResourceSourceNotAHarvester() {
+    final EntityUUID buildingId = EntityUUID.randomId();
+    gameEngine.addEntity(gameEngine.createEmptyEntity(buildingId));
+    buildingService.attachResourceSource(buildingId, EntityUUID.randomId(), 0);
+  }
+
+  @Test(expected = EntityDoesNotExistException.class)
+  public void testAttachResourceSourceHarvesterDoesNotExist() {
+    buildingService.attachResourceSource(EntityUUID.randomId(), EntityUUID.randomId(), 1);
+  }
+
+  @Test(expected = EntityDoesNotExistException.class)
+  public void testAttachResourceSourceSourceDoesNotExist() {
+    final EntityUUID buildingId = EntityUUID.randomId();
+    final Entity building = gameEngine.createEmptyEntity(buildingId);
+    building.addComponent(new ResourceHarvesterComponent(EntityUUID.randomId(), 12, 5, 1, new ArrayList<>()));
+    gameEngine.addEntity(building);
+    buildingService.attachResourceSource(buildingId, EntityUUID.randomId(), 1);
+  }
+
+  @Test(expected = InvalidResourceException.class)
+  public void testAttachResourceSourceWrongResource() {
+    final EntityUUID buildingId = EntityUUID.randomId();
+    final Entity building = gameEngine.createEmptyEntity(buildingId);
+    building.addComponent(new ResourceHarvesterComponent(EntityUUID.randomId(), 12, 5, 1, new ArrayList<>()));
+    gameEngine.addEntity(building);
+
+    final Resource resource = resourceService.getResource("Wood").get();
+    final List<Entity> resourceSourceTemplates = entityResourceService.getResourceEntityTemplates(resource);
+    final Entity placedResource = entityResourceService.placeResourceSource((EntityUUID) resourceSourceTemplates.get(0).getId(), new Point(0, 0));
+
+    buildingService.attachResourceSource(buildingId, (EntityUUID) placedResource.getId(), 1);
+  }
+
+  @Test(expected = NoResourceInRadiusException.class)
+  public void testAttachSourceIsTooFarAway() {
+    final EntityUUID buildingId = EntityUUID.randomId();
+    final Entity building = gameEngine.createEmptyEntity(buildingId);
+    final Resource resource = resourceService.getResource("Wood").get();
+    building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 12, 5, 1, new ArrayList<>()));
+    building.addComponent(new PhysicsComponent(0, 0, 50, 50));
+    gameEngine.addEntity(building);
+
+    final List<Entity> resourceSourceTemplates = entityResourceService.getResourceEntityTemplates(resource);
+    final Entity placedResource = entityResourceService.placeResourceSource((EntityUUID) resourceSourceTemplates.get(0).getId(), new Point(1000, 1000));
+
+    buildingService.attachResourceSource(buildingId, (EntityUUID) placedResource.getId(), 1);
+  }
+
+  @Test(expected = InvalidResourceSlotException.class)
+  public void testAttachResourceInvalidSlot() {
+    final EntityUUID buildingId = EntityUUID.randomId();
+    final Entity building = gameEngine.createEmptyEntity(buildingId);
+    final Resource resource = resourceService.getResource("Wood").get();
+    building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 5000, 5, 1, new ArrayList<>()));
+    building.addComponent(new PhysicsComponent(0, 0, 50, 50));
+    gameEngine.addEntity(building);
+
+    final List<Entity> resourceSourceTemplates = entityResourceService.getResourceEntityTemplates(resource);
+    final Entity placedResource = entityResourceService.placeResourceSource((EntityUUID) resourceSourceTemplates.get(0).getId(), new Point(150, 150));
+
+    buildingService.attachResourceSource(buildingId, (EntityUUID) placedResource.getId(), 5);
+  }
+
+  @Test
+  public void testAttachResourceValid() {
+    final EntityUUID buildingId = EntityUUID.randomId();
+    final Entity building = gameEngine.createEmptyEntity(buildingId);
+    final Resource resource = resourceService.getResource("Wood").get();
+    building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 5000, 5, 1, new ArrayList<>()));
+    building.addComponent(new PhysicsComponent(0, 0, 50, 50));
+    gameEngine.addEntity(building);
+
+    final ResourceHarvesterComponent harvester = building.getComponent(ResourceHarvesterComponent.class);
+    assertEquals(null, harvester.getSlots().get(0));
+
+    final List<Entity> resourceSourceTemplates = entityResourceService.getResourceEntityTemplates(resource);
+    final Entity placedResource = entityResourceService.placeResourceSource((EntityUUID) resourceSourceTemplates.get(0).getId(), new Point(150, 150));
+
+    buildingService.attachResourceSource(buildingId, (EntityUUID) placedResource.getId(), 0);
+    assertNotEquals(null, harvester.getSlots().get(0));
+    assertEquals(resourceSourceTemplates.get(0).getId(), harvester.getSlots().get(0).getSourceId());
+  }
+
+}

@@ -20,6 +20,10 @@ public class GameException extends RuntimeException {
     this.messageId = Objects.requireNonNull(messageId);
   }
 
+  public GameException(final UUID messageId) {
+    this.messageId = Objects.requireNonNull(messageId);
+  }
+
   public UUID getMessageId() {
     return messageId;
   }

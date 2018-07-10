@@ -1,9 +1,14 @@
 package com.soze.idlekluch.kingdom.service;
 
+import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.entity.PersistentEntity;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.events.KingdomAddedEvent;
+import com.soze.idlekluch.kingdom.exception.EntityDoesNotHaveComponentException;
+import com.soze.idlekluch.kingdom.exception.InvalidResourceException;
+import com.soze.idlekluch.kingdom.exception.InvalidResourceSlotException;
+import com.soze.idlekluch.kingdom.exception.NoResourceInRadiusException;
 import com.soze.klecs.engine.RemovedEntityEvent;
 import com.soze.klecs.entity.Entity;
 
@@ -27,7 +32,12 @@ public interface BuildingService {
 
   /**
    * For given entity, attaches a resource source at a given slot number.
-   * @throws
+   * @throws EntityDoesNotHaveComponentException if harvester does not have ResourceHarvesterComponent
+   *                                              or source does not have ResourceSourceComponent
+   * @throws EntityDoesNotExistException if harvester or source do not exist
+   * @throws InvalidResourceException if given harvester cannot harvesting a resource supplied by this source
+   * @throws NoResourceInRadiusException if the resource to attach to is further away than harvester radius
+   * @throws InvalidResourceSlotException if the slot to attach does not exist
    */
   void attachResourceSource(EntityUUID harvester, EntityUUID source, int slot);
 

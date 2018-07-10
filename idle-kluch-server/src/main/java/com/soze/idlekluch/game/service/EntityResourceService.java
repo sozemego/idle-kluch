@@ -50,7 +50,6 @@ public interface EntityResourceService {
   /**
    * Attempts to find an entity template with given id at a given position.
    * @throws EntityDoesNotExistException if there is no template with entityId
-   *
    */
   Entity placeResourceSource(EntityUUID entityId, Point position);
 
