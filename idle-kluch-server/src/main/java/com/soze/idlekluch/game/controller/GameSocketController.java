@@ -2,6 +2,7 @@ package com.soze.idlekluch.game.controller;
 
 import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.game.exception.GameException;
+import com.soze.idlekluch.game.message.AttachResourceSourceForm;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.message.MessageRevert;
 import com.soze.idlekluch.game.service.GameConnectionRegistryService;
@@ -42,6 +43,11 @@ public class GameSocketController {
   @MessageMapping(Routes.BUILD_BUILDING_MESSAGE)
   public void handleBuildBuildingMessage(final Principal principal, final BuildBuildingForm message) {
     gameService.handleBuildBuildingMessage(principal.getName(), message);
+  }
+
+  @MessageMapping(Routes.ATTACH_RESOURCE_SOURCE)
+  public void handleAttachResourceSource(final Principal principal, final AttachResourceSourceForm message) {
+    gameService.handleAttachResourceMessage(principal.getName(), message);
   }
 
   @MessageMapping(Routes.PAUSE_TOGGLE_MESSAGE)
