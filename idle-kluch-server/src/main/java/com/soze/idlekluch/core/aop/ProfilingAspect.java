@@ -17,8 +17,6 @@ public class ProfilingAspect {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProfilingAspect.class);
   private static final Marker PROFILING_MARKER = MarkerFactory.getMarker("PROFILING");
-  private static final String MILlI_SECONDS = "MS";
-  private static final String NANO_SECONDS = "NS";
 
   @Pointcut("execution(* *(..)) && @annotation(com.soze.idlekluch.core.aop.annotations.Profiled))")
   public void profiledMethodExecution() {}
@@ -33,7 +31,7 @@ public class ProfilingAspect {
 
     LOG.info(
       PROFILING_MARKER,
-      "[{}] [{} s] [{}]",
+      "[{}] [{}] [{}]",
       pjp.getSignature().toShortString(),
       stopwatch.elapsed(),
       pjp.getArgs()
