@@ -6,9 +6,10 @@ import { ResourceSourceComponent } from "../components/ResourceSourceComponent";
 
 export class ResourceHarvesterSystem {
 
-  constructor(engine) {
+  constructor(engine, getResourceById) {
     this.engine = engine;
     this.node = Node.of([ ResourceHarvesterComponent, ResourceStorageComponent ]);
+    this.getResourceById = getResourceById;
   }
 
   update = delta => {
@@ -38,7 +39,7 @@ export class ResourceHarvesterSystem {
 
     if(harvesterComponent.isFinished() && harvesterComponent.getState() === HARVESTING_STATE.HARVESTING) {
       harvesterComponent.stop();
-      storage.addResource(harvesterComponent.getResource());
+      storage.addResource(this.getResourceById(harvesterComponent.getResource()));
     }
 
   };

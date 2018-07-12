@@ -24,6 +24,7 @@ import {
 import {
   getTiles as _getTiles,
   getSelectedEntity as _getSelectedEntity,
+  getResourceById as _getResourceById,
 } from "./selectors";
 import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
 import { checkEntityInRangeOfResource, checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
@@ -51,6 +52,7 @@ const getTiles = () => _getTiles(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 const getKingdomStartingPoint = () => _getKingdomStartingPoint(store.getState());
 const checkCanAffordSelectedBuilding = () => _checkCanAffordSelectedBuilding(store.getState());
+const getResourceById = (id) => _getResourceById(store.getState(), id);
 
 let game = null;
 let engine = null;
@@ -438,7 +440,7 @@ const createGame = () => {
       engine = new Engine();
       engine.addSystem(new PhysicsSystem(engine));
       engine.addSystem(new GraphicsSystem(engine));
-      engine.addSystem(new ResourceHarvesterSystem(engine));
+      engine.addSystem(new ResourceHarvesterSystem(engine, getResourceById));
       engine.addSystem(new ResourceHarvesterRendererSystem(engine, game.add, getSelectedEntity, game.add.graphics(0, 0)));
       engine.addSystem(new ResourceStorageRendererSystem(engine, game.add.group(), game.make, getSelectedEntity));
       engine.addSystem(new EntityNameRendererSystem(engine, game.add.group(), game.make, getSelectedEntity));
