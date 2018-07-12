@@ -7,18 +7,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Thrown when there is something wrong with given {@link Resource}.
+ * Thrown when there is something wrong with a {@link Resource}.
  */
 public class InvalidResourceException extends GameException {
 
-  private final Resource resource;
-
-  public InvalidResourceException(final UUID messageId, final Resource resource, final String message) {
+  public InvalidResourceException(final UUID messageId, final String message) {
     super(messageId, message);
-    this.resource = Objects.requireNonNull(resource);
   }
 
-  public Resource getResource() {
-    return resource;
-  }
 }

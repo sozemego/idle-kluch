@@ -205,10 +205,37 @@ public class BuildingServiceImpl implements BuildingService {
 
     final EntityUUID sourceId = form.getSourceId();
     //3. check if source exists
-    final Entity source = gameEngine.getEntity(harvesterId)
+    final Entity source = gameEngine.getEntity(sourceId)
                             .orElseThrow(() -> {
                               return new EntityDoesNotExistException("Source with id " + sourceId + " does not exist", Entity.class);
                             });
+
+    final ResourceSourceComponent resourceSourceComponent = source.getComponent(ResourceSourceComponent.class);
+
+    //4. If it exists, check if the source provides the same resource as harvester requires
+    if (!harvesterComponent.getResourceId().equals(resourceSourceComponent.getResourceId())) {
+      throw new InvalidResourceException(
+        form.getMessageId(),
+        "Harvester requires resource: " + harvesterComponent.getResourceId() + ". Source provides: " + resourceSourceComponent.getResourceId()
+      );
+    }
+
+    //5. Check distance from source, if it's inside harvesting radius
+    final float distance = EntityUtils.distance(harvester, source);
+    final float radius = harvesterComponent.getRadius();
+    if (distance > harvesterComponent.getRadius()) {
+      throw new NoResourceInRadiusException(form.getMessageId(), "Distance: " + distance + ". Radius: " + radius);
+    }
+
+    final int slotNumber = form.getSlot();
+    if (slotNumber > harvesterComponent.getSourceSlots()) {
+      throw new InvalidResourceSlotException(
+        form.getMessageId(),
+        "Requested slot number: " + slotNumber + ". Entity: " + harvester.getId() + " only has " + harvesterComponent.getSourceSlots() + " slots"
+      );
+    }
+
+    harvesterComponent.setSlot(sourceId, slotNumber - 1);
   }
 
   @Override

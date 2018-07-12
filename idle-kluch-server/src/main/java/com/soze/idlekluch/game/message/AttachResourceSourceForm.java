@@ -4,16 +4,17 @@ import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 
 import java.util.UUID;
 
+/**
+ * Slot numbers start at 1.
+ */
 public class AttachResourceSourceForm extends IncomingMessage {
 
-  private final UUID messageId;
   private final EntityUUID harvesterId;
   private final EntityUUID sourceId;
   private final int slot;
 
   public AttachResourceSourceForm(final UUID messageId, final EntityUUID harvesterId, final EntityUUID sourceId, final int slot) {
     super(messageId, IncomingMessageType.ATTACH_RESOURCE_SOURCE);
-    this.messageId = messageId;
     this.harvesterId = harvesterId;
     this.sourceId = sourceId;
     this.slot = slot;

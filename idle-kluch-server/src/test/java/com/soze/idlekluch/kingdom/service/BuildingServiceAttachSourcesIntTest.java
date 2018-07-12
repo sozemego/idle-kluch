@@ -87,7 +87,7 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
     final EntityUUID buildingId = EntityUUID.randomId();
     gameEngine.addEntity(gameEngine.createEntityWithName(buildingId, "Name"));
     final EntityUUID sourceId = EntityUUID.randomId();
-    buildingService.attachResourceSource(getForm(buildingId, sourceId, 0));
+    buildingService.attachResourceSource(getForm(buildingId, sourceId, 1));
   }
 
   @Test(expected = EntityDoesNotExistException.class)
@@ -158,14 +158,14 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
     gameEngine.addEntity(building);
 
     final ResourceHarvesterComponent harvester = building.getComponent(ResourceHarvesterComponent.class);
-    assertEquals(null, harvester.getSlots().get(0));
+    assertEquals(null, harvester.getSlots().get(0).getSourceId());
 
     final List<Entity> resourceSourceTemplates = entityResourceService.getResourceEntityTemplates(resource);
     final Entity placedResource = entityResourceService.placeResourceSource((EntityUUID) resourceSourceTemplates.get(0).getId(), new Point(150, 150));
 
-    buildingService.attachResourceSource(getForm(buildingId, (EntityUUID) placedResource.getId(), 0));
-    assertNotEquals(null, harvester.getSlots().get(0));
-    assertEquals(resourceSourceTemplates.get(0).getId(), harvester.getSlots().get(0).getSourceId());
+    buildingService.attachResourceSource(getForm(buildingId, (EntityUUID) placedResource.getId(), 1));
+    assertNotEquals(null, harvester.getSlots().get(0).getSourceId());
+    assertEquals(placedResource.getId(), harvester.getSlots().get(0).getSourceId());
   }
 
   private AttachResourceSourceForm getForm(final EntityUUID harvesterId, final EntityUUID sourceId, final int slot) {
