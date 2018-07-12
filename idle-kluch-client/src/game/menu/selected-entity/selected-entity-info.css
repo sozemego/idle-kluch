@@ -11,8 +11,19 @@
 }
 
 .harvester_header {
+    display:  flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.harvester_state {
     display: flex;
     align-items: center;
+}
+
+.harvester_source_icon {
+    width: 32px;
+    height: 32px;
 }
 
 .resource_icon {

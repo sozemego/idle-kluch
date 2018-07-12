@@ -9,6 +9,8 @@ import { HARVESTING_STATE } from "../../../ecs/constants";
 import { ResourceSourceComponent } from "../../../ecs/components/ResourceSourceComponent";
 import { ResourceStorageComponent } from "../../../ecs/components/ResourceStorageComponent";
 import { Avatar, Chip } from "@material-ui/core/es/index";
+import { GraphicsComponent } from "../../../ecs/components/GraphicsComponent";
+import { IMAGES } from "../../constants";
 
 export class SelectedEntityInfo extends Component {
 
@@ -35,6 +37,7 @@ export class SelectedEntityInfo extends Component {
 
   getHarvestingComponent = () => {
     const { selectedEntity, getResourceById } = this.props;
+    const { getResourceSlotIcons } = this;
     const harvester = selectedEntity.getComponent(ResourceHarvesterComponent);
     if (!harvester) {
       return null;
@@ -49,8 +52,11 @@ export class SelectedEntityInfo extends Component {
 
     return (
       <div className={style.section}>
-        <span>Harvesting</span>
         <div className={style.harvester_header}>
+          <span>Harvester</span>
+          {getResourceSlotIcons(harvester.getSlots())}
+        </div>
+        <div className={style.harvester_state}>
           <Avatar>
             <img className={style.resource_icon} src={`/resources/${resource.name}.png`}/>
           </Avatar>
@@ -92,6 +98,23 @@ export class SelectedEntityInfo extends Component {
       })
       .reduce((prev, next) => prev * next, 1);
   };
+
+  getResourceSlotIcons = (slots) => {
+    const { getEntityById } = this.props;
+    const { getImageSrcByAsset } = this;
+    return slots.map((slot, index) => {
+      const entity = getEntityById(slot.sourceId);
+      const graphicsComponent = entity.getComponent(GraphicsComponent);
+      return (
+        <img key={index}
+             className={style.harvester_source_icon}
+             src={getImageSrcByAsset(graphicsComponent.getAsset())}
+        />
+      )
+    });
+  };
+
+  getImageSrcByAsset = (asset) => IMAGES[asset];
 
   getStorageComponent = () => {
     const { selectedEntity } = this.props;

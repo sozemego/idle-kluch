@@ -1,6 +1,7 @@
 export class GraphicsComponent {
 
-  constructor(sprite) {
+  constructor(asset, sprite) {
+    this.asset = asset;
     this.sprite = sprite;
   }
 
@@ -10,5 +11,7 @@ export class GraphicsComponent {
   };
 
   getSprite = () => this.sprite;
+
+  getAsset = () => this.asset;
 
 }

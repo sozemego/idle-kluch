@@ -106,7 +106,7 @@ const addEntity = (state, { payload: entity }) => {
       if (componentType === COMPONENT_TYPES.GRAPHICS) {
         const sprite = entitySprites.create(0, 0, component.asset);
         sprite.inputEnabled = true;
-        return new GraphicsComponent(sprite);
+        return new GraphicsComponent(component.asset, sprite);
       }
       if (componentType === COMPONENT_TYPES.PHYSICS) {
         return new PhysicsComponent(
