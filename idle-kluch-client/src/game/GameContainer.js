@@ -18,6 +18,7 @@ class GameContainer extends Component {
       selectedEntity,
       getResourceById,
       getEntityById,
+      onAttachSourceClicked,
     } = this.props;
 
     return (
@@ -33,6 +34,7 @@ class GameContainer extends Component {
             <SelectedEntityInfo selectedEntity={selectedEntity}
                                 getResourceById={getResourceById}
                                 getEntityById={getEntityById}
+                                onAttachSourceClicked={onAttachSourceClicked}
             />
             }
           </div>

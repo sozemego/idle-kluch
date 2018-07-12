@@ -36,6 +36,9 @@ export const setResources = makeActionCreator(SET_RESOURCES, "payload");
 export const SET_ENGINE = "SET_ENGINE";
 export const setEngine = makeActionCreator(SET_ENGINE, "payload");
 
+export const ON_ATTACH_SOURCE_CLICKED = "ON_ATTACH_SOURCE_CLICKED";
+export const onAttachSourceClicked = makeActionCreator(ON_ATTACH_SOURCE_CLICKED, "payload");
+
 let gameContainer = null;
 
 export const connect = () => {

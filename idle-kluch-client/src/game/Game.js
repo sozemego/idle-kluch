@@ -74,6 +74,7 @@ const initialState = {
   tiles: {},
   selectedEntity: null,
   resources: [],
+  attachSourceSlot: null,
 };
 
 const addTiles = (state, { payload: tiles }) => {
@@ -271,6 +272,7 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.SET_SELECTED_ENTITY]: makeSetter("selectedEntity"),
   [ GAME_ACTIONS.SET_RESOURCES]: makeSetter("resources"),
   [ GAME_ACTIONS.SET_ENGINE]: makeSetter("engine"),
+  [ GAME_ACTIONS.ON_ATTACH_SOURCE_CLICKED]: makeSetter("attachSourceSlot"),
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });

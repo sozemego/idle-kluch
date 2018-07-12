@@ -16,10 +16,27 @@ export class SelectedEntityInfo extends Component {
 
   componentDidMount = () => {
     this.interval = setInterval(() => this.setState({}), 250);
+    document.addEventListener("keyup", this.onKeyUp);
+    document.addEventListener("mouseup", this.onMouseUp);
   };
 
   componentWillUnmount = () => {
     clearInterval(this.interval);
+    document.removeEventListener("keyup", this.onKeyUp);
+    document.removeEventListener("mouseup", this.onMouseUp);
+    this.props.onAttachSourceClicked(null);
+  };
+
+  onKeyUp = (event) => {
+    if (event.keyCode === 27) {
+      this.props.onAttachSourceClicked(null);
+    }
+  };
+
+  onMouseUp = (event) => {
+    if (event.button === 2) {
+      this.props.onAttachSourceClicked(null);
+    }
   };
 
   getNameComponent = () => {
@@ -100,15 +117,22 @@ export class SelectedEntityInfo extends Component {
   };
 
   getResourceSlotIcons = (slots) => {
-    const { getEntityById } = this.props;
+    const { getEntityById, onAttachSourceClicked } = this.props;
     const { getImageSrcByAsset } = this;
     return slots.map((slot, index) => {
       const entity = getEntityById(slot.sourceId);
+      if (!entity) {
+        return (
+          <div>EMPTY BITCH</div>
+        )
+      };
+
       const graphicsComponent = entity.getComponent(GraphicsComponent);
       return (
         <img key={index}
              className={style.harvester_source_icon}
              src={getImageSrcByAsset(graphicsComponent.getAsset())}
+             onClick={() => onAttachSourceClicked(++index)}
         />
       )
     });
@@ -189,4 +213,5 @@ SelectedEntityInfo.propTypes = {
   selectedEntity: PropTypes.instanceOf(Entity).isRequired,
   getResourceById: PropTypes.func.isRequired,
   getEntityById: PropTypes.func.isRequired,
+  onAttachSourceClicked: PropTypes.func.isRequired,
 };
