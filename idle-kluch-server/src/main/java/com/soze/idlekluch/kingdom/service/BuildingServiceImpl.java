@@ -10,6 +10,7 @@ import com.soze.idlekluch.game.engine.components.*;
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.entity.PersistentEntity;
+import com.soze.idlekluch.game.exception.*;
 import com.soze.idlekluch.game.message.AttachResourceSourceForm;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.service.EntityResourceService;
@@ -19,7 +20,6 @@ import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.events.KingdomAddedEvent;
 import com.soze.idlekluch.kingdom.exception.*;
 import com.soze.idlekluch.world.entity.TileId;
-import com.soze.idlekluch.world.service.ResourceService;
 import com.soze.idlekluch.world.service.WorldService;
 import com.soze.idlekluch.world.utils.WorldUtils;
 import com.soze.klecs.engine.RemovedEntityEvent;
@@ -186,9 +186,10 @@ public class BuildingServiceImpl implements BuildingService {
 
   @Override
   @Profiled
-  @AuthLog
-  public void attachResourceSource(final AttachResourceSourceForm form) {
+  public void attachResourceSource(final String owner, final AttachResourceSourceForm form) {
+    Objects.requireNonNull(owner);
     Objects.requireNonNull(form);
+
     final EntityUUID harvesterId = form.getHarvesterId();
 
     //1. check if harvester exists
@@ -203,8 +204,19 @@ public class BuildingServiceImpl implements BuildingService {
       throw new EntityDoesNotHaveComponentException(form.getMessageId(), harvesterId, ResourceHarvesterComponent.class);
     }
 
+    //3. empty kingdom in case user is faulty
+    final Kingdom kingdom = kingdomService
+                              .getUsersKingdom(owner)
+                              .orElse(new Kingdom());
+
+    //4. Check if the user is the owner of this entity
+    final OwnershipComponent ownershipComponent = harvester.getComponent(OwnershipComponent.class);
+    if (ownershipComponent != null && !ownershipComponent.getOwnerId().equals(kingdom.getKingdomId())) {
+      throw new InvalidOwnerException(form.getMessageId(), owner + " is not the owner of " + form.getHarvesterId());
+    }
+
     final EntityUUID sourceId = form.getSourceId();
-    //3. check if source exists
+    //5. check if source exists
     final Entity source = gameEngine.getEntity(sourceId)
                             .orElseThrow(() -> {
                               return new EntityDoesNotExistException("Source with id " + sourceId + " does not exist", Entity.class);
@@ -212,7 +224,7 @@ public class BuildingServiceImpl implements BuildingService {
 
     final ResourceSourceComponent resourceSourceComponent = source.getComponent(ResourceSourceComponent.class);
 
-    //4. If it exists, check if the source provides the same resource as harvester requires
+    //6. If it exists, check if the source provides the same resource as harvester requires
     if (!harvesterComponent.getResourceId().equals(resourceSourceComponent.getResourceId())) {
       throw new InvalidResourceException(
         form.getMessageId(),
@@ -220,13 +232,14 @@ public class BuildingServiceImpl implements BuildingService {
       );
     }
 
-    //5. Check distance from source, if it's inside harvesting radius
+    //7. Check distance from source, if it's inside harvesting radius
     final float distance = EntityUtils.distance(harvester, source);
     final float radius = harvesterComponent.getRadius();
     if (distance > harvesterComponent.getRadius()) {
       throw new NoResourceInRadiusException(form.getMessageId(), "Distance: " + distance + ". Radius: " + radius);
     }
 
+    //8. Validate slots
     final int slotNumber = form.getSlot();
     if (slotNumber > harvesterComponent.getSourceSlots()) {
       throw new InvalidResourceSlotException(

@@ -1,8 +1,7 @@
-package com.soze.idlekluch.kingdom.exception;
+package com.soze.idlekluch.game.exception;
 
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.BaseComponent;
-import com.soze.idlekluch.game.exception.GameException;
 import com.soze.klecs.entity.Entity;
 
 import java.util.Objects;

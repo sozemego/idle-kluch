@@ -99,6 +99,14 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
+  @AuthLog
+  public void handleAttachResourceMessage(final String username, final AttachResourceSourceForm form) {
+    Objects.requireNonNull(username);
+    Objects.requireNonNull(form);
+    gameEngine.addAction(() -> buildingService.attachResourceSource(username, form));
+  }
+
+  @Override
   @Profiled
   public void handleDuplicateSession(final String sessionId) {
     Objects.requireNonNull(sessionId);

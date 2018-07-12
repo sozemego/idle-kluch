@@ -1,7 +1,6 @@
-package com.soze.idlekluch.kingdom.exception;
+package com.soze.idlekluch.game.exception;
 
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceSourceSlot;
-import com.soze.idlekluch.game.exception.GameException;
 
 import java.util.UUID;
 

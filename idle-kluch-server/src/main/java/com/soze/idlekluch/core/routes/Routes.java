@@ -43,6 +43,7 @@ public interface Routes {
   String GAME_INIT_MESSAGE = GAME_INBOUND + "/init";
   String BUILD_BUILDING_MESSAGE = GAME_INBOUND + "/build";
   String PAUSE_TOGGLE_MESSAGE = GAME_INBOUND + "/pause";
+  String ATTACH_RESOURCE_SOURCE = GAME_INBOUND + "/attachsource";
 
 //  String GAME_BASE = BASE + WEB_SOCKET + GAME;
   String GAME_SOCKET = BASE + "/game-socket";

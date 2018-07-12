@@ -2,6 +2,9 @@ package com.soze.idlekluch.kingdom.exception;
 
 import com.soze.idlekluch.core.utils.ExceptionUtils;
 import com.soze.idlekluch.core.utils.http.ErrorResponse;
+import com.soze.idlekluch.game.exception.BuildingDoesNotExistException;
+import com.soze.idlekluch.game.exception.CannotAffordBuildingException;
+import com.soze.idlekluch.game.exception.SpaceAlreadyOccupiedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

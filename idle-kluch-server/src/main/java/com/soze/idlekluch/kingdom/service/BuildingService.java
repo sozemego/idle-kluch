@@ -3,13 +3,10 @@ package com.soze.idlekluch.kingdom.service;
 import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.entity.PersistentEntity;
+import com.soze.idlekluch.game.exception.*;
 import com.soze.idlekluch.game.message.AttachResourceSourceForm;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.kingdom.events.KingdomAddedEvent;
-import com.soze.idlekluch.kingdom.exception.EntityDoesNotHaveComponentException;
-import com.soze.idlekluch.kingdom.exception.InvalidResourceException;
-import com.soze.idlekluch.kingdom.exception.InvalidResourceSlotException;
-import com.soze.idlekluch.kingdom.exception.NoResourceInRadiusException;
 import com.soze.klecs.engine.RemovedEntityEvent;
 import com.soze.klecs.entity.Entity;
 
@@ -33,6 +30,7 @@ public interface BuildingService {
 
   /**
    * For given entity, attaches a resource source at a given slot number.
+   * @throws InvalidOwnerException if given owner is not the actual owner of harvester
    * @throws EntityDoesNotHaveComponentException if harvester does not have ResourceHarvesterComponent
    *                                              or source does not have ResourceSourceComponent
    * @throws EntityDoesNotExistException if harvester or source do not exist
@@ -40,7 +38,7 @@ public interface BuildingService {
    * @throws NoResourceInRadiusException if the resource to attach to is further away than harvester radius
    * @throws InvalidResourceSlotException if the slot to attach does not exist
    */
-  void attachResourceSource(AttachResourceSourceForm form);
+  void attachResourceSource(String owner, AttachResourceSourceForm form);
 
   /**
    * Attempts to delete a building with given buildingId.

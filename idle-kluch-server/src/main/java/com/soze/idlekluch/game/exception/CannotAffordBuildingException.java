@@ -1,6 +1,4 @@
-package com.soze.idlekluch.kingdom.exception;
-
-import com.soze.idlekluch.game.exception.GameException;
+package com.soze.idlekluch.game.exception;
 
 import java.util.Objects;
 import java.util.UUID;

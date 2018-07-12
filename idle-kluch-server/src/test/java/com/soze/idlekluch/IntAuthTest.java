@@ -50,11 +50,11 @@ public class IntAuthTest {
    * @param username
    * @param kingdomName
    */
-  protected void createKingdom(final String username, final String kingdomName) {
-    createKingdom(username, kingdomName, KingdomService.STARTING_IDLE_BUCKS);
+  protected Kingdom createKingdom(final String username, final String kingdomName) {
+    return createKingdom(username, kingdomName, KingdomService.STARTING_IDLE_BUCKS);
   }
 
-  protected void createKingdom(final String username, final String kingdomName, final long idleBucks) {
+  protected Kingdom createKingdom(final String username, final String kingdomName, final long idleBucks) {
     register(username);
     kingdomService.addKingdom(username, new RegisterKingdomForm(kingdomName));
     final Kingdom kingdom = kingdomService.getKingdom(kingdomName).get();
@@ -64,5 +64,7 @@ public class IntAuthTest {
     buildingService
       .getOwnBuildings(username)
       .forEach(building -> gameEngine.deleteEntity((EntityUUID) building.getId()));
+
+    return kingdom;
   }
 }

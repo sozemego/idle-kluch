@@ -10,11 +10,10 @@ import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarve
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.service.EntityResourceService;
 import com.soze.idlekluch.game.service.GameEngine;
-import com.soze.idlekluch.kingdom.exception.NoResourceInRadiusException;
+import com.soze.idlekluch.game.exception.NoResourceInRadiusException;
 import com.soze.idlekluch.world.entity.Tile;
 import com.soze.idlekluch.world.entity.TileId;
 import com.soze.idlekluch.world.repository.WorldRepository;
-import com.soze.idlekluch.world.service.ResourceService;
 import com.soze.klecs.entity.Entity;
 import org.junit.Before;
 import org.junit.BeforeClass;
