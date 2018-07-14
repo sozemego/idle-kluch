@@ -3,7 +3,7 @@ import { rootSelector } from "../store/utils";
 const root = rootSelector("game");
 
 export const getTiles = (state) => root(state).tiles;
-export const getSelectedEntity = (state) => root(state).selectedEntity;
+export const getSelectedEntityId = (state) => root(state).selectedEntityId;
 export const getResources = (state) => root(state).resources;
 export const getEngine = (state) => root(state).engine;
 export const getAttachSourceSlot = (state) => root(state).attachSourceSlot;
@@ -21,5 +21,8 @@ export const getResourceById = (state, id) => {
 };
 
 export const getEntityById = (state, id) => {
-  return getEngine(state).getEntityById(id);
+	const engine = getEngine(state);
+	if (engine) {
+		return engine.getEntityById(id);
+	}
 };

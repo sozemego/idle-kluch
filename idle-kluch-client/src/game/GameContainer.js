@@ -6,20 +6,26 @@ import styles from "./game-container.css";
 import GameMenu from "./menu/GameMenu";
 import Toolbar from "./menu/Toolbar";
 import { SelectedEntityInfo } from "./menu/selected-entity/SelectedEntityInfo";
-import { getEntityById, getResourceById, getSelectedEntity } from "./selectors";
+import { getEntityById, getResourceById, getSelectedEntityId } from "./selectors";
 
 class GameContainer extends Component {
   componentDidMount = () => {
     this.props.connect();
   };
 
+  getSelectedEntity = () => {
+  	const { selectedEntityId, getEntityById } = this.props;
+  	return getEntityById(selectedEntityId);
+	}
+
   render() {
     const {
-      selectedEntity,
       getResourceById,
       getEntityById,
       onAttachSourceClicked,
     } = this.props;
+
+    const selectedEntity = this.getSelectedEntity();
 
     return (
       <div className={styles.container}>
@@ -46,7 +52,7 @@ class GameContainer extends Component {
 
 const mapStateToProps = state => {
   return {
-    selectedEntity: getSelectedEntity(state),
+    selectedEntityId: getSelectedEntityId(state),
     getResourceById: (id) => getResourceById(state, id),
     getEntityById: (id) => getEntityById(state, id),
   };

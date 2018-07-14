@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import _ from "lodash";
 import { GameService as gameService } from "./GameService";
 import { makeActionCreator } from "../store/utils";
 import createGame from "./Game";
@@ -42,75 +43,75 @@ export const onAttachSourceClicked = makeActionCreator(ON_ATTACH_SOURCE_CLICKED,
 let gameContainer = null;
 
 export const connect = () => {
-  return (dispatch, getState) => {
-    return dispatch(startGame())
-      .then(() => gameService.connect());
-  };
+	return (dispatch, getState) => {
+		return dispatch(startGame())
+			.then(() => gameService.connect());
+	};
 };
 
 export const startGame = () => {
-  return (dispatch, getState) => {
-    return createGame()
-      .then(data => {
-        dispatch(setEngine(data.engine));
-        gameContainer = data;
-      });
-  };
+	return (dispatch, getState) => {
+		return createGame()
+			.then(data => {
+				dispatch(setEngine(data.engine));
+				gameContainer = data;
+			});
+	};
 };
 
 export const selectConstructableBuilding = id => {
-  return (dispatch, getState) => {
-    const constructableBuildings = getConstructableBuildingsData(getState);
-    const building = constructableBuildings.find(
-      building => building.id === id,
-    );
-    dispatch(setSelectedConstructableBuilding(building));
-  };
+	return (dispatch, getState) => {
+		const constructableBuildings = getConstructableBuildingsData(getState);
+		const building = constructableBuildings.find(
+			building => building.id === id,
+		);
+		dispatch(setSelectedConstructableBuilding(building));
+	};
 };
 
 export const onCanvasClicked = (x, y) => {
-  return (dispatch, getState) => {
-    console.log("on canvas clicked!", x, y);
+	return (dispatch, getState) => {
+		console.log("on canvas clicked!", x, y);
 
-    //canvas was clicked, lets check what we can do
-    const selectedConstructableBuilding = getSelectedConstructableBuilding(getState);
-    if (selectedConstructableBuilding) {
-      //check player money
-      const kingdom = getKingdom(getState);
-      const costComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.COST);
-      if (kingdom.idleBucks < costComponent.idleBucks) {
-        return Promise.resolve();
-      }
+		//canvas was clicked, lets check what we can do
+		const selectedConstructableBuilding = getSelectedConstructableBuilding(getState);
+		if (selectedConstructableBuilding) {
+			//check player money
+			const kingdom = getKingdom(getState);
+			const costComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.COST);
+			if (kingdom.idleBucks < costComponent.idleBucks) {
+				return Promise.resolve();
+			}
 
-      //check if doesn't collide with any other entities
-      const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
-      const bounds = new Phaser.Rectangle(physicsComponent.x, physicsComponent.y, physicsComponent.width, physicsComponent.height);
-      const selectedConstructableBuildingCollides = checkRectangleIntersectsCollidableEntities(getEngine(getState), bounds);
-      if (selectedConstructableBuildingCollides) {
-        return Promise.resolve();
-      }
+			//check if doesn't collide with any other entities
+			const physicsComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.PHYSICS);
+			const bounds = new Phaser.Rectangle(physicsComponent.x, physicsComponent.y, physicsComponent.width, physicsComponent.height);
+			const selectedConstructableBuildingCollides = checkRectangleIntersectsCollidableEntities(getEngine(getState), bounds);
+			if (selectedConstructableBuildingCollides) {
+				return Promise.resolve();
+			}
 
-      //send network request to build
-      x = x - (physicsComponent.width / 2);
-      y = y - (physicsComponent.height / 2);
-      const messageId = gameService.constructBuilding(selectedConstructableBuilding.id, x, y);
+			//send network request to build
+			x = x - (physicsComponent.width / 2);
+			y = y - (physicsComponent.height / 2);
+			const messageId = gameService.constructBuilding(selectedConstructableBuilding.id, x, y);
 
-      undoActions.addAction(messageId, () => {
-        dispatch(idleBucksChanged(costComponent.idleBucks));
-      });
+			undoActions.addAction(messageId, () => {
+				dispatch(idleBucksChanged(costComponent.idleBucks));
+			});
 
-      dispatch(idleBucksChanged(-costComponent.idleBucks));
+			dispatch(idleBucksChanged(-costComponent.idleBucks));
 
-      return Promise.resolve();
-    }
+			return Promise.resolve();
+		}
 
-    const engine = gameContainer.engine;
-    const entities = engine.getAllEntities();
-    const selectedEntity = entities.find(entity => doesContain(entity, { x, y })) || null;
+		const engine = gameContainer.engine;
+		const entities = engine.getAllEntities();
+		const selectedEntity = entities.find(entity => doesContain(entity, { x, y })) || null;
 
-    console.log(selectedEntity);
-    dispatch(setSelectedEntity(selectedEntity));
+		console.log(selectedEntity);
+		dispatch(setSelectedEntity(_.result(selectedEntity, 'getId', null)));
 
-    return Promise.resolve();
-  };
+		return Promise.resolve();
+	};
 };

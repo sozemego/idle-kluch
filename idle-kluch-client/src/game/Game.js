@@ -23,7 +23,7 @@ import {
 } from "../kingdom/selectors";
 import {
   getTiles as _getTiles,
-  getSelectedEntity as _getSelectedEntity,
+  getSelectedEntityId as _getSelectedEntityId,
   getResourceById as _getResourceById,
 } from "./selectors";
 import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
@@ -47,7 +47,7 @@ import { ResourceStorageRendererSystem } from "../ecs/systems/ResourceStorageRen
 import { EntityNameRendererSystem } from "../ecs/systems/EntityNameRendererSystem";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
-const getSelectedEntity = () => _getSelectedEntity(store.getState());
+const getSelectedEntityId = () => _getSelectedEntityId(store.getState());
 const getTiles = () => _getTiles(store.getState());
 const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 const getKingdomStartingPoint = () => _getKingdomStartingPoint(store.getState());
@@ -72,7 +72,7 @@ const delta = 1 / 60;
 
 const initialState = {
   tiles: {},
-  selectedEntity: null,
+  selectedEntityId: null,
   resources: [],
   attachSourceSlot: null,
 };
@@ -269,7 +269,7 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.REMOVE_ENTITY ]: removeEntity,
   [ GAME_ACTIONS.SET_RUNNING_STATE]: setRunningState,
   [ GAME_ACTIONS.START_HARVESTING ]: startHarvesting,
-  [ GAME_ACTIONS.SET_SELECTED_ENTITY]: makeSetter("selectedEntity"),
+  [ GAME_ACTIONS.SET_SELECTED_ENTITY]: makeSetter("selectedEntityId"),
   [ GAME_ACTIONS.SET_RESOURCES]: makeSetter("resources"),
   [ GAME_ACTIONS.SET_ENGINE]: makeSetter("engine"),
   [ GAME_ACTIONS.ON_ATTACH_SOURCE_CLICKED]: makeSetter("attachSourceSlot"),
@@ -352,6 +352,11 @@ const updateSelectedConstructableBuilding = () => {
 
   }
 }
+
+const getSelectedEntity = () => {
+	const selectedEntityId = getSelectedEntityId();
+	return engine.getEntityById(selectedEntityId);
+};
 
 const updateSelectedEntity = () => {
   const selectedEntity = getSelectedEntity();
