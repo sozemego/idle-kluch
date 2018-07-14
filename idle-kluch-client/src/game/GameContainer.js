@@ -6,7 +6,7 @@ import styles from "./game-container.css";
 import GameMenu from "./menu/GameMenu";
 import Toolbar from "./menu/Toolbar";
 import { SelectedEntityInfo } from "./menu/selected-entity/SelectedEntityInfo";
-import { getEntityById, getResourceById, getSelectedEntityId } from "./selectors";
+import { getAttachSourceSlot, getEntityById, getResourceById, getSelectedEntityId, isConstructing } from "./selectors";
 
 class GameContainer extends Component {
   componentDidMount = () => {
@@ -16,7 +16,12 @@ class GameContainer extends Component {
   getSelectedEntity = () => {
   	const { selectedEntityId, getEntityById } = this.props;
   	return getEntityById(selectedEntityId);
-	}
+	};
+
+	isDuringAction = () => {
+		const { sourceSlot, constructing } = this.props;
+		return sourceSlot || constructing;
+	};
 
   render() {
     const {
@@ -26,9 +31,10 @@ class GameContainer extends Component {
     } = this.props;
 
     const selectedEntity = this.getSelectedEntity();
+    const duringAction = this.isDuringAction();
 
     return (
-      <div className={styles.container}>
+      <div className={`${styles.container} ${duringAction ? styles.during_action : ''}`}>
         <Toolbar/>
         <div className={styles[ 'menu-game-row' ]}>
           <div className={styles.menu}>
@@ -55,6 +61,8 @@ const mapStateToProps = state => {
     selectedEntityId: getSelectedEntityId(state),
     getResourceById: (id) => getResourceById(state, id),
     getEntityById: (id) => getEntityById(state, id),
+		sourceSlot: getAttachSourceSlot(state),
+		constructing: isConstructing(state),
   };
 };
 

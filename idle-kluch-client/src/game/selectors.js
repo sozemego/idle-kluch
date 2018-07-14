@@ -7,6 +7,7 @@ export const getTiles = (state) => root(state).tiles;
 export const getSelectedEntityId = (state) => root(state).selectedEntityId;
 export const getResources = (state) => root(state).resources;
 export const getEngine = (state) => _.result(root(state), 'engine', null);
+export const isConstructing = (state) => root(state).constructing;
 
 export const getAttachSourceSlot = (state) => root(state).attachSourceSlot;
 

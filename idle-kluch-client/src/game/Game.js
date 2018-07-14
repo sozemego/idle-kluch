@@ -75,6 +75,7 @@ const initialState = {
   selectedEntityId: null,
   resources: [],
   attachSourceSlot: null,
+	constructing: false,
 };
 
 const addTiles = (state, { payload: tiles }) => {
@@ -184,30 +185,30 @@ const removeEntity = (state, action) => {
 };
 
 const setConstructableBuilding = (state, action) => {
-  const { payload: building } = action;
+	const { payload: building } = action;
 
-  if (!building) {
-    killSprite(selectedBuildingSprite);
-    if (selectedBuildingRadiusCircle) {
-      selectedBuildingRadiusCircle.clear();
-    }
-    // if (selectedBuildingSprite) {
-    //   selectedBuildingSprite.kill(true);
-    // }
-    return state;
-  }
+	if (!building) {
+		killSprite(selectedBuildingSprite);
+		if (selectedBuildingRadiusCircle) {
+			selectedBuildingRadiusCircle.clear();
+		}
+		// if (selectedBuildingSprite) {
+		//   selectedBuildingSprite.kill(true);
+		// }
+		return { ...state, constructing: false };
+	}
 
-  const graphicsComponent = findComponent(building, COMPONENT_TYPES.GRAPHICS);
+	const graphicsComponent = findComponent(building, COMPONENT_TYPES.GRAPHICS);
 
-  if (!selectedBuildingSprite) {
-    selectedBuildingSprite = game.add.sprite(0, 0, graphicsComponent.asset);
-    selectedBuildingRadiusCircle = game.add.graphics(0, 0);
-  }
+	if (!selectedBuildingSprite) {
+		selectedBuildingSprite = game.add.sprite(0, 0, graphicsComponent.asset);
+		selectedBuildingRadiusCircle = game.add.graphics(0, 0);
+	}
 
-  selectedBuildingSprite.revive();
-  selectedBuildingSprite.loadTexture(graphicsComponent.asset);
+	selectedBuildingSprite.revive();
+	selectedBuildingSprite.loadTexture(graphicsComponent.asset);
 
-  return state;
+	return { ...state, constructing: true };
 };
 
 const logout = (state, action) => {
