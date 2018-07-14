@@ -53,7 +53,7 @@ export const startGame = () => {
 	return (dispatch, getState) => {
 		return createGame()
 			.then(data => {
-				dispatch(setEngine(data.engine));
+				dispatch(setEngine(() => data.engine));
 				gameContainer = data;
 			});
 	};

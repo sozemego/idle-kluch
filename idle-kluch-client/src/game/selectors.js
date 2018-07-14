@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { rootSelector } from "../store/utils";
 
 const root = rootSelector("game");
@@ -5,7 +6,8 @@ const root = rootSelector("game");
 export const getTiles = (state) => root(state).tiles;
 export const getSelectedEntityId = (state) => root(state).selectedEntityId;
 export const getResources = (state) => root(state).resources;
-export const getEngine = (state) => root(state).engine;
+export const getEngine = (state) => _.result(root(state), 'engine', null);
+
 export const getAttachSourceSlot = (state) => root(state).attachSourceSlot;
 
 export const getResourceByName = (state, name) => {
