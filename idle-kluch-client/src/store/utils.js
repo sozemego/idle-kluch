@@ -8,6 +8,13 @@ export const makeActionCreator = (type, ...argNames) => (...args) => {
   return action;
 };
 
+export const makePayloadActionCreator = (type) => (arg) => {
+  return {
+    type,
+    payload: arg,
+  };
+};
+
 export const rootSelector = rootName => state => {
   return typeof state === "function" ? state()[ rootName ] : state[ rootName ];
 };

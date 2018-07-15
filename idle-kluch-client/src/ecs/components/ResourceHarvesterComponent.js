@@ -87,4 +87,20 @@ export class ResourceHarvesterComponent {
     return this.sourceSlots;
   }
 
+  setSlot(sourceId, slot) {
+    this.slots[slot - 1].sourceId = sourceId;
+  }
+
+//
+// 	public void setSlot(final EntityUUID entityId, final int index) {
+// 	if(index > sourceSlots) {
+// 	throw new IllegalArgumentException("This harvester only has " + sourceSlots + ", slot index " + index + " is not accessible.");
+// }
+// final List<ResourceSourceSlot> nextSlots = new ArrayList<>(this.slots);
+// fillSlots(nextSlots);
+// nextSlots.set(index, new ResourceSourceSlot(entityId, index));
+// this.slots = new ArrayList<>(nextSlots);
+// }
+
+
 }

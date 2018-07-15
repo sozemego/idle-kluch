@@ -256,6 +256,16 @@ const setSelectedEntity = (state, action) => {
 	return { ...state, selectedEntityId: action.payload, attachSourceSlot: null };
 };
 
+const attachSource = (state, action) => {
+	const { harvesterId, sourceId, slot } = action.payload;
+
+	const selectedEntity = engine.getEntityById(harvesterId);
+	const harvester = selectedEntity.getComponent(ResourceHarvesterComponent);
+	harvester.setSlot(sourceId, slot);
+
+	return {...state};
+};
+
 const attachTileSpawnAnimation = (tileSprites) => {
   [...tileSprites]
     .sort((a, b) => b.y - a.y) //so tiles that are lower are spawned first
@@ -280,6 +290,7 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.SET_RESOURCES]: makeSetter("resources"),
   [ GAME_ACTIONS.SET_ENGINE]: makeSetter("engine"),
   [ GAME_ACTIONS.ON_ATTACH_SOURCE_CLICKED]: makeSetter("attachSourceSlot"),
+  [ GAME_ACTIONS.ATTACH_SOURCE ]: attachSource,
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });
