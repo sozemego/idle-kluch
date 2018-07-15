@@ -6,9 +6,11 @@ import createGame from "./Game";
 import { getConstructableBuildingsData, getKingdom, getSelectedConstructableBuilding } from "../kingdom/selectors";
 import { idleBucksChanged, setSelectedConstructableBuilding } from "../kingdom/actions";
 import { checkRectangleIntersectsCollidableEntities, doesContain, findComponent } from "../ecs/utils";
-import { getEngine } from "./selectors";
+import { getAttachSourceSlot, getEngine, getSelectedEntityId } from "./selectors";
 import { COMPONENT_TYPES } from "./constants";
 import { default as undoActions } from "./UndoActions";
+import { ResourceHarvesterComponent } from "../ecs/components/ResourceHarvesterComponent";
+import { ResourceSourceComponent } from "../ecs/components/ResourceSourceComponent";
 
 export const ADD_TILES = "ADD_TILES";
 export const addTiles = makeActionCreator(ADD_TILES, "payload");
@@ -107,6 +109,25 @@ export const onCanvasClicked = (x, y) => {
 
 		const engine = gameContainer.engine;
 		const entities = engine.getAllEntities();
+		const attachSourceSlot = getAttachSourceSlot(getState);
+
+		if (attachSourceSlot) {
+			const entityAtMouse = entities.find(entity => doesContain(entity, { x, y })) || null;
+			if (entityAtMouse) {
+				const selectedEntity = getSelectedEntity(getState);
+				const harvester = selectedEntity.getComponent(ResourceHarvesterComponent);
+				const harvestedResource = harvester.getResource();
+				const source = entityAtMouse.getComponent(ResourceSourceComponent);
+				if (source) {
+					const sourceResource = source.getResourceId();
+					if (harvestedResource === sourceResource) {
+						const messageId = gameService.attachResourceSource(selectedEntity.getId(), entityAtMouse.getId(), attachSourceSlot);
+						return Promise.resolve();
+					}
+				}
+			}
+		}
+
 		const selectedEntity = entities.find(entity => doesContain(entity, { x, y })) || null;
 
 		console.log(selectedEntity);
@@ -114,4 +135,9 @@ export const onCanvasClicked = (x, y) => {
 
 		return Promise.resolve();
 	};
+};
+
+const getSelectedEntity = (state) => {
+	const selectedEntityId = getSelectedEntityId(state);
+	return getEngine(state).getEntityById(selectedEntityId);
 };

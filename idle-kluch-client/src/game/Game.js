@@ -22,9 +22,10 @@ import {
   checkCanAffordSelectedBuilding as _checkCanAffordSelectedBuilding,
 } from "../kingdom/selectors";
 import {
-  getTiles as _getTiles,
-  getSelectedEntityId as _getSelectedEntityId,
-  getResourceById as _getResourceById,
+	getTiles as _getTiles,
+	getSelectedEntityId as _getSelectedEntityId,
+	getResourceById as _getResourceById,
+  getAttachSourceSlot as _getAttachSourceSlot,
 } from "./selectors";
 import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
 import { checkEntityInRangeOfResource, checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
@@ -53,6 +54,7 @@ const onCanvasClick = (x, y) => store.dispatch(onCanvasClicked(x, y));
 const getKingdomStartingPoint = () => _getKingdomStartingPoint(store.getState());
 const checkCanAffordSelectedBuilding = () => _checkCanAffordSelectedBuilding(store.getState());
 const getResourceById = (id) => _getResourceById(store.getState(), id);
+const getAttachSourceSlot = () => _getAttachSourceSlot(store.getState());
 
 let game = null;
 let engine = null;
@@ -250,6 +252,10 @@ const startHarvesting = (state, action) => {
   return state;
 };
 
+const setSelectedEntity = (state, action) => {
+	return { ...state, selectedEntityId: action.payload, attachSourceSlot: null };
+};
+
 const attachTileSpawnAnimation = (tileSprites) => {
   [...tileSprites]
     .sort((a, b) => b.y - a.y) //so tiles that are lower are spawned first
@@ -270,7 +276,7 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.REMOVE_ENTITY ]: removeEntity,
   [ GAME_ACTIONS.SET_RUNNING_STATE]: setRunningState,
   [ GAME_ACTIONS.START_HARVESTING ]: startHarvesting,
-  [ GAME_ACTIONS.SET_SELECTED_ENTITY]: makeSetter("selectedEntityId"),
+  [ GAME_ACTIONS.SET_SELECTED_ENTITY]: setSelectedEntity,
   [ GAME_ACTIONS.SET_RESOURCES]: makeSetter("resources"),
   [ GAME_ACTIONS.SET_ENGINE]: makeSetter("engine"),
   [ GAME_ACTIONS.ON_ATTACH_SOURCE_CLICKED]: makeSetter("attachSourceSlot"),
@@ -372,6 +378,20 @@ const updateSelectedEntity = () => {
       physicsComponent.getWidth(), physicsComponent.getHeight(),
     );
   }
+};
+
+const updateAttachingSource = () => {
+  const attachSourceSlot = getAttachSourceSlot();
+  const selectedEntity = getSelectedEntity();
+  if (!selectedEntity || !attachSourceSlot) {
+    return;
+  }
+
+  //1. find type of resource selected entity can harvest
+  //2. display harvesting radius around entity
+  //3. highlight viable resource source
+  //4. show bonuses for resources
+  console.log(attachSourceSlot);
 };
 
 const createGame = () => {
@@ -479,6 +499,7 @@ const createGame = () => {
 
       updateSelectedConstructableBuilding();
       updateSelectedEntity();
+      updateAttachingSource();
 
       if(isRunning) {
         accumulator += (game.time.elapsedMS / 1000);

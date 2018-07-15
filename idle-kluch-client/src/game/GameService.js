@@ -17,6 +17,7 @@ const game = `/game-socket`;
 const base = `/game/inbound`;
 const buildingBuild = `${base}/build`;
 const pauseToggle = `${base}/pause`;
+const attachResourceSource = `${base}/attachsource`;
 
 let client = null;
 
@@ -116,6 +117,16 @@ GameService.togglePause = () => {
     pauseToggle,
     {},
     null,
+  );
+  return messageId;
+};
+
+GameService.attachResourceSource = (harvesterId, sourceId, slot) => {
+  const messageId = uuid();
+  client.send(
+		attachResourceSource,
+    {},
+		JSON.stringify({ messageId, harvesterId, sourceId, slot, type: "ATTACH_RESOURCE_SOURCE" }),
   );
   return messageId;
 };
