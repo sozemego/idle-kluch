@@ -233,6 +233,7 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     //7. Check distance from source, if it's inside harvesting radius
+
     final float distance = EntityUtils.distance(harvester, source);
     final float radius = harvesterComponent.getRadius();
     if (distance > harvesterComponent.getRadius()) {

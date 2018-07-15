@@ -4,6 +4,7 @@ import com.soze.idlekluch.core.aop.annotations.AuthLog;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.game.engine.EntityConverter;
+import com.soze.idlekluch.game.exception.GameException;
 import com.soze.idlekluch.game.message.*;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.kingdom.service.BuildingService;
@@ -90,12 +91,12 @@ public class GameServiceImpl implements GameService {
   @Profiled
   @AuthLog
   public void handleBuildBuildingMessage(final String username, final BuildBuildingForm form) {
-    gameEngine.addAction(() -> {
+    gameEngine.addAction(wrapExceptionHandler(() -> {
       final Entity building = buildingService.buildBuilding(username, form);
 
       final Optional<TileId> tileId = WorldUtils.getEntityTileId(building);
       worldService.createWorldChunk(tileId.get(), 5, 5);
-    });
+    }));
   }
 
   @Override
@@ -103,7 +104,7 @@ public class GameServiceImpl implements GameService {
   public void handleAttachResourceMessage(final String username, final AttachResourceSourceForm form) {
     Objects.requireNonNull(username);
     Objects.requireNonNull(form);
-    gameEngine.addAction(() -> buildingService.attachResourceSource(username, form));
+    gameEngine.addAction(wrapExceptionHandler(() -> buildingService.attachResourceSource(username, form)));
   }
 
   @Override
@@ -157,6 +158,16 @@ public class GameServiceImpl implements GameService {
     }
 
     webSocketMessagingService.send(Routes.GAME_OUTBOUND, new PauseStateMessage(!gameEngine.isPaused()));
+  }
+
+  private Runnable wrapExceptionHandler(final Runnable action) {
+    return () -> {
+      try {
+        action.run();
+      } catch (GameException e) {
+        webSocketMessagingService.send(Routes.GAME_OUTBOUND, new MessageRevert(e.getMessageId().toString()));
+      }
+    };
   }
 
 }

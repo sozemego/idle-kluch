@@ -79,7 +79,10 @@ public class EntityUtils {
     Objects.requireNonNull(point);
 
     final PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
-    return (float) Math.hypot(physicsComponent.getX() - point.x, physicsComponent.getY() - point.y);
+    return (float) Math.hypot(
+      (physicsComponent.getX() - physicsComponent.getWidth()) - point.x,
+      (physicsComponent.getY() - physicsComponent.getHeight()) - point.y
+    );
   }
 
   public static float distance(final Entity entity1, final Entity entity2) {
