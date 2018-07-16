@@ -26,7 +26,7 @@ class HeaderKingdomSection extends Component {
   };
 
   render() {
-    const { hasKingdom, kingdom, deleteKingdom, deletingKingdom } = this.props;
+    const { hasKingdom, kingdom, deleteKingdom } = this.props;
 
     if (!hasKingdom) {
       return null;

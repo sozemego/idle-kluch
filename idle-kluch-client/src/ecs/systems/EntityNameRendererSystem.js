@@ -1,10 +1,8 @@
 import Node from "../Node";
-import { ResourceStorageComponent } from "../components/ResourceStorageComponent";
 import { PhysicsComponent } from "../components/PhysicsComponent";
 import { IN_GAME_FONT_SIZE } from "../../game/constants";
 import { NameComponent } from "../components/NameComponent";
 import { Engine as Entity } from "../Engine";
-
 
 export class EntityNameRendererSystem {
 

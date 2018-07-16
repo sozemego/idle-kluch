@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import _ from "lodash";
 import { GameService as gameService } from "./GameService";
-import { makeActionCreator, makePayloadActionCreator } from "../store/utils";
+import { makePayloadActionCreator } from "../store/utils";
 import createGame from "./Game";
 import { getConstructableBuildingsData, getKingdom, getSelectedConstructableBuilding } from "../kingdom/selectors";
 import { idleBucksChanged, setSelectedConstructableBuilding } from "../kingdom/actions";

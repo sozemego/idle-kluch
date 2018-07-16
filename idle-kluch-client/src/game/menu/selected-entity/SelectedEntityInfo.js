@@ -75,7 +75,10 @@ export class SelectedEntityInfo extends Component {
         </div>
         <div className={style.harvester_state}>
           <Avatar>
-            <img className={style.resource_icon} src={`/resources/${resource.name}.png`}/>
+            <img className={style.resource_icon}
+                 src={`/resources/${resource.name}.png`}
+                 alt={resource.name}
+            />
           </Avatar>
           {harvestingState}
         </div>
@@ -133,6 +136,7 @@ export class SelectedEntityInfo extends Component {
              className={style.harvester_source_icon}
              src={getImageSrcByAsset(graphicsComponent.getAsset())}
              onClick={() => onAttachSourceClicked(++index)}
+             alt={`source ${index + 1}`}
         />
       )
     });
@@ -160,7 +164,10 @@ export class SelectedEntityInfo extends Component {
                 key={resource.name}
                 avatar={
                   <Avatar>
-                    <img className={style.resource_icon} src={`/resources/${resource.name}.png`}/>
+                    <img className={style.resource_icon}
+                         src={`/resources/${resource.name}.png`}
+                         alt={resource.name}
+                    />
                   </Avatar>
                 }
               />
