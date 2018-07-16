@@ -6,6 +6,7 @@ import Phaser from "phaser";
 import _ from 'lodash';
 
 import { TILE_SIZE } from "./constants";
+import { PhysicsComponent } from "../ecs/components/PhysicsComponent";
 
 /**
  * Centers camera at a given point.
@@ -102,4 +103,22 @@ export const drawCircle = (graphics, center, radius, color) => {
 	graphics.beginFill(color, 0.1);
 	graphics.drawCircle(center.x, center.y, radius * 2);
 	graphics.endFill();
+};
+
+export const drawRect = (graphics, rect, style) => {
+	graphics.lineStyle(style.width, style.color, style.alpha);
+	graphics.drawRect(
+		rect.x, rect.y,
+		rect.width, rect.height,
+	);
+};
+
+export const getRect = (entity) => {
+  const physicsComponent = entity.getComponent(PhysicsComponent);
+  return {
+    x: physicsComponent.getX(),
+    y: physicsComponent.getY(),
+    width: physicsComponent.getWidth(),
+    height: physicsComponent.getHeight(),
+  };
 };

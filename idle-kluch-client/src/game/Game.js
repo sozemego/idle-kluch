@@ -41,7 +41,7 @@ import {
 	attachSpawnAnimation,
 	centerCameraAt,
 	destroyTileGroup,
-	DIRECTIONS, drawCircle,
+	DIRECTIONS, drawCircle, drawRect, getRect,
 	getWheelDelta,
 	killSprite,
 	translateCoordinatesToTile,
@@ -391,13 +391,11 @@ const updateSelectedEntity = () => {
   if(selectedEntity === null) {
     entitySelector.clear();
   } else {
-    const physicsComponent = selectedEntity.getComponent(PhysicsComponent);
-    entitySelector.clear();
-    entitySelector.lineStyle(2, 0xdd00dd, 1);
-    entitySelector.drawRect(
-      physicsComponent.getX(), physicsComponent.getY(),
-      physicsComponent.getWidth(), physicsComponent.getHeight(),
-    );
+		drawRect(
+			entitySelector,
+			getRect(selectedEntity),
+			{ width: 2, color: 0xdd00dd, alpha: 1 },
+		);
   }
 };
 
@@ -410,11 +408,10 @@ const updateAttachingSource = () => {
     return;
   }
 
-
-  //1. find type of resource selected entity can harvest
 	const resourceHarvester = selectedEntity.getComponent(ResourceHarvesterComponent);
 	const radius = resourceHarvester.getRadius();
 	const center = getCenter(selectedEntity);
+
 	drawCircle(
 		getSelectedBuildingRadiusCircle(),
 		center,
@@ -425,20 +422,23 @@ const updateAttachingSource = () => {
 
   const resourceId = resourceHarvester.getResource();
 
-  const resourceSources = engine.getEntitiesByNode(Node.of([PhysicsComponent, ResourceSourceComponent]));
-  const resourceSourceInRadius = resourceSources
-    .filter(source => {
-      const resourceSource = source.getComponent(ResourceSourceComponent);
-      return resourceSource.getResourceId() === resourceId;
-    })
-    .filter(source => {
-      return distance(source, selectedEntity) <= radius;
-    });
+	engine.getEntitiesByNode(Node.of([ PhysicsComponent, ResourceSourceComponent ]))
+		.filter(source => {
+			const resourceSource = source.getComponent(ResourceSourceComponent);
+			return resourceSource.getResourceId() === resourceId;
+		})
+		.filter(source => {
+			return distance(source, selectedEntity) <= radius;
+		})
+		.forEach(source => {
+			drawRect(
+				entitySelector,
+				getRect(source),
+				{ width: 2, color: 0xdd00dd, alpha: 1 },
+			);
+		});
 
-  //2. display harvesting radius around entity
-  //3. highlight viable resource source
   //4. show bonuses for resources
-  console.log(attachSourceSlot);
 };
 
 const createGame = () => {
@@ -558,6 +558,7 @@ const createGame = () => {
     };
 
     const render = () => {
+			entitySelector.clear();
     };
 
     const config = {
