@@ -77,3 +77,24 @@ export const doesContain = (entity, point) => {
 
   return rectangle.contains(point.x, point.y);
 };
+
+export const distance = (entity1, entity2) => {
+  const center1 = getCenter(entity1);
+  const center2 = getCenter(entity2);
+  return distanceBetweenPoints(center1, center2);
+};
+
+export const getCenter = (entity) => {
+	const physicsComponent = entity.getComponent(PhysicsComponent);
+	return {
+		x: physicsComponent.getX() + (physicsComponent.getWidth() / 2),
+		y: physicsComponent.getY() + (physicsComponent.getHeight() / 2),
+	}
+};
+
+export const distanceBetweenPoints = (point1, point2) => {
+	return Math.hypot(
+		point1.x - point2.x,
+		point1.y - point2.y,
+	);
+};

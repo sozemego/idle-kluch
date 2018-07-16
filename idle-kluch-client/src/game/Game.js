@@ -16,6 +16,7 @@ import { NameComponent } from "../ecs/components/NameComponent";
 import { BuildableComponent } from "../ecs/components/BuildableComponent";
 import { StaticOccupySpaceComponent } from "../ecs/components/StaticOccupySpaceComponent";
 import { CostComponent } from "../ecs/components/CostComponent";
+import Node from "../ecs/Node";
 import {
   getKingdomStartingPoint as _getKingdomStartingPoint,
   getSelectedConstructableBuilding as _getSelectedConstructableBuilding,
@@ -28,16 +29,22 @@ import {
   getAttachSourceSlot as _getAttachSourceSlot,
 } from "./selectors";
 import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
-import { checkEntityInRangeOfResource, checkRectangleIntersectsCollidableEntities, findComponent } from "../ecs/utils";
 import {
-  attachDespawnAnimation,
-  attachSpawnAnimation,
-  centerCameraAt,
-  destroyTileGroup,
-  DIRECTIONS,
-  getWheelDelta,
-  killSprite,
-  translateCoordinatesToTile,
+	checkEntityInRangeOfResource,
+	checkRectangleIntersectsCollidableEntities,
+	findComponent,
+	distance,
+	getCenter
+} from "../ecs/utils";
+import {
+	attachDespawnAnimation,
+	attachSpawnAnimation,
+	centerCameraAt,
+	destroyTileGroup,
+	DIRECTIONS, drawCircle,
+	getWheelDelta,
+	killSprite,
+	translateCoordinatesToTile,
 } from "./utils";
 import { ResourceSourceComponent } from "../ecs/components/ResourceSourceComponent";
 import { ResourceHarvesterComponent } from "../ecs/components/ResourceHarvesterComponent";
@@ -191,12 +198,7 @@ const setConstructableBuilding = (state, action) => {
 
 	if (!building) {
 		killSprite(selectedBuildingSprite);
-		if (selectedBuildingRadiusCircle) {
-			selectedBuildingRadiusCircle.clear();
-		}
-		// if (selectedBuildingSprite) {
-		//   selectedBuildingSprite.kill(true);
-		// }
+		getSelectedBuildingRadiusCircle().clear();
 		return { ...state, constructing: false };
 	}
 
@@ -204,7 +206,7 @@ const setConstructableBuilding = (state, action) => {
 
 	if (!selectedBuildingSprite) {
 		selectedBuildingSprite = game.add.sprite(0, 0, graphicsComponent.asset);
-		selectedBuildingRadiusCircle = game.add.graphics(0, 0);
+		selectedBuildingRadiusCircle = getSelectedBuildingRadiusCircle();
 	}
 
 	selectedBuildingSprite.revive();
@@ -295,6 +297,13 @@ export const gameReducer = createReducer(initialState, {
   [ APP_ACTIONS.LOGOUT ]: logout,
 });
 
+const getSelectedBuildingRadiusCircle = () => {
+	if (!selectedBuildingRadiusCircle) {
+		selectedBuildingRadiusCircle = game.add.graphics(0, 0);
+	}
+	return selectedBuildingRadiusCircle;
+};
+
 const mouseOut = (event) => {
   // tileGroup.children.forEach((sprite) => {
   //   sprite.tint = 0xffffff;
@@ -346,16 +355,17 @@ const updateSelectedConstructableBuilding = () => {
     if(resourceHarvesterComponent != null) {
 
       const inRangeOfResources = checkEntityInRangeOfResource(engine, selectedConstructableBuilding);
-
       const color = inRangeOfResources ? 0x00ff00 : 0xff0000;
 
-      selectedBuildingRadiusCircle.beginFill(color, 0.1);
-      selectedBuildingRadiusCircle.drawCircle(
-        mouseX + game.world.pivot.x,
-        mouseY + game.world.pivot.y,
-        resourceHarvesterComponent.radius * 2
+			drawCircle(
+			  selectedBuildingRadiusCircle,
+        {
+          x: mouseX + game.world.pivot.x,
+          y: mouseY + game.world.pivot.y
+        },
+				resourceHarvesterComponent.radius,
+        color,
       );
-      selectedBuildingRadiusCircle.endFill();
 
       if(!inRangeOfResources) {
         isBuildingConstructable = false;
@@ -392,13 +402,39 @@ const updateSelectedEntity = () => {
 };
 
 const updateAttachingSource = () => {
-  const attachSourceSlot = getAttachSourceSlot();
+	getSelectedBuildingRadiusCircle().clear();
+
+	const attachSourceSlot = getAttachSourceSlot();
   const selectedEntity = getSelectedEntity();
   if (!selectedEntity || !attachSourceSlot) {
     return;
   }
 
+
   //1. find type of resource selected entity can harvest
+	const resourceHarvester = selectedEntity.getComponent(ResourceHarvesterComponent);
+	const radius = resourceHarvester.getRadius();
+	const center = getCenter(selectedEntity);
+	drawCircle(
+		getSelectedBuildingRadiusCircle(),
+		center,
+		radius,
+		0x00ff00,
+	);
+
+
+  const resourceId = resourceHarvester.getResource();
+
+  const resourceSources = engine.getEntitiesByNode(Node.of([PhysicsComponent, ResourceSourceComponent]));
+  const resourceSourceInRadius = resourceSources
+    .filter(source => {
+      const resourceSource = source.getComponent(ResourceSourceComponent);
+      return resourceSource.getResourceId() === resourceId;
+    })
+    .filter(source => {
+      return distance(source, selectedEntity) <= radius;
+    });
+
   //2. display harvesting radius around entity
   //3. highlight viable resource source
   //4. show bonuses for resources
