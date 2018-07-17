@@ -9,6 +9,7 @@ import { parseJSON } from "../utils/JSONUtils";
 import { alreadyConnected } from "../app/actions";
 import { default as undoActions } from "./UndoActions";
 import { setConstructableBuildings } from "../kingdom/actions";
+import { MESSAGE_TYPE } from "./constants";
 
 const getToken = () => getUser(store.getState()).token;
 
@@ -94,24 +95,24 @@ GameService.attachResourceSource = (harvesterId, sourceId, slot) => {
 
 const handleMessage = (message) => {
 	const parsed = parseJSON(message.body);
-	const type = parsed["type"];
-	handlerTable[type](parsed);
+	const type = parsed[ "type" ];
+	handlerTable[ type ](parsed);
 };
 
 const handlerTable = {
-  "WORLD_CHUNK": (message) => store.dispatch(addTiles(message.tiles)),
-	"ENTITY": (message) => store.dispatch(addEntity(message)),
-	"ALREADY_CONNECTED": (message) => {
+	[ MESSAGE_TYPE.WORLD_CHUNK ]: (message) => store.dispatch(addTiles(message.tiles)),
+	[ MESSAGE_TYPE.ENTITY ]: (message) => store.dispatch(addEntity(message)),
+	[ MESSAGE_TYPE.ALREADY_CONNECTED ]: (message) => {
 		client.disconnect();
 		store.dispatch(alreadyConnected(true));
-  },
-	"MESSAGE_REVERT": (message) => {
+	},
+	[ MESSAGE_TYPE.MESSAGE_REVERT ]: (message) => {
 		const undoAction = undoActions.getAction(message.messageId);
 		undoAction();
-  },
-	"REMOVE_ENTITY": (message) => store.dispatch(removeEntity(message.entityId)),
-	"BUILDING_LIST": (message) => store.dispatch(setConstructableBuildings(message.buildingDefinitions)),
-	"PAUSE_STATE": (message) => store.dispatch(setRunningState(message.running)),
-	"START_HARVESTING": (message) => store.dispatch(startHarvesting(message.id)),
-	"RESOURCE_LIST": (message) => store.dispatch(setResources(message.resources)),
+	},
+	[ MESSAGE_TYPE.REMOVE_ENTITY ]: (message) => store.dispatch(removeEntity(message.entityId)),
+	[ MESSAGE_TYPE.BUILDING_LIST ]: (message) => store.dispatch(setConstructableBuildings(message.buildingDefinitions)),
+	[ MESSAGE_TYPE.PAUSE_STATE ]: (message) => store.dispatch(setRunningState(message.running)),
+	[ MESSAGE_TYPE.START_HARVESTING ]: (message) => store.dispatch(startHarvesting(message.id)),
+	[ MESSAGE_TYPE.RESOURCE_LIST ]: (message) => store.dispatch(setResources(message.resources)),
 };
