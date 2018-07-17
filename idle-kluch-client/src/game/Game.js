@@ -28,7 +28,7 @@ import {
 	getResourceById as _getResourceById,
   getAttachSourceSlot as _getAttachSourceSlot,
 } from "./selectors";
-import { COMPONENT_TYPES, IMAGES, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
+import { COMPONENT_TYPES, IMAGES, IN_GAME_FONT_SIZE, MAX_HEIGHT, MAX_WIDTH, TILE_SIZE, ZOOM_AMOUNT } from "./constants";
 import {
 	checkEntityInRangeOfResource,
 	checkRectangleIntersectsCollidableEntities,
@@ -76,6 +76,8 @@ let entitySprites = null;
 let isBuildingConstructable = false;
 
 let isRunning = true;
+
+let resourceBonusTextGroup = null;
 
 const delta = 1 / 60;
 
@@ -401,6 +403,7 @@ const updateSelectedEntity = () => {
 
 const updateAttachingSource = () => {
 	getSelectedBuildingRadiusCircle().clear();
+	destroyTileGroup(resourceBonusTextGroup);
 
 	const attachSourceSlot = getAttachSourceSlot();
   const selectedEntity = getSelectedEntity();
@@ -431,11 +434,19 @@ const updateAttachingSource = () => {
 			return distance(source, selectedEntity) <= radius;
 		})
 		.forEach(source => {
+			const rect = getRect(source);
 			drawRect(
 				entitySelector,
-				getRect(source),
+				rect,
 				{ width: 2, color: 0xdd00dd, alpha: 1 },
 			);
+
+			const sourceComponent = source.getComponent(ResourceSourceComponent);
+			const text = game.make.text(0, 0, "", { font: `${IN_GAME_FONT_SIZE}px Arial`, fill: "rgb(0, 0, 0)" });
+			text.text = `${sourceComponent.getBonus()}x`;
+			text.x = rect.x;
+			text.y = rect.y - IN_GAME_FONT_SIZE;
+			resourceBonusTextGroup.add(text);
 		});
 
   //4. show bonuses for resources
@@ -511,6 +522,7 @@ const createGame = () => {
       tileGroup = game.add.group();
       entitySprites = game.add.group();
       entitySelector = game.add.graphics(0, 0);
+			resourceBonusTextGroup = game.add.group();
 
       engine = new Engine();
       engine.addSystem(new PhysicsSystem(engine));
