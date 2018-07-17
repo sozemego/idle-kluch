@@ -25,10 +25,6 @@ export const GameService = {};
 
 GameService.connect = function () {
   return new Promise((resolve, reject) => {
-    // if (client && client.readyState !== WebSocket.CLOSED) {
-    //   reject('Already connected or connecting or closing. Either way, cannot connect right now.');
-    //   return;
-    // }
 
     const { protocol, base, port, version, app } = networkConfig;
     const socket = new SockJS(
@@ -39,52 +35,9 @@ GameService.connect = function () {
     //disable debug messages
     client.debug = () => {};
 
-    const messageHandler = message => {
-      const parsed = parseJSON(message.body);
-      const type = parsed["type"];
-      if (type === "WORLD_CHUNK") {
-        store.dispatch(addTiles(parsed.tiles));
-      }
-
-      if (type === "ENTITY") {
-        store.dispatch(addEntity(parsed));
-      }
-
-      if(type === "ALREADY_CONNECTED") {
-        client.disconnect();
-        store.dispatch(alreadyConnected(true));
-      }
-
-      if(type === "MESSAGE_REVERT") {
-        const undoAction = undoActions.getAction(parsed.messageId);
-        undoAction();
-      }
-
-      if(type === "REMOVE_ENTITY") {
-        store.dispatch(removeEntity(parsed.entityId));
-      }
-
-      if(type === "BUILDING_LIST") {
-        store.dispatch(setConstructableBuildings(parsed.buildingDefinitions));
-      }
-
-      if(type === "PAUSE_STATE") {
-        store.dispatch(setRunningState(parsed.running));
-      }
-
-      if(type === "START_HARVESTING") {
-        store.dispatch(startHarvesting(parsed.id))
-      }
-
-      if(type === "RESOURCE_LIST") {
-        store.dispatch(setResources(parsed.resources))
-      }
-
-    };
-
     client.connect({}, frame => {
-      client.subscribe("/user/game/outbound", messageHandler);
-      client.subscribe("/game/outbound", messageHandler);
+      client.subscribe("/user/game/outbound", handleMessage);
+      client.subscribe("/game/outbound", handleMessage);
       client.send("/game/inbound/init", {}, null);
 
       resolve();
@@ -138,3 +91,27 @@ GameService.attachResourceSource = (harvesterId, sourceId, slot) => {
 // const isConnecting = () => {
 //   return (socket && socket.readyState === WebSocket.CONNECTING);
 // };
+
+const handleMessage = (message) => {
+	const parsed = parseJSON(message.body);
+	const type = parsed["type"];
+	handlerTable[type](parsed);
+};
+
+const handlerTable = {
+  "WORLD_CHUNK": (message) => store.dispatch(addTiles(message.tiles)),
+	"ENTITY": (message) => store.dispatch(addEntity(message)),
+	"ALREADY_CONNECTED": (message) => {
+		client.disconnect();
+		store.dispatch(alreadyConnected(true));
+  },
+	"MESSAGE_REVERT": (message) => {
+		const undoAction = undoActions.getAction(message.messageId);
+		undoAction();
+  },
+	"REMOVE_ENTITY": (message) => store.dispatch(removeEntity(message.entityId)),
+	"BUILDING_LIST": (message) => store.dispatch(setConstructableBuildings(message.buildingDefinitions)),
+	"PAUSE_STATE": (message) => store.dispatch(setRunningState(message.running)),
+	"START_HARVESTING": (message) => store.dispatch(startHarvesting(message.id)),
+	"RESOURCE_LIST": (message) => store.dispatch(setResources(message.resources)),
+};
