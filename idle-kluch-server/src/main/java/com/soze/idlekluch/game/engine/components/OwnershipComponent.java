@@ -7,8 +7,7 @@ import java.util.Objects;
 
 /**
  * Component responsible for keeping an identifier of the owner
- * of the entity. Right now, they are users, so it contains both
- * the username and their id.
+ * of the entity.
  */
 public class OwnershipComponent extends BaseComponent {
 

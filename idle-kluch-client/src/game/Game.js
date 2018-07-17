@@ -114,57 +114,7 @@ const addEntity = (state, { payload: entity }) => {
   const newEntity = engine.getEntityFactory().createEntity(entity.id);
 
   entity.components
-    .map(component => {
-      const { componentType } = component;
-      if (componentType === COMPONENT_TYPES.GRAPHICS) {
-        const sprite = entitySprites.create(0, 0, component.asset);
-        sprite.inputEnabled = true;
-        return new GraphicsComponent(component.asset, sprite);
-      }
-      if (componentType === COMPONENT_TYPES.PHYSICS) {
-        return new PhysicsComponent(
-          component.x,
-          component.y,
-          component.width,
-          component.height,
-        );
-      }
-      if (componentType === COMPONENT_TYPES.OWNERSHIP) {
-        return new OwnershipComponent(entity.id);
-      }
-      if (componentType === COMPONENT_TYPES.NAME) {
-        return new NameComponent(component.name);
-      }
-      if (componentType === COMPONENT_TYPES.BUILDABLE) {
-        return new BuildableComponent();
-      }
-      if (componentType === COMPONENT_TYPES.STATIC_OCCUPY_SPACE) {
-        return new StaticOccupySpaceComponent();
-      }
-      if (componentType === COMPONENT_TYPES.COST) {
-        return new CostComponent(component.idleBucks);
-      }
-      if (componentType === COMPONENT_TYPES.RESOURCE_SOURCE) {
-        return new ResourceSourceComponent(component.resourceId, component.bonus);
-      }
-      if(componentType === COMPONENT_TYPES.RESOURCE_HARVESTER) {
-        return new ResourceHarvesterComponent(
-          component.resourceId,
-          component.radius,
-          component.unitsPerMinute,
-          component.slots,
-          component.sourceSlots,
-          component.harvestingProgress,
-        );
-      }
-      if(componentType === COMPONENT_TYPES.RESOURCE_STORAGE) {
-        const storageComponent = new ResourceStorageComponent(component.capacity);
-        component.resources.forEach(resource => storageComponent.addResource(resource));
-        return storageComponent;
-      }
-
-      throw new Error("INVALID COMPONENT TYPE " + componentType);
-    })
+    .map(createComponent)
     .forEach(component => newEntity.addComponent(component));
 
   const graphicsComponent = newEntity.getComponent(GraphicsComponent);
@@ -177,6 +127,58 @@ const addEntity = (state, { payload: entity }) => {
   engine.addEntity(newEntity);
 
   return { ...state };
+};
+
+const createComponent = (component) => {
+	const { componentType } = component;
+	if (componentType === COMPONENT_TYPES.GRAPHICS) {
+		const sprite = entitySprites.create(0, 0, component.asset);
+		sprite.inputEnabled = true;
+		return new GraphicsComponent(component.asset, sprite);
+	}
+	if (componentType === COMPONENT_TYPES.PHYSICS) {
+		return new PhysicsComponent(
+			component.x,
+			component.y,
+			component.width,
+			component.height,
+		);
+	}
+	if (componentType === COMPONENT_TYPES.OWNERSHIP) {
+		return new OwnershipComponent(component.ownerId);
+	}
+	if (componentType === COMPONENT_TYPES.NAME) {
+		return new NameComponent(component.name);
+	}
+	if (componentType === COMPONENT_TYPES.BUILDABLE) {
+		return new BuildableComponent();
+	}
+	if (componentType === COMPONENT_TYPES.STATIC_OCCUPY_SPACE) {
+		return new StaticOccupySpaceComponent();
+	}
+	if (componentType === COMPONENT_TYPES.COST) {
+		return new CostComponent(component.idleBucks);
+	}
+	if (componentType === COMPONENT_TYPES.RESOURCE_SOURCE) {
+		return new ResourceSourceComponent(component.resourceId, component.bonus);
+	}
+	if(componentType === COMPONENT_TYPES.RESOURCE_HARVESTER) {
+		return new ResourceHarvesterComponent(
+			component.resourceId,
+			component.radius,
+			component.unitsPerMinute,
+			component.slots,
+			component.sourceSlots,
+			component.harvestingProgress,
+		);
+	}
+	if(componentType === COMPONENT_TYPES.RESOURCE_STORAGE) {
+		const storageComponent = new ResourceStorageComponent(component.capacity);
+		component.resources.forEach(resource => storageComponent.addResource(resource));
+		return storageComponent;
+	}
+
+	throw new Error("INVALID COMPONENT TYPE " + componentType);
 };
 
 const removeEntity = (state, action) => {
