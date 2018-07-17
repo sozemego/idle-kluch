@@ -16,6 +16,13 @@ export const findComponent = (entity, componentType) => {
   return _.find(components, { componentType });
 };
 
+/**
+ * Given an engine and a rectangle, checks whether there is any entity
+ * that intersects with this rectangle.
+ * @param {Engine} engine
+ * @param {Phaser.Rectangle} rectangle
+ * @returns {boolean}
+ */
 export const checkRectangleIntersectsCollidableEntities = (engine, rectangle) => {
   const staticOccupy = Node.of(StaticOccupySpaceComponent);
   const collidableEntities = engine.getEntitiesByNode(staticOccupy);
@@ -37,6 +44,12 @@ export const checkRectangleIntersectsCollidableEntities = (engine, rectangle) =>
   return false;
 };
 
+/**
+ * For given entity which is a ResourceHarvester, checks if there is a resource in its range.
+ * @param {Engine} engine
+ * @param {Entity} entity
+ * @returns {boolean}
+ */
 export const checkEntityInRangeOfResource = (engine, entity) => {
   const harvesterComponent = findComponent(entity, COMPONENT_TYPES.RESOURCE_HARVESTER);
   const radius = harvesterComponent.radius;
