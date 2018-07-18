@@ -353,8 +353,6 @@ const updateSelectedConstructableBuilding = () => {
       }
     }
 
-    selectedBuildingRadiusCircle.clear();
-
     const resourceHarvesterComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.RESOURCE_HARVESTER);
     if(resourceHarvesterComponent != null) {
 
@@ -404,7 +402,6 @@ const updateSelectedEntity = () => {
 };
 
 const updateAttachingSource = () => {
-	getSelectedBuildingRadiusCircle().clear();
 	destroyTileGroup(resourceBonusTextGroup);
 
 	const attachSourceSlot = getAttachSourceSlot();
@@ -557,6 +554,8 @@ const createGame = () => {
       if (cursors.right.isDown) {
         game.world.pivot.x += 5 * Math.pow(scale, -1);
       }
+
+			getSelectedBuildingRadiusCircle().clear();
 
       updateSelectedConstructableBuilding();
       updateSelectedEntity();
