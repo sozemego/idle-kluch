@@ -1,15 +1,15 @@
-import Node from "../Node";
 import { ResourceStorageComponent } from "../components/ResourceStorageComponent";
 import { PhysicsComponent } from "../components/PhysicsComponent";
 import { IN_GAME_FONT_SIZE } from "../../game/constants";
 import { Engine as Entity } from "../Engine";
+import { STORAGE_NODE } from "../nodes";
 
 
 export class ResourceStorageRendererSystem {
 
   constructor(engine, textGroup, textFactory, getSelectedEntity) {
     this.engine = engine;
-    this.node = Node.of([ PhysicsComponent, ResourceStorageComponent ]);
+    this.node = STORAGE_NODE;
     this.textGroup = textGroup;
     this.textFactory = textFactory;
     this.texts = {};

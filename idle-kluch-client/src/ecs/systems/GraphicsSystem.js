@@ -1,12 +1,12 @@
 import { EntitySystem } from "../EntitySystem";
 import { GraphicsComponent } from "../components/GraphicsComponent";
 import { PhysicsComponent } from "../components/PhysicsComponent";
-import Node from "../Node";
+import { GRAPHICS_RENDER_NODE } from "../nodes";
 
 export class GraphicsSystem extends EntitySystem {
   constructor(engine) {
     super(engine);
-    this.node = Node.of([ GraphicsComponent, PhysicsComponent ]);
+    this.node = GRAPHICS_RENDER_NODE;
   }
 
   update = delta => {

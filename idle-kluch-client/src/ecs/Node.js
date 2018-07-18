@@ -3,8 +3,7 @@ export default class Node {
     this.components = components;
   }
 
-  static of(components) {
-    components = Array.isArray(components) ? components: [ components ];
+  static of(...components) {
     return new Node(components);
   }
 

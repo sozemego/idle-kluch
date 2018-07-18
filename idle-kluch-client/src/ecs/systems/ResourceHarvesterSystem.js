@@ -1,14 +1,14 @@
-import Node from "../Node";
 import { ResourceHarvesterComponent } from "../components/ResourceHarvesterComponent";
 import { ResourceStorageComponent } from "../components/ResourceStorageComponent";
 import { HARVESTING_STATE } from "../constants";
 import { ResourceSourceComponent } from "../components/ResourceSourceComponent";
+import { RESOURCE_HARVESTER_NODE } from "../nodes";
 
 export class ResourceHarvesterSystem {
 
   constructor(engine, getResourceById) {
     this.engine = engine;
-    this.node = Node.of([ ResourceHarvesterComponent, ResourceStorageComponent ]);
+    this.node = RESOURCE_HARVESTER_NODE;
     this.getResourceById = getResourceById;
   }
 

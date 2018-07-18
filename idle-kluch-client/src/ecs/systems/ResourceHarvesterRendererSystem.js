@@ -1,14 +1,14 @@
-import Node from "../Node";
 import { ResourceHarvesterComponent } from "../components/ResourceHarvesterComponent";
 import { PhysicsComponent } from "../components/PhysicsComponent";
 import { Engine as Entity } from "../Engine";
+import { RESOURCE_HARVESTER_NODE } from "../nodes";
 
 export class ResourceHarvesterRendererSystem {
 
   constructor(engine, spriteFactory, getSelectedEntity, entitySelector) {
     this.engine = engine;
     this.spriteFactory = spriteFactory;
-    this.node = Node.of([ ResourceHarvesterComponent, PhysicsComponent ]);
+    this.node = RESOURCE_HARVESTER_NODE;
     this.sprites = {};
     this.getSelectedEntity = getSelectedEntity;
     this.entitySelector = entitySelector;
