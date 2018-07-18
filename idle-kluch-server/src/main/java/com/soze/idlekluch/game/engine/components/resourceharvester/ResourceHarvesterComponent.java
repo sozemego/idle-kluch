@@ -12,7 +12,7 @@ import java.util.*;
 public class ResourceHarvesterComponent extends BaseComponent {
 
   private EntityUUID resourceId;
-  private float radius;
+  private int radius;
   private int unitsPerMinute;
   private int sourceSlots;
 
@@ -27,7 +27,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
   }
 
   public ResourceHarvesterComponent(final EntityUUID resourceId,
-                                    final float radius,
+                                    final int radius,
                                     final int unitsPerMinute,
                                     final int sourceSlots,
                                     final List<ResourceSourceSlot> slots) {
@@ -54,11 +54,11 @@ public class ResourceHarvesterComponent extends BaseComponent {
     this.resourceId = Objects.requireNonNull(resourceId);
   }
 
-  public float getRadius() {
+  public int getRadius() {
     return radius;
   }
 
-  public void setRadius(final float radius) {
+  public void setRadius(final int radius) {
     this.radius = radius;
   }
 

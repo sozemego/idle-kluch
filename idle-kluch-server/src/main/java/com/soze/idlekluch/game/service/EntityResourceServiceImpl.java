@@ -127,7 +127,7 @@ public class EntityResourceServiceImpl implements EntityResourceService {
   }
 
   @Override
-  public List<Entity> getResourceSourcesInRadius(final Resource resource, final Point center, final float radius) {
+  public List<Entity> getResourceSourcesInRadius(final Resource resource, final Point center, final int radius) {
     return getAllResourceSources(resource)
              .stream()
              .filter(source -> EntityUtils.distance(source, center) <= radius)
@@ -135,7 +135,7 @@ public class EntityResourceServiceImpl implements EntityResourceService {
   }
 
   @Override
-  public List<Entity> getResourceSourcesInRadius(final EntityUUID resourceId, final Point center, final float radius) {
+  public List<Entity> getResourceSourcesInRadius(final EntityUUID resourceId, final Point center, final int radius) {
     final Resource resource = resourceService.getResource(resourceId).orElseThrow(() -> new IllegalArgumentException());
     return getResourceSourcesInRadius(resource, center, radius);
   }

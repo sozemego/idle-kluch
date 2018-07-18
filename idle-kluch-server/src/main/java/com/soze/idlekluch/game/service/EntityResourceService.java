@@ -43,9 +43,9 @@ public interface EntityResourceService {
 
   void handleWorldChunkCreatedEvent(WorldChunkCreatedEvent worldChunkCreatedEvent);
 
-  List<Entity> getResourceSourcesInRadius(Resource resource, Point center, float radius);
+  List<Entity> getResourceSourcesInRadius(Resource resource, Point center, int radius);
 
-  List<Entity> getResourceSourcesInRadius(EntityUUID resourceId, Point center, float radius);
+  List<Entity> getResourceSourcesInRadius(EntityUUID resourceId, Point center, int radius);
 
   /**
    * Attempts to find an entity template with given id at a given position.
