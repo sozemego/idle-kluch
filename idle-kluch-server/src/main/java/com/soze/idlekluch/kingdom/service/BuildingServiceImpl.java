@@ -1,5 +1,7 @@
 package com.soze.idlekluch.kingdom.service;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.soze.idlekluch.core.aop.annotations.AuthLog;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
@@ -34,6 +36,8 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.soze.idlekluch.game.engine.EntityUtils.getName;
@@ -53,7 +57,11 @@ public class BuildingServiceImpl implements BuildingService {
 
   private final Set<EntityUUID> buildings = ConcurrentHashMap.newKeySet();
 
-  private final Map<String, Object> locks = new ConcurrentHashMap<>();
+  private final Cache<String, Object> locks = CacheBuilder
+                                                .newBuilder()
+                                                .maximumSize(500)
+                                                .expireAfterAccess(5, TimeUnit.MINUTES)
+                                                .build();
 
   @Autowired
   public BuildingServiceImpl(final KingdomService kingdomService,
@@ -328,8 +336,12 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   private Object getLock(final String name) {
-    //TODO clear those locks from time to time
-    return locks.computeIfAbsent(name, k -> new Object());
+    try {
+      return locks.get(name, () -> new Object());
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+      throw new RuntimeException(e);
+    }
   }
 
   private void validateTileExists(final BuildBuildingForm form) {

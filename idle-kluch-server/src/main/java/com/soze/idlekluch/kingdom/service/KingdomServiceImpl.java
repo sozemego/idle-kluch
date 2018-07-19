@@ -1,5 +1,7 @@
 package com.soze.idlekluch.kingdom.service;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.soze.idlekluch.core.aop.annotations.AuthLog;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.idlekluch.core.event.EventPublisher;
@@ -34,6 +36,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,7 +52,11 @@ public class KingdomServiceImpl implements KingdomService {
   private final EntityService entityService;
   private final EventPublisher eventPublisher;
 
-  private final Map<String, Object> locks = new ConcurrentHashMap<>();
+  private final Cache<String, Object> locks = CacheBuilder
+                                                .newBuilder()
+                                                .maximumSize(500)
+                                                .expireAfterAccess(5, TimeUnit.MINUTES)
+                                                .build();
 
   @Autowired
   public KingdomServiceImpl(final KingdomRepository kingdomRepository,
@@ -189,7 +197,12 @@ public class KingdomServiceImpl implements KingdomService {
   }
 
   public Object getLock(final String name) {
-    return locks.computeIfAbsent(name, k -> new Object());
+    try {
+      return locks.get(name, () -> new Object());
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+      throw new RuntimeException(e);
+    }
   }
 
 }
