@@ -59,6 +59,7 @@ public class EntityConverter {
     target.setResourceSourceComponent(source.getComponent(ResourceSourceComponent.class));
     target.setResourceHarvesterComponent(source.getComponent(ResourceHarvesterComponent.class));
     target.setResourceStorageComponent(source.getComponent(ResourceStorageComponent.class));
+    target.setSellerComponent(source.getComponent(SellerComponent.class));
 
     return target;
   }

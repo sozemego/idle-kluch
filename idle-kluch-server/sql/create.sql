@@ -58,7 +58,8 @@ CREATE TABLE entity (
   cost_component jsonb,
   resource_source_component jsonb,
   resource_harvester_component jsonb,
-  resource_storage_component jsonb
+  resource_storage_component jsonb,
+  seller_component jsonb
 );
 
 -- here entity templates live --
@@ -207,5 +208,26 @@ INSERT INTO entity (
     null,
     '{"capacity": 20, "resources": []}',
     '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "radius": 256, "unitsPerMinute": 5, "sourceSlots": 1, "slots": []}'
+  )
+;
+
+INSERT INTO entity (
+  entity_id, template, physics_component, graphics_component, ownership_component, static_occupy_space_component,
+  name_component, buildable_component, cost_component, resource_source_component, resource_storage_component,
+  resource_harvester_component
+)
+ VALUES
+  (
+    '5f3a49ad-4283-4fc2-bcf2-c4d1a0c020fa', true,
+    '{"x": 0, "y": 0, "width": 94, "height": 84}',
+    '{"asset": "trading_post"}',
+    '{"ownerId": "4517e8b9-de2e-473d-98e8-4c6c73c46c4d"}',
+    '{}',
+    '{"name": "trading_post"}',
+    '{}',
+    '{"idleBucks": 250}',
+    null,
+    '{"capacity": 50, "resources": []}',
+    'null'
   )
 ;

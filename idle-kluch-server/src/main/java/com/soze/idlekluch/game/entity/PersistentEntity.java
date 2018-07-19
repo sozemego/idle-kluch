@@ -62,6 +62,10 @@ public class PersistentEntity {
   @Type(type = "ResourceStorageComponentUserType")
   private ResourceStorageComponent resourceStorageComponent;
 
+  @Column(name = "seller_component")
+  @Type(type = "SellerComponentUserType")
+  private SellerComponent sellerComponent;
+
 
   public PersistentEntity() {
 
@@ -163,6 +167,14 @@ public class PersistentEntity {
     this.resourceStorageComponent = resourceStorageComponent;
   }
 
+  public SellerComponent getSellerComponent() {
+    return sellerComponent;
+  }
+
+  public void setSellerComponent(final SellerComponent sellerComponent) {
+    this.sellerComponent = sellerComponent;
+  }
+
   @Transient
   public List<BaseComponent> getAllComponents() {
     return Stream.of(
@@ -175,7 +187,8 @@ public class PersistentEntity {
       getStaticOccupySpaceComponent(),
       getResourceSourceComponent(),
       getResourceHarvesterComponent(),
-      getResourceStorageComponent()
+      getResourceStorageComponent(),
+      getSellerComponent()
     )
     .filter(Objects::nonNull)
     .collect(Collectors.toList());

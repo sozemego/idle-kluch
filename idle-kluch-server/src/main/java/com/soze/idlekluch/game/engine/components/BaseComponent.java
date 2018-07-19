@@ -34,7 +34,8 @@ import java.util.Objects;
   @TypeDef(name = "StaticOccupySpaceComponentUserType", typeClass = StaticOccupySpaceComponentUserType.class),
   @TypeDef(name = "ResourceSourceComponentUserType", typeClass = ResourceSourceComponentUserType.class),
   @TypeDef(name = "ResourceHarvesterComponentUserType", typeClass = ResourceHarvesterComponentUserType.class),
-  @TypeDef(name = "ResourceStorageComponentUserType", typeClass = ResourceStorageComponentUserType.class)
+  @TypeDef(name = "ResourceStorageComponentUserType", typeClass = ResourceStorageComponentUserType.class),
+  @TypeDef(name = "SellerComponentUserType", typeClass = SellerComponentUserType.class),
 })
 @JsonInclude(Include.NON_NULL)
 public abstract class BaseComponent {
@@ -67,7 +68,7 @@ public abstract class BaseComponent {
     PHYSICS, GRAPHICS, OWNERSHIP,
     STATIC_OCCUPY_SPACE, NAME, BUILDABLE,
     COST, RESOURCE_SOURCE, RESOURCE_HARVESTER,
-    RESOURCE_STORAGE,
+    RESOURCE_STORAGE, SELLER
   }
 
   @Override
