@@ -563,6 +563,12 @@ const createGame = () => {
 
       if(isRunning) {
         accumulator += (game.time.elapsedMS / 1000);
+
+        if(accumulator > 3) {
+        	console.log('Would take too long to update, reloading the page ' + accumulator);
+        	window.location.reload();
+				}
+
         while(accumulator >= delta) {
           engine.update(delta);
           accumulator -= delta;
