@@ -18,6 +18,9 @@ public class Resource {
   @Column(name = "name")
   private String name;
 
+  @Column(name = "price")
+  private int price;
+
   public Resource() {
 
   }
@@ -25,6 +28,11 @@ public class Resource {
   public Resource(final EntityUUID resourceId, final String name) {
     this.resourceId = Objects.requireNonNull(resourceId);
     this.name = Objects.requireNonNull(name);
+  }
+
+  public Resource(final EntityUUID resourceId, final String name, final int price) {
+    this(resourceId, name);
+    this.price = price;
   }
 
   public EntityUUID getResourceId() {
@@ -48,6 +56,14 @@ public class Resource {
     this.name = name;
   }
 
+  public int getPrice() {
+    return price;
+  }
+
+  public void setPrice(final int price) {
+    this.price = price;
+  }
+
   @Override
   public boolean equals(final Object o) {
     if (this == o) return true;
@@ -64,8 +80,9 @@ public class Resource {
   @Override
   public String toString() {
     return "Resource{" +
-      "resourceId=" + resourceId +
-      ", name='" + name + '\'' +
-      '}';
+             "resourceId=" + resourceId +
+             ", name='" + name + '\'' +
+             ", price=" + price +
+             '}';
   }
 }

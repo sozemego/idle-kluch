@@ -35,7 +35,7 @@ import java.util.Objects;
   @TypeDef(name = "ResourceSourceComponentUserType", typeClass = ResourceSourceComponentUserType.class),
   @TypeDef(name = "ResourceHarvesterComponentUserType", typeClass = ResourceHarvesterComponentUserType.class),
   @TypeDef(name = "ResourceStorageComponentUserType", typeClass = ResourceStorageComponentUserType.class),
-  @TypeDef(name = "SellerComponentUserType", typeClass = SellerComponentUserType.class),
+  @TypeDef(name = "ResourceSellerComponentUserType", typeClass = ResourceSellerComponentUserType.class),
 })
 @JsonInclude(Include.NON_NULL)
 public abstract class BaseComponent {

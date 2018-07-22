@@ -9,6 +9,7 @@ export const COMPONENT_TYPES = {
   RESOURCE_SOURCE: "RESOURCE_SOURCE",
   RESOURCE_HARVESTER: "RESOURCE_HARVESTER",
   RESOURCE_STORAGE: "RESOURCE_STORAGE",
+	SELLER: "SELLER",
 };
 
 export const MESSAGE_TYPE = {
@@ -59,4 +60,5 @@ export const IMAGES = {
   "blue_button01": "ui/blue_button01.png",
   "red_button01": "ui/red_button01.png",
   "Wood": "resources/Wood.png",
+	"trading_post": "trading_post.png",
 };

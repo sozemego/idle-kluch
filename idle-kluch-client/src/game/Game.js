@@ -53,6 +53,7 @@ import { ResourceStorageComponent } from "../ecs/components/ResourceStorageCompo
 import { ResourceHarvesterRendererSystem } from "../ecs/systems/ResourceHarvesterRendererSystem";
 import { ResourceStorageRendererSystem } from "../ecs/systems/ResourceStorageRendererSystem";
 import { EntityNameRendererSystem } from "../ecs/systems/EntityNameRendererSystem";
+import { ResourceSellerComponent } from "../ecs/components/ResourceSellerComponent";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const getSelectedEntityId = () => _getSelectedEntityId(store.getState());
@@ -176,6 +177,14 @@ const createComponent = (component) => {
 		const storageComponent = new ResourceStorageComponent(component.capacity);
 		component.resources.forEach(resource => storageComponent.addResource(resource));
 		return storageComponent;
+	}
+
+	if(componentType === COMPONENT_TYPES.SELLER) {
+		return new ResourceSellerComponent(
+			component.secondsPerUnit,
+			component.sellingProgress,
+			component.resourceBeingSold,
+		);
 	}
 
 	throw new Error("INVALID COMPONENT TYPE " + componentType);

@@ -15,5 +15,6 @@ public interface Nodes {
   Node BUILDING = Node.of(PhysicsComponent.class, OwnershipComponent.class, BuildableComponent.class, StaticOccupySpaceComponent.class);
 
   Node HARVESTER = Node.of(ResourceHarvesterComponent.class, ResourceStorageComponent.class);
+  Node SELLER = Node.of(ResourceStorageComponent.class, ResourceSellerComponent.class);
 
 }

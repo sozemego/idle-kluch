@@ -8,6 +8,7 @@ import com.soze.idlekluch.game.engine.EngineRunner;
 import com.soze.idlekluch.game.engine.components.NameComponent;
 import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
 import com.soze.idlekluch.game.engine.systems.ResourceHarvesterSystem;
+import com.soze.idlekluch.game.engine.systems.ResourceSellerSystem;
 import com.soze.idlekluch.world.service.ResourceService;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
@@ -36,7 +37,7 @@ public class GameEngineImpl implements GameEngine {
   private final EngineRunner engineRunner;
   private final Map<EntityUUID, Entity> changedEntities = new HashMap<>();
 
-  private final boolean isIntegrationTest;
+  private final boolean isEnabled;
 
   @Autowired
   public GameEngineImpl(final EventPublisher publisher,
@@ -47,10 +48,11 @@ public class GameEngineImpl implements GameEngine {
     this.engine = new Engine(EntityUUID::randomId);
     this.engine.addSystem(new PhysicsSystem(this.engine, this.changedEntities));
     this.engine.addSystem(new ResourceHarvesterSystem(this.engine, this.changedEntities, webSocketMessagingService, resourceService));
+    this.engine.addSystem(new ResourceSellerSystem(this.engine, this.changedEntities, publisher));
 
     this.publisher = Objects.requireNonNull(publisher);
 
-    this.isIntegrationTest = environment.acceptsProfiles("integration-test");
+    this.isEnabled = environment.acceptsProfiles("production", "development");
     this.engineRunner = new EngineRunner(engine, 1f / 60f);
   }
 
@@ -68,7 +70,7 @@ public class GameEngineImpl implements GameEngine {
   @Override
   public void handleAppStartedEvent(final AppStartedEvent event) {
     LOG.info("App started, starting game engine.");
-    if(!isIntegrationTest) {
+    if(isEnabled) {
       executor.execute(this.engineRunner);
       this.engineRunner.start();
     }
