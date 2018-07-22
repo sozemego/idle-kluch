@@ -56,11 +56,6 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
   private void update(final Entity entity, final float delta) {
     final HarvestingProgress currentHarvestingProgress = getCurrentHarvestingProgress(entity);
     final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
-    final int remainingCapacity = storage.getCapacity() - storage.getResources().size();
-    if(remainingCapacity > 0 && currentHarvestingProgress.getHarvestingState() == HarvestingProgress.HarvestingState.WAITING) {
-      currentHarvestingProgress.start();
-      beganHarvesting.add((EntityUUID) entity.getId());
-    }
 
     if(currentHarvestingProgress.getHarvestingState() == HarvestingProgress.HarvestingState.HARVESTING) {
       final float secondsPerUnit = getSecondsPerUnit(entity);
@@ -76,6 +71,12 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
       storage.addResource(resource);
       addChangedEntity(entity);
       LOG.debug("FINISHED HARVESTING FOR ENTITY [{}][{}][{}]/[{}]", entity.getId(), EntityUtils.getName(entity), storage.getResources().size(), storage.getCapacity());
+    }
+
+    final int remainingCapacity = storage.getCapacity() - storage.getResources().size();
+    if(remainingCapacity > 0 && currentHarvestingProgress.getHarvestingState() == HarvestingProgress.HarvestingState.WAITING) {
+      currentHarvestingProgress.start();
+      beganHarvesting.add((EntityUUID) entity.getId());
     }
   }
 
