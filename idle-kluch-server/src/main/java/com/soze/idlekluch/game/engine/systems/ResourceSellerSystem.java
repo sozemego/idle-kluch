@@ -59,6 +59,8 @@ public class ResourceSellerSystem extends BaseEntitySystem {
 
     if (sellerComponent.isFinished()) {
       sellerComponent.stopSelling();
+      storage.removeResource(resourceBeingSold);
+      addChangedEntity(entity);
       System.out.println("FINISHED SELLING " + resourceBeingSold.toString());
     }
   }
