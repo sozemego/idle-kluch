@@ -73,7 +73,7 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
       final Resource resource = resourceService.getResource(harvester.getResourceId()).get();
       storage.addResource(resource);
       addChangedEntity(entity);
-      LOG.debug("FINISHED HARVESTING FOR ENTITY [{}][{}][{}]/[{}]", entity.getId(), EntityUtils.getName(entity), storage.getResources().size(), storage.getCapacity());
+      LOG.trace("FINISHED HARVESTING FOR ENTITY [{}][{}][{}]/[{}]", entity.getId(), EntityUtils.getName(entity), storage.getResources().size(), storage.getCapacity());
     }
 
     final int remainingCapacity = storage.getCapacity() - storage.getResources().size();
@@ -107,7 +107,8 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
               (EntityUUID) entity.getId(), (EntityUUID) seller.getId(), resourceToTransfer
             )
           );
-          System.out.println("Transferring " + resourceToTransfer + " from " + EntityUtils.getName(entity) + " to " + EntityUtils.getName(seller));
+
+          LOG.trace("Transferring [] from [] to []", resourceToTransfer, EntityUtils.getName(entity), EntityUtils.getName(seller));
         });
     }
   }
