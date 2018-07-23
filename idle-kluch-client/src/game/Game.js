@@ -269,6 +269,17 @@ const startHarvesting = (state, action) => {
   return state;
 };
 
+const startSelling = (state, action) => {
+	const { id, resource } = action.payload;
+	const entity = engine.getEntity(id);
+	if (entity == null) {
+		return state;
+	}
+	const resourceSeller = entity.getComponent(ResourceSellerComponent);
+	resourceSeller.addResourceToQueue(resource);
+	return state;
+};
+
 const setSelectedEntity = (state, action) => {
 	return { ...state, selectedEntityId: action.payload, attachSourceSlot: null };
 };
@@ -303,6 +314,7 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.REMOVE_ENTITY ]: removeEntity,
   [ GAME_ACTIONS.SET_RUNNING_STATE]: setRunningState,
   [ GAME_ACTIONS.START_HARVESTING ]: startHarvesting,
+  [ GAME_ACTIONS.START_SELLING ]: startSelling,
   [ GAME_ACTIONS.SET_SELECTED_ENTITY]: setSelectedEntity,
   [ GAME_ACTIONS.SET_RESOURCES]: makeSetter("resources"),
   [ GAME_ACTIONS.SET_ENGINE]: makeSetter("engine"),

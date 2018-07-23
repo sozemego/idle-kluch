@@ -30,6 +30,9 @@ export const setRunningState = makePayloadActionCreator(SET_RUNNING_STATE);
 export const START_HARVESTING = "START_HARVESTING";
 export const startHarvesting = makePayloadActionCreator(START_HARVESTING);
 
+export const START_SELLING = "START_SELLING";
+export const startSelling = makePayloadActionCreator(START_SELLING);
+
 export const SET_SELECTED_ENTITY = "SET_SELECTED_ENTITY";
 export const setSelectedEntity = makePayloadActionCreator(SET_SELECTED_ENTITY);
 

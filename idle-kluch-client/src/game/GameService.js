@@ -2,7 +2,15 @@ import { networkConfig } from "../api/config";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 import uuid from 'uuid/v4';
-import { addEntity, addTiles, removeEntity, setResources, setRunningState, startHarvesting } from "./actions";
+import {
+	addEntity,
+	addTiles,
+	removeEntity,
+	setResources,
+	setRunningState,
+	startHarvesting,
+	startSelling
+} from "./actions";
 import store from "../store/store";
 import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
@@ -114,5 +122,6 @@ const handlerTable = {
 	[ MESSAGE_TYPE.BUILDING_LIST ]: (message) => store.dispatch(setConstructableBuildings(message.buildingDefinitions)),
 	[ MESSAGE_TYPE.PAUSE_STATE ]: (message) => store.dispatch(setRunningState(message.running)),
 	[ MESSAGE_TYPE.START_HARVESTING ]: (message) => store.dispatch(startHarvesting(message.id)),
+	[ MESSAGE_TYPE.START_SELLING ]: (message) => store.dispatch(startSelling(message)),
 	[ MESSAGE_TYPE.RESOURCE_LIST ]: (message) => store.dispatch(setResources(message.resources)),
 };

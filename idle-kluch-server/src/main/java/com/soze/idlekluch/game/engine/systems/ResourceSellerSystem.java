@@ -1,10 +1,13 @@
 package com.soze.idlekluch.game.engine.systems;
 
 import com.soze.idlekluch.core.event.EventPublisher;
+import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.ResourceSellerComponent;
 import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
+import com.soze.idlekluch.game.message.StartSellingMessage;
+import com.soze.idlekluch.game.service.WebSocketMessagingService;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
@@ -13,12 +16,15 @@ import java.util.*;
 
 public class ResourceSellerSystem extends BaseEntitySystem {
 
+  private final WebSocketMessagingService webSocketMessagingService;
   private final EventPublisher eventPublisher;
 
   public ResourceSellerSystem(final Engine engine,
                               final Map<EntityUUID, Entity> changedEntities,
+                              final WebSocketMessagingService webSocketMessagingService,
                               final EventPublisher eventPublisher) {
     super(engine, changedEntities);
+    this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
     this.eventPublisher = Objects.requireNonNull(eventPublisher);
   }
 
@@ -48,6 +54,7 @@ public class ResourceSellerSystem extends BaseEntitySystem {
       resources.sort(Comparator.comparingInt(Resource::getPrice));
       resourceBeingSold = resources.get(resources.size() - 1);
       sellerComponent.startSelling(resourceBeingSold);
+      webSocketMessagingService.send(Routes.GAME_OUTBOUND, new StartSellingMessage((EntityUUID) entity.getId(), resourceBeingSold));
     }
 
     if (sellerComponent.isFinished()) {

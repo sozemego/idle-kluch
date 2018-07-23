@@ -48,7 +48,7 @@ public class GameEngineImpl implements GameEngine {
     this.engine = new Engine(EntityUUID::randomId);
     this.engine.addSystem(new PhysicsSystem(this.engine, this.changedEntities));
     this.engine.addSystem(new ResourceHarvesterSystem(this.engine, this.changedEntities, webSocketMessagingService, resourceService));
-    this.engine.addSystem(new ResourceSellerSystem(this.engine, this.changedEntities, publisher));
+    this.engine.addSystem(new ResourceSellerSystem(this.engine, this.changedEntities, webSocketMessagingService, publisher));
 
     this.publisher = Objects.requireNonNull(publisher);
 
