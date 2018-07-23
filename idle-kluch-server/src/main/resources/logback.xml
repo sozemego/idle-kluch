@@ -205,7 +205,7 @@
         </rollingPolicy>
     </appender>
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="FILE-ERROR" />
         <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT"/>
@@ -217,13 +217,13 @@
 
     <logger name="org.springframework" level="INFO"/>
 
-    <logger name="org.hibernate.SQL" level="DEBUG">
+    <logger name="org.hibernate.SQL" level="OFF">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE"/>
         <appender-ref ref="FILE-ERROR"/>
     </logger>
 
-    <logger name="org.hibernate.type.descriptor.sql" level="TRACE">
+    <logger name="org.hibernate.type.descriptor.sql" level="OFF">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE"/>
         <appender-ref ref="FILE-ERROR"/>
