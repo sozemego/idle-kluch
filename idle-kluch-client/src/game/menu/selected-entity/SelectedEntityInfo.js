@@ -11,6 +11,7 @@ import { ResourceStorageComponent } from "../../../ecs/components/ResourceStorag
 import { Avatar, Chip } from "@material-ui/core/es/index";
 import { GraphicsComponent } from "../../../ecs/components/GraphicsComponent";
 import { IMAGES } from "../../constants";
+import { ResourceSellerComponent } from "../../../ecs/components/ResourceSellerComponent";
 
 export class SelectedEntityInfo extends Component {
 
@@ -91,7 +92,7 @@ export class SelectedEntityInfo extends Component {
         </div>
         <Divider className={style.divider}/>
       </div>
-    )
+    );
   };
 
   getHarvestingStats = () => {
@@ -198,11 +199,48 @@ export class SelectedEntityInfo extends Component {
     return Object.values(resourceMap);
   };
 
+	getSellerComponent = () => {
+		const { selectedEntity, getResourceById } = this.props;
+		const seller = selectedEntity.getComponent(ResourceSellerComponent);
+		if (!seller) {
+			return null;
+		}
+
+		const resource = seller.getResourceBeingSold();
+		const value = resource ? seller.getSellingProgress() * 100 : 0;
+		const secondsPerUnit = seller.getSecondsPerUnit();
+
+		return (
+			<div className={style.section}>
+				<div className={style.harvester_header}>
+					<span>Seller</span>
+				</div>
+        <div className={style.harvester_state}>
+          {resource &&
+            <Avatar>
+              <img className={style.resource_icon}
+                   src={`/resources/${resource.name}.png`}
+                   alt={resource.name}
+              />
+            </Avatar>
+          }
+          {resource ? "Selling" : "Waiting"}
+				</div>
+				<LinearProgress variant={"determinate"} value={value}/>
+				<div>
+					{`Selling ${60 / secondsPerUnit} per minute`}
+				</div>
+				<Divider className={style.divider}/>
+			</div>
+		);
+  };
+
   render() {
     const {
       getNameComponent,
       getHarvestingComponent,
       getStorageComponent,
+      getSellerComponent,
     } = this;
 
     return (
@@ -210,6 +248,7 @@ export class SelectedEntityInfo extends Component {
         {getNameComponent()}
         {getHarvestingComponent()}
         {getStorageComponent()}
+        {getSellerComponent()}
       </div>
     )
   }
