@@ -54,6 +54,7 @@ import { ResourceHarvesterRendererSystem } from "../ecs/systems/ResourceHarveste
 import { ResourceStorageRendererSystem } from "../ecs/systems/ResourceStorageRendererSystem";
 import { EntityNameRendererSystem } from "../ecs/systems/EntityNameRendererSystem";
 import { ResourceSellerComponent } from "../ecs/components/ResourceSellerComponent";
+import { ResourceSellerSystem } from "../ecs/systems/ResourceSellerSystem";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const getSelectedEntityId = () => _getSelectedEntityId(store.getState());
@@ -537,6 +538,7 @@ const createGame = () => {
       engine.addSystem(new GraphicsSystem(engine));
       engine.addSystem(new ResourceHarvesterSystem(engine, getResourceById));
       engine.addSystem(new ResourceHarvesterRendererSystem(engine, game.add, getSelectedEntity, game.add.graphics(0, 0)));
+      engine.addSystem(new ResourceSellerSystem(engine));
       engine.addSystem(new ResourceStorageRendererSystem(engine, game.add.group(), game.make, getSelectedEntity));
       engine.addSystem(new EntityNameRendererSystem(engine, game.add.group(), game.make, getSelectedEntity));
 
