@@ -9,7 +9,7 @@ import {
 	setResources,
 	setRunningState,
 	startHarvesting,
-	startSelling
+	startSelling, transferResource
 } from "./actions";
 import store from "../store/store";
 import { getUser } from "../app/selectors";
@@ -124,4 +124,5 @@ const handlerTable = {
 	[ MESSAGE_TYPE.START_HARVESTING ]: (message) => store.dispatch(startHarvesting(message.id)),
 	[ MESSAGE_TYPE.START_SELLING ]: (message) => store.dispatch(startSelling(message)),
 	[ MESSAGE_TYPE.RESOURCE_LIST ]: (message) => store.dispatch(setResources(message.resources)),
+	[ MESSAGE_TYPE.TRANSFER_RESOURCE ]: (message) => store.dispatch(transferResource(message)),
 };

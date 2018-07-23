@@ -10,6 +10,7 @@ import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarve
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceSourceSlot;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.message.StartHarvestingMessage;
+import com.soze.idlekluch.game.message.TransferResourceMessage;
 import com.soze.idlekluch.game.service.WebSocketMessagingService;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.world.service.ResourceService;
@@ -52,6 +53,8 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
    * If entity is waiting and has free space, it starts harvesting.
    * If entity is harvesting, but harvesting percentage is below 1, keep harvesting.
    * If entity is harvesting and harvesting percentage becomes 1, store the resource in warehouse and reset percentage to 0, start waiting.
+   *
+   * At the end, if possible, resources are transferred to sellers.
    */
   private void update(final Entity entity, final float delta) {
     final HarvestingProgress currentHarvestingProgress = getCurrentHarvestingProgress(entity);
@@ -78,6 +81,35 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
       currentHarvestingProgress.start();
       beganHarvesting.add((EntityUUID) entity.getId());
     }
+
+    transferToSeller(entity);
+  }
+
+  private void transferToSeller(final Entity entity) {
+    final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
+    // transport to sellers if possible
+    if (!storage.getResources().isEmpty()) {
+      getSellers()
+        .stream()
+        .filter(seller -> {
+          final ResourceStorageComponent sellerStorage = seller.getComponent(ResourceStorageComponent.class);
+          return sellerStorage.getRemainingCapacity() > 0;
+        })
+        .sorted(Comparator.comparingInt(e -> (int) EntityUtils.distance(e, entity)))
+        .findFirst()
+        .ifPresent(seller -> {
+          final ResourceStorageComponent sellerStorage = seller.getComponent(ResourceStorageComponent.class);
+          final Resource resourceToTransfer = storage.getResources().get(0);
+          storage.removeResource(resourceToTransfer);
+          sellerStorage.addResource(resourceToTransfer);
+          webSocketMessagingService.send(Routes.GAME_OUTBOUND,
+            new TransferResourceMessage(
+              (EntityUUID) entity.getId(), (EntityUUID) seller.getId(), resourceToTransfer
+            )
+          );
+          System.out.println("Transferring " + resourceToTransfer + " from " + EntityUtils.getName(entity) + " to " + EntityUtils.getName(seller));
+        });
+    }
   }
 
   private HarvestingProgress getCurrentHarvestingProgress(final Entity entity) {
@@ -86,6 +118,10 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
 
   private List<Entity> getHarvesters() {
     return getEngine().getEntitiesByNode(Nodes.HARVESTER);
+  }
+
+  private List<Entity> getSellers() {
+    return getEngine().getEntitiesByNode(Nodes.SELLER);
   }
 
   /**
@@ -111,7 +147,5 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
              })
              .reduce(1f, (prev, next) -> prev * next);
   }
-
-
 
 }

@@ -280,6 +280,25 @@ const startSelling = (state, action) => {
 	return state;
 };
 
+const transferResource = (state, action) => {
+	const { fromId, toId, resource } = action.payload;
+
+	const fromEntity = engine.getEntity(fromId);
+	const toEntity = engine.getEntity(toId);
+
+	if (!fromEntity || !toEntity) {
+		return state;
+	}
+
+	const fromStorage = fromEntity.getComponent(ResourceStorageComponent);
+	const toStorage = toEntity.getComponent(ResourceStorageComponent);
+
+	fromStorage.removeResource(resource);
+	toStorage.addResource(resource);
+
+	return state;
+};
+
 const setSelectedEntity = (state, action) => {
 	return { ...state, selectedEntityId: action.payload, attachSourceSlot: null };
 };
@@ -320,6 +339,7 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.SET_ENGINE]: makeSetter("engine"),
   [ GAME_ACTIONS.ON_ATTACH_SOURCE_CLICKED]: makeSetter("attachSourceSlot"),
   [ GAME_ACTIONS.ATTACH_SOURCE ]: attachSource,
+	[ GAME_ACTIONS.TRANSFER_RESOURCE ]: transferResource,
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });

@@ -48,6 +48,9 @@ export const onAttachSourceClicked = makePayloadActionCreator(ON_ATTACH_SOURCE_C
 export const ATTACH_SOURCE = "ATTACH_SOURCE";
 export const attachSource = makePayloadActionCreator(ATTACH_SOURCE);
 
+export const TRANSFER_RESOURCE = "TRANSFER_RESOURCE";
+export const transferResource = makePayloadActionCreator(TRANSFER_RESOURCE);
+
 let gameContainer = null;
 
 export const connect = () => {

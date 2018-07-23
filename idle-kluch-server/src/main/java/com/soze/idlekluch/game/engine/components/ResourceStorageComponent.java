@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.engine.components;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import org.hibernate.annotations.Type;
 
@@ -58,6 +59,11 @@ public class ResourceStorageComponent extends BaseComponent {
 
   public List<Resource> getResources() {
     return new ArrayList<>(resources);
+  }
+
+  @JsonIgnore
+  public int getRemainingCapacity() {
+    return getCapacity() - getResources().size();
   }
 
   @Override
