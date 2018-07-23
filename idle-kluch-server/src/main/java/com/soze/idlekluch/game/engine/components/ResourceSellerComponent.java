@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.engine.components;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.soze.idlekluch.core.utils.MathUtils;
 import com.soze.idlekluch.kingdom.entity.Resource;
 
@@ -40,7 +41,7 @@ public class ResourceSellerComponent extends BaseComponent {
     this.sellingProgress = sellingProgress;
   }
 
-  @Transient
+  @JsonIgnore
   public boolean isFinished() {
     return MathUtils.equals(getSellingProgress(), 1f, 0.01f);
   }
