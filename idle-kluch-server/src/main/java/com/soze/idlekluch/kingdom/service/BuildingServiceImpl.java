@@ -342,7 +342,7 @@ public class BuildingServiceImpl implements BuildingService {
                                    }
                                    return ownershipComponent.getOwnerId().equals(kingdom.getKingdomId());
                                  })
-                                 .reduce(1f, (value, entity) -> value + 0.3f, (prev, next) -> prev * next);
+                                 .reduce(1f, (value, entity) -> value * 1.1f, (prev, next) -> next);
 
     final float baseCost = (float) buildingTemplate.getComponent(CostComponent.class).getIdleBucks();
 

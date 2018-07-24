@@ -40,7 +40,7 @@ const addEntity = (state, action) => {
     return state;
   }
 
-  if(ownershipComponent.ownerId !== state.kingdom.id) {
+  if (ownershipComponent.ownerId !== state.kingdom.id) {
     return state;
   }
 

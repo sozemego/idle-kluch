@@ -3,7 +3,12 @@ import _ from "lodash";
 import { GameService as gameService } from "./GameService";
 import { makePayloadActionCreator } from "../store/utils";
 import createGame from "./Game";
-import { getConstructableBuildingsData, getKingdom, getSelectedConstructableBuilding } from "../kingdom/selectors";
+import {
+	getConstructableBuildingsData,
+	getCost,
+	getKingdom,
+	getSelectedConstructableBuilding
+} from "../kingdom/selectors";
 import { idleBucksChanged, setSelectedConstructableBuilding } from "../kingdom/actions";
 import { checkRectangleIntersectsCollidableEntities, doesContain, findComponent } from "../ecs/utils";
 import { getAttachSourceSlot, getEngine, getSelectedEntityId } from "./selectors";
@@ -89,8 +94,8 @@ export const onCanvasClicked = (x, y) => {
 		if (selectedConstructableBuilding) {
 			//check player money
 			const kingdom = getKingdom(getState);
-			const costComponent = findComponent(selectedConstructableBuilding, COMPONENT_TYPES.COST);
-			if (kingdom.idleBucks < costComponent.idleBucks) {
+			const cost = getCost(getState(), selectedConstructableBuilding);
+			if (kingdom.idleBucks < cost) {
 				return Promise.resolve();
 			}
 
@@ -108,10 +113,10 @@ export const onCanvasClicked = (x, y) => {
 			const messageId = gameService.constructBuilding(selectedConstructableBuilding.id, x, y);
 
 			undoActions.addAction(messageId, () => {
-				dispatch(idleBucksChanged(costComponent.idleBucks));
+				dispatch(idleBucksChanged(cost));
 			});
 
-			dispatch(idleBucksChanged(-costComponent.idleBucks));
+			dispatch(idleBucksChanged(-cost));
 
 			return Promise.resolve();
 		}

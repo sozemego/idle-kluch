@@ -13,21 +13,46 @@ export const getKingdomNameRegistrationError = state => root(state).kingdomNameR
 export const isDeletingKingdom = state => root(state).deletingKingdom;
 
 export const getConstructableBuildingsData = state => root(state).constructableBuildings;
+export const getOwnBuildings = (state) => root(state).ownBuildings;
 
 export const getConstructableBuildingsList = state => {
   const buildings  = getConstructableBuildingsData(state);
 
   return buildings.map(building => {
     const nameComponent = findComponent(building, COMPONENT_TYPES.NAME);
-    const costComponent = findComponent(building, COMPONENT_TYPES.COST);
     return {
       id: building.id,
       name: nameComponent.name,
       cost: {
-        idleBucks: costComponent.idleBucks,
+        idleBucks: getCost(state, building),
       }
     }
   })
+};
+
+const getMultiplier = (name, ownBuildings) => {
+  if (!ownBuildings[name]) {
+    return 1;
+  }
+
+  let result = 1;
+  for (let i = 0; i < ownBuildings[name]; i++) {
+    result = result * 1.1;
+  }
+  return result;
+};
+
+export const getCostMultiplier = (state, name) => {
+	const ownBuildings = getOwnBuildings(state);
+	return getMultiplier(name, ownBuildings);
+};
+
+export const getCost = (state, building) => {
+  const baseCost = findComponent(building, COMPONENT_TYPES.COST).idleBucks;
+  const name = findComponent(building, COMPONENT_TYPES.NAME).name;
+	const ownBuildings = getOwnBuildings(state);
+
+	return Number(Number(baseCost * getMultiplier(name, ownBuildings)).toFixed(0));
 };
 
 export const getSelectedConstructableBuilding = state => root(state).selectedConstructableBuilding;
