@@ -2,6 +2,9 @@ import _ from "lodash";
 import { createReducer, makeSetter } from "../store/utils";
 import * as KINGDOM_ACTIONS from "./actions";
 import * as APP_ACTIONS from "../app/actions";
+// import * as GAME_ACTIONS from "../game/actions";
+import { findComponent } from "../ecs/utils";
+import { COMPONENT_TYPES } from "../game/constants";
 
 const initialState = {
   showCreateKingdomForm: false,
@@ -10,12 +13,42 @@ const initialState = {
   constructableBuildings: [],
   selectedConstructableBuilding: null,
   deletingKingdom: false,
+  ownBuildings: {},
 };
 
 const idleBucksChanged = (state, action) => {
   const kingdom = { ...state.kingdom };
   kingdom.idleBucks += action.payload;
   return { ...state, kingdom };
+};
+
+const addEntity = (state, action) => {
+  const entity = action.payload;
+
+  const nameComponent = findComponent(entity, COMPONENT_TYPES.NAME);
+  if (!nameComponent) {
+    return state;
+  }
+
+  const ownershipComponent = findComponent(entity, COMPONENT_TYPES.OWNERSHIP);
+  if (!ownershipComponent) {
+    return state;
+  }
+
+  const buildable = findComponent(entity, COMPONENT_TYPES.BUILDABLE);
+  if (!buildable) {
+    return state;
+  }
+
+  if(ownershipComponent.ownerId !== state.kingdom.id) {
+    return state;
+  }
+
+  const ownBuildings = {...state.ownBuildings};
+  const number = ownBuildings[nameComponent.name] || 0;
+	ownBuildings[nameComponent.name] = number + 1;
+
+	return {...state, ownBuildings};
 };
 
 const kingdom = createReducer(_.cloneDeep(initialState), {
@@ -26,6 +59,8 @@ const kingdom = createReducer(_.cloneDeep(initialState), {
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: makeSetter("selectedConstructableBuilding"),
   [ KINGDOM_ACTIONS.IDLE_BUCKS_CHANGED ]: idleBucksChanged,
   [ KINGDOM_ACTIONS.SET_DELETING_KINGDOM ]: makeSetter("deletingKingdom"),
+  //TODO fix this, extract actions
+	[ 'ADD_ENTITY' ]: addEntity,
   [ APP_ACTIONS.LOGOUT ]: () => _.cloneDeep(initialState),
 });
 
