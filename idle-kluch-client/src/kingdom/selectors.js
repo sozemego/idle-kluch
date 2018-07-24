@@ -69,7 +69,5 @@ export const checkCanAffordSelectedBuilding = state => {
     return false;
   }
 
-  const costComponent = findComponent(selectedBuilding, COMPONENT_TYPES.COST);
-
-  return idleBucks >= costComponent.idleBucks;
+  return idleBucks >= getCost(state, selectedBuilding);
 }
