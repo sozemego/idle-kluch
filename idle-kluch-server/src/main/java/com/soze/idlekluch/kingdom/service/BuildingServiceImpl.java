@@ -93,17 +93,12 @@ public class BuildingServiceImpl implements BuildingService {
     final Entity building = constructBuilding(form);
     validateCollision(building, form);
 
-
     //check if there are proper resources in radius
     final ResourceHarvesterComponent resourceHarvesterComponent = building.getComponent(ResourceHarvesterComponent.class);
     if(resourceHarvesterComponent != null) {
-      final PhysicsComponent physicsComponent = building.getComponent(PhysicsComponent.class);
       final List<Entity> resources = resourceService.getResourceSourcesInRadius(
         resourceHarvesterComponent.getResourceId(),
-        new Point(
-          (int) physicsComponent.getX() - (physicsComponent.getWidth() / 2),
-          (int) physicsComponent.getY() - (physicsComponent.getHeight() / 2)
-        ),
+        EntityUtils.getCenter(building),
         resourceHarvesterComponent.getRadius()
       );
 
@@ -131,7 +126,6 @@ public class BuildingServiceImpl implements BuildingService {
   }
 
   private void validateCollision(final Entity building, final BuildBuildingForm form) {
-
     //check for collisions with other buildings
     gameEngine
       .getEntitiesByNode(Nodes.OCCUPY_SPACE)
@@ -325,14 +319,34 @@ public class BuildingServiceImpl implements BuildingService {
     return building;
   }
 
-  private int getBuildingCost(final BuildBuildingForm form) {
+  private int getBuildingCost(final Kingdom kingdom, final BuildBuildingForm form) {
     final Entity buildingTemplate = entityService
                                       .getEntityTemplate(EntityUUID.fromString(form.getBuildingId()))
                                       .<BuildingDoesNotExistException>orElseThrow(() -> {
                                         throw new BuildingDoesNotExistException(form.getMessageId(), form.getBuildingId());
                                       });
 
-    return buildingTemplate.getComponent(CostComponent.class).getIdleBucks();
+    //to apply cost multipliers we need to find all buildings with same name built by this kingdom
+    final NameComponent newBuildingName = buildingTemplate.getComponent(NameComponent.class);
+    final float costMultiplier = entityService
+                                 .getEntitiesByNode(Nodes.BUILDABLE)
+                                 .stream()
+                                 .filter(building -> {
+                                   final NameComponent nameComponent = building.getComponent(NameComponent.class);
+                                   return nameComponent.getName().equals(newBuildingName.getName());
+                                 })
+                                 .filter(building -> {
+                                   final OwnershipComponent ownershipComponent = building.getComponent(OwnershipComponent.class);
+                                   if (ownershipComponent == null) {
+                                     return false;
+                                   }
+                                   return ownershipComponent.getOwnerId().equals(kingdom.getKingdomId());
+                                 })
+                                 .reduce(1f, (value, entity) -> value + 0.3f, (prev, next) -> prev * next);
+
+    final float baseCost = (float) buildingTemplate.getComponent(CostComponent.class).getIdleBucks();
+
+    return (int) (baseCost * costMultiplier);
   }
 
   private Object getLock(final String name) {
@@ -369,7 +383,7 @@ public class BuildingServiceImpl implements BuildingService {
                     throw new UserDoesNotHaveKingdomException(owner);
                   });
 
-      final int cost = getBuildingCost(form);
+      final int cost = getBuildingCost(kingdom, form);
       final long idleBucks = kingdom.getIdleBucks();
       if(idleBucks < cost) {
         throw new CannotAffordBuildingException(form.getMessageId(), form.getBuildingId(), idleBucks, cost);
