@@ -223,10 +223,10 @@ INSERT INTO entity (
     '{"asset": "trading_post"}',
     '{"ownerId": "4517e8b9-de2e-473d-98e8-4c6c73c46c4d"}',
     '{}',
-    '{"name": "TradingPost"}',
+    '{"name": "Trading Post"}',
     '{}',
-    '{"idleBucks": 250}',
+    '{"idleBucks": 375}',
     '{"capacity": 50, "resources": []}',
-    '{"secondsPerUnit": 10}'
+    '{"secondsPerUnit": 6}'
   )
 ;

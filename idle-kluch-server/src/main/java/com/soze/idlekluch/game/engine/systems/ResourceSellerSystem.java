@@ -3,12 +3,14 @@ package com.soze.idlekluch.game.engine.systems;
 import com.soze.idlekluch.core.event.EventPublisher;
 import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.components.ResourceSellerComponent;
 import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.message.StartSellingMessage;
 import com.soze.idlekluch.game.service.WebSocketMessagingService;
 import com.soze.idlekluch.kingdom.entity.Resource;
+import com.soze.idlekluch.kingdom.events.ResourceSoldEvent;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
 
@@ -61,6 +63,8 @@ public class ResourceSellerSystem extends BaseEntitySystem {
       sellerComponent.stopSelling();
       storage.removeResource(resourceBeingSold);
       addChangedEntity(entity);
+      final OwnershipComponent ownershipComponent = entity.getComponent(OwnershipComponent.class);
+      eventPublisher.publishEvent(new ResourceSoldEvent(ownershipComponent.getOwnerId(), resourceBeingSold));
       System.out.println("FINISHED SELLING " + resourceBeingSold.toString());
     }
   }

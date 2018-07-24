@@ -89,11 +89,11 @@ public class EntityUtils {
     Objects.requireNonNull(entity1);
     Objects.requireNonNull(entity2);
 
-    final PhysicsComponent physicsComponent1 = entity1.getComponent(PhysicsComponent.class);
-    final PhysicsComponent physicsComponent2 = entity2.getComponent(PhysicsComponent.class);
+    final Point center1 = getCenter(entity1);
+    final Point center2 = getCenter(entity2);
     return (float) Math.hypot(
-      physicsComponent1.getX() - physicsComponent2.getX(),
-      physicsComponent1.getY() - physicsComponent2.getY()
+      center1.x - center2.x,
+      center1.y - center2.y
     );
   }
 
@@ -145,5 +145,13 @@ public class EntityUtils {
   public static Point getPosition(final Entity entity) {
     final PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
     return new Point((int) physicsComponent.getX(), (int) physicsComponent.getY());
+  }
+
+  public static Point getCenter(final Entity entity) {
+    final PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
+    return new Point(
+      (int) physicsComponent.getX() - (physicsComponent.getWidth() / 2),
+      (int) physicsComponent.getY() - (physicsComponent.getHeight() / 2)
+    );
   }
 }

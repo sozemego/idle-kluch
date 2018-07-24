@@ -16,7 +16,7 @@ import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
 import { alreadyConnected } from "../app/actions";
 import { default as undoActions } from "./UndoActions";
-import { setConstructableBuildings } from "../kingdom/actions";
+import { idleBucksChanged, setConstructableBuildings } from "../kingdom/actions";
 import { MESSAGE_TYPE } from "./constants";
 
 const getToken = () => getUser(store.getState()).token;
@@ -125,4 +125,5 @@ const handlerTable = {
 	[ MESSAGE_TYPE.START_SELLING ]: (message) => store.dispatch(startSelling(message)),
 	[ MESSAGE_TYPE.RESOURCE_LIST ]: (message) => store.dispatch(setResources(message.resources)),
 	[ MESSAGE_TYPE.TRANSFER_RESOURCE ]: (message) => store.dispatch(transferResource(message)),
+	[ MESSAGE_TYPE.MODIFY_KINGDOM_BUCKS ]: (message) => store.dispatch(idleBucksChanged(message.bucksChange)),
 };
