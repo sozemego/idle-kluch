@@ -329,23 +329,22 @@ public class BuildingServiceImpl implements BuildingService {
     //to apply cost multipliers we need to find all buildings with same name built by this kingdom
     final NameComponent newBuildingName = buildingTemplate.getComponent(NameComponent.class);
     final float costMultiplier = entityService
-                                 .getEntitiesByNode(Nodes.BUILDABLE)
-                                 .stream()
-                                 .filter(building -> {
-                                   final NameComponent nameComponent = building.getComponent(NameComponent.class);
-                                   return nameComponent.getName().equals(newBuildingName.getName());
-                                 })
-                                 .filter(building -> {
-                                   final OwnershipComponent ownershipComponent = building.getComponent(OwnershipComponent.class);
-                                   if (ownershipComponent == null) {
-                                     return false;
-                                   }
-                                   return ownershipComponent.getOwnerId().equals(kingdom.getKingdomId());
-                                 })
-                                 .reduce(1f, (value, entity) -> value * 1.1f, (prev, next) -> next);
+                                   .getEntitiesByNode(Nodes.BUILDABLE)
+                                   .stream()
+                                   .filter(building -> {
+                                     final NameComponent nameComponent = building.getComponent(NameComponent.class);
+                                     return nameComponent.getName().equals(newBuildingName.getName());
+                                   })
+                                   .filter(building -> {
+                                     final OwnershipComponent ownershipComponent = building.getComponent(OwnershipComponent.class);
+                                     if (ownershipComponent == null) {
+                                       return false;
+                                     }
+                                     return ownershipComponent.getOwnerId().equals(kingdom.getKingdomId());
+                                   })
+                                   .reduce(1f, (value, entity) -> value * 1.1f, (prev, next) -> next);
 
     final float baseCost = (float) buildingTemplate.getComponent(CostComponent.class).getIdleBucks();
-
     return (int) (baseCost * costMultiplier);
   }
 
