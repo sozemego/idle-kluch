@@ -1,9 +1,11 @@
 package com.soze.idlekluch.game.engine.components;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.soze.idlekluch.game.engine.components.resourcetransport.ResourceRoute;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import org.hibernate.annotations.Type;
 
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +17,12 @@ public class ResourceStorageComponent extends BaseComponent {
 
   @Type(type = "jsonb")
   private List<Resource> resources = new ArrayList<>();
+
+  @Transient
+  private final List<ResourceRoute> routes = new ArrayList<>();
+
+  @Transient
+  private int maxRoutes = 1;
 
   public ResourceStorageComponent() {
     super(ComponentType.RESOURCE_STORAGE);
@@ -69,6 +77,26 @@ public class ResourceStorageComponent extends BaseComponent {
   @Override
   public BaseComponent copy() {
     return new ResourceStorageComponent(getCapacity(), getResources());
+  }
+
+  public void addRoute(final ResourceRoute resourceRoute) {
+    this.routes.add(resourceRoute);
+  }
+
+  public List<ResourceRoute> getRoutes() {
+    return this.routes;
+  }
+
+  public void removeRoute(final ResourceRoute resourceRoute) {
+    this.routes.remove(resourceRoute);
+  }
+
+  public int getMaxRoutes() {
+    return maxRoutes;
+  }
+
+  public void setMaxRoutes(final int maxRoutes) {
+    this.maxRoutes = maxRoutes;
   }
 
   @Override

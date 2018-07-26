@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.engine;
 
+import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.NameComponent;
 import com.soze.idlekluch.game.engine.components.PhysicsComponent;
 import com.soze.idlekluch.game.entity.PersistentEntity;
@@ -153,5 +154,9 @@ public class EntityUtils {
       (int) physicsComponent.getX() - (physicsComponent.getWidth() / 2),
       (int) physicsComponent.getY() - (physicsComponent.getHeight() / 2)
     );
+  }
+
+  public static EntityUUID getId(final Entity entity) {
+    return (EntityUUID) entity.getId();
   }
 }
