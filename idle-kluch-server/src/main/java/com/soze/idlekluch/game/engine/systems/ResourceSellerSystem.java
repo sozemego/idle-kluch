@@ -13,10 +13,14 @@ import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.kingdom.events.ResourceSoldEvent;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class ResourceSellerSystem extends BaseEntitySystem {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ResourceSellerSystem.class);
 
   private final WebSocketMessagingService webSocketMessagingService;
   private final EventPublisher eventPublisher;
@@ -65,7 +69,7 @@ public class ResourceSellerSystem extends BaseEntitySystem {
       addChangedEntity(entity);
       final OwnershipComponent ownershipComponent = entity.getComponent(OwnershipComponent.class);
       eventPublisher.publishEvent(new ResourceSoldEvent(ownershipComponent.getOwnerId(), resourceBeingSold));
-      System.out.println("FINISHED SELLING " + resourceBeingSold.toString());
+      LOG.trace("FINISHED SELLING [{}]", resourceBeingSold);
     }
   }
 

@@ -2,6 +2,7 @@ package com.soze.idlekluch.game.engine.systems;
 
 import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.game.engine.components.ResourceSellerComponent;
 import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.engine.components.resourcetransport.ResourceRoute;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
@@ -43,8 +44,9 @@ public class ResourceStorageSystem extends BaseEntitySystem {
 
   private void update(final Entity entity, final float delta) {
     final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
+    final boolean isSeller = entity.getComponent(ResourceSellerComponent.class) != null;
     // transport to sellers if possible
-    if (!storage.getResources().isEmpty() && storage.getRoutes().size() < storage.getMaxRoutes()) {
+    if (!storage.getResources().isEmpty() && storage.getRoutes().size() < storage.getMaxRoutes() && !isSeller) {
       getSellers()
         .stream()
         .filter(seller -> !seller.getId().equals(entity.getId()))
