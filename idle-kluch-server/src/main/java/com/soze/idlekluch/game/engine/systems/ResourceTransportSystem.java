@@ -18,7 +18,7 @@ public class ResourceTransportSystem extends BaseEntitySystem {
 
   private static final Logger LOG = LoggerFactory.getLogger(ResourceTransportSystem.class);
 
-  private static final float METERS_PER_SECOND = 10f;
+  private static final float METERS_PER_SECOND = 30f;
 
   public ResourceTransportSystem(final Engine engine,
                                  final Map<EntityUUID, Entity> changedEntities) {

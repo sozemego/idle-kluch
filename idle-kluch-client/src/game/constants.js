@@ -64,4 +64,5 @@ export const IMAGES = {
   "red_button01": "ui/red_button01.png",
   "Wood": "resources/Wood.png",
 	"trading_post": "trading_post.png",
+	"shipYellow_manned": "shipYellow_manned.png",
 };

@@ -7,7 +7,7 @@ export class ResourceTransportSystem {
 	constructor(engine) {
 		this.engine = engine;
 		this.node = STORAGE_NODE;
-		this.metersPerSecond = 10;
+		this.metersPerSecond = 30;
 	}
 
 	getEngine() {

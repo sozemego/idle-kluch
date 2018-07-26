@@ -8,8 +8,9 @@ Transport system
   A ResourceTransportSystem
 #    One route per entity
 #    On route start, removes resource from storage and starts updating the path
-    Additionaly, it sends a message to the client that a transport is happening
-    The client will render a dude with the resource travelling
-    After the transfer ends, if the storage has enough space, the resource will be added to the storage
-    After the transfer ends, if the storage has enough space, a message will be sent to the client to add the resource
+#    Additionaly, it sends a message to the client that a transport is happening
+#    The client will render a dude with the resource travelling
+#    After the transfer ends, if the storage has enough space, the resource will be added to the storage
+#    After the transfer ends, if the storage has enough space, a message will be sent to the client to add the resource
     If the target does not have enough space, the dude will wait
+    On front-end, when transport starts, a resource has to be removed from storage
