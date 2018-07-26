@@ -44,7 +44,7 @@ public class ResourceTransportSystem extends BaseEntitySystem {
       route.setProgress(nextProgress);
 
       if(nextProgress >= 0.99f) {
-        LOG.trace("Finished [{}]", route);
+        LOG.trace("Finished route [{}]", route);
         final ResourceStorageComponent targetStorage = target.getComponent(ResourceStorageComponent.class);
         targetStorage.addResource(route.getResource());
         storage.removeRoute(route);

@@ -56,6 +56,7 @@ import { EntityNameRendererSystem } from "../ecs/systems/EntityNameRendererSyste
 import { ResourceSellerComponent } from "../ecs/components/ResourceSellerComponent";
 import { ResourceSellerSystem } from "../ecs/systems/ResourceSellerSystem";
 import { ResourceSellerRendererSystem } from "../ecs/systems/ResourceSellerRendererSystem";
+import { ResourceTransportSystem } from "../ecs/systems/ResourceTransportSystem";
 
 const getSelectedConstructableBuilding = () => _getSelectedConstructableBuilding(store.getState());
 const getSelectedEntityId = () => _getSelectedEntityId(store.getState());
@@ -176,7 +177,7 @@ const createComponent = (component) => {
 		);
 	}
 	if(componentType === COMPONENT_TYPES.RESOURCE_STORAGE) {
-		const storageComponent = new ResourceStorageComponent(component.capacity);
+		const storageComponent = new ResourceStorageComponent(component.capacity, component.routes);
 		component.resources.forEach(resource => storageComponent.addResource(resource));
 		return storageComponent;
 	}
@@ -281,20 +282,17 @@ const startSelling = (state, action) => {
 };
 
 const transferResource = (state, action) => {
-	const { fromId, toId, resource } = action.payload;
+	const { route } = action.payload;
 
-	const fromEntity = engine.getEntity(fromId);
-	const toEntity = engine.getEntity(toId);
+	const fromEntity = engine.getEntity(route.from);
+	const toEntity = engine.getEntity(route.to);
 
 	if (!fromEntity || !toEntity) {
 		return state;
 	}
 
 	const fromStorage = fromEntity.getComponent(ResourceStorageComponent);
-	const toStorage = toEntity.getComponent(ResourceStorageComponent);
-
-	fromStorage.removeResource(resource);
-	toStorage.addResource(resource);
+	fromStorage.addRoute(route);
 
 	return state;
 };
@@ -574,6 +572,7 @@ const createGame = () => {
       engine.addSystem(new ResourceSellerSystem(engine));
       engine.addSystem(new ResourceSellerRendererSystem(engine, game.add, getSelectedEntity, game.add.graphics(0, 0)));
       engine.addSystem(new ResourceStorageRendererSystem(engine, game.add.group(), game.make, getSelectedEntity));
+      engine.addSystem(new ResourceTransportSystem(engine));
       engine.addSystem(new EntityNameRendererSystem(engine, game.add.group(), game.make, getSelectedEntity));
 
       return resolve({

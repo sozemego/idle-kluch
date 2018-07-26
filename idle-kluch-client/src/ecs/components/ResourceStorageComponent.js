@@ -1,8 +1,9 @@
 export class ResourceStorageComponent {
 
-  constructor(capacity) {
+  constructor(capacity, routes) {
     this.capacity = capacity;
     this.resources = [];
+    this.routes = routes;
   }
 
   setCapacity(capacity) {
@@ -25,6 +26,21 @@ export class ResourceStorageComponent {
     const index = this.resources.findIndex(r => r.id === resource.id);
     if(index > -1) {
       this.resources.splice(index, 1);
+    }
+  }
+
+  addRoute(route) {
+    this.routes.push(route);
+  }
+
+  getRoutes() {
+    return this.routes;
+  }
+
+  removeRoute(route) {
+    const index = this.routes.findIndex(r => r === route);
+    if (index > -1) {
+      this.routes.splice(index, 1);
     }
   }
 
