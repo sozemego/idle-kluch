@@ -1,0 +1,11 @@
+Transport system
+  After a harvester finishes harvesting, the resource is added to the storage.
+  Another system (for example, ResourceStorageSystem) sends the resource to a seller (it is now impossible to send it
+  anywhere else)
+  A ResourceTransportSystem takes the queued resource, checks where to route it and sends it on its way
+    Additionaly, it sends a message to the client that a transport is happening
+    The client will render a dude with the resource travelling
+    After the transfer ends, if the storage has enough space, the resource will be added to the storage
+    After the transfer ends, if the storage has enough space, a message will be sent to the client
+    to add the resource
+    If the target does not have enough space, the dude will wait

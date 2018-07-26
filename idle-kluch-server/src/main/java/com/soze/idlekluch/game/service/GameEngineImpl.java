@@ -9,6 +9,7 @@ import com.soze.idlekluch.game.engine.components.NameComponent;
 import com.soze.idlekluch.game.engine.systems.PhysicsSystem;
 import com.soze.idlekluch.game.engine.systems.ResourceHarvesterSystem;
 import com.soze.idlekluch.game.engine.systems.ResourceSellerSystem;
+import com.soze.idlekluch.game.engine.systems.ResourceStorageSystem;
 import com.soze.idlekluch.world.service.ResourceService;
 import com.soze.klecs.engine.Engine;
 import com.soze.klecs.entity.Entity;
@@ -49,6 +50,7 @@ public class GameEngineImpl implements GameEngine {
     this.engine.addSystem(new PhysicsSystem(this.engine, this.changedEntities));
     this.engine.addSystem(new ResourceHarvesterSystem(this.engine, this.changedEntities, webSocketMessagingService, resourceService));
     this.engine.addSystem(new ResourceSellerSystem(this.engine, this.changedEntities, webSocketMessagingService, publisher));
+    this.engine.addSystem(new ResourceStorageSystem(this.engine, this.changedEntities, webSocketMessagingService));
 
     this.publisher = Objects.requireNonNull(publisher);
 

@@ -81,36 +81,6 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
       currentHarvestingProgress.start();
       beganHarvesting.add((EntityUUID) entity.getId());
     }
-
-    transferToSeller(entity);
-  }
-
-  private void transferToSeller(final Entity entity) {
-    final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
-    // transport to sellers if possible
-    if (!storage.getResources().isEmpty()) {
-      getSellers()
-        .stream()
-        .filter(seller -> {
-          final ResourceStorageComponent sellerStorage = seller.getComponent(ResourceStorageComponent.class);
-          return sellerStorage.getRemainingCapacity() > 0;
-        })
-        .sorted(Comparator.comparingInt(e -> (int) EntityUtils.distance(e, entity)))
-        .findFirst()
-        .ifPresent(seller -> {
-          final ResourceStorageComponent sellerStorage = seller.getComponent(ResourceStorageComponent.class);
-          final Resource resourceToTransfer = storage.getResources().get(0);
-          storage.removeResource(resourceToTransfer);
-          sellerStorage.addResource(resourceToTransfer);
-          webSocketMessagingService.send(Routes.GAME_OUTBOUND,
-            new TransferResourceMessage(
-              (EntityUUID) entity.getId(), (EntityUUID) seller.getId(), resourceToTransfer
-            )
-          );
-
-          LOG.trace("Transferring [] from [] to []", resourceToTransfer, EntityUtils.getName(entity), EntityUtils.getName(seller));
-        });
-    }
   }
 
   private HarvestingProgress getCurrentHarvestingProgress(final Entity entity) {
@@ -119,10 +89,6 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
 
   private List<Entity> getHarvesters() {
     return getEngine().getEntitiesByNode(Nodes.HARVESTER);
-  }
-
-  private List<Entity> getSellers() {
-    return getEngine().getEntitiesByNode(Nodes.SELLER);
   }
 
   /**
