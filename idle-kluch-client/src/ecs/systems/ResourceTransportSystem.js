@@ -35,7 +35,7 @@ export class ResourceTransportSystem {
 			if (route.progress >= 0.99) {
 				const targetStorage = target.getComponent(ResourceStorageComponent);
 				targetStorage.addResource(route.resource);
-				storage.removeRoute(route);
+				setTimeout(() => storage.removeRoute(route), 0)
 			}
 
 		}

@@ -1,4 +1,3 @@
-import Phaser from "phaser";
 import { STORAGE_NODE } from "../nodes";
 import { ResourceStorageComponent } from "../components/ResourceStorageComponent";
 import { distance, getCenter } from "../utils";
@@ -11,7 +10,6 @@ export class ResourceTransportRendererSystem {
 		this.node = STORAGE_NODE;
 		this.sprites = {};
 		this.spriteFactory = spriteFactory;
-		this.lineFactory = line;
 	}
 
 	getEngine() {
