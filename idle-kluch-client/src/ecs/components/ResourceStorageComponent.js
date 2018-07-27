@@ -14,6 +14,10 @@ export class ResourceStorageComponent {
     return this.capacity;
   }
 
+  hasRemainingCapacity() {
+    return this.resources.length < this.capacity;
+  }
+
   getResources() {
     return [...this.resources];
   }

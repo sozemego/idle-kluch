@@ -44,7 +44,7 @@ export class ResourceTransportRendererSystem {
 			sprite.x = x - 16;
 			sprite.y = y - 16;
 
-			if (route.progress >= 0.99) {
+			if (route.finished) {
 				this.destroySprite(route.routeId);
 			}
 

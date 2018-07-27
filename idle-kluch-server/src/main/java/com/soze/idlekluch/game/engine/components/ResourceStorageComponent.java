@@ -74,6 +74,11 @@ public class ResourceStorageComponent extends BaseComponent {
     return getCapacity() - getResources().size();
   }
 
+  @JsonIgnore
+  public boolean hasRemainingCapacity() {
+    return getResources().size() < getCapacity();
+  }
+
   @Override
   public BaseComponent copy() {
     return new ResourceStorageComponent(getCapacity(), getResources());

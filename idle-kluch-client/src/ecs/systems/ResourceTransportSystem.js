@@ -26,16 +26,20 @@ export class ResourceTransportSystem {
 		const storage = entity.getComponent(ResourceStorageComponent);
 		if (storage.getRoutes().length > 0) {
 			const route = storage.getRoutes()[0];
+			if (route.finished) {
+				return storage.removeRoute(route);
+			}
+
 			const target = this.getEngine().getEntityById(route.to);
 			const distanceBetweenEntities = distance(entity, target);
 			const distanceChange = this.metersPerSecond * delta;
 			const progressChange = distanceChange / distanceBetweenEntities;
-			route.progress += progressChange;
+			route.progress = Math.min(1, route.progress + progressChange);
 
-			if (route.progress >= 0.99) {
-				const targetStorage = target.getComponent(ResourceStorageComponent);
+			const targetStorage = target.getComponent(ResourceStorageComponent);
+			if (route.progress >= 0.99 && targetStorage.hasRemainingCapacity()) {
 				targetStorage.addResource(route.resource);
-				setTimeout(() => storage.removeRoute(route), 0)
+				route.finished = true;
 			}
 
 		}

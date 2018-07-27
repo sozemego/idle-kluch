@@ -41,11 +41,11 @@ public class ResourceTransportSystem extends BaseEntitySystem {
       final float distanceChange = METERS_PER_SECOND * delta;
       final float progressChange = distanceChange / distance;
       final float nextProgress = progress + progressChange;
-      route.setProgress(nextProgress);
+      route.setProgress(Math.min(1f, nextProgress));
 
-      if(nextProgress >= 0.99f) {
+      final ResourceStorageComponent targetStorage = target.getComponent(ResourceStorageComponent.class);
+      if(nextProgress >= 0.99f && targetStorage.hasRemainingCapacity()) {
         LOG.trace("Finished route [{}]", route);
-        final ResourceStorageComponent targetStorage = target.getComponent(ResourceStorageComponent.class);
         targetStorage.addResource(route.getResource());
         storage.removeRoute(route);
       }
