@@ -22,7 +22,7 @@ public class ResourceStorageComponent extends BaseComponent {
   private final List<ResourceRoute> routes = new ArrayList<>();
 
   @Transient
-  private int maxRoutes = 1;
+  private int maxRoutes = 20;
 
   public ResourceStorageComponent() {
     super(ComponentType.RESOURCE_STORAGE);

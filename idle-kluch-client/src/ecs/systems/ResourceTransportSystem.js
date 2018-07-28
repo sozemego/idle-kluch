@@ -24,8 +24,7 @@ export class ResourceTransportSystem {
 
 	updateEntity = (entity, delta) => {
 		const storage = entity.getComponent(ResourceStorageComponent);
-		if (storage.getRoutes().length > 0) {
-			const route = storage.getRoutes()[0];
+		storage.getRoutes().forEach(route => {
 			if (route.finished) {
 				return storage.removeRoute(route);
 			}
@@ -42,7 +41,7 @@ export class ResourceTransportSystem {
 				route.finished = true;
 			}
 
-		}
+		});
 	}
 
 }

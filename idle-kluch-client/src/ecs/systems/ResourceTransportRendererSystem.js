@@ -26,8 +26,7 @@ export class ResourceTransportRendererSystem {
 
 	updateEntity = (entity, delta) => {
 		const storage = entity.getComponent(ResourceStorageComponent);
-		if (storage.getRoutes().length > 0) {
-			const route = storage.getRoutes()[0];
+		storage.getRoutes().forEach(route => {
 			const target = this.getEngine().getEntityById(route.to);
 			const distanceBetweenEntities = distance(entity, target);
 			const distanceProgress = distanceBetweenEntities * route.progress;
@@ -47,14 +46,14 @@ export class ResourceTransportRendererSystem {
 			if (route.finished) {
 				this.destroySprite(route.routeId);
 			}
-
-		}
+		});
 	}
 
 	getSprite = (id) => {
 		let sprite = this.sprites[ id ];
 		if (!sprite) {
 			sprite = this.spriteFactory.sprite(0, 0, "shipYellow_manned");
+			sprite.autoCull = true;
 			this.sprites[ id ] = sprite;
 		}
 		return sprite;

@@ -14,6 +14,7 @@
 #    After the transfer ends, if the storage has enough space, a message will be sent to the client to add the resource
 #    If the target does not have enough space, the dude will wait
 #    On front-end, when transport starts, a resource has to be removed from storage
+#     Can have multiple routes per storage
 
 Upgrades
   Components will be upgradeable
@@ -28,3 +29,7 @@ Upgrades
     Harvester component - increase number of resource sources possible
     Seller component - increase selling speed
     Seller component - get better prices
+
+Other
+  Display money earned per second on average
+  When entity is selling, show the price it will sell for

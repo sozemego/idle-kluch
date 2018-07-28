@@ -10,6 +10,7 @@ import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +33,9 @@ public class ResourceTransportSystem extends BaseEntitySystem {
 
   private void update(final Entity entity, final float delta) {
     final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
-    // transport to sellers if possible
-    if (!storage.getRoutes().isEmpty()) {
-      final ResourceRoute route = storage.getRoutes().get(0);
+    final Iterator<ResourceRoute> it = storage.getRoutes().iterator();
+    while (it.hasNext()) {
+      final ResourceRoute route = it.next();
       final Entity target = getEngine().getEntityById(route.getTo()).get();
       final float distance = EntityUtils.distance(entity, target);
       final float progress = route.getProgress();
@@ -47,7 +48,7 @@ public class ResourceTransportSystem extends BaseEntitySystem {
       if(nextProgress >= 0.99f && targetStorage.hasRemainingCapacity()) {
         LOG.trace("Finished route [{}]", route);
         targetStorage.addResource(route.getResource());
-        storage.removeRoute(route);
+        it.remove();
       }
     }
   }
