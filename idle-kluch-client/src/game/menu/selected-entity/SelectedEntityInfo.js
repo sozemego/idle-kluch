@@ -224,7 +224,7 @@ export class SelectedEntityInfo extends Component {
               />
             </Avatar>
           }
-          {resource ? "Selling" : "Waiting"}
+          {resource ? "Selling (+" + resource.price + ")": "Waiting"}
 				</div>
 				<LinearProgress variant={"determinate"} value={value}/>
 				<div>
