@@ -14,12 +14,7 @@ const initialState = {
   selectedConstructableBuilding: null,
   deletingKingdom: false,
   ownBuildings: {},
-};
-
-const idleBucksChanged = (state, action) => {
-  const kingdom = { ...state.kingdom };
-  kingdom.idleBucks += action.payload;
-  return { ...state, kingdom };
+  cashHistory: [],
 };
 
 const addEntity = (state, action) => {
@@ -49,6 +44,17 @@ const addEntity = (state, action) => {
 	ownBuildings[nameComponent.name] = number + 1;
 
 	return {...state, ownBuildings};
+};
+
+const idleBucksChanged = (state, action) => {
+	const kingdom = { ...state.kingdom };
+	kingdom.idleBucks += action.payload;
+
+	const cashHistory = [...state.cashHistory];
+	if (action.payload > 0) {
+		cashHistory.push({time: Date.now(), cash: action.payload });
+  }
+	return { ...state, kingdom, cashHistory };
 };
 
 const kingdom = createReducer(_.cloneDeep(initialState), {

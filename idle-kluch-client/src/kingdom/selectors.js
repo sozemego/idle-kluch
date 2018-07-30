@@ -70,4 +70,13 @@ export const checkCanAffordSelectedBuilding = state => {
   }
 
   return idleBucks >= getCost(state, selectedBuilding);
-}
+};
+
+export const getCashHistory = (state) => {
+	const cashHistory = root(state).cashHistory;
+	const now = Date.now();
+	const tenSeconds = 10 * 1000;
+  return cashHistory.filter(event => {
+    return event.time > (now - tenSeconds);
+  });
+};
