@@ -36,3 +36,6 @@ Other
 #  When entity is selling, show the price it will sell for
   After selling, an icon with amount of money should popup from the building
   After harvesting, an icon with resource amount and resource icon should popup
+
+Building cost
+  After each building constructed, the cost should be increased more than now
