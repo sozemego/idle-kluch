@@ -55,6 +55,7 @@ export class ResourceHarvesterSystem {
   getBonus = (slots) => {
     return slots
       .map(slot => this.getEngine().getEntityById(slot.sourceId))
+      .filter(Boolean)
       .map(entity => {
         const resourceSource = entity.getComponent(ResourceSourceComponent);
         return resourceSource.getBonus();

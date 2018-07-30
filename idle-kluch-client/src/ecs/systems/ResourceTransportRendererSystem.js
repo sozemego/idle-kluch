@@ -28,6 +28,9 @@ export class ResourceTransportRendererSystem {
 		const storage = entity.getComponent(ResourceStorageComponent);
 		storage.getRoutes().forEach(route => {
 			const target = this.getEngine().getEntityById(route.to);
+			if (!target) {
+				return;
+			}
 			const distanceBetweenEntities = distance(entity, target);
 			const distanceProgress = distanceBetweenEntities * route.progress;
 

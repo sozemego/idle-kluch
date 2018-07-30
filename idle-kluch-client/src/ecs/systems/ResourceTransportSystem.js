@@ -30,6 +30,9 @@ export class ResourceTransportSystem {
 			}
 
 			const target = this.getEngine().getEntityById(route.to);
+			if (!target) {
+				return;
+			}
 			const distanceBetweenEntities = distance(entity, target);
 			const distanceChange = this.metersPerSecond * delta;
 			const progressChange = distanceChange / distanceBetweenEntities;
