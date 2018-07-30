@@ -294,6 +294,7 @@ const transferResource = (state, action) => {
 
 	const fromStorage = fromEntity.getComponent(ResourceStorageComponent);
 	fromStorage.addRoute(route);
+	fromStorage.removeResource(route.resource);
 
 	return state;
 };
