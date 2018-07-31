@@ -46,8 +46,15 @@ export class ResourceTransportRendererSystem {
 			sprite.x = x - 16;
 			sprite.y = y - 16;
 
+			const resourceSprite = this.getResourceSprite(route.routeId + route.resource.resourceId, route.resource.name);
+			resourceSprite.width = 16;
+			resourceSprite.height = 16;
+			resourceSprite.x = x - 8;
+			resourceSprite.y = y - 32;
+
 			if (route.finished) {
 				this.destroySprite(route.routeId);
+				this.destroyResourceSprite(route.routeId + route.resource.resourceId);
 			}
 		});
 	}
@@ -64,6 +71,22 @@ export class ResourceTransportRendererSystem {
 
 	destroySprite = (id) => {
 		const sprite = this.getSprite(id);
+		killSprite(sprite);
+		delete this.sprites[ id ];
+	};
+
+	getResourceSprite = (id, name) => {
+		let sprite = this.sprites[ id ];
+		if (!sprite) {
+			sprite = this.spriteFactory.sprite(0, 0, name);
+			sprite.autoCull = true;
+			this.sprites[ id ] = sprite;
+		}
+		return sprite;
+	};
+
+	destroyResourceSprite = (id) => {
+		const sprite = this.getResourceSprite(id);
 		killSprite(sprite);
 		delete this.sprites[ id ];
 	};
