@@ -613,7 +613,7 @@ const createGame = () => {
 
         if(accumulator > 3) {
         	console.log('Would take too long to update, reloading the page ' + accumulator);
-        	window.location.reload();
+        	return window.location.reload();
 				}
 
         while(accumulator >= delta) {
