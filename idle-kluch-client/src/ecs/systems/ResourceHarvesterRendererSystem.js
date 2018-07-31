@@ -5,13 +5,15 @@ import { RESOURCE_HARVESTER_NODE } from "../nodes";
 
 export class ResourceHarvesterRendererSystem {
 
-  constructor(engine, spriteFactory, getSelectedEntity, entitySelector) {
+  constructor(engine, spriteFactory, getSelectedEntity, entitySelector, jumpingSpriteFactory, getResourceById) {
     this.engine = engine;
     this.spriteFactory = spriteFactory;
     this.node = RESOURCE_HARVESTER_NODE;
     this.sprites = {};
     this.getSelectedEntity = getSelectedEntity;
     this.entitySelector = entitySelector;
+    this.jumpingSpriteFactory = jumpingSpriteFactory;
+    this.getResourceById = getResourceById;
   }
 
   update = delta => {
@@ -37,6 +39,17 @@ export class ResourceHarvesterRendererSystem {
 
     if (selectedEntity.getId() === entity.getId()) {
       harvesterComponent.getSlots().forEach(this.renderSource);
+    }
+
+    if (harvesterComponent.justFinished) {
+      harvesterComponent.justFinished = false;
+      const resource = this.getResourceById(harvesterComponent.getResource());
+			this.jumpingSpriteFactory(
+			  resource.name,
+				{
+					x: physicsComponent.getX() + physicsComponent.getWidth() / 2,
+					y: physicsComponent.getY(),
+				});
     }
   };
 

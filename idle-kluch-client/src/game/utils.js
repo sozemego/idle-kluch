@@ -122,3 +122,25 @@ export const getRect = (entity) => {
     height: physicsComponent.getHeight(),
   };
 };
+
+export const createJumpingSpriteFactory = (game) => (name, point) => spawnJumpingSprite(game, name, point);
+
+export const spawnJumpingSprite = (game, name, point) => {
+  const sprite = game.add.sprite(point.x, point.y, name);
+
+  sprite.x = sprite.x - 16;
+  sprite.width = 32;
+  sprite.height = 32;
+	const tween = game.add.tween(sprite);
+
+	tween.to({
+    y: point.y - 32,
+		alpha: 0,
+	}, 1500, Phaser.Easing.Circular.Out);
+
+	tween.start();
+
+	tween.onComplete.add(() => {
+		killSprite(sprite);
+	});
+};

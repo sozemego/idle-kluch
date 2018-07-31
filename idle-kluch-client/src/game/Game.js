@@ -39,7 +39,7 @@ import {
 import {
 	attachDespawnAnimation,
 	attachSpawnAnimation,
-	centerCameraAt,
+	centerCameraAt, createJumpingSpriteFactory,
 	destroyTileGroup,
 	DIRECTIONS, drawCircle, drawRect, getRect,
 	getWheelDelta,
@@ -570,7 +570,7 @@ const createGame = () => {
       engine.addSystem(new PhysicsSystem(engine));
       engine.addSystem(new GraphicsSystem(engine));
       engine.addSystem(new ResourceHarvesterSystem(engine, getResourceById));
-      engine.addSystem(new ResourceHarvesterRendererSystem(engine, game.add, getSelectedEntity, game.add.graphics(0, 0)));
+      engine.addSystem(new ResourceHarvesterRendererSystem(engine, game.add, getSelectedEntity, game.add.graphics(0, 0), createJumpingSpriteFactory(game), getResourceById));
       engine.addSystem(new ResourceSellerSystem(engine));
       engine.addSystem(new ResourceSellerRendererSystem(engine, game.add, getSelectedEntity, game.add.graphics(0, 0)));
       engine.addSystem(new ResourceStorageRendererSystem(engine, game.add.group(), game.make, getSelectedEntity));

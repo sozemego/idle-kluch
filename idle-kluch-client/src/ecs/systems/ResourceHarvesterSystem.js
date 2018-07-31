@@ -25,20 +25,21 @@ export class ResourceHarvesterSystem {
     const harvesterComponent = entity.getComponent(ResourceHarvesterComponent);
     const storage = entity.getComponent(ResourceStorageComponent);
 
-    if(harvesterComponent.getState() === HARVESTING_STATE.WAITING && harvesterComponent.getHarvests() > 0) {
+    if (harvesterComponent.getState() === HARVESTING_STATE.WAITING && harvesterComponent.getHarvests() > 0) {
       harvesterComponent.removeHarvest();
       harvesterComponent.start();
     }
 
-    if(harvesterComponent.getState() === HARVESTING_STATE.HARVESTING) {
+    if (harvesterComponent.getState() === HARVESTING_STATE.HARVESTING) {
       const secondsPerUnit = this.getSecondsPerUnit(entity);
       const harvestingProgressChange = delta / secondsPerUnit;
       const nextHarvestingPercentage = Math.min(1, harvesterComponent.getProgress() + harvestingProgressChange);
       harvesterComponent.setProgress(nextHarvestingPercentage);
     }
 
-    if(harvesterComponent.isFinished() && harvesterComponent.getState() === HARVESTING_STATE.HARVESTING) {
+    if (harvesterComponent.isFinished() && harvesterComponent.getState() === HARVESTING_STATE.HARVESTING) {
       harvesterComponent.stop();
+      harvesterComponent.justFinished = true;
       storage.addResource(this.getResourceById(harvesterComponent.getResource()));
     }
 
