@@ -572,7 +572,7 @@ const createGame = () => {
       engine.addSystem(new ResourceHarvesterSystem(engine, getResourceById));
       engine.addSystem(new ResourceHarvesterRendererSystem(engine, game.add, getSelectedEntity, game.add.graphics(0, 0), createJumpingSpriteFactory(game), getResourceById));
       engine.addSystem(new ResourceSellerSystem(engine));
-      engine.addSystem(new ResourceSellerRendererSystem(engine, game.add, getSelectedEntity, game.add.graphics(0, 0)));
+      engine.addSystem(new ResourceSellerRendererSystem(engine, game.add, getSelectedEntity, game.add.graphics(0, 0), createJumpingSpriteFactory(game)));
       engine.addSystem(new ResourceStorageRendererSystem(engine, game.add.group(), game.make, getSelectedEntity));
 			engine.addSystem(new ResourceTransportSystem(engine));
 			engine.addSystem(new ResourceTransportRendererSystem(engine, game.add, game.add.graphics(0, 0)));

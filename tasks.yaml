@@ -34,7 +34,7 @@ Other
 #  Display money earned per second on average
 #  From cashHistory, remove entries older than 10 seconds to improve performance
 #  When entity is selling, show the price it will sell for
-  After selling, an icon with amount of money should popup from the building
+#  After selling, an icon with amount of money should popup from the building
 #  After harvesting, an icon with resource amount and resource icon should popup
 #  When transporting a resource, a resource icon will be displayed above transporter
 

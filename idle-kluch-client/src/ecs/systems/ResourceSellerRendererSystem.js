@@ -5,13 +5,14 @@ import { ResourceSellerComponent } from "../components/ResourceSellerComponent";
 
 export class ResourceSellerRendererSystem {
 
-	constructor(engine, spriteFactory, getSelectedEntity, entitySelector) {
+	constructor(engine, spriteFactory, getSelectedEntity, entitySelector, jumpingSpriteFactory) {
 		this.engine = engine;
 		this.spriteFactory = spriteFactory;
 		this.node = RESOURCE_SELLER_NODE;
 		this.sprites = {};
 		this.getSelectedEntity = getSelectedEntity;
 		this.entitySelector = entitySelector;
+		this.jumpingSpriteFactory = jumpingSpriteFactory;
 	}
 
 	update = delta => {
@@ -35,6 +36,17 @@ export class ResourceSellerRendererSystem {
 		sprite.width = physicsComponent.getWidth() * sellerComponent.getSellingProgress();
 		sprite.height = 12;
 
+		if (sellerComponent.justSold) {
+			this.jumpingSpriteFactory(
+				"idle_buck_1",
+				{
+					x: physicsComponent.getX() + (physicsComponent.getWidth() / 2),
+					y: physicsComponent.getY(),
+				},
+				sellerComponent.justSold.price
+			);
+			sellerComponent.justSold = null;
+		}
 	};
 
 	getSprite = (id) => {

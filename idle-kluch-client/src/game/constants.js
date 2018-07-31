@@ -65,4 +65,5 @@ export const IMAGES = {
   "Wood": "resources/Wood.png",
 	"trading_post": "trading_post.png",
 	"shipYellow_manned": "shipYellow_manned.png",
+	"idle_buck_1": "idle_buck_1.png",
 };

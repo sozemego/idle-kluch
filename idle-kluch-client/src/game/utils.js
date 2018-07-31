@@ -5,7 +5,7 @@
 import Phaser from "phaser";
 import _ from 'lodash';
 
-import { TILE_SIZE } from "./constants";
+import { IN_GAME_FONT_SIZE, TILE_SIZE } from "./constants";
 import { PhysicsComponent } from "../ecs/components/PhysicsComponent";
 
 /**
@@ -123,10 +123,17 @@ export const getRect = (entity) => {
   };
 };
 
-export const createJumpingSpriteFactory = (game) => (name, point) => spawnJumpingSprite(game, name, point);
+let texts = null;
 
-export const spawnJumpingSprite = (game, name, point) => {
+export const createJumpingSpriteFactory = (game) => (name, point, text) => spawnJumpingSprite(game, name, point, text);
+
+export const spawnJumpingSprite = (game, name, point, text = "") => {
+	if (!texts) {
+		texts = game.add.group();
+	}
+
   const sprite = game.add.sprite(point.x, point.y, name);
+	const tweenTime = 1500;
 
   sprite.x = sprite.x - 16;
   sprite.width = 32;
@@ -136,11 +143,26 @@ export const spawnJumpingSprite = (game, name, point) => {
 	tween.to({
     y: point.y - 32,
 		alpha: 0,
-	}, 1500, Phaser.Easing.Circular.Out);
+	}, tweenTime, Phaser.Easing.Circular.Out);
+
+	if (text) {
+		const textObject = game.make.text(point.x + 32, point.y, text, { font: `${IN_GAME_FONT_SIZE}px Arial`, fill: "rgb(255, 255, 255)" });
+		textObject.x = point.x + 16;
+		textObject.y = point.y + (IN_GAME_FONT_SIZE / 2);
+		texts.add(textObject);
+
+		const textTween = game.add.tween(textObject);
+		textTween.to({
+			y: point.y - 32,
+			alpha: 0,
+		}, tweenTime, Phaser.Easing.Circular.Out);
+		textTween.start();
+	}
 
 	tween.start();
 
 	tween.onComplete.add(() => {
 		killSprite(sprite);
+		killSprite(text);
 	});
 };

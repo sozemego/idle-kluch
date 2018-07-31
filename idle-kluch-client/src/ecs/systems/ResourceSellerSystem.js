@@ -38,6 +38,7 @@ export class ResourceSellerSystem {
 
 		if (sellerComponent.isFinished()) {
 			sellerComponent.stopSelling();
+			sellerComponent.justSold = resourceBeingSold;
 			storageComponent.removeResource(resourceBeingSold);
 		}
 

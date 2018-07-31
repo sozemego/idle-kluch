@@ -9,10 +9,7 @@ import {
   getSelectedConstructableBuilding,
 } from "../../../kingdom/selectors";
 import * as gameActions from "../../actions";
-
-
 import styles from "./building-list.css";
-import idleBuckImg from "../idle_buck_1.png";
 
 class BuildingList extends Component {
 
@@ -46,7 +43,7 @@ class BuildingList extends Component {
 
     return (
       <div className={styles.building_cost}>
-        <img src={idleBuckImg} className={styles.building_cost_icon} alt={"Idle bucks coin"}/>
+        <img src={"idle_buck_1.png"} className={styles.building_cost_icon} alt={"Idle bucks coin"}/>
         {cost.idleBucks}
       </div>
     )
