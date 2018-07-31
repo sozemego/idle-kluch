@@ -50,9 +50,12 @@ const idleBucksChanged = (state, action) => {
 	const kingdom = { ...state.kingdom };
 	kingdom.idleBucks += action.payload;
 
-	const cashHistory = [...state.cashHistory];
+	let cashHistory = [...state.cashHistory];
 	if (action.payload > 0) {
-		cashHistory.push({time: Date.now(), cash: action.payload });
+		const now = Date.now();
+		const tenSeconds = 10 * 1000;
+		cashHistory = cashHistory.filter(event => event.time > now - tenSeconds);
+		cashHistory.push({time: now, cash: action.payload });
   }
 	return { ...state, kingdom, cashHistory };
 };
