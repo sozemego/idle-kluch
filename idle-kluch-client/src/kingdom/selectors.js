@@ -37,7 +37,7 @@ const getMultiplier = (name, ownBuildings) => {
 
   let result = 1;
   for (let i = 0; i < ownBuildings[name]; i++) {
-    result = result * 1.1;
+    result = result * (1.1 + (ownBuildings[name] * 0.030));
   }
   return result;
 };
