@@ -8,7 +8,7 @@ import javax.persistence.Transient;
 
 public class ResourceSellerComponent extends BaseComponent {
 
-  private int secondsPerUnit;
+  private float secondsPerUnit;
 
   @Transient
   private float sellingProgress;
@@ -20,16 +20,16 @@ public class ResourceSellerComponent extends BaseComponent {
     super(ComponentType.SELLER);
   }
 
-  public ResourceSellerComponent(final int secondsPerUnit) {
+  public ResourceSellerComponent(final float secondsPerUnit) {
     this();
     this.secondsPerUnit = secondsPerUnit;
   }
 
-  public int getSecondsPerUnit() {
+  public float getSecondsPerUnit() {
     return secondsPerUnit;
   }
 
-  public void setSecondsPerUnit(final int secondsPerUnit) {
+  public void setSecondsPerUnit(final float secondsPerUnit) {
     this.secondsPerUnit = secondsPerUnit;
   }
 

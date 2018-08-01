@@ -49,8 +49,8 @@ public class ResourceSellerSystem extends BaseEntitySystem {
     final ResourceSellerComponent sellerComponent = entity.getComponent(ResourceSellerComponent.class);
     Resource resourceBeingSold = sellerComponent.getResourceBeingSold();
     if (resourceBeingSold != null) {
-      final int secondsPerUnit = sellerComponent.getSecondsPerUnit();
-      final float sellingPercentageChange = delta / (float) secondsPerUnit;
+      final float secondsPerUnit = sellerComponent.getSecondsPerUnit();
+      final float sellingPercentageChange = delta / secondsPerUnit;
       final float nextSellingPercentage = Math.min(1f, sellerComponent.getSellingProgress() + sellingPercentageChange);
       sellerComponent.setSellingProgress(nextSellingPercentage);
     }
