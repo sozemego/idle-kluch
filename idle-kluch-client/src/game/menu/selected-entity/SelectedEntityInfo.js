@@ -54,7 +54,7 @@ export class SelectedEntityInfo extends Component {
   };
 
   getHarvestingComponent = () => {
-    const { selectedEntity, getResourceById } = this.props;
+    const { selectedEntity, getResourceById, onUpgradeComponentClicked } = this.props;
     const { getResourceSlotIcons } = this;
     const harvester = selectedEntity.getComponent(ResourceHarvesterComponent);
     if (!harvester) {
@@ -73,6 +73,7 @@ export class SelectedEntityInfo extends Component {
         <div className={style.harvester_header}>
           <span>Harvester</span>
           {getResourceSlotIcons(harvester.getSlots())}
+          <span onClick={() => onUpgradeComponentClicked(selectedEntity.getId(), "HARVESTER_SPEED")}>UPGRADE</span>
         </div>
         <div className={style.harvester_state}>
           <Avatar>
@@ -260,4 +261,5 @@ SelectedEntityInfo.propTypes = {
   getResourceById: PropTypes.func.isRequired,
   getEntityById: PropTypes.func.isRequired,
   onAttachSourceClicked: PropTypes.func.isRequired,
+  onUpgradeComponentClicked: PropTypes.func.isRequired,
 };

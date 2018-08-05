@@ -97,9 +97,9 @@ public class ResourceHarvesterSystem extends BaseEntitySystem {
    */
   private float getSecondsPerUnit(final Entity entity) {
     final ResourceHarvesterComponent resourceHarvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
-    final int unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
+    final float unitsPerMinute = resourceHarvesterComponent.getUnitsPerMinute();
     final float bonus = getBonus(resourceHarvesterComponent.getSlots());
-    float secondsPerUnit = 60 / ((float) unitsPerMinute * bonus);
+    float secondsPerUnit = 60 / (unitsPerMinute * bonus);
     return secondsPerUnit;
   }
 

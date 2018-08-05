@@ -27,6 +27,7 @@ const base = `/game/inbound`;
 const buildingBuild = `${base}/build`;
 const pauseToggle = `${base}/pause`;
 const attachResourceSource = `${base}/attachsource`;
+const upgradeComponent = `${base}/upgradecomponent`;
 
 let client = null;
 
@@ -91,6 +92,16 @@ GameService.attachResourceSource = (harvesterId, sourceId, slot) => {
 		JSON.stringify({ messageId, harvesterId, sourceId, slot, type: "ATTACH_RESOURCE_SOURCE" }),
   );
   return messageId;
+};
+
+GameService.upgradeComponent = (entityId, upgradeType) => {
+	const messageId = uuid();
+	client.send(
+		upgradeComponent,
+		{},
+		JSON.stringify({ messageId, entityId, upgradeType, type: "UPGRADE_COMPONENT" }),
+	);
+	return messageId;
 };
 
 // const isOpen = () => {

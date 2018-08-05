@@ -161,3 +161,11 @@ const getSelectedEntity = (state) => {
 	const selectedEntityId = getSelectedEntityId(state);
 	return getEngine(state).getEntityById(selectedEntityId);
 };
+
+export const onUpgradeComponentClicked = (entityId, upgradeType) => {
+	return (dispatch, getState) => {
+
+		return gameService.upgradeComponent(entityId, upgradeType);
+
+	};
+};

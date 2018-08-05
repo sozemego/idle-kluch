@@ -7,7 +7,6 @@ import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarve
 import com.soze.idlekluch.game.exception.NotEnoughIdleBucksException;
 import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
-import com.soze.idlekluch.game.service.GameService;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.service.KingdomService;
 import com.soze.klecs.entity.Entity;
@@ -21,7 +20,6 @@ import java.util.*;
 public class HarvesterSpeedUpgradeService {
 
   private final EntityService entityService;
-  private final GameService gameService;
   private final GameEngine gameEngine;
   private final KingdomService kingdomService;
 
@@ -29,10 +27,9 @@ public class HarvesterSpeedUpgradeService {
 
   @Autowired
   public HarvesterSpeedUpgradeService(final EntityService entityService,
-                                      final GameService gameService,
-                                      final GameEngine gameEngine, final KingdomService kingdomService) {
+                                      final GameEngine gameEngine,
+                                      final KingdomService kingdomService) {
     this.entityService = Objects.requireNonNull(entityService);
-    this.gameService = Objects.requireNonNull(gameService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.kingdomService = Objects.requireNonNull(kingdomService);
   }
@@ -56,7 +53,7 @@ public class HarvesterSpeedUpgradeService {
 
     final Entity entity = gameEngine
                             .getEntity(entityId)
-                            .orElseThrow(() -> {
+                            .<EntityDoesNotExistException>orElseThrow(() -> {
                               throw new EntityDoesNotExistException(entityId + " does not exist", Entity.class);
                             });
 

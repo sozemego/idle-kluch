@@ -17,6 +17,7 @@ import java.util.UUID;
   @JsonSubTypes.Type(value = BuildBuildingForm.class, name = "BUILD_BUILDING"),
   @JsonSubTypes.Type(value = PauseToggleMessage.class, name = "PAUSE_TOGGLE"),
   @JsonSubTypes.Type(value = AttachResourceSourceForm.class, name = "ATTACH_RESOURCE_SOURCE"),
+  @JsonSubTypes.Type(value = UpgradeComponentMessage.class, name = "UPGRADE_COMPONENT"),
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class IncomingMessage {

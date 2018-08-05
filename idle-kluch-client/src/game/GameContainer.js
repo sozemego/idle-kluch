@@ -28,6 +28,7 @@ class GameContainer extends Component {
       getResourceById,
       getEntityById,
       onAttachSourceClicked,
+			onUpgradeComponentClicked,
     } = this.props;
 
     const selectedEntity = this.getSelectedEntity();
@@ -47,6 +48,7 @@ class GameContainer extends Component {
                                 getResourceById={getResourceById}
                                 getEntityById={getEntityById}
                                 onAttachSourceClicked={onAttachSourceClicked}
+																onUpgradeComponentClicked={onUpgradeComponentClicked}
             />
             }
           </div>

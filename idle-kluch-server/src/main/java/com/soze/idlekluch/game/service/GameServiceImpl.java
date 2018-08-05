@@ -119,7 +119,7 @@ public class GameServiceImpl implements GameService {
     Objects.requireNonNull(owner);
     Objects.requireNonNull(upgradeComponentMessage);
     gameEngine.addAction(wrapExceptionHandler(() -> {
-      upgradeService.upgradeComponent(upgradeComponentMessage);
+      upgradeService.upgradeComponent(owner, upgradeComponentMessage);
     }));
   }
 

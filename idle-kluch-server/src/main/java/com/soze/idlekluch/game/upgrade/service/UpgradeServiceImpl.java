@@ -1,5 +1,6 @@
 package com.soze.idlekluch.game.upgrade.service;
 
+import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.exception.InvalidOwnerException;
@@ -30,15 +31,16 @@ public class UpgradeServiceImpl implements UpgradeService {
   }
 
   @Override
+  @Profiled
   public void upgradeComponent(final String owner, final UpgradeComponentMessage message) {
+    Objects.requireNonNull(owner);
     Objects.requireNonNull(message);
 
     final Entity entity = gameEngine
                             .getEntity(message.getEntityId())
-                            .orElseThrow(() -> {
+                            .<EntityDoesNotExistException>orElseThrow(() -> {
                               throw new EntityDoesNotExistException(message.getEntityId() + " does not exist", Entity.class);
                             });
-
 
     final Kingdom kingdom = kingdomService
                               .getUsersKingdom(owner)

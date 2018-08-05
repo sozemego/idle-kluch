@@ -14,10 +14,10 @@ public class UpgradeComponentMessage extends IncomingMessage {
   private final UpgradeType upgradeType;
 
   @JsonCreator
-  public UpgradeComponentMessage(@JsonProperty("messageId") final String messageId,
-                                 @JsonProperty("buildingId") final String entityId,
+  public UpgradeComponentMessage(@JsonProperty("messageId") final UUID messageId,
+                                 @JsonProperty("entityId") final String entityId,
                                  @JsonProperty("upgradeType") final String upgradeType) {
-    super(UUID.fromString(messageId), IncomingMessageType.UPGRADE_COMPONENT);
+    super(messageId, IncomingMessageType.UPGRADE_COMPONENT);
     this.entityId = EntityUUID.fromString(Objects.requireNonNull(entityId));
     this.upgradeType = UpgradeType.valueOf(upgradeType);
   }

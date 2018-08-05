@@ -52,8 +52,8 @@ public class GameSocketController {
   }
 
   @MessageMapping(Routes.UPGRADE_COMPONENT)
-  public void upgradeComponent(final UpgradeComponentMessage message) {
-
+  public void upgradeComponent(final Principal principal, final UpgradeComponentMessage message) {
+    gameService.handleUpgradeComponentMessage(principal.getName(), message);
   }
 
   @MessageMapping(Routes.PAUSE_TOGGLE_MESSAGE)
