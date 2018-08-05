@@ -6,6 +6,7 @@ import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.BaseComponent;
 import org.hibernate.annotations.Type;
 
+import javax.persistence.Column;
 import javax.persistence.Transient;
 import java.util.*;
 
@@ -13,7 +14,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
 
   private EntityUUID resourceId;
   private int radius;
-  private int unitsPerMinute;
+  private float unitsPerMinute;
   private int sourceSlots;
 
   @Transient
@@ -22,13 +23,16 @@ public class ResourceHarvesterComponent extends BaseComponent {
   @Type(type = "jsonb")
   private List<ResourceSourceSlot> slots = new ArrayList<>();
 
+  @Column(name = "speed_level")
+  private int speedLevel = 1;
+
   public ResourceHarvesterComponent() {
     super(ComponentType.RESOURCE_HARVESTER);
   }
 
   public ResourceHarvesterComponent(final EntityUUID resourceId,
                                     final int radius,
-                                    final int unitsPerMinute,
+                                    final float unitsPerMinute,
                                     final int sourceSlots,
                                     final List<ResourceSourceSlot> slots) {
     this();
@@ -62,11 +66,11 @@ public class ResourceHarvesterComponent extends BaseComponent {
     this.radius = radius;
   }
 
-  public int getUnitsPerMinute() {
+  public float getUnitsPerMinute() {
     return unitsPerMinute;
   }
 
-  public void setUnitsPerMinute(final int unitsPerMinute) {
+  public void setUnitsPerMinute(final float unitsPerMinute) {
     this.unitsPerMinute = unitsPerMinute;
   }
 
@@ -109,6 +113,14 @@ public class ResourceHarvesterComponent extends BaseComponent {
   public List<ResourceSourceSlot> getSlots() {
     Collections.sort(this.slots, Comparator.comparingInt(ResourceSourceSlot::getSlotNumber));
     return this.slots;
+  }
+
+  public int getSpeedLevel() {
+    return speedLevel;
+  }
+
+  public void setSpeedLevel(final int speedLevel) {
+    this.speedLevel = speedLevel;
   }
 
   @Override

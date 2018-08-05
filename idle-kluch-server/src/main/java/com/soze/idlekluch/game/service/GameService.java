@@ -2,6 +2,7 @@ package com.soze.idlekluch.game.service;
 
 import com.soze.idlekluch.game.message.AttachResourceSourceForm;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
+import com.soze.idlekluch.game.message.UpgradeComponentMessage;
 import com.soze.idlekluch.world.events.WorldChunkCreatedEvent;
 import com.soze.klecs.engine.RemovedEntityEvent;
 
@@ -18,6 +19,8 @@ public interface GameService {
   void handleBuildBuildingMessage(String owner, BuildBuildingForm form);
 
   void handleAttachResourceMessage(String owner, AttachResourceSourceForm form);
+
+  void handleUpgradeComponentMessage(String owner, UpgradeComponentMessage upgradeComponentMessage);
 
   void handleDuplicateSession(String sessionId);
 

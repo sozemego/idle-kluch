@@ -5,6 +5,7 @@ import com.soze.idlekluch.game.exception.GameException;
 import com.soze.idlekluch.game.message.AttachResourceSourceForm;
 import com.soze.idlekluch.game.message.BuildBuildingForm;
 import com.soze.idlekluch.game.message.MessageRevert;
+import com.soze.idlekluch.game.message.UpgradeComponentMessage;
 import com.soze.idlekluch.game.service.GameConnectionRegistryService;
 import com.soze.idlekluch.game.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,11 @@ public class GameSocketController {
   @MessageMapping(Routes.ATTACH_RESOURCE_SOURCE)
   public void handleAttachResourceSource(final Principal principal, final AttachResourceSourceForm message) {
     gameService.handleAttachResourceMessage(principal.getName(), message);
+  }
+
+  @MessageMapping(Routes.UPGRADE_COMPONENT)
+  public void upgradeComponent(final UpgradeComponentMessage message) {
+
   }
 
   @MessageMapping(Routes.PAUSE_TOGGLE_MESSAGE)

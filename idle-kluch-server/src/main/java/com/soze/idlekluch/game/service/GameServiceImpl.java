@@ -4,8 +4,12 @@ import com.soze.idlekluch.core.aop.annotations.AuthLog;
 import com.soze.idlekluch.core.aop.annotations.Profiled;
 import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.game.engine.EntityConverter;
+import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.exception.GameException;
+import com.soze.idlekluch.game.exception.InvalidOwnerException;
 import com.soze.idlekluch.game.message.*;
+import com.soze.idlekluch.game.upgrade.service.UpgradeService;
+import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.entity.Resource;
 import com.soze.idlekluch.kingdom.service.BuildingService;
 import com.soze.idlekluch.world.entity.Tile;
@@ -38,6 +42,7 @@ public class GameServiceImpl implements GameService {
   private final GameEngine gameEngine;
   private final EntityConverter entityConverter;
   private final ResourceService resourceService;
+  private final UpgradeService upgradeService;
 
   @Autowired
   public GameServiceImpl(final WorldService worldService,
@@ -45,13 +50,15 @@ public class GameServiceImpl implements GameService {
                          final BuildingService buildingService,
                          final GameEngine gameEngine,
                          final EntityConverter entityConverter,
-                         final ResourceService resourceService) {
+                         final ResourceService resourceService,
+                         final UpgradeService upgradeService) {
     this.worldService = Objects.requireNonNull(worldService);
     this.webSocketMessagingService = Objects.requireNonNull(webSocketMessagingService);
     this.buildingService = Objects.requireNonNull(buildingService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.entityConverter = Objects.requireNonNull(entityConverter);
     this.resourceService = Objects.requireNonNull(resourceService);
+    this.upgradeService = Objects.requireNonNull(upgradeService);
   }
 
   /**
@@ -105,6 +112,15 @@ public class GameServiceImpl implements GameService {
     Objects.requireNonNull(username);
     Objects.requireNonNull(form);
     gameEngine.addAction(wrapExceptionHandler(() -> buildingService.attachResourceSource(username, form)));
+  }
+
+  @Override
+  public void handleUpgradeComponentMessage(final String owner, final UpgradeComponentMessage upgradeComponentMessage) {
+    Objects.requireNonNull(owner);
+    Objects.requireNonNull(upgradeComponentMessage);
+    gameEngine.addAction(wrapExceptionHandler(() -> {
+      upgradeService.upgradeComponent(upgradeComponentMessage);
+    }));
   }
 
   @Override

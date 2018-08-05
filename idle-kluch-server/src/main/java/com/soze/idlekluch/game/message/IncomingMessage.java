@@ -38,7 +38,7 @@ public abstract class IncomingMessage {
   }
 
   public enum IncomingMessageType {
-    BUILD_BUILDING, PAUSE_TOGGLE, ATTACH_RESOURCE_SOURCE
+    BUILD_BUILDING, PAUSE_TOGGLE, ATTACH_RESOURCE_SOURCE, UPGRADE_COMPONENT
   }
 
 }
