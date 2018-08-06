@@ -11,7 +11,7 @@ import {
 	startHarvesting,
 	startSelling,
 	transferResource,
-	componentChanged,
+	componentChanged, setUpgrades,
 } from "./actions";
 import store from "../store/store";
 import { getUser } from "../app/selectors";
@@ -140,4 +140,5 @@ const handlerTable = {
 	[ MESSAGE_TYPE.TRANSFER_RESOURCE ]: (message) => store.dispatch(transferResource(message)),
 	[ MESSAGE_TYPE.MODIFY_KINGDOM_BUCKS ]: (message) => store.dispatch(idleBucksChanged(message.bucksChange)),
 	[ MESSAGE_TYPE.COMPONENT_CHANGED]: (message) => store.dispatch(componentChanged(message)),
+	[ MESSAGE_TYPE.UPGRADES]: (message) => store.dispatch(setUpgrades(message.upgrades)),
 };

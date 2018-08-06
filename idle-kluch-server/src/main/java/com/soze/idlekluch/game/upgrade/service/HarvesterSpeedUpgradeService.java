@@ -1,14 +1,11 @@
 package com.soze.idlekluch.game.upgrade.service;
 
 import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
-import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
-import com.soze.idlekluch.game.engine.components.BaseComponent;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.exception.GameException;
 import com.soze.idlekluch.game.exception.NotEnoughIdleBucksException;
-import com.soze.idlekluch.game.message.ComponentChangedMessage;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.game.service.WebSocketMessagingService;
 import com.soze.idlekluch.game.upgrade.dto.Upgrade;
@@ -20,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static com.soze.idlekluch.game.engine.components.BaseComponent.ComponentType.*;
 import static com.soze.idlekluch.game.upgrade.service.UpgradeService.UpgradeType.*;
 
 @Service
@@ -71,15 +67,15 @@ public class HarvesterSpeedUpgradeService {
     final float nextUnitsPerMinute = (float) Math.floor(harvesterComponent.getUnitsPerMinute() * (float) upgrade.getData() * 100) / 100;
     harvesterComponent.setUnitsPerMinute(nextUnitsPerMinute);
     harvesterComponent.setSpeedLevel(level + 1);
-    webSocketMessagingService.send(
-      Routes.GAME_OUTBOUND,
-      new ComponentChangedMessage(
-        entityId.toString(),
-        RESOURCE_HARVESTER,
-        "unitsPerMinute",
-        harvesterComponent.getUnitsPerMinute()
-      )
-    );
+//    webSocketMessagingService.send(
+//      Routes.GAME_OUTBOUND,
+//      new ComponentChangedMessage(
+//        entityId.toString(),
+//        RESOURCE_HARVESTER,
+//        "unitsPerMinute",
+//        harvesterComponent.getUnitsPerMinute()
+//      )
+//    );
   }
 
 }

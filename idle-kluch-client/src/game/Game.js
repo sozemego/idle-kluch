@@ -308,6 +308,11 @@ const componentChanged = (state, action) => {
 	return state;
 };
 
+const setUpgrades = (state, action) => {
+	console.log(action);
+	return state;
+}
+
 const setSelectedEntity = (state, action) => {
 	return { ...state, selectedEntityId: action.payload, attachSourceSlot: null };
 };
@@ -349,7 +354,8 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.ON_ATTACH_SOURCE_CLICKED]: makeSetter("attachSourceSlot"),
   [ GAME_ACTIONS.ATTACH_SOURCE ]: attachSource,
 	[ GAME_ACTIONS.TRANSFER_RESOURCE ]: transferResource,
-	[ GAME_ACTIONS.COMPONENT_CHANGED]: componentChanged,
+	[ GAME_ACTIONS.COMPONENT_CHANGED ]: componentChanged,
+	[ GAME_ACTIONS.SET_UPGRADES ]: setUpgrades,
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });

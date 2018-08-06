@@ -8,6 +8,7 @@ import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.exception.GameException;
 import com.soze.idlekluch.game.exception.InvalidOwnerException;
 import com.soze.idlekluch.game.message.*;
+import com.soze.idlekluch.game.upgrade.dto.Upgrade;
 import com.soze.idlekluch.game.upgrade.service.UpgradeService;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.entity.Resource;
@@ -92,6 +93,9 @@ public class GameServiceImpl implements GameService {
     final List<Resource> resources = resourceService.getAllAvailableResources();
     final ResourceListMessage resourceListMessage = new ResourceListMessage(resources);
     webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, resourceListMessage);
+
+    final Map<UpgradeService.UpgradeType, Collection<Upgrade>> upgrades = upgradeService.getUpgrades();
+    webSocketMessagingService.sendToUser(username, Routes.GAME_OUTBOUND, new UpgradesMessage(upgrades));
   }
 
   @Override
