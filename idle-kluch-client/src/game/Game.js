@@ -189,6 +189,7 @@ const createComponent = (component) => {
 			component.secondsPerUnit,
 			component.sellingProgress,
 			component.resourceBeingSold,
+			component.speedLevel,
 		);
 	}
 

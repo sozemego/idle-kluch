@@ -17,6 +17,7 @@ import { default as undoActions } from "./UndoActions";
 import { ResourceHarvesterComponent } from "../ecs/components/ResourceHarvesterComponent";
 import { ResourceSourceComponent } from "../ecs/components/ResourceSourceComponent";
 import { getComponentByUpgradeType, getComponentClassByType } from "./utils";
+import { ResourceSellerComponent } from "../ecs/components/ResourceSellerComponent";
 
 export const ADD_TILES = "ADD_TILES";
 export const addTiles = makePayloadActionCreator(ADD_TILES);
@@ -183,11 +184,22 @@ export const onUpgradeComponentClicked = (entityId, upgradeType, level) => {
 		if (componentType === COMPONENT_TYPES.RESOURCE_HARVESTER) {
 			const component = entity.getComponent(ResourceHarvesterComponent);
 			if (upgradeType === UPGRADE_TYPE.HARVESTER_SPEED) {
-				const upgrade = upgrades[upgradeType][level - 1];
+				const upgrade = upgrades[ upgradeType ][ level - 1 ];
 				cost = upgrade.cost;
 				field = "unitsPerMinute";
 				previousData = component.getUnitsPerMinute();
 				data = Math.floor(previousData * upgrade.data * 100) / 100;
+			}
+		}
+
+		if (componentType === COMPONENT_TYPES.SELLER) {
+			const component = entity.getComponent(ResourceSellerComponent);
+			if (upgradeType === UPGRADE_TYPE.SELLING_SPEED) {
+				const upgrade = upgrades[ upgradeType ][ level - 1 ];
+				cost = upgrade.cost;
+				field = "secondsPerUnit";
+				previousData = component.getSecondsPerUnit();
+				data = Math.floor(previousData * (1 / upgrade.data) * 100) / 100;
 			}
 		}
 

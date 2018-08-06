@@ -216,7 +216,7 @@ export class SelectedEntityInfo extends Component {
   };
 
 	getSellerComponent = () => {
-		const { selectedEntity, getResourceById } = this.props;
+		const { selectedEntity, getResourceById, upgrades, onUpgradeComponentClicked } = this.props;
 		const seller = selectedEntity.getComponent(ResourceSellerComponent);
 		if (!seller) {
 			return null;
@@ -225,6 +225,8 @@ export class SelectedEntityInfo extends Component {
 		const resource = seller.getResourceBeingSold();
 		const value = resource ? seller.getSellingProgress() * 100 : 0;
 		const secondsPerUnit = seller.getSecondsPerUnit();
+		const speedLevel = seller.speedLevel || 1;
+		const upgrade = upgrades[UPGRADE_TYPE.SELLING_SPEED][speedLevel - 1];
 
 		return (
 			<div className={style.section}>
@@ -246,6 +248,13 @@ export class SelectedEntityInfo extends Component {
 				<div>
 					{`Selling ${60 / secondsPerUnit} per minute`}
 				</div>
+        <div>
+					<div>{`Speed level ${speedLevel}`}</div>
+					{upgrade && <UpgradeButton onClick={() => onUpgradeComponentClicked(selectedEntity.getId(), UPGRADE_TYPE.SELLING_SPEED, speedLevel)}
+																		 cost={upgrade.cost}
+																		 text={`Upgrade speed +${this.getUpgradeSpeedPercentage(upgrade)}%`}
+					/>}
+        </div>
 				<Divider className={style.divider}/>
 			</div>
 		);

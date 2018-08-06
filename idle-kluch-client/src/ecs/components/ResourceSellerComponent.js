@@ -2,11 +2,12 @@ import { isEqual } from "../../utils/MathUtils";
 
 export class ResourceSellerComponent {
 
-	constructor(secondsPerUnit, sellingProgress, resourceBeingSold) {
+	constructor(secondsPerUnit, sellingProgress, resourceBeingSold, speedLevel) {
 		this.secondsPerUnit = secondsPerUnit;
 		this.sellingProgress = sellingProgress;
 		this.resourceBeingSold = resourceBeingSold;
 		this.sellQueue = [];
+		this.speedLevel = speedLevel;
 	}
 
 	getSecondsPerUnit() {

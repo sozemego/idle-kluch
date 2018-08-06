@@ -31,6 +31,7 @@ export const MESSAGE_TYPE = {
 
 export const UPGRADE_TYPE = {
 	HARVESTER_SPEED: "HARVESTER_SPEED",
+	SELLING_SPEED: "SELLING_SPEED",
 };
 
 /**

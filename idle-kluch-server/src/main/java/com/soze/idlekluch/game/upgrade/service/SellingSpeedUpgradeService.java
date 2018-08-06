@@ -1,14 +1,11 @@
 package com.soze.idlekluch.game.upgrade.service;
 
-import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.components.ResourceSellerComponent;
-import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.exception.GameException;
 import com.soze.idlekluch.game.exception.NotEnoughIdleBucksException;
 import com.soze.idlekluch.game.service.GameEngine;
-import com.soze.idlekluch.game.service.WebSocketMessagingService;
 import com.soze.idlekluch.game.upgrade.dto.Upgrade;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.service.KingdomService;
