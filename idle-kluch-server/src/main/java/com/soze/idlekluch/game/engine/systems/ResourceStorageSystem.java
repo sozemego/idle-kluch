@@ -61,6 +61,10 @@ public class ResourceStorageSystem extends BaseEntitySystem {
           final ResourceStorageComponent sellerStorage = seller.getComponent(ResourceStorageComponent.class);
           return sellerStorage.hasRemainingCapacity();
         })
+        .sorted(Comparator.comparingInt(e -> {
+          final ResourceStorageComponent sellerStorage = e.getComponent(ResourceStorageComponent.class);
+          return sellerStorage.getRemainingCapacity();
+        }))
         .sorted(Comparator.comparingInt(e -> (int) distance(e, entity)))
         .findFirst()
         .ifPresent(seller -> {
