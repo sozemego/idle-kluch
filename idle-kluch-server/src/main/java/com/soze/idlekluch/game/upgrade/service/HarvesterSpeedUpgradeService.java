@@ -52,9 +52,6 @@ public class HarvesterSpeedUpgradeService {
 
     kingdom.setIdleBucks(kingdom.getIdleBucks() - upgrade.getCost());
     kingdomService.updateKingdom(kingdom);
-//    final float nextUnitsPerMinute = (float) Math.floor(harvesterComponent.getUnitsPerMinute() * (float) upgrade.getData() * 100) / 100;
-//    harvesterComponent.setUnitsPerMinute(nextUnitsPerMinute);
-//    harvesterComponent.setSpeedLevel(level + 1);
   }
 
 }

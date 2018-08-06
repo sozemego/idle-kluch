@@ -71,29 +71,15 @@ public class UpgradeServiceImpl implements UpgradeService {
       throw new NotEnoughIdleBucksException(message.getMessageId());
     }
 
-    switch (message.getUpgradeType()) {
-      case HARVESTER_SPEED:
-        upgradeHarvesterSpeed(message);
-        break;
-      case SELLING_SPEED:
-        upgradeSellingSpeed(message);
-        break;
-      default:
-        break;
-    }
+    upgrade.getUpdater().accept(entity);
+
+    kingdom.setIdleBucks(kingdom.getIdleBucks() - upgrade.getCost());
+    kingdomService.updateKingdom(kingdom);
   }
 
   @Override
   public Map<UpgradeType, Collection<Upgrade>> getUpgrades() {
     return upgradeDataService.getUpgrades();
-  }
-
-  private void upgradeHarvesterSpeed(final UpgradeComponentMessage message) {
-    harvesterSpeedUpgradeService.upgradeHarvesterSpeed(message.getMessageId(), message.getEntityId());
-  }
-
-  private void upgradeSellingSpeed(final UpgradeComponentMessage message) {
-    sellingSpeedUpgradeService.upgradeSellingSpeed(message.getMessageId(), message.getEntityId());
   }
 
   private Upgrade getUpgrade(final UpgradeComponentMessage message) {
