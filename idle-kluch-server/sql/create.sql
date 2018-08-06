@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS world;
 DROP TABLE IF EXISTS tile;
 DROP TABLE IF EXISTS resource CASCADE;
 DROP TABLE IF EXISTS entity CASCADE;
+DROP TABLE IF EXISTS upgrades CASCADE;
 
 CREATE TABLE user_table (
   user_id uuid NOT NULL PRIMARY KEY,
@@ -230,3 +231,10 @@ INSERT INTO entity (
     '{"secondsPerUnit": 6}'
   )
 ;
+
+CREATE TABLE upgrades (
+  id SERIAL PRIMARY KEY,
+  entity_id UUID NOT NULL,
+  upgrade_type VARCHAR(32) NOT NULL,
+  level INT NOT NULL,
+);

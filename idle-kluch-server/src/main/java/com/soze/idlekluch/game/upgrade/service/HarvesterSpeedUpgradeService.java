@@ -50,15 +50,11 @@ public class HarvesterSpeedUpgradeService {
     final OwnershipComponent ownershipComponent = entity.getComponent(OwnershipComponent.class);
     final Kingdom kingdom = kingdomService.getKingdom(ownershipComponent.getOwnerId()).get();
 
-    if (kingdom.getIdleBucks() < upgrade.getCost()) {
-      throw new NotEnoughIdleBucksException(messageId);
-    }
-
     kingdom.setIdleBucks(kingdom.getIdleBucks() - upgrade.getCost());
     kingdomService.updateKingdom(kingdom);
-    final float nextUnitsPerMinute = (float) Math.floor(harvesterComponent.getUnitsPerMinute() * (float) upgrade.getData() * 100) / 100;
-    harvesterComponent.setUnitsPerMinute(nextUnitsPerMinute);
-    harvesterComponent.setSpeedLevel(level + 1);
+//    final float nextUnitsPerMinute = (float) Math.floor(harvesterComponent.getUnitsPerMinute() * (float) upgrade.getData() * 100) / 100;
+//    harvesterComponent.setUnitsPerMinute(nextUnitsPerMinute);
+//    harvesterComponent.setSpeedLevel(level + 1);
   }
 
 }

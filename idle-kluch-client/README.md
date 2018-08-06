@@ -1844,7 +1844,7 @@ allow you to change the default 10 minute HTTP cache lifetime—then be aware
 that if you visit your production site, and then revisit again before
 `service-worker.js` has expired from your HTTP cache, you'll continue to get
 the previously cached assets from the service worker. If you have an immediate
-need to view your updated production deployment, performing a shift-refresh
+need to view your updater production deployment, performing a shift-refresh
 will temporarily disable the service worker and retrieve all assets from the
 network.
 
@@ -2334,7 +2334,7 @@ NODE_PATH | :white_check_mark: |  :white_check_mark: | Same as [`NODE_PATH` in N
 
 ### `npm start` doesn’t detect changes
 
-When you save a file while `npm start` is running, the browser should refresh with the updated code.<br>
+When you save a file while `npm start` is running, the browser should refresh with the updater code.<br>
 If this doesn’t happen, try one of the following workarounds:
 
 * If your project is in a Dropbox folder, try moving it out.

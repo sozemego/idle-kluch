@@ -27,8 +27,8 @@ public class SellingSpeedUpgradeService {
 
   @Autowired
   public SellingSpeedUpgradeService(final GameEngine gameEngine,
-                                      final KingdomService kingdomService,
-                                      final UpgradeDataService upgradeDataService) {
+                                    final KingdomService kingdomService,
+                                    final UpgradeDataService upgradeDataService) {
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.kingdomService = Objects.requireNonNull(kingdomService);
     this.upgradeDataService = Objects.requireNonNull(upgradeDataService);
@@ -50,15 +50,12 @@ public class SellingSpeedUpgradeService {
     final OwnershipComponent ownershipComponent = entity.getComponent(OwnershipComponent.class);
     final Kingdom kingdom = kingdomService.getKingdom(ownershipComponent.getOwnerId()).get();
 
-    if (kingdom.getIdleBucks() < upgrade.getCost()) {
-      throw new NotEnoughIdleBucksException(messageId);
-    }
 
     kingdom.setIdleBucks(kingdom.getIdleBucks() - upgrade.getCost());
     kingdomService.updateKingdom(kingdom);
-    final float nextSecondsPerUnit = (float) Math.floor(seller.getSecondsPerUnit() * (1 / (float) upgrade.getData()) * 100) / 100;
-    seller.setSecondsPerUnit(nextSecondsPerUnit);
-    seller.setSpeedLevel(level + 1);
+//    final float nextSecondsPerUnit = (float) Math.floor(seller.getSecondsPerUnit() * (1 / (float) upgrade.getData()) * 100) / 100;
+//    seller.setSecondsPerUnit(nextSecondsPerUnit);
+//    seller.setSpeedLevel(level + 1);
   }
 
 }

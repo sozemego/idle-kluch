@@ -17,7 +17,6 @@
 #     Can have multiple routes per storage
 
 Upgrades
-  Components will be upgradeable
   Cost
     Each upgrade will have an increasing cost depending on the upgrade
   Components
@@ -30,6 +29,7 @@ Upgrades
     Harvester component - increase number of resources harvested at once
 #    Seller component - increase selling speed
     Seller component - get better prices
+  Upgrade data will be kept orthogonal to component data
 
 Other
 #  Display money earned per second on average
