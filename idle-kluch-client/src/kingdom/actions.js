@@ -35,6 +35,9 @@ export const idleBucksChanged = makeActionCreator(IDLE_BUCKS_CHANGED, "payload")
 export const SET_DELETING_KINGDOM = "SET_DELETING_KINGDOM";
 export const setDeletingKingdom = makeActionCreator(SET_DELETING_KINGDOM, "payload");
 
+export const SET_UPGRADES = "SET_UPGRADES";
+export const setUpgrades = makeActionCreator(SET_UPGRADES, "payload");
+
 /**
  * Loads kingdom for the logged in user.
  */

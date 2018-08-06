@@ -80,3 +80,5 @@ export const getCashHistory = (state) => {
     return event.time > (now - tenSeconds);
   });
 };
+
+export const getUpgrades = (state) => root(state).upgrades;

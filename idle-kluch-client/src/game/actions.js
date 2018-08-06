@@ -59,10 +59,6 @@ export const transferResource = makePayloadActionCreator(TRANSFER_RESOURCE);
 export const COMPONENT_CHANGED = "COMPONENT_CHANGED";
 export const componentChanged = makeActionCreator(COMPONENT_CHANGED, "payload");
 
-export const SET_UPGRADES = "SET_UPGRADES";
-export const setUpgrades = makeActionCreator(SET_UPGRADES, "payload");
-
-
 let gameContainer = null;
 
 export const connect = () => {
@@ -171,6 +167,8 @@ const getSelectedEntity = (state) => {
 
 export const onUpgradeComponentClicked = (entityId, upgradeType) => {
 	return (dispatch, getState) => {
+
+
 
 		return gameService.upgradeComponent(entityId, upgradeType);
 

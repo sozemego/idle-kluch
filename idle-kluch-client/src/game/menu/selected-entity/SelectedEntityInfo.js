@@ -12,6 +12,7 @@ import { Avatar, Chip } from "@material-ui/core/es/index";
 import { GraphicsComponent } from "../../../ecs/components/GraphicsComponent";
 import { IMAGES } from "../../constants";
 import { ResourceSellerComponent } from "../../../ecs/components/ResourceSellerComponent";
+import { UpgradeButton } from "../../../components/UpgradeButton/UpgradeButton";
 
 export class SelectedEntityInfo extends Component {
 
@@ -54,7 +55,8 @@ export class SelectedEntityInfo extends Component {
   };
 
   getHarvestingComponent = () => {
-    const { selectedEntity, getResourceById, onUpgradeComponentClicked } = this.props;
+    const { selectedEntity, getResourceById, onUpgradeComponentClicked, upgrades } = this.props
+    console.log(upgrades);
     const { getResourceSlotIcons } = this;
     const harvester = selectedEntity.getComponent(ResourceHarvesterComponent);
     if (!harvester) {
@@ -67,13 +69,14 @@ export class SelectedEntityInfo extends Component {
 
     const harvestingStats = this.getHarvestingStats();
     const { unitsPerMinute, bonus, baseUnitsPerMinute } = harvestingStats;
+    const speedLevel = harvester.speedLevel || 1;
+    const upgrade = upgrades["HARVESTER_SPEED"][speedLevel - 1];
 
     return (
       <div className={style.section}>
         <div className={style.harvester_header}>
           <span>Harvester</span>
           {getResourceSlotIcons(harvester.getSlots())}
-          <span onClick={() => onUpgradeComponentClicked(selectedEntity.getId(), "HARVESTER_SPEED")}>UPGRADE</span>
         </div>
         <div className={style.harvester_state}>
           <Avatar>
@@ -91,6 +94,13 @@ export class SelectedEntityInfo extends Component {
         <div>
           {bonus === 1 ? "No bonus" : `Bonus multiplier ${bonus}`}
         </div>
+        <div>
+          <div>{`Speed level ${speedLevel}`}</div>
+          {upgrade && <UpgradeButton onClick={() => onUpgradeComponentClicked(selectedEntity.getId(), "HARVESTER_SPEED")}
+                                     cost={upgrade.cost}
+                                     text={`Upgrade speed +${this.getUpgradeSpeedPercentage(upgrade)}%`}
+          />}
+        </div>
         <Divider className={style.divider}/>
       </div>
     );
@@ -105,7 +115,7 @@ export class SelectedEntityInfo extends Component {
 
     return {
       baseUnitsPerMinute: unitsPerMinute,
-      unitsPerMinute: unitsPerMinute * bonus,
+      unitsPerMinute: (unitsPerMinute * bonus).toFixed(2),
       bonus,
     };
   };
@@ -145,6 +155,12 @@ export class SelectedEntityInfo extends Component {
   };
 
   getImageSrcByAsset = (asset) => IMAGES[asset];
+
+  getUpgradeSpeedPercentage = (upgrade) => {
+    const { data } = upgrade;
+    const percentageIncrease = data - 1;
+    return (percentageIncrease * 100).toFixed(0);
+  };
 
   getStorageComponent = () => {
     const { selectedEntity } = this.props;
@@ -262,4 +278,5 @@ SelectedEntityInfo.propTypes = {
   getEntityById: PropTypes.func.isRequired,
   onAttachSourceClicked: PropTypes.func.isRequired,
   onUpgradeComponentClicked: PropTypes.func.isRequired,
+	upgrades: PropTypes.object.isRequired,
 };

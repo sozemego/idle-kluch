@@ -15,6 +15,7 @@ const initialState = {
   deletingKingdom: false,
   ownBuildings: {},
   cashHistory: [],
+	upgrades: {},
 };
 
 const addEntity = (state, action) => {
@@ -60,6 +61,10 @@ const idleBucksChanged = (state, action) => {
 	return { ...state, kingdom, cashHistory };
 };
 
+const setUpgrades = (state, action) => {
+	return { ...state, upgrades: action.payload };
+}
+
 const kingdom = createReducer(_.cloneDeep(initialState), {
   [ KINGDOM_ACTIONS.SET_KINGDOM ]: makeSetter("kingdom"),
   [ KINGDOM_ACTIONS.SET_KINGDOM_NAME_REGISTRATION_ERROR ]: makeSetter("kingdomNameRegistrationError"),
@@ -68,6 +73,7 @@ const kingdom = createReducer(_.cloneDeep(initialState), {
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: makeSetter("selectedConstructableBuilding"),
   [ KINGDOM_ACTIONS.IDLE_BUCKS_CHANGED ]: idleBucksChanged,
   [ KINGDOM_ACTIONS.SET_DELETING_KINGDOM ]: makeSetter("deletingKingdom"),
+	[ KINGDOM_ACTIONS.SET_UPGRADES ]: setUpgrades,
   //TODO fix this, extract actions
 	[ 'ADD_ENTITY' ]: addEntity,
   [ APP_ACTIONS.LOGOUT ]: () => _.cloneDeep(initialState),

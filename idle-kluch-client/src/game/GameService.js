@@ -11,14 +11,14 @@ import {
 	startHarvesting,
 	startSelling,
 	transferResource,
-	componentChanged, setUpgrades,
+	componentChanged,
 } from "./actions";
 import store from "../store/store";
 import { getUser } from "../app/selectors";
 import { parseJSON } from "../utils/JSONUtils";
 import { alreadyConnected } from "../app/actions";
 import { default as undoActions } from "./UndoActions";
-import { idleBucksChanged, setConstructableBuildings } from "../kingdom/actions";
+import { idleBucksChanged, setConstructableBuildings, setUpgrades } from "../kingdom/actions";
 import { MESSAGE_TYPE } from "./constants";
 
 const getToken = () => getUser(store.getState()).token;

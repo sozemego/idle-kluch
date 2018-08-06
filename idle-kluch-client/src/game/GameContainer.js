@@ -7,6 +7,7 @@ import GameMenu from "./menu/GameMenu";
 import Toolbar from "./menu/Toolbar";
 import { SelectedEntityInfo } from "./menu/selected-entity/SelectedEntityInfo";
 import { getAttachSourceSlot, getEntityById, getResourceById, getSelectedEntityId, isConstructing } from "./selectors";
+import { getUpgrades } from "../kingdom/selectors";
 
 class GameContainer extends Component {
   componentDidMount = () => {
@@ -29,6 +30,7 @@ class GameContainer extends Component {
       getEntityById,
       onAttachSourceClicked,
 			onUpgradeComponentClicked,
+			upgrades,
     } = this.props;
 
     const selectedEntity = this.getSelectedEntity();
@@ -49,6 +51,7 @@ class GameContainer extends Component {
                                 getEntityById={getEntityById}
                                 onAttachSourceClicked={onAttachSourceClicked}
 																onUpgradeComponentClicked={onUpgradeComponentClicked}
+																upgrades={upgrades}
             />
             }
           </div>
@@ -65,6 +68,7 @@ const mapStateToProps = state => {
     getEntityById: (id) => getEntityById(state, id),
 		sourceSlot: getAttachSourceSlot(state),
 		constructing: isConstructing(state),
+		upgrades: getUpgrades(state),
   };
 };
 
