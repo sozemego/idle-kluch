@@ -50,6 +50,7 @@ public class HarvesterSpeedUpgradeService {
                               .orElseThrow(() -> {
                                 throw new GameException(messageId);
                               });
+
     final OwnershipComponent ownershipComponent = entity.getComponent(OwnershipComponent.class);
     final Kingdom kingdom = kingdomService.getKingdom(ownershipComponent.getOwnerId()).get();
 
