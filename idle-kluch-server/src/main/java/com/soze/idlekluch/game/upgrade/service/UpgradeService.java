@@ -17,7 +17,7 @@ public interface UpgradeService {
   Map<UpgradeType, Collection<Upgrade>> getUpgrades();
 
   public enum UpgradeType {
-    HARVESTER_SPEED
+    HARVESTER_SPEED, SELLING_SPEED,
   }
 
 }

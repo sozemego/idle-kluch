@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.soze.idlekluch.core.utils.MathUtils;
 import com.soze.idlekluch.kingdom.entity.Resource;
 
+import javax.persistence.Column;
 import javax.persistence.Transient;
 
 public class ResourceSellerComponent extends BaseComponent {
@@ -16,13 +17,17 @@ public class ResourceSellerComponent extends BaseComponent {
   @Transient
   private Resource resourceBeingSold;
 
+  @Column(name = "speed_level")
+  private int speedLevel;
+
   public ResourceSellerComponent() {
     super(ComponentType.SELLER);
   }
 
-  public ResourceSellerComponent(final float secondsPerUnit) {
+  public ResourceSellerComponent(final float secondsPerUnit, final int speedLevel) {
     this();
     this.secondsPerUnit = secondsPerUnit;
+    this.speedLevel = speedLevel;
   }
 
   public float getSecondsPerUnit() {
@@ -54,6 +59,14 @@ public class ResourceSellerComponent extends BaseComponent {
     this.resourceBeingSold = resourceBeingSold;
   }
 
+  public int getSpeedLevel() {
+    return speedLevel;
+  }
+
+  public void setSpeedLevel(final int speedLevel) {
+    this.speedLevel = speedLevel;
+  }
+
   public void startSelling(final Resource resourceBeingSold) {
     setResourceBeingSold(resourceBeingSold);
     setSellingProgress(0f);
@@ -67,7 +80,8 @@ public class ResourceSellerComponent extends BaseComponent {
   @Override
   public BaseComponent copy() {
     return new ResourceSellerComponent(
-      getSecondsPerUnit()
+      getSecondsPerUnit(),
+      getSpeedLevel()
     );
   }
 

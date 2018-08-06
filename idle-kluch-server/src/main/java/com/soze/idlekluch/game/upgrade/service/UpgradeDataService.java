@@ -20,6 +20,7 @@ public class UpgradeDataService {
   @PostConstruct
   public void setup() {
     populateHarvesterSpeed();
+    populateSellingSpeed();
   }
 
   public Optional<Upgrade> getUpgrade(final UpgradeType type, final int level) {
@@ -44,6 +45,19 @@ public class UpgradeDataService {
     upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 7, 16000, 1.6f));
     upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 8, 32000, 1.6f));
     upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 9, 64000, 2f));
+  }
+
+  private void populateSellingSpeed() {
+    final int baseCost = 1000;
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 1, baseCost, 1.5f));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 2, baseCost * 2, 1.5f));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 3, baseCost * 4, 1.5f));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 4, baseCost * 8, 1.5f));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 5, baseCost * 16, 1.75f));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 6, baseCost * 32, 1.75f));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 7, baseCost * 64, 1.75f));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 8, baseCost * 256, 2f));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 9, baseCost * 1000, 2.5f));
   }
 
 }

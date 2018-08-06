@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -22,16 +21,19 @@ import java.util.Objects;
 public class UpgradeServiceImpl implements UpgradeService {
 
   private final HarvesterSpeedUpgradeService harvesterSpeedUpgradeService;
+  private final SellingSpeedUpgradeService sellingSpeedUpgradeService;
   private final KingdomService kingdomService;
   private final GameEngine gameEngine;
   private final UpgradeDataService upgradeDataService;
 
   @Autowired
   public UpgradeServiceImpl(final HarvesterSpeedUpgradeService harvesterSpeedUpgradeService,
+                            final SellingSpeedUpgradeService sellingSpeedUpgradeService,
                             final KingdomService kingdomService,
                             final GameEngine gameEngine,
                             final UpgradeDataService upgradeDataService) {
     this.harvesterSpeedUpgradeService = Objects.requireNonNull(harvesterSpeedUpgradeService);
+    this.sellingSpeedUpgradeService = sellingSpeedUpgradeService;
     this.kingdomService = Objects.requireNonNull(kingdomService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.upgradeDataService = Objects.requireNonNull(upgradeDataService);
@@ -62,6 +64,9 @@ public class UpgradeServiceImpl implements UpgradeService {
       case HARVESTER_SPEED:
         upgradeHarvesterSpeed(message);
         break;
+      case SELLING_SPEED:
+        upgradeSellingSpeed(message);
+        break;
       default:
         break;
     }
@@ -74,6 +79,10 @@ public class UpgradeServiceImpl implements UpgradeService {
 
   private void upgradeHarvesterSpeed(final UpgradeComponentMessage message) {
     harvesterSpeedUpgradeService.upgradeHarvesterSpeed(message.getMessageId(), message.getEntityId());
+  }
+
+  private void upgradeSellingSpeed(final UpgradeComponentMessage message) {
+    sellingSpeedUpgradeService.upgradeSellingSpeed(message.getMessageId(), message.getEntityId());
   }
 
 }

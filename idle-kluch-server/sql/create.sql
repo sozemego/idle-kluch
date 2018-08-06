@@ -227,6 +227,6 @@ INSERT INTO entity (
     '{}',
     '{"idleBucks": 375}',
     '{"capacity": 50, "resources": []}',
-    '{"secondsPerUnit": 6}'
+    '{"secondsPerUnit": 6, "speedLevel": 1}'
   )
 ;
