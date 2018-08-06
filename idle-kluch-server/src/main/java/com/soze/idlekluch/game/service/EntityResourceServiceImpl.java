@@ -110,7 +110,7 @@ public class EntityResourceServiceImpl implements EntityResourceService {
   public void handleWorldChunkCreatedEvent(final WorldChunkCreatedEvent worldChunkCreatedEvent) {
     final List<Entity> resourceSources = getAllResourceEntityTemplates();
 
-    if(resourceSources.isEmpty()) {
+    if (resourceSources.isEmpty()) {
       return;
     }
 

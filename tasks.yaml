@@ -39,6 +39,7 @@ Other
 #  After harvesting, an icon with resource amount and resource icon should popup
 #  When transporting a resource, a resource icon will be displayed above transporter
   Find a centralized way to validate entity exists
+  Select only own entities
 
 
 Building cost
