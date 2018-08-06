@@ -13,6 +13,7 @@ import com.soze.klecs.entity.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Service
@@ -21,6 +22,7 @@ public class HarvesterSpeedUpgradeService {
   private final GameEngine gameEngine;
   private final KingdomService kingdomService;
   private final UpgradeCostService upgradeCostService;
+  private final List<Float> speedUpgrades = new ArrayList<>();
 
   @Autowired
   public HarvesterSpeedUpgradeService(final GameEngine gameEngine,
@@ -29,6 +31,18 @@ public class HarvesterSpeedUpgradeService {
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.kingdomService = Objects.requireNonNull(kingdomService);
     this.upgradeCostService = Objects.requireNonNull(upgradeCostService);
+  }
+
+  @PostConstruct
+  public void setup() {
+    speedUpgrades.add(1.2f);
+    speedUpgrades.add(1.4f);
+    speedUpgrades.add(1.4f);
+    speedUpgrades.add(1.6f);
+    speedUpgrades.add(2f);
+    speedUpgrades.add(2f);
+    speedUpgrades.add(2f);
+    speedUpgrades.add(2f);
   }
 
   public void upgradeHarvesterSpeed(final UUID messageId, final EntityUUID entityId) {
@@ -59,13 +73,12 @@ public class HarvesterSpeedUpgradeService {
     kingdom.setIdleBucks(kingdom.getIdleBucks() - cost);
     kingdomService.updateKingdom(kingdom);
 
-    harvesterComponent.setUnitsPerMinute(harvesterComponent.getUnitsPerMinute() * getHarvestingSpeedChange(level + 1));
+    harvesterComponent.setUnitsPerMinute(harvesterComponent.getUnitsPerMinute() * getHarvestingSpeedChange(level));
     harvesterComponent.setSpeedLevel(level + 1);
   }
 
-  private float getHarvestingSpeedChange(final int nextLevel) {
-    return 2;
+  private float getHarvestingSpeedChange(final int level) {
+    return speedUpgrades.get(level - 1);
   }
-
 
 }

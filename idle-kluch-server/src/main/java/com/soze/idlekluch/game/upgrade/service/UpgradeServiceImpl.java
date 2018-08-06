@@ -64,5 +64,4 @@ public class UpgradeServiceImpl implements UpgradeService {
     harvesterSpeedUpgradeService.upgradeHarvesterSpeed(message.getMessageId(), message.getEntityId());
   }
 
-
 }
