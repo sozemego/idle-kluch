@@ -55,7 +55,7 @@ public class HarvesterSpeedUpgradeService {
     final ResourceHarvesterComponent harvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
     final int level = harvesterComponent.getSpeedLevel();
     final Upgrade upgrade = upgradeDataService.getUpgrade(HARVESTER_SPEED, level)
-                              .orElseThrow(() -> {
+                              .<GameException>orElseThrow(() -> {
                                 throw new GameException(messageId);
                               });
 
@@ -68,8 +68,8 @@ public class HarvesterSpeedUpgradeService {
 
     kingdom.setIdleBucks(kingdom.getIdleBucks() - upgrade.getCost());
     kingdomService.updateKingdom(kingdom);
-
-    harvesterComponent.setUnitsPerMinute(harvesterComponent.getUnitsPerMinute() * (float) upgrade.getData());
+    final float nextUnitsPerMinute = (float) Math.floor(harvesterComponent.getUnitsPerMinute() * (float) upgrade.getData() * 100) / 100;
+    harvesterComponent.setUnitsPerMinute(nextUnitsPerMinute);
     harvesterComponent.setSpeedLevel(level + 1);
     webSocketMessagingService.send(
       Routes.GAME_OUTBOUND,

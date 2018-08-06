@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import _ from "lodash";
 import { GameService as gameService } from "./GameService";
-import { makePayloadActionCreator } from "../store/utils";
+import { makeActionCreator, makePayloadActionCreator } from "../store/utils";
 import createGame from "./Game";
 import {
 	getConstructableBuildingsData,
@@ -55,6 +55,9 @@ export const attachSource = makePayloadActionCreator(ATTACH_SOURCE);
 
 export const TRANSFER_RESOURCE = "TRANSFER_RESOURCE";
 export const transferResource = makePayloadActionCreator(TRANSFER_RESOURCE);
+
+export const COMPONENT_CHANGED = "COMPONENT_CHANGED";
+export const componentChanged = makeActionCreator(COMPONENT_CHANGED, "payload");
 
 let gameContainer = null;
 

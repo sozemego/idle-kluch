@@ -41,7 +41,7 @@ import {
 	attachSpawnAnimation,
 	centerCameraAt, createJumpingSpriteFactory,
 	destroyTileGroup,
-	DIRECTIONS, drawCircle, drawRect, getRect,
+	DIRECTIONS, drawCircle, drawRect, getComponentClassByType, getRect,
 	getWheelDelta,
 	killSprite,
 	translateCoordinatesToTile,
@@ -299,6 +299,15 @@ const transferResource = (state, action) => {
 	return state;
 };
 
+const componentChanged = (state, action) => {
+	const { componentType, data, entityId, field } = action.payload;
+	const entity = engine.getEntity(entityId);
+	const componentClass = getComponentClassByType(componentType);
+	const component = entity.getComponent(componentClass);
+	component[ field ] = data;
+	return state;
+};
+
 const setSelectedEntity = (state, action) => {
 	return { ...state, selectedEntityId: action.payload, attachSourceSlot: null };
 };
@@ -340,6 +349,7 @@ export const gameReducer = createReducer(initialState, {
   [ GAME_ACTIONS.ON_ATTACH_SOURCE_CLICKED]: makeSetter("attachSourceSlot"),
   [ GAME_ACTIONS.ATTACH_SOURCE ]: attachSource,
 	[ GAME_ACTIONS.TRANSFER_RESOURCE ]: transferResource,
+	[ GAME_ACTIONS.COMPONENT_CHANGED]: componentChanged,
   [ KINGDOM_ACTIONS.SET_SELECTED_CONSTRUCTABLE_BUILDING ]: setConstructableBuilding,
   [ APP_ACTIONS.LOGOUT ]: logout,
 });

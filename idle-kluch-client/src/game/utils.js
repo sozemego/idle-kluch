@@ -5,8 +5,9 @@
 import Phaser from "phaser";
 import _ from 'lodash';
 
-import { IN_GAME_FONT_SIZE, TILE_SIZE } from "./constants";
+import { COMPONENT_TYPES, IN_GAME_FONT_SIZE, TILE_SIZE } from "./constants";
 import { PhysicsComponent } from "../ecs/components/PhysicsComponent";
+import { ResourceHarvesterComponent } from "../ecs/components/ResourceHarvesterComponent";
 
 /**
  * Centers camera at a given point.
@@ -165,4 +166,10 @@ export const spawnJumpingSprite = (game, name, point, text = "") => {
 		killSprite(sprite);
 		killSprite(text);
 	});
+};
+
+export const getComponentClassByType = (componentType) => {
+	if(componentType === COMPONENT_TYPES.RESOURCE_HARVESTER) {
+		return ResourceHarvesterComponent;
+	}
 };

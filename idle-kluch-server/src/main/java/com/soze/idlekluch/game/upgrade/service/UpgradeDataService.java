@@ -22,7 +22,7 @@ public class UpgradeDataService {
   }
 
   public Optional<Upgrade> getUpgrade(final UpgradeType type, final int level) {
-    final List<Upgrade> upgradeCosts = (ArrayList) upgrades.get(type);
+    final List<Upgrade> upgradeCosts = (List) upgrades.get(type);
     if (upgradeCosts.size() > level - 1) {
       return Optional.of(upgradeCosts.get(level - 1));
     }
