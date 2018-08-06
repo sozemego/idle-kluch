@@ -67,15 +67,6 @@ public class HarvesterSpeedUpgradeService {
     final float nextUnitsPerMinute = (float) Math.floor(harvesterComponent.getUnitsPerMinute() * (float) upgrade.getData() * 100) / 100;
     harvesterComponent.setUnitsPerMinute(nextUnitsPerMinute);
     harvesterComponent.setSpeedLevel(level + 1);
-//    webSocketMessagingService.send(
-//      Routes.GAME_OUTBOUND,
-//      new ComponentChangedMessage(
-//        entityId.toString(),
-//        RESOURCE_HARVESTER,
-//        "unitsPerMinute",
-//        harvesterComponent.getUnitsPerMinute()
-//      )
-//    );
   }
 
 }
