@@ -24,7 +24,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
   private List<ResourceSourceSlot> slots = new ArrayList<>();
 
   @Column(name = "speed_level")
-  private int speedLevel = 1;
+  private int speedLevel;
 
   public ResourceHarvesterComponent() {
     super(ComponentType.RESOURCE_HARVESTER);
@@ -34,13 +34,15 @@ public class ResourceHarvesterComponent extends BaseComponent {
                                     final int radius,
                                     final float unitsPerMinute,
                                     final int sourceSlots,
-                                    final List<ResourceSourceSlot> slots) {
+                                    final List<ResourceSourceSlot> slots,
+                                    final int speedLevel) {
     this();
     this.resourceId = Objects.requireNonNull(resourceId);
     this.radius = radius;
     this.unitsPerMinute = unitsPerMinute;
     this.sourceSlots = sourceSlots;
     this.slots = Objects.requireNonNull(slots);
+    this.speedLevel = speedLevel;
     fillSlots(slots);
   }
 
@@ -130,7 +132,8 @@ public class ResourceHarvesterComponent extends BaseComponent {
       getRadius(),
       getUnitsPerMinute(),
       getSourceSlots(),
-      getSlots()
+      getSlots(),
+      getSpeedLevel()
     );
   }
 
