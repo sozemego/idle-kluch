@@ -208,7 +208,7 @@ INSERT INTO entity (
     '{"idleBucks": 125}',
     null,
     '{"capacity": 20, "resources": []}',
-    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "radius": 256, "unitsPerMinute": 5, "sourceSlots": 1, "slots": [], "speedLevel": 1}'
+    '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "radius": 256, "unitsPerMinute": 5, "sourceSlots": 1, "slots": []}'
   )
 ;
 
@@ -227,6 +227,6 @@ INSERT INTO entity (
     '{}',
     '{"idleBucks": 375}',
     '{"capacity": 50, "resources": []}',
-    '{"secondsPerUnit": 6, "speedLevel": 1}'
+    '{"secondsPerUnit": 6}'
   )
 ;
