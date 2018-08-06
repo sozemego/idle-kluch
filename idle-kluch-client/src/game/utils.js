@@ -5,7 +5,7 @@
 import Phaser from "phaser";
 import _ from 'lodash';
 
-import { COMPONENT_TYPES, IN_GAME_FONT_SIZE, TILE_SIZE } from "./constants";
+import { COMPONENT_TYPES, IN_GAME_FONT_SIZE, TILE_SIZE, UPGRADE_TYPE } from "./constants";
 import { PhysicsComponent } from "../ecs/components/PhysicsComponent";
 import { ResourceHarvesterComponent } from "../ecs/components/ResourceHarvesterComponent";
 
@@ -169,7 +169,13 @@ export const spawnJumpingSprite = (game, name, point, text = "") => {
 };
 
 export const getComponentClassByType = (componentType) => {
-	if(componentType === COMPONENT_TYPES.RESOURCE_HARVESTER) {
+	if (componentType === COMPONENT_TYPES.RESOURCE_HARVESTER) {
 		return ResourceHarvesterComponent;
+	}
+};
+
+export const getComponentByUpgradeType = (upgradeType) => {
+	if (upgradeType === UPGRADE_TYPE.HARVESTER_SPEED) {
+		return COMPONENT_TYPES.RESOURCE_HARVESTER;
 	}
 };

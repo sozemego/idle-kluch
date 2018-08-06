@@ -7,15 +7,16 @@ import {
 	getConstructableBuildingsData,
 	getCost,
 	getKingdom,
-	getSelectedConstructableBuilding
+	getSelectedConstructableBuilding, getUpgrades
 } from "../kingdom/selectors";
 import { idleBucksChanged, setSelectedConstructableBuilding } from "../kingdom/actions";
 import { checkRectangleIntersectsCollidableEntities, doesContain, findComponent } from "../ecs/utils";
 import { getAttachSourceSlot, getEngine, getSelectedEntityId } from "./selectors";
-import { COMPONENT_TYPES } from "./constants";
+import { COMPONENT_TYPES, UPGRADE_TYPE } from "./constants";
 import { default as undoActions } from "./UndoActions";
 import { ResourceHarvesterComponent } from "../ecs/components/ResourceHarvesterComponent";
 import { ResourceSourceComponent } from "../ecs/components/ResourceSourceComponent";
+import { getComponentByUpgradeType, getComponentClassByType } from "./utils";
 
 export const ADD_TILES = "ADD_TILES";
 export const addTiles = makePayloadActionCreator(ADD_TILES);
@@ -165,12 +166,40 @@ const getSelectedEntity = (state) => {
 	return getEngine(state).getEntityById(selectedEntityId);
 };
 
-export const onUpgradeComponentClicked = (entityId, upgradeType) => {
+export const onUpgradeComponentClicked = (entityId, upgradeType, level) => {
 	return (dispatch, getState) => {
 
+		const upgrades = getUpgrades(getState);
+		const engine = getEngine(getState);
 
+		let field = null;
+		let data = null;
+		let previousData = null;
+		let cost = null;
 
-		return gameService.upgradeComponent(entityId, upgradeType);
+		const componentType = getComponentByUpgradeType(upgradeType);
+		const entity = engine.getEntity(entityId);
+
+		if (componentType === COMPONENT_TYPES.RESOURCE_HARVESTER) {
+			const component = entity.getComponent(ResourceHarvesterComponent);
+			if (upgradeType === UPGRADE_TYPE.HARVESTER_SPEED) {
+				const upgrade = upgrades[upgradeType][level - 1];
+				cost = upgrade.cost;
+				field = "unitsPerMinute";
+				previousData = component.getUnitsPerMinute();
+				data = Math.floor(previousData * upgrade.data * 100) / 100;
+			}
+		}
+
+		const messageId = gameService.upgradeComponent(entityId, upgradeType);
+		dispatch(componentChanged({ entityId, componentType, field, data }));
+		dispatch(componentChanged({ entityId, componentType, field: "speedLevel", data: level + 1}));
+		dispatch(idleBucksChanged(-cost));
+		undoActions.addAction(messageId, () => {
+			dispatch(componentChanged({ entityId, componentType, field, previousData }));
+			dispatch(componentChanged({ entityId, componentType, field: "speedLevel", data: level}));
+			dispatch(idleBucksChanged(cost));
+		});
 
 	};
 };

@@ -10,7 +10,7 @@ import { ResourceSourceComponent } from "../../../ecs/components/ResourceSourceC
 import { ResourceStorageComponent } from "../../../ecs/components/ResourceStorageComponent";
 import { Avatar, Chip } from "@material-ui/core/es/index";
 import { GraphicsComponent } from "../../../ecs/components/GraphicsComponent";
-import { IMAGES } from "../../constants";
+import { IMAGES, UPGRADE_TYPE } from "../../constants";
 import { ResourceSellerComponent } from "../../../ecs/components/ResourceSellerComponent";
 import { UpgradeButton } from "../../../components/UpgradeButton/UpgradeButton";
 
@@ -56,7 +56,6 @@ export class SelectedEntityInfo extends Component {
 
   getHarvestingComponent = () => {
     const { selectedEntity, getResourceById, onUpgradeComponentClicked, upgrades } = this.props
-    console.log(upgrades);
     const { getResourceSlotIcons } = this;
     const harvester = selectedEntity.getComponent(ResourceHarvesterComponent);
     if (!harvester) {
@@ -70,7 +69,7 @@ export class SelectedEntityInfo extends Component {
     const harvestingStats = this.getHarvestingStats();
     const { unitsPerMinute, bonus, baseUnitsPerMinute } = harvestingStats;
     const speedLevel = harvester.speedLevel || 1;
-    const upgrade = upgrades["HARVESTER_SPEED"][speedLevel - 1];
+    const upgrade = upgrades[UPGRADE_TYPE.HARVESTER_SPEED][speedLevel - 1];
 
     return (
       <div className={style.section}>
@@ -96,7 +95,7 @@ export class SelectedEntityInfo extends Component {
         </div>
         <div>
           <div>{`Speed level ${speedLevel}`}</div>
-          {upgrade && <UpgradeButton onClick={() => onUpgradeComponentClicked(selectedEntity.getId(), "HARVESTER_SPEED")}
+          {upgrade && <UpgradeButton onClick={() => onUpgradeComponentClicked(selectedEntity.getId(), UPGRADE_TYPE.HARVESTER_SPEED, speedLevel)}
                                      cost={upgrade.cost}
                                      text={`Upgrade speed +${this.getUpgradeSpeedPercentage(upgrade)}%`}
           />}

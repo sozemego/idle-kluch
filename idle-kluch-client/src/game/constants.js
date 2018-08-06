@@ -29,6 +29,10 @@ export const MESSAGE_TYPE = {
 	UPGRADES: "UPGRADES",
 };
 
+export const UPGRADE_TYPE = {
+	HARVESTER_SPEED: "HARVESTER_SPEED",
+};
+
 /**
  * Size, in pixels, of one side of the tile.
  * Tiles are squares.
