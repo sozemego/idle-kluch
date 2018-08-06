@@ -25,8 +25,9 @@ Upgrades
     Storage component - increase transport speed
     Storage component - increase number of routes
     Storage component - increase number of resources transported at once
-    Harvester component - increase harvesting speed
+#    Harvester component - increase harvesting speed
     Harvester component - increase number of resource sources possible
+    Harvester component - increase number of resources harvested at once
     Seller component - increase selling speed
     Seller component - get better prices
 
