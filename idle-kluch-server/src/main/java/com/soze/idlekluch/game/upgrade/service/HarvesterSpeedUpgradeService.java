@@ -4,8 +4,8 @@ import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
+import com.soze.idlekluch.game.exception.GameException;
 import com.soze.idlekluch.game.exception.NotEnoughIdleBucksException;
-import com.soze.idlekluch.game.service.EntityService;
 import com.soze.idlekluch.game.service.GameEngine;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.service.KingdomService;
@@ -13,38 +13,22 @@ import com.soze.klecs.entity.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Service
 public class HarvesterSpeedUpgradeService {
 
-  private final EntityService entityService;
   private final GameEngine gameEngine;
   private final KingdomService kingdomService;
-
-  private final List<Integer> costs = new ArrayList<>();
+  private final UpgradeCostService upgradeCostService;
 
   @Autowired
-  public HarvesterSpeedUpgradeService(final EntityService entityService,
-                                      final GameEngine gameEngine,
-                                      final KingdomService kingdomService) {
-    this.entityService = Objects.requireNonNull(entityService);
+  public HarvesterSpeedUpgradeService(final GameEngine gameEngine,
+                                      final KingdomService kingdomService,
+                                      final UpgradeCostService upgradeCostService) {
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.kingdomService = Objects.requireNonNull(kingdomService);
-  }
-
-  @PostConstruct
-  public void setup() {
-    costs.add(250);
-    costs.add(500);
-    costs.add(1000);
-    costs.add(2000);
-    costs.add(4000);
-    costs.add(8000);
-    costs.add(16000);
-    costs.add(32000);
-    costs.add(64000);
+    this.upgradeCostService = Objects.requireNonNull(upgradeCostService);
   }
 
   public void upgradeHarvesterSpeed(final UUID messageId, final EntityUUID entityId) {
@@ -59,7 +43,11 @@ public class HarvesterSpeedUpgradeService {
 
     final ResourceHarvesterComponent harvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
     final int level = harvesterComponent.getSpeedLevel();
-    final int cost = costs.get(level - 1);
+    final int cost = upgradeCostService
+                       .getUpgradeCost(UpgradeService.UpgradeType.HARVESTER_SPEED, level)
+                       .orElseThrow(() -> {
+                         throw new GameException(messageId);
+                       });
 
     final OwnershipComponent ownershipComponent = entity.getComponent(OwnershipComponent.class);
     final Kingdom kingdom = kingdomService.getKingdom(ownershipComponent.getOwnerId()).get();
@@ -73,7 +61,6 @@ public class HarvesterSpeedUpgradeService {
 
     harvesterComponent.setUnitsPerMinute(harvesterComponent.getUnitsPerMinute() * getHarvestingSpeedChange(level + 1));
     harvesterComponent.setSpeedLevel(level + 1);
-
   }
 
   private float getHarvestingSpeedChange(final int nextLevel) {
