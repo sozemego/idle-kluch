@@ -2,6 +2,7 @@ package com.soze.idlekluch.game.engine.systems;
 
 import com.soze.idlekluch.core.routes.Routes;
 import com.soze.idlekluch.core.utils.jpa.EntityUUID;
+import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.components.ResourceSellerComponent;
 import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.engine.components.resourcetransport.ResourceRoute;
@@ -14,6 +15,7 @@ import com.soze.klecs.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.acl.Owner;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,11 @@ public class ResourceStorageSystem extends BaseEntitySystem {
       getSellers()
         .stream()
         .filter(seller -> !seller.getId().equals(entity.getId()))
+        .filter(seller -> {
+          final OwnershipComponent sellerOwnership = seller.getComponent(OwnershipComponent.class);
+          final OwnershipComponent sellingOwnership = entity.getComponent(OwnershipComponent.class);
+          return sellerOwnership.getOwnerId().equals(sellingOwnership.getOwnerId());
+        })
         .filter(seller -> {
           final ResourceStorageComponent sellerStorage = seller.getComponent(ResourceStorageComponent.class);
           return sellerStorage.hasRemainingCapacity();
