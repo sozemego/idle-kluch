@@ -18,10 +18,8 @@ public class ResourceStorageComponent extends BaseComponent {
   @Type(type = "jsonb")
   private List<Resource> resources = new ArrayList<>();
 
-  @Transient
   private final List<ResourceRoute> routes = new ArrayList<>();
 
-  @Transient
   private int maxRoutes = 20;
 
   public ResourceStorageComponent() {
@@ -88,6 +86,7 @@ public class ResourceStorageComponent extends BaseComponent {
     this.routes.add(resourceRoute);
   }
 
+  @Transient
   public List<ResourceRoute> getRoutes() {
     return this.routes;
   }
@@ -96,6 +95,7 @@ public class ResourceStorageComponent extends BaseComponent {
     this.routes.remove(resourceRoute);
   }
 
+  @Transient
   public int getMaxRoutes() {
     return maxRoutes;
   }

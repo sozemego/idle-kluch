@@ -45,7 +45,7 @@ public class UpgradeRepositoryImpl implements UpgradeRepository {
       em.merge(upgradeEntity);
     } else {
       final UpgradeEntity upgradeEntity = new UpgradeEntity();
-      upgradeEntity.setLevel(1);
+      upgradeEntity.setLevel(2);
       upgradeEntity.setEntityId(entityId);
       upgradeEntity.setUpgradeType(upgradeType.toString());
       em.persist(upgradeEntity);

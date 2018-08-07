@@ -17,14 +17,12 @@ public class ResourceHarvesterComponent extends BaseComponent {
   private float unitsPerMinute;
   private int sourceSlots;
 
-  @Transient
   private final HarvestingProgress harvestingProgress = new HarvestingProgress();
 
   @Type(type = "jsonb")
   private List<ResourceSourceSlot> slots = new ArrayList<>();
 
-  @Transient
-  private int speedLevel;
+  private int speedLevel = 1;
 
   public ResourceHarvesterComponent() {
     super(ComponentType.RESOURCE_HARVESTER);
@@ -74,6 +72,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
     this.unitsPerMinute = unitsPerMinute;
   }
 
+  @Transient
   public HarvestingProgress getHarvestingProgress() {
     return harvestingProgress;
   }
@@ -115,6 +114,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
     return this.slots;
   }
 
+  @Transient
   public int getSpeedLevel() {
     return speedLevel;
   }

@@ -56,6 +56,19 @@ public class UpgradeDataService {
     upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 7, 16000, 1.8f, harvestSpeedConsumer));
     upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 8, 32000, 1.8f, harvestSpeedConsumer));
     upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 9, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 10, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 11, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 12, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 13, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 14, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 15, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 16, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 17, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 18, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 19, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 20, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 21, 64000, 2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 22, 64000, 2f, harvestSpeedConsumer));
   }
 
   private BiConsumer<Entity, Object> getHarvestSpeedConsumer() {
@@ -79,6 +92,17 @@ public class UpgradeDataService {
     upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 7, baseCost * 64, 1.75f, sellingSpeedConsumer));
     upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 8, baseCost * 256, 1.9f, sellingSpeedConsumer));
     upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 9, baseCost * 1000, 2f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 10, baseCost * 1000, 2f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 11, baseCost * 2000, 2f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 12, baseCost * 3000, 2f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 13, baseCost * 4000, 2f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 14, baseCost * 5000, 2f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 15, baseCost * 6000, 2f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 16, baseCost * 7000, 2f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 17, baseCost * 8000, 2f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 18, baseCost * 9000, 2f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 19, baseCost * 10000, 2f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 20, baseCost * 100000, 2f, sellingSpeedConsumer));
   }
 
   private BiConsumer<Entity, Object> getSellingSpeedConsumer() {

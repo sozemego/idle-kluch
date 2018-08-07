@@ -11,14 +11,11 @@ public class ResourceSellerComponent extends BaseComponent {
 
   private float secondsPerUnit;
 
-  @Transient
   private float sellingProgress;
 
-  @Transient
   private Resource resourceBeingSold;
 
-  @Transient
-  private int speedLevel;
+  private int speedLevel = 1;
 
   public ResourceSellerComponent() {
     super(ComponentType.SELLER);
@@ -37,6 +34,7 @@ public class ResourceSellerComponent extends BaseComponent {
     this.secondsPerUnit = secondsPerUnit;
   }
 
+  @Transient
   public float getSellingProgress() {
     return sellingProgress;
   }
@@ -50,6 +48,7 @@ public class ResourceSellerComponent extends BaseComponent {
     return MathUtils.equals(getSellingProgress(), 1f, 0.01f);
   }
 
+  @Transient
   public Resource getResourceBeingSold() {
     return resourceBeingSold;
   }
@@ -58,6 +57,7 @@ public class ResourceSellerComponent extends BaseComponent {
     this.resourceBeingSold = resourceBeingSold;
   }
 
+  @Transient
   public int getSpeedLevel() {
     return speedLevel;
   }
