@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -46,21 +47,22 @@ public class UpgradeDataService {
   }
 
   private void populateHarvesterSpeed() {
-    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 1, 250, getHarvestSpeedConsumer(1.2f)));
-    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 2, 500, getHarvestSpeedConsumer(1.2f)));
-    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 3, 1000, getHarvestSpeedConsumer(1.4f)));
-    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 4, 2000, getHarvestSpeedConsumer(1.4f)));
-    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 5, 4000, getHarvestSpeedConsumer(1.6f)));
-    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 6, 8000, getHarvestSpeedConsumer(1.6f)));
-    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 7, 16000, getHarvestSpeedConsumer(1.8f)));
-    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 8, 32000, getHarvestSpeedConsumer(1.8f)));
-    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 9, 64000, getHarvestSpeedConsumer(2f)));
+    final BiConsumer<Entity, Object> harvestSpeedConsumer = getHarvestSpeedConsumer();
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 1, 250, 1.2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 2, 500, 1.2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 3, 1000, 1.2f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 4, 2000, 1.4f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 5, 4000, 1.6f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 6, 8000, 1.6f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 7, 16000, 1.8f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 8, 32000, 1.8f, harvestSpeedConsumer));
+    upgrades.put(UpgradeType.HARVESTER_SPEED, new Upgrade(UpgradeType.HARVESTER_SPEED, 9, 64000, 2f, harvestSpeedConsumer));
   }
 
-  private Consumer<Entity> getHarvestSpeedConsumer(final float multiplier) {
-    return entity -> {
+  private BiConsumer<Entity, Object> getHarvestSpeedConsumer() {
+    return (entity, data) -> {
       final ResourceHarvesterComponent harvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
-      final float nextUnitsPerMinute = (float) Math.floor((harvesterComponent.getUnitsPerMinute() * multiplier) * 100) / 100;
+      final float nextUnitsPerMinute = (float) Math.floor((harvesterComponent.getUnitsPerMinute() * (float) data) * 100) / 100;
       harvesterComponent.setUnitsPerMinute(nextUnitsPerMinute);
       harvesterComponent.setSpeedLevel(harvesterComponent.getSpeedLevel() + 1);
     };
@@ -68,21 +70,22 @@ public class UpgradeDataService {
 
   private void populateSellingSpeed() {
     final int baseCost = 1000;
-    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 1, baseCost, getSellingSpeedConsumer(1.5f)));
-    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 2, baseCost * 2, getSellingSpeedConsumer(1.5f)));
-    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 3, baseCost * 4, getSellingSpeedConsumer(1.5f)));
-    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 4, baseCost * 8, getSellingSpeedConsumer(1.5f)));
-    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 5, baseCost * 16, getSellingSpeedConsumer(1.5f)));
-    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 6, baseCost * 32, getSellingSpeedConsumer(1.5f)));
-    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 7, baseCost * 64, getSellingSpeedConsumer(1.5f)));
-    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 8, baseCost * 256, getSellingSpeedConsumer(1.5f)));
-    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 9, baseCost * 1000, getSellingSpeedConsumer(1.5f)));
+    final BiConsumer<Entity, Object> sellingSpeedConsumer = getSellingSpeedConsumer();
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 1, baseCost * 1, 1.5f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 2, baseCost * 2, 1.5f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 3, baseCost * 4, 1.5f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 4, baseCost * 8, 1.5f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 5, baseCost * 16, 1.75f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 6, baseCost * 32, 1.75f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 7, baseCost * 64, 1.75f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 8, baseCost * 256, 1.9f, sellingSpeedConsumer));
+    upgrades.put(UpgradeType.SELLING_SPEED, new Upgrade(UpgradeType.SELLING_SPEED, 9, baseCost * 1000, 2f, sellingSpeedConsumer));
   }
 
-  private Consumer<Entity> getSellingSpeedConsumer(final float multiplier) {
-    return entity -> {
+  private BiConsumer<Entity, Object> getSellingSpeedConsumer() {
+    return (entity, data) -> {
       final ResourceSellerComponent seller = entity.getComponent(ResourceSellerComponent.class);
-      final float nextSecondsPerUnit = (float) Math.floor(seller.getSecondsPerUnit() * (1 / multiplier) * 100) / 100;
+      final float nextSecondsPerUnit = (float) Math.floor(seller.getSecondsPerUnit() * (1 / (float) data) * 100) / 100;
       seller.setSecondsPerUnit(nextSecondsPerUnit);
       seller.setSpeedLevel(seller.getSpeedLevel() + 1);
     };

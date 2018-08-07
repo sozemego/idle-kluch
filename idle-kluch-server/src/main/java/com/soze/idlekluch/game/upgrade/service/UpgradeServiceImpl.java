@@ -65,7 +65,7 @@ public class UpgradeServiceImpl implements UpgradeService {
       throw new NotEnoughIdleBucksException(message.getMessageId());
     }
 
-    upgrade.getUpdater().accept(entity);
+    upgrade.upgrade(entity);
 
     kingdom.setIdleBucks(kingdom.getIdleBucks() - upgrade.getCost());
     kingdomService.updateKingdom(kingdom);
