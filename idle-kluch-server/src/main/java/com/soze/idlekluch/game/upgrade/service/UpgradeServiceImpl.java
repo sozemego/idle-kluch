@@ -1,8 +1,13 @@
 package com.soze.idlekluch.game.upgrade.service;
 
 import com.soze.idlekluch.core.aop.annotations.Profiled;
+import com.soze.idlekluch.core.event.AppStartedEvent;
 import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
+import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
+import com.soze.idlekluch.game.engine.components.ResourceSellerComponent;
+import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
+import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.exception.GameException;
 import com.soze.idlekluch.game.exception.InvalidOwnerException;
 import com.soze.idlekluch.game.exception.NotEnoughIdleBucksException;
@@ -13,6 +18,8 @@ import com.soze.idlekluch.game.upgrade.repository.UpgradeRepository;
 import com.soze.idlekluch.kingdom.entity.Kingdom;
 import com.soze.idlekluch.kingdom.service.KingdomService;
 import com.soze.klecs.entity.Entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +29,8 @@ import java.util.Objects;
 
 @Service
 public class UpgradeServiceImpl implements UpgradeService {
+
+  private static final Logger LOG = LoggerFactory.getLogger(UpgradeServiceImpl.class);
 
   private final KingdomService kingdomService;
   private final GameEngine gameEngine;
@@ -77,6 +86,11 @@ public class UpgradeServiceImpl implements UpgradeService {
     return upgradeDataService.getUpgrades();
   }
 
+  @Override
+  public void handleAppStartedEvent(final AppStartedEvent event) {
+    updateUpgradeLevels();
+  }
+
   private Upgrade getUpgrade(final UpgradeComponentMessage message) {
     final int currentLevel = upgradeRepository.getUpgradeLevel(message.getEntityId(), message.getUpgradeType());
     return upgradeDataService
@@ -84,6 +98,23 @@ public class UpgradeServiceImpl implements UpgradeService {
              .<GameException>orElseThrow(() -> {
                throw new GameException(message.getMessageId());
              });
+  }
+
+  private void updateUpgradeLevels() {
+    LOG.info("Updating upgrade levels");
+    gameEngine
+      .getEntitiesByNode(Nodes.HARVESTER)
+      .forEach(entity -> {
+        final ResourceHarvesterComponent harvesterComponent = entity.getComponent(ResourceHarvesterComponent.class);
+        harvesterComponent.setSpeedLevel(upgradeRepository.getUpgradeLevel(EntityUtils.getId(entity), UpgradeType.HARVESTER_SPEED));
+      });
+
+    gameEngine
+      .getEntitiesByNode(Nodes.SELLER)
+      .forEach(entity -> {
+        final ResourceSellerComponent sellerComponent = entity.getComponent(ResourceSellerComponent.class);
+        sellerComponent.setSpeedLevel(upgradeRepository.getUpgradeLevel(EntityUtils.getId(entity), UpgradeType.SELLING_SPEED));
+      });
   }
 
 }

@@ -5,6 +5,7 @@ import com.soze.idlekluch.core.utils.jpa.EntityUUID;
 import com.soze.klecs.entity.Entity;
 import com.soze.klecs.node.Node;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 
 import java.util.Collection;
 import java.util.List;
@@ -69,6 +70,7 @@ public interface GameEngine {
   Map<EntityUUID, Entity> getChangedEntities();
 
   @EventListener
+  @Order(2)
   void handleAppStartedEvent(final AppStartedEvent event);
 
 }

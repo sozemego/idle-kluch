@@ -23,6 +23,7 @@ public class UpgradeRepositoryImpl implements UpgradeRepository {
     final Query query = em.createQuery("SELECT u FROM UpgradeEntity u WHERE u.upgradeType = :upgradeType AND u.entityId = :entityId");
     query.setParameter("upgradeType", upgradeType.toString());
     query.setParameter("entityId", entityId);
+    query.setMaxResults(1);
     final Optional<UpgradeEntity> upgrade = QueryUtils.getOptional(query, UpgradeEntity.class);
     if (upgrade.isPresent()) {
       return upgrade.get().getLevel();
