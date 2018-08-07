@@ -23,7 +23,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
   @Type(type = "jsonb")
   private List<ResourceSourceSlot> slots = new ArrayList<>();
 
-  @Column(name = "speed_level")
+  @Transient
   private int speedLevel;
 
   public ResourceHarvesterComponent() {
@@ -34,15 +34,13 @@ public class ResourceHarvesterComponent extends BaseComponent {
                                     final int radius,
                                     final float unitsPerMinute,
                                     final int sourceSlots,
-                                    final List<ResourceSourceSlot> slots,
-                                    final int speedLevel) {
+                                    final List<ResourceSourceSlot> slots) {
     this();
     this.resourceId = Objects.requireNonNull(resourceId);
     this.radius = radius;
     this.unitsPerMinute = unitsPerMinute;
     this.sourceSlots = sourceSlots;
     this.slots = Objects.requireNonNull(slots);
-    this.speedLevel = speedLevel;
     fillSlots(slots);
   }
 
@@ -132,8 +130,7 @@ public class ResourceHarvesterComponent extends BaseComponent {
       getRadius(),
       getUnitsPerMinute(),
       getSourceSlots(),
-      getSlots(),
-      getSpeedLevel()
+      getSlots()
     );
   }
 

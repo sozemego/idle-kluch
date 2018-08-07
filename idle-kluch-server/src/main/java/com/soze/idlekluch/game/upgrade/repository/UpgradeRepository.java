@@ -6,5 +6,6 @@ import com.soze.idlekluch.game.upgrade.service.UpgradeService.UpgradeType;
 public interface UpgradeRepository {
 
   int getUpgradeLevel(final EntityUUID entityId, final UpgradeType upgradeType);
+  void increaseUpgradeLevel(final EntityUUID entityUUID, final UpgradeType upgradeType);
 
 }

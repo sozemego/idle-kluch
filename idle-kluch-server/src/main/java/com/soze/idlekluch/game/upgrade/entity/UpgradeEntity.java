@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class UpgradeEntity {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
   @AttributeOverride(name = "id", column = @Column(name = "entity_id"))

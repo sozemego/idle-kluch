@@ -17,17 +17,16 @@ public class ResourceSellerComponent extends BaseComponent {
   @Transient
   private Resource resourceBeingSold;
 
-  @Column(name = "speed_level")
+  @Transient
   private int speedLevel;
 
   public ResourceSellerComponent() {
     super(ComponentType.SELLER);
   }
 
-  public ResourceSellerComponent(final float secondsPerUnit, final int speedLevel) {
+  public ResourceSellerComponent(final float secondsPerUnit) {
     this();
     this.secondsPerUnit = secondsPerUnit;
-    this.speedLevel = speedLevel;
   }
 
   public float getSecondsPerUnit() {
@@ -80,8 +79,7 @@ public class ResourceSellerComponent extends BaseComponent {
   @Override
   public BaseComponent copy() {
     return new ResourceSellerComponent(
-      getSecondsPerUnit(),
-      getSpeedLevel()
+      getSecondsPerUnit()
     );
   }
 

@@ -2,6 +2,7 @@ package com.soze.idlekluch.core.aop;
 
 import com.google.common.base.Stopwatch;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -38,6 +39,12 @@ public class ProfilingAspect {
     );
 
     return returnValue;
+  }
+
+  @AfterThrowing(pointcut = "profiledMethodExecution()", throwing = "ex")
+  public void afterThrowing(final Throwable ex) throws Throwable {
+    ex.printStackTrace();
+    throw ex;
   }
 
 }

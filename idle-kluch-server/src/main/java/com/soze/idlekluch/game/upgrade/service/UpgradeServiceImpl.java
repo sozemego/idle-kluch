@@ -66,6 +66,7 @@ public class UpgradeServiceImpl implements UpgradeService {
     }
 
     upgrade.upgrade(entity);
+    upgradeRepository.increaseUpgradeLevel(message.getEntityId(), message.getUpgradeType());
 
     kingdom.setIdleBucks(kingdom.getIdleBucks() - upgrade.getCost());
     kingdomService.updateKingdom(kingdom);
