@@ -23,22 +23,16 @@ import java.util.Objects;
 @Service
 public class UpgradeServiceImpl implements UpgradeService {
 
-  private final HarvesterSpeedUpgradeService harvesterSpeedUpgradeService;
-  private final SellingSpeedUpgradeService sellingSpeedUpgradeService;
   private final KingdomService kingdomService;
   private final GameEngine gameEngine;
   private final UpgradeDataService upgradeDataService;
   private final UpgradeRepository upgradeRepository;
 
   @Autowired
-  public UpgradeServiceImpl(final HarvesterSpeedUpgradeService harvesterSpeedUpgradeService,
-                            final SellingSpeedUpgradeService sellingSpeedUpgradeService,
-                            final KingdomService kingdomService,
+  public UpgradeServiceImpl(final KingdomService kingdomService,
                             final GameEngine gameEngine,
                             final UpgradeDataService upgradeDataService,
                             final UpgradeRepository upgradeRepository) {
-    this.harvesterSpeedUpgradeService = Objects.requireNonNull(harvesterSpeedUpgradeService);
-    this.sellingSpeedUpgradeService = sellingSpeedUpgradeService;
     this.kingdomService = Objects.requireNonNull(kingdomService);
     this.gameEngine = Objects.requireNonNull(gameEngine);
     this.upgradeDataService = Objects.requireNonNull(upgradeDataService);
