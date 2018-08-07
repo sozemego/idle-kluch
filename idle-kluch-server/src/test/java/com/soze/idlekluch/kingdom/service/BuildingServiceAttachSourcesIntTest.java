@@ -86,7 +86,7 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
   public void testAttachResourceSourceSourceDoesNotExist() {
     final EntityUUID buildingId = EntityUUID.randomId();
     final Entity building = gameEngine.createEntityWithName(buildingId, "Name");
-    building.addComponent(new ResourceHarvesterComponent(EntityUUID.randomId(), 12, 5, 1, new ArrayList<>(), 1));
+    building.addComponent(new ResourceHarvesterComponent(EntityUUID.randomId(), 12, 5, 1, new ArrayList<>()));
     gameEngine.addEntity(building);
     buildingService.attachResourceSource("", getForm(buildingId, EntityUUID.randomId(), 1));
   }
@@ -95,7 +95,7 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
   public void testAttachResourceSourceWrongResource() {
     final EntityUUID buildingId = EntityUUID.randomId();
     final Entity building = gameEngine.createEntityWithName(buildingId, "Name");
-    building.addComponent(new ResourceHarvesterComponent(EntityUUID.randomId(), 12, 5, 1, new ArrayList<>(), 1));
+    building.addComponent(new ResourceHarvesterComponent(EntityUUID.randomId(), 12, 5, 1, new ArrayList<>()));
     gameEngine.addEntity(building);
 
     final Resource resource = resourceService.getResource("Wood").get();
@@ -110,7 +110,7 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
     final EntityUUID buildingId = EntityUUID.randomId();
     final Entity building = gameEngine.createEntityWithName(buildingId, "Name");
     final Resource resource = resourceService.getResource("Wood").get();
-    building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 12, 5, 1, new ArrayList<>(), 1));
+    building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 12, 5, 1, new ArrayList<>()));
     building.addComponent(new PhysicsComponent(0, 0, 50, 50));
     gameEngine.addEntity(building);
 
@@ -125,7 +125,7 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
     final EntityUUID buildingId = EntityUUID.randomId();
     final Entity building = gameEngine.createEntityWithName(buildingId, "Name");
     final Resource resource = resourceService.getResource("Wood").get();
-    building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 5000, 5, 1, new ArrayList<>(), 1));
+    building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 5000, 5, 1, new ArrayList<>()));
     building.addComponent(new PhysicsComponent(0, 0, 50, 50));
     gameEngine.addEntity(building);
 
@@ -141,7 +141,7 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
     final Entity building = gameEngine.createEntityWithName(buildingId, "Name");
 
     final Resource resource = resourceService.getResource("Wood").get();
-    building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 5000, 5, 1, new ArrayList<>(), 1));
+    building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 5000, 5, 1, new ArrayList<>()));
     building.addComponent(new PhysicsComponent(0, 0, 50, 50));
     gameEngine.addEntity(building);
 
@@ -162,7 +162,7 @@ public class BuildingServiceAttachSourcesIntTest extends IntAuthTest {
     final EntityUUID buildingId = EntityUUID.randomId();
     final Entity building = gameEngine.createEntityWithName(buildingId, "Name");
     final Resource resource = resourceService.getResource("Wood").get();
-    building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 5000, 5, 1, new ArrayList<>(), 1));
+    building.addComponent(new ResourceHarvesterComponent(resource.getResourceId(), 5000, 5, 1, new ArrayList<>()));
     building.addComponent(new OwnershipComponent(kingdom.getKingdomId()));
     gameEngine.addEntity(building);
 
