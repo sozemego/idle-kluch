@@ -236,5 +236,5 @@ CREATE TABLE upgrades (
   id SERIAL PRIMARY KEY,
   entity_id UUID NOT NULL,
   upgrade_type VARCHAR(32) NOT NULL,
-  level INT NOT NULL,
+  level INT NOT NULL
 );
