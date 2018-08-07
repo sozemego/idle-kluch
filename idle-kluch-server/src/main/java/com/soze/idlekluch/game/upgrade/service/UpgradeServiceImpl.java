@@ -78,9 +78,11 @@ public class UpgradeServiceImpl implements UpgradeService {
 
   private Upgrade getUpgrade(final UpgradeComponentMessage message) {
     final int currentLevel = upgradeRepository.getUpgradeLevel(message.getEntityId(), message.getUpgradeType());
-    return upgradeDataService.getUpgrade(message.getUpgradeType(), currentLevel).orElseThrow(() -> {
-      throw new GameException(message.getMessageId());
-    });
+    return upgradeDataService
+             .getUpgrade(message.getUpgradeType(), currentLevel)
+             .<GameException>orElseThrow(() -> {
+               throw new GameException(message.getMessageId());
+             });
   }
 
 }
