@@ -65,7 +65,7 @@ public class ResourceHarvesterSystemTest {
     resourceHarvesterComponent.setResourceId(resourceService.getResource("Wood").get().getResourceId());
     entity.addComponent(resourceHarvesterComponent);
 
-    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent(40);
+    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent(40, 30);
     entity.addComponent(resourceStorageComponent);
 
     gameEngine.addEntity(entity);
@@ -104,7 +104,7 @@ public class ResourceHarvesterSystemTest {
     resourceHarvesterComponent.setResourceId(resourceService.getResource("Wood").get().getResourceId());
     entity.addComponent(resourceHarvesterComponent);
 
-    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent(0);
+    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent(0, 30);
     entity.addComponent(resourceStorageComponent);
 
     gameEngine.addEntity(entity);
@@ -142,7 +142,7 @@ public class ResourceHarvesterSystemTest {
     resourceHarvesterComponent.setResourceId(resourceService.getResource("Wood").get().getResourceId());
     entity.addComponent(resourceHarvesterComponent);
 
-    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent(20);
+    ResourceStorageComponent resourceStorageComponent = new ResourceStorageComponent(20, 30);
     entity.addComponent(resourceStorageComponent);
 
     gameEngine.addEntity(entity);

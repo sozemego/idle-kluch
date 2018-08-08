@@ -179,7 +179,12 @@ const createComponent = (component) => {
 		);
 	}
 	if(componentType === COMPONENT_TYPES.RESOURCE_STORAGE) {
-		const storageComponent = new ResourceStorageComponent(component.capacity, component.routes);
+		const storageComponent = new ResourceStorageComponent(
+			component.capacity,
+			component.routes,
+			component.transportSpeed,
+			component.transportSpeedLevel
+		);
 		component.resources.forEach(resource => storageComponent.addResource(resource));
 		return storageComponent;
 	}

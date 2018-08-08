@@ -24,7 +24,7 @@ public interface UpgradeService {
   void handleAppStartedEvent(AppStartedEvent event);
 
   public enum UpgradeType {
-    HARVESTER_SPEED, SELLING_SPEED,
+    HARVESTER_SPEED, SELLING_SPEED, TRANSPORT_SPEED,
   }
 
 }

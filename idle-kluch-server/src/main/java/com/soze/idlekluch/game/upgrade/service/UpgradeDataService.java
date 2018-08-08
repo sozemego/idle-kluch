@@ -3,6 +3,7 @@ package com.soze.idlekluch.game.upgrade.service;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.soze.idlekluch.game.engine.components.ResourceSellerComponent;
+import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.upgrade.dto.Upgrade;
 import com.soze.idlekluch.game.upgrade.repository.UpgradeRepository;
@@ -31,6 +32,7 @@ public class UpgradeDataService {
   public void setup() {
     populateHarvesterSpeed();
     populateSellingSpeed();
+    populateTransportSpeed();
   }
 
   public Optional<Upgrade> getUpgrade(final UpgradeType type, final int level) {
@@ -111,6 +113,40 @@ public class UpgradeDataService {
       final float nextSecondsPerUnit = (float) Math.floor(seller.getSecondsPerUnit() * (1 / (float) data) * 100) / 100;
       seller.setSecondsPerUnit(nextSecondsPerUnit);
       seller.setSpeedLevel(seller.getSpeedLevel() + 1);
+    };
+  }
+
+  private void populateTransportSpeed() {
+    final int baseCost = 1000;
+    final BiConsumer<Entity, Object> transportSpeedConsumer = getTransportSpeedConsumer();
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 1, baseCost * 1, 1.1f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 2, baseCost * 2, 1.1f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 3, baseCost * 4, 1.1f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 4, baseCost * 8, 1.1f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 5, baseCost * 16, 1.2f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 6, baseCost * 32, 1.2f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 7, baseCost * 64, 1.2f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 8, baseCost * 256, 1.2f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 9, baseCost * 1000, 1.3f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 10, baseCost * 1000, 1.3f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 11, baseCost * 2000, 1.3f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 12, baseCost * 3000, 1.3f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 13, baseCost * 4000, 1.4f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 14, baseCost * 5000, 1.4f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 15, baseCost * 6000, 1.4f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 16, baseCost * 7000, 1.4f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 17, baseCost * 8000, 1.5f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 18, baseCost * 9000, 1.5f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 19, baseCost * 10000, 1.5f, transportSpeedConsumer));
+    upgrades.put(UpgradeType.TRANSPORT_SPEED, new Upgrade(UpgradeType.TRANSPORT_SPEED, 20, baseCost * 100000, 1.5f, transportSpeedConsumer));
+  }
+
+  private BiConsumer<Entity, Object> getTransportSpeedConsumer() {
+    return (entity, data) -> {
+      final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
+      final float nextSpeed = (float) Math.floor((storage.getTransportSpeed() * (float) data) * 100) / 100;
+      storage.setTransportSpeed(nextSpeed);
+      storage.setTransportSpeedLevel(storage.getTransportSpeedLevel() + 1);
     };
   }
 

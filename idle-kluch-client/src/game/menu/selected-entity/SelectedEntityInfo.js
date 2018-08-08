@@ -162,15 +162,17 @@ export class SelectedEntityInfo extends Component {
   };
 
   getStorageComponent = () => {
-    const { selectedEntity } = this.props;
+    const { selectedEntity, upgrades, onUpgradeComponentClicked } = this.props;
     const storageComponent = selectedEntity.getComponent(ResourceStorageComponent);
     if (!storageComponent) {
       return null;
     }
 
     const resourceCounts = this.getResourceCounts();
+		const speedLevel = storageComponent.transportSpeedLevel || 1;
+		const upgrade = upgrades[UPGRADE_TYPE.TRANSPORT_SPEED][speedLevel - 1];
 
-    return (
+		return (
       <div className={style.section}>
         <span>Storage</span>
         <div className={style.storage_container}>
@@ -191,6 +193,13 @@ export class SelectedEntityInfo extends Component {
             )
           })}
         </div>
+				<div>
+					<div>{`Transport speed level ${speedLevel}`}</div>
+					{upgrade && <UpgradeButton onClick={() => onUpgradeComponentClicked(selectedEntity.getId(), UPGRADE_TYPE.TRANSPORT_SPEED, speedLevel)}
+																		 cost={upgrade.cost}
+																		 text={`Upgrade transport speed +${this.getUpgradeSpeedPercentage(upgrade)}%`}
+					/>}
+				</div>
         <Divider className={style.divider}/>
       </div>
     );

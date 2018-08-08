@@ -18,6 +18,7 @@ import { ResourceHarvesterComponent } from "../ecs/components/ResourceHarvesterC
 import { ResourceSourceComponent } from "../ecs/components/ResourceSourceComponent";
 import { getComponentByUpgradeType, getComponentClassByType } from "./utils";
 import { ResourceSellerComponent } from "../ecs/components/ResourceSellerComponent";
+import { ResourceStorageComponent } from "../ecs/components/ResourceStorageComponent";
 
 export const ADD_TILES = "ADD_TILES";
 export const addTiles = makePayloadActionCreator(ADD_TILES);
@@ -177,6 +178,7 @@ export const onUpgradeComponentClicked = (entityId, upgradeType, level) => {
 		let data = null;
 		let previousData = null;
 		let cost = null;
+		let levelField = "speedLevel";
 
 		const componentType = getComponentByUpgradeType(upgradeType);
 		const entity = engine.getEntity(entityId);
@@ -203,13 +205,25 @@ export const onUpgradeComponentClicked = (entityId, upgradeType, level) => {
 			}
 		}
 
+		if (componentType === COMPONENT_TYPES.RESOURCE_STORAGE) {
+			const component = entity.getComponent(ResourceStorageComponent);
+			if (upgradeType === UPGRADE_TYPE.TRANSPORT_SPEED) {
+				const upgrade = upgrades[ upgradeType ][ level - 1 ];
+				cost = upgrade.cost;
+				field = "transportSpeed";
+				previousData = component.transportSpeed;
+				data = Math.floor(previousData * upgrade.data * 100) / 100;
+				levelField = "transportSpeedLevel";
+			}
+		}
+
 		const messageId = gameService.upgradeComponent(entityId, upgradeType);
 		dispatch(componentChanged({ entityId, componentType, field, data }));
-		dispatch(componentChanged({ entityId, componentType, field: "speedLevel", data: level + 1}));
+		dispatch(componentChanged({ entityId, componentType, field: levelField, data: level + 1}));
 		dispatch(idleBucksChanged(-cost));
 		undoActions.addAction(messageId, () => {
 			dispatch(componentChanged({ entityId, componentType, field, previousData }));
-			dispatch(componentChanged({ entityId, componentType, field: "speedLevel", data: level}));
+			dispatch(componentChanged({ entityId, componentType, field: levelField, data: level}));
 			dispatch(idleBucksChanged(cost));
 		});
 

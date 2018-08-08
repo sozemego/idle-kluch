@@ -21,7 +21,7 @@ Upgrades
     Each upgrade will have an increasing cost depending on the upgrade
   Components
     Storage component - increase storage by 5
-    Storage component - increase transport speed
+#    Storage component - increase transport speed
     Storage component - increase number of routes
     Storage component - increase number of resources transported at once
 #    Harvester component - increase harvesting speed

@@ -19,8 +19,6 @@ public class ResourceTransportSystem extends BaseEntitySystem {
 
   private static final Logger LOG = LoggerFactory.getLogger(ResourceTransportSystem.class);
 
-  private static final float METERS_PER_SECOND = 30f;
-
   public ResourceTransportSystem(final Engine engine,
                                  final Map<EntityUUID, Entity> changedEntities) {
     super(engine, changedEntities);
@@ -39,7 +37,7 @@ public class ResourceTransportSystem extends BaseEntitySystem {
       final Entity target = getEngine().getEntityById(route.getTo()).get();
       final float distance = EntityUtils.distance(entity, target);
       final float progress = route.getProgress();
-      final float distanceChange = METERS_PER_SECOND * delta;
+      final float distanceChange = storage.getTransportSpeed() * delta;
       final float progressChange = distanceChange / distance;
       final float nextProgress = progress + progressChange;
       route.setProgress(Math.min(1f, nextProgress));

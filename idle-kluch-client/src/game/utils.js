@@ -9,6 +9,7 @@ import { COMPONENT_TYPES, IN_GAME_FONT_SIZE, TILE_SIZE, UPGRADE_TYPE } from "./c
 import { PhysicsComponent } from "../ecs/components/PhysicsComponent";
 import { ResourceHarvesterComponent } from "../ecs/components/ResourceHarvesterComponent";
 import { ResourceSellerComponent } from "../ecs/components/ResourceSellerComponent";
+import { ResourceStorageComponent } from "../ecs/components/ResourceStorageComponent";
 
 /**
  * Centers camera at a given point.
@@ -176,6 +177,9 @@ export const getComponentClassByType = (componentType) => {
 	if (componentType === COMPONENT_TYPES.SELLER) {
 		return ResourceSellerComponent;
 	}
+	if (componentType === COMPONENT_TYPES.RESOURCE_STORAGE) {
+		return ResourceStorageComponent;
+	}
 };
 
 export const getComponentByUpgradeType = (upgradeType) => {
@@ -184,5 +188,8 @@ export const getComponentByUpgradeType = (upgradeType) => {
 	}
 	if (upgradeType === UPGRADE_TYPE.SELLING_SPEED) {
 		return COMPONENT_TYPES.SELLER;
+	}
+	if (upgradeType === UPGRADE_TYPE.TRANSPORT_SPEED) {
+		return COMPONENT_TYPES.RESOURCE_STORAGE;
 	}
 };

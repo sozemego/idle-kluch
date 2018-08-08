@@ -7,7 +7,6 @@ export class ResourceTransportSystem {
 	constructor(engine) {
 		this.engine = engine;
 		this.node = STORAGE_NODE;
-		this.metersPerSecond = 30;
 	}
 
 	getEngine() {
@@ -34,7 +33,7 @@ export class ResourceTransportSystem {
 				return;
 			}
 			const distanceBetweenEntities = distance(entity, target);
-			const distanceChange = this.metersPerSecond * delta;
+			const distanceChange = storage.transportSpeed * delta;
 			const progressChange = distanceChange / distanceBetweenEntities;
 			route.progress = Math.min(1, route.progress + progressChange);
 

@@ -6,6 +6,7 @@ import com.soze.idlekluch.core.exception.EntityDoesNotExistException;
 import com.soze.idlekluch.game.engine.EntityUtils;
 import com.soze.idlekluch.game.engine.components.OwnershipComponent;
 import com.soze.idlekluch.game.engine.components.ResourceSellerComponent;
+import com.soze.idlekluch.game.engine.components.ResourceStorageComponent;
 import com.soze.idlekluch.game.engine.components.resourceharvester.ResourceHarvesterComponent;
 import com.soze.idlekluch.game.engine.nodes.Nodes;
 import com.soze.idlekluch.game.exception.GameException;
@@ -114,6 +115,13 @@ public class UpgradeServiceImpl implements UpgradeService {
       .forEach(entity -> {
         final ResourceSellerComponent sellerComponent = entity.getComponent(ResourceSellerComponent.class);
         sellerComponent.setSpeedLevel(upgradeRepository.getUpgradeLevel(EntityUtils.getId(entity), UpgradeType.SELLING_SPEED));
+      });
+
+    gameEngine
+      .getEntitiesByNode(Nodes.STORAGE)
+      .forEach(entity -> {
+        final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
+        storage.setTransportSpeedLevel(upgradeRepository.getUpgradeLevel(EntityUtils.getId(entity), UpgradeType.TRANSPORT_SPEED));
       });
   }
 

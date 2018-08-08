@@ -22,19 +22,25 @@ public class ResourceStorageComponent extends BaseComponent {
 
   private int maxRoutes = 20;
 
+  private float transportSpeed;
+
+  private int transportSpeedLevel = 1;
+
   public ResourceStorageComponent() {
     super(ComponentType.RESOURCE_STORAGE);
   }
 
-  public ResourceStorageComponent(final int capacity, final List<Resource> resources) {
+  public ResourceStorageComponent(final int capacity, final List<Resource> resources, final float transportSpeed) {
     this();
     this.capacity = capacity;
     this.resources = Objects.requireNonNull(resources);
+    this.transportSpeed = transportSpeed;
   }
 
-  public ResourceStorageComponent(final int capacity) {
+  public ResourceStorageComponent(final int capacity, final float transportSpeed) {
     this();
     this.capacity = capacity;
+    this.transportSpeed = transportSpeed;
   }
 
   public int getCapacity() {
@@ -79,7 +85,7 @@ public class ResourceStorageComponent extends BaseComponent {
 
   @Override
   public BaseComponent copy() {
-    return new ResourceStorageComponent(getCapacity(), getResources());
+    return new ResourceStorageComponent(getCapacity(), getResources(), getTransportSpeed());
   }
 
   public void addRoute(final ResourceRoute resourceRoute) {
@@ -102,6 +108,22 @@ public class ResourceStorageComponent extends BaseComponent {
 
   public void setMaxRoutes(final int maxRoutes) {
     this.maxRoutes = maxRoutes;
+  }
+
+  public float getTransportSpeed() {
+    return transportSpeed;
+  }
+
+  public void setTransportSpeed(final float transportSpeed) {
+    this.transportSpeed = transportSpeed;
+  }
+
+  public int getTransportSpeedLevel() {
+    return transportSpeedLevel;
+  }
+
+  public void setTransportSpeedLevel(final int transportSpeedLevel) {
+    this.transportSpeedLevel = transportSpeedLevel;
   }
 
   @Override
