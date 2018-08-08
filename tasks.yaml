@@ -29,7 +29,8 @@ Upgrades
     Harvester component - increase number of resources harvested at once
 #    Seller component - increase selling speed
     Seller component - get better prices
-  Upgrade data will be kept orthogonal to component data
+#  Upgrade data will be kept orthogonal to component data
+  Don't let upgrade when not enough idle bucks - front end
 
 Other
 #  Display money earned per second on average
