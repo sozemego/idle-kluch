@@ -171,6 +171,9 @@ export class SelectedEntityInfo extends Component {
     const resourceCounts = this.getResourceCounts();
 		const speedLevel = storageComponent.transportSpeedLevel || 1;
 		const upgrade = upgrades[UPGRADE_TYPE.TRANSPORT_SPEED][speedLevel - 1];
+		const nextRouteProgress = storageComponent.nextRouteProgress;
+		const secondsPerRoute = storageComponent.secondsPerRoute;
+		const nextRouteIn = secondsPerRoute - nextRouteProgress;
 
 		return (
       <div className={style.section}>
@@ -200,6 +203,8 @@ export class SelectedEntityInfo extends Component {
 																		 text={`Upgrade transport speed +${this.getUpgradeSpeedPercentage(upgrade)}%`}
 					/>}
 				</div>
+        {`Next transport in: ${nextRouteIn.toFixed(2)}s`}
+				<LinearProgress variant={"determinate"} value={(nextRouteIn / secondsPerRoute) * 100}/>
         <Divider className={style.divider}/>
       </div>
     );

@@ -23,6 +23,10 @@ export class ResourceTransportSystem {
 
 	updateEntity = (entity, delta) => {
 		const storage = entity.getComponent(ResourceStorageComponent);
+		if (storage.routes.length < storage.maxRoutes) {
+			storage.nextRouteProgress = Math.min(storage.secondsPerRoute, storage.nextRouteProgress + delta);
+		}
+
 		storage.getRoutes().forEach(route => {
 			if (route.finished) {
 				return storage.removeRoute(route);

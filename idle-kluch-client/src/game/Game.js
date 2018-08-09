@@ -182,6 +182,7 @@ const createComponent = (component) => {
 		const storageComponent = new ResourceStorageComponent(
 			component.capacity,
 			component.routes,
+			component.maxRoutes,
 			component.transportSpeed,
 			component.transportSpeedLevel,
 			component.secondsPerRoute,
@@ -304,6 +305,7 @@ const transferResource = (state, action) => {
 	const fromStorage = fromEntity.getComponent(ResourceStorageComponent);
 	fromStorage.addRoute(route);
 	fromStorage.removeResource(route.resource);
+	fromStorage.nextRouteProgress = 0;
 
 	return state;
 };
