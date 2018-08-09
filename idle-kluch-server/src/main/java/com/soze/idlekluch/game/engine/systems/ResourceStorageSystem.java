@@ -47,8 +47,16 @@ public class ResourceStorageSystem extends BaseEntitySystem {
   private void update(final Entity entity, final float delta) {
     final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
     final boolean isSeller = entity.getComponent(ResourceSellerComponent.class) != null;
+    if (isSeller) {
+      return;
+    }
+
+    updateNextRouteProgress(storage, delta);
+    if (storage.getNextRouteProgress() < storage.getSecondsPerRoute()) {
+      return;
+    }
     // transport to sellers if possible
-    if (!storage.getResources().isEmpty() && storage.getRoutes().size() < storage.getMaxRoutes() && !isSeller) {
+    if (!storage.getResources().isEmpty() && storage.getRoutes().size() < storage.getMaxRoutes()) {
       getSellers()
         .stream()
         .filter(seller -> !seller.getId().equals(entity.getId()))
@@ -68,9 +76,11 @@ public class ResourceStorageSystem extends BaseEntitySystem {
         .sorted(Comparator.comparingInt(e -> (int) distance(e, entity)))
         .findFirst()
         .ifPresent(seller -> {
-          final Resource resourceToTransfer = storage.getResources().get(0);
+          storage.setNextRouteProgress(0f);
 
+          final Resource resourceToTransfer = storage.getResources().get(0);
           final ResourceRoute route = new ResourceRoute(
+
             resourceToTransfer, getId(entity), getId(seller)
           );
           storage.addRoute(route);
@@ -89,6 +99,11 @@ public class ResourceStorageSystem extends BaseEntitySystem {
 
   private List<Entity> getSellers() {
     return getEngine().getEntitiesByNode(Nodes.SELLER);
+  }
+
+  private void updateNextRouteProgress(final ResourceStorageComponent storageComponent, final float delta) {
+    final float nextRouteProgress = storageComponent.getNextRouteProgress();
+    storageComponent.setNextRouteProgress(Math.min(storageComponent.getSecondsPerRoute(), nextRouteProgress + delta));
   }
 
 }

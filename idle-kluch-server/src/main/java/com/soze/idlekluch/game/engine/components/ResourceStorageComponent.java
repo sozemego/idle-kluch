@@ -26,15 +26,24 @@ public class ResourceStorageComponent extends BaseComponent {
 
   private int transportSpeedLevel = 1;
 
+  private float secondsPerRoute;
+
+  private float nextRouteProgress;
+
   public ResourceStorageComponent() {
     super(ComponentType.RESOURCE_STORAGE);
   }
 
-  public ResourceStorageComponent(final int capacity, final List<Resource> resources, final float transportSpeed) {
+  public ResourceStorageComponent(final int capacity,
+                                  final List<Resource> resources,
+                                  final float transportSpeed,
+                                  final float secondsPerRoute
+  ) {
     this();
     this.capacity = capacity;
     this.resources = Objects.requireNonNull(resources);
     this.transportSpeed = transportSpeed;
+    this.secondsPerRoute = secondsPerRoute;
   }
 
   public ResourceStorageComponent(final int capacity, final float transportSpeed) {
@@ -85,7 +94,7 @@ public class ResourceStorageComponent extends BaseComponent {
 
   @Override
   public BaseComponent copy() {
-    return new ResourceStorageComponent(getCapacity(), getResources(), getTransportSpeed());
+    return new ResourceStorageComponent(getCapacity(), getResources(), getTransportSpeed(), getSecondsPerRoute());
   }
 
   public void addRoute(final ResourceRoute resourceRoute) {
@@ -124,6 +133,22 @@ public class ResourceStorageComponent extends BaseComponent {
 
   public void setTransportSpeedLevel(final int transportSpeedLevel) {
     this.transportSpeedLevel = transportSpeedLevel;
+  }
+
+  public float getSecondsPerRoute() {
+    return secondsPerRoute;
+  }
+
+  public void setSecondsPerRoute(final float secondsPerRoute) {
+    this.secondsPerRoute = secondsPerRoute;
+  }
+
+  public float getNextRouteProgress() {
+    return nextRouteProgress;
+  }
+
+  public void setNextRouteProgress(final float nextRouteProgress) {
+    this.nextRouteProgress = nextRouteProgress;
   }
 
   @Override

@@ -82,7 +82,7 @@ INSERT INTO entity (
     '{}',
     '{"idleBucks": 100}',
     null,
-    '{"capacity": 100, "resources": [], "transportSpeed": 30}',
+    '{"capacity": 100, "resources": [], "transportSpeed": 30, "secondsPerRoute": 10}',
     null
   )
 ;
@@ -103,7 +103,7 @@ INSERT INTO entity (
     '{}',
     '{"idleBucks": 250}',
     null,
-    '{"capacity": 250, "resources": [], "transportSpeed": 30}',
+    '{"capacity": 250, "resources": [], "transportSpeed": 30, "secondsPerRoute": 10}',
     null
   )
 ;
@@ -208,7 +208,7 @@ INSERT INTO entity (
     '{}',
     '{"idleBucks": 125}',
     null,
-    '{"capacity": 20, "resources": [], "transportSpeed": 30}',
+    '{"capacity": 20, "resources": [], "transportSpeed": 30, "secondsPerRoute": 10}',
     '{"resourceId": "771d49e6-3fd1-436d-88aa-02b5377ba29e", "radius": 256, "unitsPerMinute": 5, "sourceSlots": 1, "slots": []}'
   )
 ;
@@ -227,7 +227,7 @@ INSERT INTO entity (
     '{"name": "Trading Post"}',
     '{}',
     '{"idleBucks": 375}',
-    '{"capacity": 50, "resources": [], "transportSpeed": 30}',
+    '{"capacity": 50, "resources": [], "transportSpeed": 30, "secondsPerRoute": 10}',
     '{"secondsPerUnit": 6}'
   )
 ;

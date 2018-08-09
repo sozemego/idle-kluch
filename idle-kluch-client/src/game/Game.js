@@ -183,7 +183,9 @@ const createComponent = (component) => {
 			component.capacity,
 			component.routes,
 			component.transportSpeed,
-			component.transportSpeedLevel
+			component.transportSpeedLevel,
+			component.secondsPerRoute,
+			component.nextRouteProgress,
 		);
 		component.resources.forEach(resource => storageComponent.addResource(resource));
 		return storageComponent;
