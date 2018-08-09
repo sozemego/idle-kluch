@@ -51,12 +51,17 @@ public class ResourceStorageSystem extends BaseEntitySystem {
       return;
     }
 
-    updateNextRouteProgress(storage, delta);
+    if (storage.getRoutes().size() < storage.getMaxRoutes()) {
+      updateNextRouteProgress(storage, delta);
+    } else {
+      return;
+    }
+
     if (storage.getNextRouteProgress() < storage.getSecondsPerRoute()) {
       return;
     }
     // transport to sellers if possible
-    if (!storage.getResources().isEmpty() && storage.getRoutes().size() < storage.getMaxRoutes()) {
+    if (!storage.getResources().isEmpty()) {
       getSellers()
         .stream()
         .filter(seller -> !seller.getId().equals(entity.getId()))
