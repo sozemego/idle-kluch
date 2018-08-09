@@ -1,6 +1,6 @@
 export class ResourceStorageComponent {
 
-  constructor(capacity, routes, maxRoutes, transportSpeed, transportSpeedLevel, secondsPerRoute, nextRouteProgress) {
+  constructor(capacity, routes, maxRoutes, transportSpeed, transportSpeedLevel, secondsPerRoute, nextRouteProgress, nextRouteTimeLevel) {
     this.capacity = capacity;
     this.resources = [];
     this.routes = routes;
@@ -9,6 +9,7 @@ export class ResourceStorageComponent {
     this.transportSpeedLevel = transportSpeedLevel;
 		this.secondsPerRoute = secondsPerRoute;
 		this.nextRouteProgress = nextRouteProgress;
+		this.nextRouteTimeLevel = nextRouteTimeLevel;
   }
 
   setCapacity(capacity) {

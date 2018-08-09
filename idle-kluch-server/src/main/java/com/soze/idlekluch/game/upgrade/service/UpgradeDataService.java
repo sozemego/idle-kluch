@@ -33,6 +33,7 @@ public class UpgradeDataService {
     populateHarvesterSpeed();
     populateSellingSpeed();
     populateTransportSpeed();
+    populateNextRouteTime();
   }
 
   public Optional<Upgrade> getUpgrade(final UpgradeType type, final int level) {
@@ -147,6 +148,39 @@ public class UpgradeDataService {
       final float nextSpeed = (float) Math.floor((storage.getTransportSpeed() * (float) data) * 100) / 100;
       storage.setTransportSpeed(nextSpeed);
       storage.setTransportSpeedLevel(storage.getTransportSpeedLevel() + 1);
+    };
+  }
+
+  private void populateNextRouteTime() {
+    final BiConsumer<Entity, Object> nextRouteTimeConsumer = getNextRouteTimeConsumer();
+    final int baseCost = 5000;
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 1, baseCost * 1, 0.1f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 2, baseCost * 2, 0.1f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 3, baseCost * 4, 0.1f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 4, baseCost * 8, 0.1f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 5, baseCost * 16, 0.2f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 6, baseCost * 32, 0.2f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 7, baseCost * 64, 0.2f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 8, baseCost * 256, 0.2f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 9, baseCost * 1000, 0.3f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 10, baseCost * 1000, 0.3f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 11, baseCost * 2000, 0.3f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 12, baseCost * 3000, 0.3f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 13, baseCost * 4000, 0.4f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 14, baseCost * 5000, 0.4f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 15, baseCost * 6000, 0.4f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 16, baseCost * 7000, 0.4f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 17, baseCost * 8000, 0.5f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 18, baseCost * 9000, 0.5f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 19, baseCost * 10000, 0.5f, nextRouteTimeConsumer));
+    upgrades.put(UpgradeType.NEXT_ROUTE_TIME, new Upgrade(UpgradeType.NEXT_ROUTE_TIME, 20, baseCost * 100000, 0.5f, nextRouteTimeConsumer));
+  }
+
+  private BiConsumer<Entity, Object> getNextRouteTimeConsumer() {
+    return (entity, data) -> {
+      final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
+      final float secondDifference = storage.getSecondsPerRoute() * (float) data;
+      storage.setSecondsPerRoute(storage.getSecondsPerRoute() - secondDifference);
     };
   }
 

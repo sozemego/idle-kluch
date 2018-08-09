@@ -192,4 +192,7 @@ export const getComponentByUpgradeType = (upgradeType) => {
 	if (upgradeType === UPGRADE_TYPE.TRANSPORT_SPEED) {
 		return COMPONENT_TYPES.RESOURCE_STORAGE;
 	}
+	if (upgradeType === UPGRADE_TYPE.NEXT_ROUTE_TIME) {
+		return COMPONENT_TYPES.RESOURCE_STORAGE;
+	}
 };

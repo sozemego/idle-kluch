@@ -215,6 +215,15 @@ export const onUpgradeComponentClicked = (entityId, upgradeType, level) => {
 				data = Math.floor(previousData * upgrade.data * 100) / 100;
 				levelField = "transportSpeedLevel";
 			}
+			if (upgradeType === UPGRADE_TYPE.NEXT_ROUTE_TIME) {
+				const upgrade = upgrades[ upgradeType ][ level - 1 ];
+				cost = upgrade.cost;
+				field = "secondsPerRoute";
+				previousData = component.transportSpeed;
+				const secondsDifference = component.secondsPerRoute * upgrade.data;
+				data = component.secondsPerRoute - secondsDifference;
+				levelField = "nextRouteTimeLevel";
+			}
 		}
 
 		const messageId = gameService.upgradeComponent(entityId, upgradeType);

@@ -123,6 +123,13 @@ public class UpgradeServiceImpl implements UpgradeService {
         final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
         storage.setTransportSpeedLevel(upgradeRepository.getUpgradeLevel(EntityUtils.getId(entity), UpgradeType.TRANSPORT_SPEED));
       });
+
+    gameEngine
+      .getEntitiesByNode(Nodes.STORAGE)
+      .forEach(entity -> {
+        final ResourceStorageComponent storage = entity.getComponent(ResourceStorageComponent.class);
+        storage.setNextRouteTimeLevel(upgradeRepository.getUpgradeLevel(EntityUtils.getId(entity), UpgradeType.NEXT_ROUTE_TIME));
+      });
   }
 
 }

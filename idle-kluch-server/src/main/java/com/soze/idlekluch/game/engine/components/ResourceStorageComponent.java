@@ -30,6 +30,8 @@ public class ResourceStorageComponent extends BaseComponent {
 
   private float nextRouteProgress;
 
+  private int nextRouteTimeLevel = 1;
+
   public ResourceStorageComponent() {
     super(ComponentType.RESOURCE_STORAGE);
   }
@@ -149,6 +151,14 @@ public class ResourceStorageComponent extends BaseComponent {
 
   public void setNextRouteProgress(final float nextRouteProgress) {
     this.nextRouteProgress = nextRouteProgress;
+  }
+
+  public int getNextRouteTimeLevel() {
+    return nextRouteTimeLevel;
+  }
+
+  public void setNextRouteTimeLevel(final int nextRouteTimeLevel) {
+    this.nextRouteTimeLevel = nextRouteTimeLevel;
   }
 
   @Override

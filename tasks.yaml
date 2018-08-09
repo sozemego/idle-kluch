@@ -24,7 +24,7 @@ Upgrades
 #    Storage component - increase transport speed
     Storage component - increase number of routes
     Storage component - increase number of resources transported at once
-    Storage component - decrease number of time per route
+#    Storage component - decrease number of time per route
 #    Harvester component - increase harvesting speed
     Harvester component - increase number of resource sources possible
     Harvester component - increase number of resources harvested at once
